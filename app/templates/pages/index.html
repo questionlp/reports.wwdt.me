@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block synopsis %}
+<section id="summary">
+<p>
+    This site provides reports on various aspects of the data recorded in the
+    <a href="{{ stats_url }}">Wait Wait... Don't Tell Me! Stats and Show Details</a>
+    database that don't really fit neatly into the main Stats and Show Details
+    site.
+</p>
+</section>
+{% endblock synopsis %}
+
+{% block content %}
+<section id="toc">
+<h2>Available Report Categories</h2>
+<ul>
+    <li><a href="#">Guests</a></li>
+    <li><a href="#">Hosts</a></li>
+    <li><a href="#">Locations</a></li>
+    <li><a href="#">Panelists</a></li>
+    <li><a href="#">Scorekeepers</a></li>
+    <li><a href="#">Shows</a></li>
+</ul>
+</section>
+
+<section id="guest">
+<h2>Guest</h2>
+{% include "guests/_reports.html" %}
+</section>
+
+
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Guests{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li>Guests</li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Guests</h2>
+{% endblock synopsis %}
+
+{% block content %}
+{% include "guests/_reports.html" %}
+{% endblock content %}

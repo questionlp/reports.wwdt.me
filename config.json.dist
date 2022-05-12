@@ -1,0 +1,26 @@
+{
+    "database": {
+        "host": "",
+        "user": "",
+        "password": "",
+        "database": "",
+        "port": 3306,
+        "raise_on_warnings": true,
+        "autocommit": true,
+        "compress": false,
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_unicode_ci",
+        "time_zone": "UTC"
+    },
+
+    "settings": {
+        "api_url": "",
+        "blog_url": "",
+        "graphs_url": "",
+        "repo_url": "https://github.com/questionlp/reports.wwdt.me_v2",
+        "reports_url": "",
+        "site_url": "",
+        "ga_property_code": null,
+        "time_zone": "UTC"
+    }
+}
