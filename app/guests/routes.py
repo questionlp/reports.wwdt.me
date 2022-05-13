@@ -7,6 +7,7 @@
 from flask import Blueprint, current_app, redirect, render_template, url_for
 import mysql.connector
 
+from app.guests.reports.best_of_only import retrieve_best_of_only_guests
 from app.utility import redirect_url
 
 blueprint = Blueprint("guests", __name__)
@@ -21,7 +22,8 @@ def index():
 @blueprint.route("/best-of-only")
 def best_of_only():
     """View: Guests Best Of Only Report"""
-    return render_template("guests/best-of-only.html")
+    _guests = retrieve_best_of_only_guests()
+    return render_template("guests/best-of-only.html", guests=_guests)
 
 
 @blueprint.route("/most-appearances")
@@ -40,42 +42,3 @@ def scoring_exceptions():
 def three_pointers():
     """View: Guests Three Pointers Report"""
     return render_template("guests/three-pointers.html")
-
-
-# @blueprint.route("/<string:guest_slug>")
-# def details(guest_slug: str):
-#     """View: Guest Details"""
-#     database_connection = mysql.connector.connect(**current_app.config["database"])
-#     guest = Guest(database_connection=database_connection)
-#     details = guest.retrieve_details_by_slug(guest_slug)
-#     database_connection.close()
-
-#     if not details:
-#         return redirect(url_for("guests.index"))
-
-#     guests = []
-#     guests.append(details)
-#     return render_template(
-#         "guests/single.html", guest_name=details["name"], guests=guests
-#     )
-
-
-# @blueprint.route("/all")
-# def all():
-#     """View: Guest Details for All Guests"""
-#     database_connection = mysql.connector.connect(**current_app.config["database"])
-#     guest = Guest(database_connection=database_connection)
-#     guests = guest.retrieve_all_details()
-#     database_connection.close()
-
-#     if not guests:
-#         return redirect(url_for("guests.index"))
-
-#     return render_template("guests/all.html", guests=guests)
-
-
-# @blueprint.route("/random")
-# def random():
-#     """View: Random Guest Redirect"""
-#     _slug = random_guest_slug()
-#     return redirect_url(url_for("guests.details", guest_slug=_slug))
