@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Panelists Reports{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li>Panelists</li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Panelists Reports</h2>
+{% endblock synopsis %}
+
+{% block content %}
+{% include "panelists/_reports.html" %}
+{% endblock content %}

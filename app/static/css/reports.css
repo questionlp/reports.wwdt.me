@@ -1,0 +1,92 @@
+@media all {
+    col.boolean, col.count, col.score, col.state {
+        width: 6rem;
+    }
+
+    col.city {
+        width: 12rem;
+    }
+
+    col.date {
+        width: 10rem;
+    }
+
+    col.name.guest {
+        width: 16rem;
+    }
+
+    col.name.venue {
+        width: 26rem;
+    }
+
+    col.notes {
+        width: 32rem;
+    }
+
+    td.notes p {
+        margin-block-start: 0;
+        margin-block-end: 1em;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+    }
+
+    table.pure-table {
+        margin: 1.5rem 0;
+    }
+
+    table.pure-table td {
+        vertical-align: top;
+    }
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: initial;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: rgba(240, 240, 240, 0.3) !important;
+        color: white;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table.pure-table-bordered,
+    table.pure-table-bordered thead,
+    table.pure-table-bordered tbody,
+    table.pure-table-bordered tfoot,
+    table.pure-table-bordered th,
+    table.pure-table-bordered td {
+        border-color: #666 !important;
+    }
+
+    td.no-data {
+        background-color: rgba(48, 48, 48, 0.75);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: lightgray !important;
+    }
+
+    td.no-data {
+        background-color: rgb(240, 240, 240);
+    }
+}
+
+@media print {
+    table tfoot {
+        display: none;
+        visibility: hidden;
+    }
+}

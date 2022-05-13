@@ -5,8 +5,7 @@
         margin: 1.5rem;
     }
 
-    pre,
-    code {
+    pre, code {
         font-family: "IBM Plex Mono", monospace;
     }
 
@@ -31,7 +30,7 @@
     }
 
     #breadcrumb {
-        margin: 0;
+        margin: 1.625rem 0;
         padding: 0;
     }
 
@@ -72,6 +71,25 @@
         font-size: 92.5%;
         margin-top: 2.5rem;
     }
+
+    div.sections {
+        margin-top: 3rem;
+    }
+
+    div.sections section {
+        border-bottom: 1px #aaa solid;
+        margin: 1rem 0;
+        padding-bottom: 1.25rem;
+    }
+
+    div.sections section#toc, div.sections section#summary {
+        border: none;
+        margin: 0;
+    }
+
+    div.sections h2 {
+        margin: 2rem 0 1.5rem;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -93,10 +111,10 @@
 }
 
 @media print {
-
-    html,
-    body {
+    html, body {
         background-color: initial;
         color: initial;
+        margin: initial;
+        padding: initial;
     }
 }

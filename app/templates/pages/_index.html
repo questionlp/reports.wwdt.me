@@ -16,19 +16,30 @@
 <section id="toc">
 <h2>Available Report Categories</h2>
 <ul>
-    <li><a href="#">Guests</a></li>
-    <li><a href="#">Hosts</a></li>
-    <li><a href="#">Locations</a></li>
+    <li><a href="#guests">Guests</a></li>
+    <li><a href="#hosts">Hosts</a></li>
+    <li><a href="#locations">Locations</a></li>
     <li><a href="#">Panelists</a></li>
     <li><a href="#">Scorekeepers</a></li>
     <li><a href="#">Shows</a></li>
 </ul>
 </section>
 
-<section id="guest">
-<h2>Guest</h2>
-{% include "guests/_reports.html" %}
-</section>
+<div class="sections">
+    <section id="guests">
+    <h2>Guests</h2>
+    {% include "guests/_reports.html" %}
+    </section>
 
+    <section id="hosts">
+    <h2>Hosts</h2>
+    {% include "hosts/_reports.html" %}
+    </section>
+
+    <section id="locations">
+    <h2>Locations</h2>
+    {% include "locations/_reports.html" %}
+    </section>
+</div>
 
 {% endblock content %}

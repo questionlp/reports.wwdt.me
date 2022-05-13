@@ -7,17 +7,21 @@
 from flask import Flask
 
 from app import config, utility
-from app.errors import handlers
-from app.guests.routes import blueprint as guests_bp
-# from app.hosts.routes import blueprint as hosts_bp
-# from app.locations.routes import blueprint as locations_bp
-from app.main.routes import blueprint as main_bp
+from .errors import handlers
+from .guests.redirects import blueprint as guests_redirects_bp
+from .guests.routes import blueprint as guests_bp
+from .hosts.redirects import blueprint as hosts_redirects_bp
+from .hosts.routes import blueprint as hosts_bp
+from .locations.redirects import blueprint as locations_redirects_bp
+from .locations.routes import blueprint as locations_bp
+from .main.routes import blueprint as main_bp
+
 # from app.main.redirects import blueprint as redirects_bp
 # from app.panelists.routes import blueprint as panelists_bp
 # from app.scorekeepers.routes import blueprint as scorekeepers_bp
 # from app.sitemaps.routes import blueprint as sitemaps_bp
 # from app.shows.routes import blueprint as shows_bp
-from app.version import APP_VERSION
+from .version import APP_VERSION
 
 
 def create_app():
@@ -55,6 +59,7 @@ def create_app():
     app.jinja_env.globals["repo_url"] = app.config["app_settings"]["repo_url"]
     app.jinja_env.globals["reports_url"] = app.config["app_settings"]["reports_url"]
     app.jinja_env.globals["site_url"] = app.config["app_settings"]["site_url"]
+    app.jinja_env.globals["stats_url"] = app.config["app_settings"]["stats_url"]
 
     # Register Jinja template filters
     app.jinja_env.filters["pretty_jsonify"] = utility.pretty_jsonify
@@ -64,9 +69,12 @@ def create_app():
     app.register_blueprint(main_bp)
     # app.register_blueprint(redirects_bp)
     # app.register_blueprint(sitemaps_bp)
+    app.register_blueprint(guests_redirects_bp)
     app.register_blueprint(guests_bp, url_prefix="/guests")
-    # app.register_blueprint(hosts_bp, url_prefix="/hosts")
-    # app.register_blueprint(locations_bp, url_prefix="/locations")
+    app.register_blueprint(hosts_redirects_bp)
+    app.register_blueprint(hosts_bp, url_prefix="/hosts")
+    app.register_blueprint(locations_redirects_bp)
+    app.register_blueprint(locations_bp, url_prefix="/locations")
     # app.register_blueprint(panelists_bp, url_prefix="/panelists")
     # app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     # app.register_blueprint(shows_bp, url_prefix="/shows")

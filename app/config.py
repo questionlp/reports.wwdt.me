@@ -9,7 +9,7 @@ import json
 from typing import Any, Dict
 import pytz
 
-from app import utility
+from . import utility
 
 
 def load_config(

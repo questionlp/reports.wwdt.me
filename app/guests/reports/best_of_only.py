@@ -15,6 +15,7 @@ def retrieve_guest_appearances(
 ) -> List[Dict]:
     """Retrieve a list of shows in which the requested Not My Job guest
     has made an appearance on (including Best Of and Repeats)"""
+
     database_connection = mysql.connector.connect(**current_app.config["database"])
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -29,6 +30,7 @@ def retrieve_guest_appearances(
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
+    database_connection.close()
 
     if not result:
         return None
@@ -50,6 +52,7 @@ def retrieve_guest_appearances(
 def retrieve_best_of_only_guests() -> List[Dict]:
     """Retrieves a list of Not My Job guests that have only appeared
     on Best Of shows"""
+
     database_connection = mysql.connector.connect(**current_app.config["database"])
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -67,6 +70,7 @@ def retrieve_best_of_only_guests() -> List[Dict]:
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
+    database_connection.close()
 
     if not result:
         return None

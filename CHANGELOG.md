@@ -5,7 +5,7 @@
 ### Component Changes
 
 - Upgrade Flask from 2.0.2 to 2.1.2
-- Replace Pure CSS with Bulma
+- Upgrade Pure CSS from 2.0.6 to 2.1.0
 
 ### Application Changes
 
@@ -26,10 +26,17 @@
 | scorekeeper     | scorekeepers    |
 | show            | shows           |
 
-- Changed underlines in page name in URLs to hyphens
-- Consolidation of CSS files to standardize column widths across reports
+- Previously, each section's reports lived under the `reports` module at the
+  top-level of the application. The reports have been moved to reside within
+  their respective section's module
+- Changed underscore in page name in URLs to hyphens
+- Renamed `index.html` to `_index.html` in all of the template folders
+- Moved the `Panel Gender Mix` report from being under the `Panelists` section
+  to the more appropriate section, `Shows`
+- Consolidation of CSS files to standardize column widths across all reports
 - Redesign the Panelist vs Panelist report to use a dropdown to select a
   panelist rather than a side navigation menu
+- Enable Markdown handling for show notes fields in the respective reports
 
 ### Development Changes
 

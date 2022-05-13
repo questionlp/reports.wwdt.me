@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Most Appearances | Guests{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('guests.index') }}">Guests</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Most Appearances</h2>
+<p>
+    This report provides a list of Not My Job guests ordered by guests with
+    the most number of appearances across all shows to the least number of
+    appearances.
+</p>
+<p>
+    Only Not My Job guests that have made more than one appearance across all
+    shows are listed below.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Most Appearances Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name guest">
+        <col class="count">
+        <col class="count">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col" rowspan="2">Guest</th>
+            <td colspan="2">Shows</td>
+        </tr>
+        <tr>
+            <th scope="col">All</th>
+            <th scope="col">Regular</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for guest in guests %}
+        <tr>
+            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+            <td>{{ guest.all_shows }}</a></td>
+            <td>{{ guest.regular_shows }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col" rowspan="2">Guest</th>
+            <th scope="col">All</th>
+            <th scope="col">Regular</th>
+        </tr>
+        <tr>
+            <td colspan="2">Shows</td>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Most Appearances Section -->
+{% endblock content %}

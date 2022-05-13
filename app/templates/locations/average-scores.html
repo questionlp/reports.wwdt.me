@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Average Score by Location | Locations{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('locations.index') }}">Locations</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Average Score by Location</h2>
+<p>
+    The following table lists the average panelist score and average total
+    score for each location the show has broadcasted from. The exception is
+    the 25th Anniversary Special that aired on October 27, 2018 due to the
+    unique Lightning Fill-in-the-Blank format used.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Location Breakdown -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name venue">
+        <col class="name city">
+        <col class="name state">
+        <col class="score">
+        <col class="score">
+        <col class="dates">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Venue</th>
+            <th scope="col">City</th>
+            <th scope="col">State</th>
+            <th scope="col">Average Score</th>
+            <th scope="col">Average Total</th>
+            <th scope="col">Shows</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for location in locations %}
+        <tr>
+            {% if location.venue %}
+            <td>{{ location.venue }}</td>
+            {% else %}
+            <td class="no-data">&nbsp;</td>
+            {% endif %}
+            {% if location.city %}
+            <td>{{ location.city }}</td>
+            {% else %}
+            <td class="no-data">&nbsp;</td>
+            {% endif %}
+            {% if location.state %}
+            <td>{{ location.state }}</td>
+            {% else %}
+            <td class="no-data">&nbsp;</td>
+            {% endif %}
+            {# Using str.format() in order to get clean, floating output
+                from Decimal numbers
+            #}
+            <td>{{ "{:f}".format(location.average_score) }}</td>
+            <td>{{ "{:f}".format(location.average_total) }}</td>
+            <td>{{ "{:f}".format(location.show_count) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- End Location Breakdown -->
+{% endblock content %}

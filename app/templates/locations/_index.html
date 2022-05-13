@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Location Reports{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li>Locations</li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Location Reports</h2>
+{% endblock synopsis %}
+
+{% block content %}
+{% include "locations/_reports.html" %}
+{% endblock content %}

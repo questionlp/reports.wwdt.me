@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Not My Job Three Pointers | Guests{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('guests.index') }}">Guests</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Not My Job Three Pointers</h2>
+<p>
+    List of all of the Not My Job guests who answered all three Not My Job
+    questions correctly or were awarded all three points.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Not My Job Scoring Exceptions Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name guest">
+        <col class="date">
+        <col class="name scorekeeper">
+        <col class="score">
+        <col class="boolean">
+        <col class="notes">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Guest</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Score</th>
+            <th scope="col">Scoring Exception</th>
+            <th scope="col">Show Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for guest in three_pointers %}
+        <tr>
+            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+            <td><a href="{{ stats_url }}/shows/{{ guest.show_date|replace('-', '/') }}">{{ guest.show_date }}</a></td>
+            <td>{{ guest.show_scorekeeper }}</td>
+            <td>{{ guest.score }}</td>
+            <td>{{ guest.exception }}</td>
+        {% if guest.exception %}
+            <td class="notes">{{ guest.show_notes|markdown|safe }}</td>
+        {% else %}
+            <td class="no-data">&nbsp;</td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Guest</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Score</th>
+            <th scope="col">Scoring Exception</th>
+            <th scope="col">Show Notes</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Not My Job Scoring Exceptions Section -->
+{% endblock content %}
