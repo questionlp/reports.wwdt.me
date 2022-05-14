@@ -1,10 +1,14 @@
 @media all {
-    col.boolean, col.count, col.score, col.state {
+    col.boolean, col.count, col.date.year, col.score, col.state {
         width: 6rem;
     }
 
     col.city {
         width: 12rem;
+    }
+
+    col.count.mix {
+        width: 8rem;
     }
 
     col.date {
@@ -45,6 +49,10 @@
         text-align: center;
         vertical-align: middle;
     }
+
+    span.hover.tooltip {
+        cursor: help;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,6 +78,10 @@
     td.no-data {
         background-color: rgba(48, 48, 48, 0.75);
     }
+
+    span.hover.tooltip {
+        border-bottom: 1px dotted lightskyblue;
+    }
 }
 
 @media (prefers-color-scheme: light) {
@@ -81,6 +93,10 @@
 
     td.no-data {
         background-color: rgb(240, 240, 240);
+    }
+
+    span.hover.tooltip {
+        border-bottom: 1px dotted blue;
     }
 }
 

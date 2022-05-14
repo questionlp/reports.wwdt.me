@@ -33,7 +33,8 @@
 - Renamed `index.html` to `_index.html` in all of the template folders
 - Moved the `Panel Gender Mix` report from being under the `Panelists` section
   to the more appropriate section, `Shows`
-- Consolidation of CSS files to standardize column widths across all reports
+- Consolidation of report CSS files into a single file
+- Standardize column widths across all reports
 - Redesign the Panelist vs Panelist report to use a dropdown to select a
   panelist rather than a side navigation menu
 - Enable Markdown handling for show notes fields in the respective reports

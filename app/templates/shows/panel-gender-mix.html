@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Panel Gender Mix | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Panel Gender Mix</h2>
+<p>
+    This report provides a breakdown of the gender mix of panels for all
+    broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
+    and the 25th Anniversary special.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Panel Mix Breakdown Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date year">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">
+                <span class="hover tooltip"
+                 title="Zero female panelists, 3 male">0 F / 3 M
+                </span>
+            </th>
+            <th scope="col">
+                <span class="hover tooltip"
+                 title="1 female panelist, 2 male">1 F / 2 M
+                </span>
+            </th>
+            <th scope="col">
+                <span class="hover tooltip"
+                 title="2 female panelists, 1 male">2 F / 1 M
+                <span>
+            </th>
+            <th scope="col">
+                <span class="hover tooltip"
+                 title="3 female panelists, zero male">3 F / 0 M
+                </span>
+            </th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for year in panel_gender_mix %}
+        <tr>
+            <td>{{ year }}</td>
+            <td>{{ panel_gender_mix[year]["0{}".format(gender)] }}</td>
+            <td>{{ panel_gender_mix[year]["1{}".format(gender)] }}</td>
+            <td>{{ panel_gender_mix[year]["2{}".format(gender)] }}</td>
+            <td>{{ panel_gender_mix[year]["3{}".format(gender)] }}</td>
+            <td>{{ panel_gender_mix[year].total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- End Panel Mix Breakdown Section -->
+{% endblock content %}
