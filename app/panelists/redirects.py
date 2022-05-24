@@ -8,7 +8,7 @@ from flask import Blueprint, url_for
 
 from app.utility import redirect_url
 
-blueprint = Blueprint("locations_redirects", __name__)
+blueprint = Blueprint("panelists_redirects", __name__)
 
 
 @blueprint.route("/panelist")
@@ -63,25 +63,16 @@ def losing_streaks():
 
 
 @blueprint.route("/panelist/panel_gender_mix")
+@blueprint.route("/panelists/panel_gender_mix")
 def panel_gender_mix():
     """View: Panel Gender Mix Report Redirect"""
     return redirect_url(url_for("shows.panel_gender_mix"), status_code=301)
 
 
+@blueprint.route("/panelist/panelist_pvp_report")
+@blueprint.route("/panelist/panelist_vs_panelist")
 @blueprint.route("/panelist/pvp")
 def pvp():
-    """View: Panelist vs Panelist Report Redirect"""
-    return redirect_url(url_for("panelists.panelist_pvp_report"), status_code=301)
-
-
-@blueprint.route("/panelist/panelist_vs_panelist")
-def panelist_vs_panelist():
-    """View: Panelist vs Panelist Report Redirect"""
-    return redirect_url(url_for("panelists.panelist_pvp_report"), status_code=301)
-
-
-@blueprint.route("/panelist/panelist_pvp_report")
-def panelist_pvp_report():
     """View: Panelist vs Panelist Report Redirect"""
     return redirect_url(url_for("panelists.panelist_pvp_report"), status_code=301)
 

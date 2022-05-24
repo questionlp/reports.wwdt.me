@@ -4,6 +4,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Core Application for Wait Wait Reports"""
+from re import template
 from flask import Flask
 
 from app import config, utility
@@ -15,9 +16,10 @@ from .hosts.routes import blueprint as hosts_bp
 from .locations.redirects import blueprint as locations_redirects_bp
 from .locations.routes import blueprint as locations_bp
 from .main.routes import blueprint as main_bp
+from .main.redirects import blueprint as redirects_bp
+from .panelists.redirects import blueprint as panelists_redirects_bp
+from .panelists.routes import blueprint as panelists_bp
 
-# from app.main.redirects import blueprint as redirects_bp
-# from app.panelists.routes import blueprint as panelists_bp
 # from app.scorekeepers.routes import blueprint as scorekeepers_bp
 # from app.sitemaps.routes import blueprint as sitemaps_bp
 from .shows.routes import blueprint as shows_bp
@@ -67,7 +69,7 @@ def create_app():
 
     # Register application blueprints
     app.register_blueprint(main_bp)
-    # app.register_blueprint(redirects_bp)
+    app.register_blueprint(redirects_bp)
     # app.register_blueprint(sitemaps_bp)
     app.register_blueprint(guests_redirects_bp)
     app.register_blueprint(guests_bp, url_prefix="/guests")
@@ -75,7 +77,8 @@ def create_app():
     app.register_blueprint(hosts_bp, url_prefix="/hosts")
     app.register_blueprint(locations_redirects_bp)
     app.register_blueprint(locations_bp, url_prefix="/locations")
-    # app.register_blueprint(panelists_bp, url_prefix="/panelists")
+    app.register_blueprint(panelists_redirects_bp)
+    app.register_blueprint(panelists_bp, url_prefix="/panelists", template_folder="templates")
     # app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     app.register_blueprint(shows_bp, url_prefix="/shows")
 

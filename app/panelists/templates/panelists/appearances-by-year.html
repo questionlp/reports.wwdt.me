@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Appearances by Year | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Appearances by Year</h2>
+<p>
+    The pivot table below contains a list of panelists and the number of
+    appearances each panelist has made, broken out by year (excluding
+    Best Of and Repeat shows).
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Appearances by Year Section -->
+<div id="appearance-by-year">
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name panelist">
+        {% for col in range((show_years|length + 1)) %}
+            <col class="count">
+        {% endfor %}
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in show_years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in panelists %}
+        <tr>
+            <td class="name panelist">
+                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
+                    {{ panelist.name }}
+                </a>
+            </td>
+            {% for year in show_years %}
+                {% if year in panelist.appearances %}
+            <td class="centered middle year">{{ panelist.appearances[year] }}</td>
+                {% else %}
+            <td class="no-data">&nbsp;</td>
+                {% endif %}
+            {% endfor %}
+            <td class="centered middle count">{{ panelist.appearances.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in show_years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+            <th scope="col">Total</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<!-- End Appearances by Year Section -->
+{% endblock content %}

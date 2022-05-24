@@ -6,18 +6,21 @@
 """WWDTM Guest Most Appearances Report Functions"""
 from typing import Dict, List
 
-from flask import current_app
 import mysql.connector
 
 from app.utility import multi_key_sort
 
 
-def retrieve_guest_most_appearances_all() -> Dict[str, Dict]:
+def retrieve_guest_most_appearances_all(
+    database_connection: mysql.connector.connect,
+) -> Dict[str, Dict]:
     """Returns a dictionary of all guests that have appeared on the
     show more than once, ordered by number of appearances in descending
     order, across all shows"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT g.guestid, g.guest, g.guestslug, "
@@ -38,24 +41,28 @@ def retrieve_guest_most_appearances_all() -> Dict[str, Dict]:
     if not result:
         return None
 
-    guests = {}
+    _guests = {}
     for row in result:
-        guest = {}
-        guest["id"] = row.guestid
-        guest["name"] = row.guest
-        guest["slug"] = row.guestslug
-        guest["all_shows"] = row.appearances
-        guests[guest["id"]] = guest
+        _guests[row.guestid] = {
+            "id": row.guestid,
+            "name": row.guest,
+            "slug": row.guestslug,
+            "all_shows": row.appearances,
+        }
 
-    return guests
+    return _guests
 
 
-def retrieve_guest_most_appearances_regular() -> Dict[str, Dict]:
+def retrieve_guest_most_appearances_regular(
+    database_connection: mysql.connector.connect,
+) -> Dict[str, Dict]:
     """Returns a dictionary of all guests that have appeared on the
     show more than once, ordered by number of appearances in descending
     order, across regular shows"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT g.guestid, g.guest, g.guestslug, "
@@ -75,24 +82,33 @@ def retrieve_guest_most_appearances_regular() -> Dict[str, Dict]:
     if not result:
         return None
 
-    guests = {}
+    _guests = {}
     for row in result:
-        guest = {}
-        guest["id"] = row.guestid
-        guest["name"] = row.guest
-        guest["slug"] = row.guestslug
-        guest["regular_shows"] = row.appearances
-        guests[guest["id"]] = guest
+        _guests[row.guestid] = {
+            "id": row.guestid,
+            "name": row.guest,
+            "slug": row.guestslug,
+            "regular_shows": row.appearances,
+        }
 
-    return guests
+    return _guests
 
 
-def guest_multiple_appearances() -> List[Dict]:
+def guest_multiple_appearances(
+    database_connection: mysql.connector.connect,
+) -> List[Dict]:
     """Get a list of guests that have appeared on the show multiple
     times on all shows and regular shows"""
 
-    guests_all_shows = retrieve_guest_most_appearances_all()
-    guests_regular_shows = retrieve_guest_most_appearances_regular()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    guests_all_shows = retrieve_guest_most_appearances_all(
+        database_connection=database_connection
+    )
+    guests_regular_shows = retrieve_guest_most_appearances_regular(
+        database_connection=database_connection
+    )
 
     _guests = []
     for guest in guests_all_shows:

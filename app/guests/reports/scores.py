@@ -4,20 +4,20 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Guest Scores Report Functions"""
-
 from typing import Any, Dict, List
 
-from flask import current_app
 import mysql.connector
 
 
 def retrieve_scoring_exceptions(
-    guest_id: int,
+    guest_id: int, database_connection: mysql.connector.connect
 ) -> List[Dict[str, Any]]:
     """Retrieve a list of instances where a requested Not My Job guest
     has had a scoring exception"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT g.guestid, g.guest, s.showid, s.showdate, "
@@ -34,31 +34,34 @@ def retrieve_scoring_exceptions(
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
     _exceptions = []
     for row in result:
-        show = {}
-        show["id"] = row.showid
-        show["date"] = row.showdate.isoformat()
-        show["score"] = row.guestscore
-        show["exception"] = bool(row.exception)
-        show["notes"] = row.shownotes
-        _exceptions.append(show)
+        _exceptions.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "score": row.guestscore,
+                "exception": bool(row.exception),
+                "notes": row.shownotes,
+            }
+        )
 
     return _exceptions
 
 
 def retrieve_guest_scores(
-    guest_id: int,
+    guest_id: int, database_connection: mysql.connector.connect
 ) -> List[Dict[str, Any]]:
     """Retrieve a list of instances where a requested Not My Job guest
     has received three points"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT g.guestid, g.guest, s.showid, s.showdate, "
@@ -75,28 +78,33 @@ def retrieve_guest_scores(
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
     _scores = []
     for row in result:
-        show = {}
-        show["id"] = row.showid
-        show["date"] = row.showdate.isoformat()
-        show["score"] = row.guestscore
-        show["exception"] = bool(row.exception)
-        show["notes"] = row.shownotes
-        _scores.append(show)
+        _scores.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "score": row.guestscore,
+                "exception": bool(row.exception),
+                "notes": row.shownotes,
+            }
+        )
 
     return _scores
 
 
-def retrieve_all_scoring_exceptions() -> List[Dict[str, Any]]:
+def retrieve_all_scoring_exceptions(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, Any]]:
     """Retrieve a list of all Not My Job scoring exceptions"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
@@ -110,28 +118,36 @@ def retrieve_all_scoring_exceptions() -> List[Dict[str, Any]]:
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
+        database_connection.close()
         return None
 
     _exceptions = []
     for row in result:
-        guest = {}
-        guest["id"] = row.guestid
-        guest["name"] = row.guest
-        guest["slug"] = row.guestslug
-        guest["exceptions"] = retrieve_scoring_exceptions(guest_id=row.guestid)
-        _exceptions.append(guest)
+        _exceptions.append(
+            {
+                "id": row.guestid,
+                "name": row.guest,
+                "slug": row.guestslug,
+                "exceptions": retrieve_scoring_exceptions(
+                    guest_id=row.guestid, database_connection=database_connection
+                ),
+            }
+        )
 
     return _exceptions
 
 
-def retrieve_all_three_pointers() -> List[Dict]:
+def retrieve_all_three_pointers(
+    database_connection: mysql.connector.connect,
+) -> List[Dict]:
     """Retrieve a list instances where Not My Job guests have answered
     all three questions correctly or received all three points"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "(SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate, "
@@ -170,23 +186,24 @@ def retrieve_all_three_pointers() -> List[Dict]:
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
     three_pointers = []
     for row in result:
-        guest = {}
-        guest["id"] = row.guestid
-        guest["name"] = row.guest
-        guest["slug"] = row.guestslug
-        guest["show_date"] = row.showdate.isoformat()
-        guest["show_scorekeeper"] = row.scorekeeper
-        guest["show_scorekeeper_slug"] = row.scorekeeperslug
-        guest["score"] = row.guestscore
-        guest["exception"] = bool(row.exception)
-        guest["show_notes"] = row.shownotes
-        three_pointers.append(guest)
+        three_pointers.append(
+            {
+                "id": row.guestid,
+                "name": row.guest,
+                "slug": row.guestslug,
+                "show_date": row.showdate.isoformat(),
+                "show_scorekeeper": row.scorekeeper,
+                "show_scorekeeper_slug": row.scorekeeperslug,
+                "score": row.guestscore,
+                "exception": bool(row.exception),
+                "show_notes": row.shownotes,
+            }
+        )
 
     return three_pointers

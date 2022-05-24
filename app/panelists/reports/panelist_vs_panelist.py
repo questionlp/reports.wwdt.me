@@ -1,128 +1,137 @@
 # -*- coding: utf-8 -*-
+# vim: set noai syntax=python ts=4 sw=4:
+#
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist vs Panelist Report Functions"""
-
-from collections import OrderedDict
-from typing import List, Dict
+from typing import Any, Dict, List
 import mysql.connector
 
-#region Retrieval Functions
-def retrieve_panelists(database_connection: mysql.connector.connect
-                      ) -> List[Dict]:
+
+def retrieve_panelists(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, Any]]:
     """Retrieve panelists from the Stats Page database"""
 
-    panelists = OrderedDict()
-    try:
-        cursor = database_connection.cursor()
-        query = ("SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug "
-                 "FROM ww_showpnlmap pm "
-                 "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-                 "WHERE pm.panelistscore IS NOT NULL "
-                 "AND p.panelist <> '<Multiple>' "
-                 "ORDER BY p.panelist ASC;")
-        cursor.execute(query)
-        result = cursor.fetchall()
-        cursor.close()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
 
-        for row in result:
-            panelist_info = {}
-            panelist_info["id"] = row[0]
-            panelist_info["name"] = row[1]
-            panelist_info["slug"] = row[2]
-            panelists[panelist_info["slug"]] = panelist_info
+    cursor = database_connection.cursor(dictionary=False)
+    query = (
+        "SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug "
+        "FROM ww_showpnlmap pm "
+        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
+        "WHERE pm.panelistscore IS NOT NULL "
+        "AND p.panelist <> '<Multiple>' "
+        "ORDER BY p.panelist ASC;"
+    )
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
 
-        return panelists
-    except mysql.connector.Error:
-        return
+    panelists = []
+    for row in result:
+        panelists[row[2]] = {
+            "id": row[0],
+            "name": row[1],
+            "slug": row[2],
+        }
 
-def retrieve_panelist_appearances(panelists: Dict,
-                                  database_connection: mysql.connector.connect
-                                 ) -> Dict:
+    return panelists
+
+
+def retrieve_panelist_appearances(
+    panelists: Dict[str, Any], database_connection: mysql.connector.connect
+) -> Dict[str, Any]:
     """Retrieve panelist appearances from the Stats Page database"""
 
-    panelist_appearances = OrderedDict()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    panelist_appearances = {}
     for _, panelist_info in panelists.items():
-        try:
-            appearances = []
-            cursor = database_connection.cursor()
-            query = ("SELECT s.showdate FROM ww_showpnlmap pm "
-                     "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-                     "JOIN ww_shows s ON s.showid = pm.showid "
-                     "WHERE p.panelistslug = %s "
-                     "AND pm.panelistscore IS NOT NULL "
-                     "AND s.bestof = 0 "
-                     "AND s.repeatshowid IS NULL "
-                     "ORDER BY s.showdate ASC;")
-            cursor.execute(query, (panelist_info["slug"],))
-            result = cursor.fetchall()
-            cursor.close()
-
-            if result:
-                for appearance in result:
-                    appearances.append(appearance[0].isoformat())
-
-                panelist_appearances[panelist_info["slug"]] = appearances
-        except mysql.connector.Error:
-            return
-
-    return panelist_appearances
-
-def retrieve_show_scores(database_connection: mysql.connector.connect) -> Dict:
-    """Retrieve scores for each show and panelist from the Stats Page
-    Database"""
-
-    shows = OrderedDict()
-
-    try:
         cursor = database_connection.cursor()
-        query = ("SELECT s.showdate, p.panelistslug, pm.panelistscore FROM ww_showpnlmap pm "
-                 "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-                 "JOIN ww_shows s ON s.showid = pm.showid "
-                 "WHERE s.bestof = 0 "
-                 "AND s.repeatshowid IS NULL "
-                 "AND pm.panelistscore IS NOT NULL "
-                 "ORDER BY s.showdate ASC, pm.panelistscore DESC;")
-        cursor.execute(query)
+        query = (
+            "SELECT s.showdate FROM ww_showpnlmap pm "
+            "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
+            "JOIN ww_shows s ON s.showid = pm.showid "
+            "WHERE p.panelistslug = %s "
+            "AND pm.panelistscore IS NOT NULL "
+            "AND s.bestof = 0 "
+            "AND s.repeatshowid IS NULL "
+            "ORDER BY s.showdate ASC;"
+        )
+        cursor.execute(query, (panelist_info["slug"],))
         result = cursor.fetchall()
         cursor.close()
 
         if result:
-            for show in result:
-                show_date = show[0].isoformat()
-                if show_date not in shows:
-                    shows[show_date] = OrderedDict()
+            panelist_appearances[panelist_info["slug"]] = [
+                appearance[0].isoformat() for appearance in result
+            ]
 
-                panelist_slug = show[1]
-                panelist_score = show[2]
-                shows[show_date][panelist_slug] = panelist_score
+    return panelist_appearances
 
-        return shows
-    except mysql.connector.Error:
-        return
 
-#endregion
+def retrieve_show_scores(
+    database_connection: mysql.connector.connect,
+) -> Dict[str, Any]:
+    """Retrieve scores for each show and panelist from the Stats Page
+    Database"""
 
-#region Results Generation Functions
-def generate_panelist_vs_panelist_results(panelists: Dict,
-                                          panelist_appearances: Dict,
-                                          show_scores: Dict
-                                          ) -> Dict:
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor()
+    query = (
+        "SELECT s.showdate, p.panelistslug, pm.panelistscore FROM ww_showpnlmap pm "
+        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
+        "JOIN ww_shows s ON s.showid = pm.showid "
+        "WHERE s.bestof = 0 "
+        "AND s.repeatshowid IS NULL "
+        "AND pm.panelistscore IS NOT NULL "
+        "ORDER BY s.showdate ASC, pm.panelistscore DESC;"
+    )
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+
+    shows = {}
+    if result:
+        for show in result:
+            show_date = show[0].isoformat()
+            if show_date not in shows:
+                shows[show_date] = {}
+
+            panelist_slug = show[1]
+            panelist_score = show[2]
+            shows[show_date][panelist_slug] = panelist_score
+
+    return shows
+
+
+def generate_panelist_vs_panelist_results(
+    panelists: Dict[str, Any],
+    panelist_appearances: Dict[str, Any],
+    show_scores: Dict[str, Any],
+) -> Dict[str, Any]:
     """Generate panelist vs panelist results"""
 
-    pvp_results = OrderedDict()
+    pvp_results = {}
     for _, panelist_a in panelists.items():
         panelist_a = panelist_a["slug"]
-        pvp_results[panelist_a] = OrderedDict()
+        pvp_results[panelist_a] = {}
         for _, panelist_b in panelists.items():
             panelist_b = panelist_b["slug"]
             if panelist_a != panelist_b:
                 panelist_a_appearances = panelist_appearances[panelist_a]
                 panelist_b_appearances = panelist_appearances[panelist_b]
-                a_b_intersect = list(set(panelist_a_appearances) & set(panelist_b_appearances))
+                a_b_intersect = list(
+                    set(panelist_a_appearances) & set(panelist_b_appearances)
+                )
                 a_b_intersect.sort()
 
-                pvp_results[panelist_a][panelist_b] = OrderedDict()
+                pvp_results[panelist_a][panelist_b] = {}
                 wins = 0
                 draws = 0
                 losses = 0
@@ -142,5 +151,3 @@ def generate_panelist_vs_panelist_results(panelists: Dict,
                 pvp_results[panelist_a][panelist_b]["total"] = wins + draws + losses
 
     return pvp_results
-
-#endregion

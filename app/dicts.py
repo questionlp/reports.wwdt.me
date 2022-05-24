@@ -3,4 +3,13 @@
 #
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Panelists Reports module for Wait Wait Reports"""
+# Shared Dictionaries for Wait Wait Reports
+
+
+RANK_MAP = {
+    "1": "First",
+    "1t": "First Tied",
+    "2": "Second",
+    "2t": "Second Tied",
+    "3": "Third",
+}

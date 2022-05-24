@@ -6,14 +6,17 @@
 """WWDTM Hosts Appearances Report Functions"""
 from typing import Any, Dict, List
 
-from flask import current_app
 import mysql.connector
 
 
-def retrieve_all_hosts() -> List[Dict[str, str]]:
+def retrieve_all_hosts(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, str]]:
     """Retrieves a dictionary for all available hosts from the database"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT h.hostid, h.host, h.hostslug "
@@ -24,25 +27,30 @@ def retrieve_all_hosts() -> List[Dict[str, str]]:
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
     _hosts = []
     for row in result:
-        host = {}
-        host["name"] = row.host
-        host["slug"] = row.hostslug
-        _hosts.append(host)
+        _hosts.append(
+            {
+                "name": row.host,
+                "slug": row.hostslug,
+            }
+        )
 
     return _hosts
 
 
-def retrieve_appearances_by_host(host_slug: str) -> Dict[str, int]:
+def retrieve_appearances_by_host(
+    host_slug: str, database_connection: mysql.connector.connect
+) -> Dict[str, int]:
     """Retrieve appearance data for the requested host"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT ( "
@@ -65,23 +73,25 @@ def retrieve_appearances_by_host(host_slug: str) -> Dict[str, int]:
     )
     result = cursor.fetchone()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
-    _appearances = {}
-    _appearances["regular"] = result.regular
-    _appearances["all"] = result.allshows
+    return {
+        "regular": result.regular,
+        "all": result.allshows,
+    }
 
-    return _appearances
 
-
-def retrieve_first_most_recent_appearances(host_slug: str) -> Dict[str, str]:
+def retrieve_first_most_recent_appearances(
+    host_slug: str, database_connection: mysql.connector.connect
+) -> Dict[str, str]:
     """Retrieve first and most recent appearances for both regular
     and all shows for the requested host"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -99,10 +109,6 @@ def retrieve_first_most_recent_appearances(host_slug: str) -> Dict[str, str]:
     if not result:
         return None
 
-    appearance_info = {}
-    appearance_info["first"] = result.min.isoformat()
-    appearance_info["most_recent"] = result.max.isoformat()
-
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -112,41 +118,54 @@ def retrieve_first_most_recent_appearances(host_slug: str) -> Dict[str, str]:
         "WHERE h.hostslug = %s;"
     )
     cursor.execute(query, (host_slug,))
-    result = cursor.fetchone()
+    result_all = cursor.fetchone()
     cursor.close()
-    database_connection.close()
 
     if not result:
-        return appearance_info
+        return {
+            "first": result.min.isoformat(),
+            "most_recent": result.max.isoformat(),
+        }
 
-    appearance_info["first_all"] = result.min.isoformat()
-    appearance_info["most_recent_all"] = result.max.isoformat()
+    return {
+        "first": result.min.isoformat(),
+        "most_recent": result.max.isoformat(),
+        "first_all": result_all.min.isoformat(),
+        "most_recent_all": result_all.max.isoformat(),
+    }
 
-    return appearance_info
 
-
-def retrieve_appearance_summaries() -> List[Dict[str, Any]]:
+def retrieve_appearance_summaries(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, Any]]:
     """Retrieve host appearance summary, including appearance counts,
     and first and most recent appearances"""
 
-    _hosts = retrieve_all_hosts()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    _hosts = retrieve_all_hosts(database_connection=database_connection)
 
     if not _hosts:
         return None
 
     hosts_summary = {}
     for host in _hosts:
-        appearance_count = retrieve_appearances_by_host(host["slug"])
-        first_most_recent = retrieve_first_most_recent_appearances(host["slug"])
-        info = {}
-        info["slug"] = host["slug"]
-        info["name"] = host["name"]
-        info["regular_shows"] = appearance_count["regular"]
-        info["all_shows"] = appearance_count["all"]
-        info["first"] = first_most_recent["first"]
-        info["first_all"] = first_most_recent["first_all"]
-        info["most_recent"] = first_most_recent["most_recent"]
-        info["most_recent_all"] = first_most_recent["most_recent_all"]
-        hosts_summary[host["slug"]] = info
+        appearance_count = retrieve_appearances_by_host(
+            host_slug=host["slug"], database_connection=database_connection
+        )
+        first_most_recent = retrieve_first_most_recent_appearances(
+            host_slug=host["slug"], database_connection=database_connection
+        )
+        hosts_summary[host["slug"]] = {
+            "slug": host["slug"],
+            "name": host["name"],
+            "regular_shows": appearance_count["regular"],
+            "all_shows": appearance_count["all"],
+            "first": first_most_recent["first"],
+            "first_all": first_most_recent["first_all"],
+            "most_recent": first_most_recent["most_recent"],
+            "most_recent_all": first_most_recent["most_recent_all"],
+        }
 
     return hosts_summary

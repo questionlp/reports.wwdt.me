@@ -6,17 +6,18 @@
 """WWDTM Guest Best Of Only Appearances Report Functions"""
 from typing import List, Dict
 
-from flask import current_app
 import mysql.connector
 
 
 def retrieve_guest_appearances(
-    guest_id: int,
+    guest_id: int, database_connection: mysql.connector.connect
 ) -> List[Dict]:
     """Retrieve a list of shows in which the requested Not My Job guest
     has made an appearance on (including Best Of and Repeats)"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, "
@@ -30,30 +31,35 @@ def retrieve_guest_appearances(
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
 
     shows = []
     for row in result:
-        show = {}
-        show["id"] = row.showid
-        show["date"] = row.showdate.isoformat()
-        show["best_of"] = bool(row.bestof)
-        show["repeat_show"] = bool(row.repeatshowid)
-        show["score"] = row.guestscore
-        show["exception"] = bool(row.exception)
-        shows.append(show)
+        shows.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "best_of": bool(row.bestof),
+                "repeat_show": bool(row.repeatshowid),
+                "score": row.guestscore,
+                "exception": bool(row.exception),
+            }
+        )
 
     return shows
 
 
-def retrieve_best_of_only_guests() -> List[Dict]:
+def retrieve_best_of_only_guests(
+    database_connection: mysql.connector.connect,
+) -> List[Dict]:
     """Retrieves a list of Not My Job guests that have only appeared
     on Best Of shows"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
@@ -70,18 +76,22 @@ def retrieve_best_of_only_guests() -> List[Dict]:
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
+        database_connection.close()
         return None
 
     guests = []
     for row in result:
-        guest = {}
-        guest["id"] = row.guestid
-        guest["name"] = row.guest
-        guest["slug"] = row.guestslug
-        guest["appearances"] = retrieve_guest_appearances(row.guestid)
-        guests.append(guest)
+        guests.append(
+            {
+                "id": row.guestid,
+                "name": row.guest,
+                "slug": row.guestslug,
+                "appearances": retrieve_guest_appearances(
+                    guest_id=row.guestid, database_connection=database_connection
+                ),
+            }
+        )
 
     return guests

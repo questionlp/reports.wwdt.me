@@ -11,6 +11,10 @@
 
 - Complete restructuring of the Flask application to use Blueprints design
   pattern
+  - This includes moving section template directories to live within each
+    section's module directory
+  - Core templates including core templates, errors and sitemaps still reside
+    within the top-level templates directory
 - Convert the application from using uWSGI to serve the application to
   Gunicorn to match the changes made with the Wait Wait Stats API
 - Changed section names from singular to plural to match the naming convention

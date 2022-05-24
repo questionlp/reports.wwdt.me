@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Debut by Year | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Debut by Year</h2>
+<p>
+    This report provides a list of panelist debuts broken down by year.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+{% if years and debuts %}
+    {% for year in years %}
+<h3 id="y{{ year }}">{{ year }}</h3>
+        {% if debuts[year] %}
+<p>
+    <strong>Panelist debuts:</strong> {{ debuts[year]|length }}
+</p>
+
+<!-- Start Panelist Debut by Year Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date">
+        <col class="boolean">
+        <col class="name panelist">
+        <col class="count">
+        <col class="name host">
+        <col class="name scorekeeper">
+        <col class="name guest">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Show</th>
+            <th scope="col">Best Of</th>
+            <th scope="col">Panelist</th>
+            <th scope="col"># of Regular Appearances</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for debut in debuts[year] %}
+        <tr>
+            <td><a href="{{ stats_url }}/shows/{{ debut.show|replace('-', '/') }}">{{ debut.show }}</a></td>
+            {% if debut.best_of %}
+            <td>Best Of</td>
+            {% else %}
+            <td class="no-data">&nbsp;</td>
+            {% endif %}
+            <td><a href="{{ stats_url }}/panelists/{{ debut.panelist_slug }}">{{ debut.panelist_name }}</a></td>
+            <td>{{ debut.regular_appearances }}</td>
+            <td>{{ debut.host }}</td>
+            <td>{{ debut.scorekeeper }}</td>
+            {% if debut.guests %}
+            <td class="guest-names">
+                <ul class="no-bullets">
+                {% for guest in debut.guests %}
+                <li>{{ guest }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            {% else %}
+            <td class="no-data">&nbsp;</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        {% else %}
+<p>No panelists made their debut in {{ year }}.</p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<!-- End Panelist Debut by Year Section -->
+{% endblock content %}

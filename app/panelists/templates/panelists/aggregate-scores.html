@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Aggregate Scores | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Aggregate Scores</h2>
+<p>
+    The first table details the general statistics for entire aggregate of
+    panelist total scores. The second table breaks down the number of instances
+    a total score has been achieved at the end of the show.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Aggregate Score Statistics Section -->
+<h3 id="panelist">Aggregate Score Statistics</h3>
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="label">
+        <col class="stats float">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Statistic</th>
+            <th scope="col">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Count</td>
+            <td>{{ stats.count }}</td>
+        </tr>
+        <tr>
+            <td>Minimum</td>
+            <td>{{ stats.minimum }}</td>
+        </tr>
+        <tr>
+            <td>Maximum</td>
+            <td>{{ stats.maximum }}</td>
+        </tr>
+        <tr>
+            <td>Mean</td>
+            <td>{{ stats.mean }}</td>
+        </tr>
+        <tr>
+            <td>Median</td>
+            <td>{{ stats.median }}</td>
+        </tr>
+        <tr>
+            <td>Standard Deviation</td>
+            <td>{{ stats.standard_deviation }}</td>
+        </tr>
+        <tr>
+            <td>Sum</td>
+            <td>{{ stats.sum }}</td>
+        </tr>
+    </tbody>
+</table>
+<!-- End Aggregate Score Statistics Section -->
+
+<!-- Start Score Spread Section -->
+<h3 id="panelist">Aggregate Score Spread</h3>
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="score">
+        <col class="count">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Score</th>
+            <th scope="col">Count</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for score in aggregate %}
+        <tr>
+            <td>{{ score.score }}</td>
+            <td>{{ score.count }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!-- End Score Spread Section -->
+{% endblock content %}

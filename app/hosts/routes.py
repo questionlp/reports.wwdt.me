@@ -4,11 +4,12 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Hosts Routes for Wait Wait Reports"""
-from flask import Blueprint, render_template
+from flask import Blueprint, current_app, render_template
+import mysql.connector
 
 from .reports.appearances import retrieve_appearance_summaries
 
-blueprint = Blueprint("hosts", __name__)
+blueprint = Blueprint("hosts", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
@@ -20,5 +21,7 @@ def index():
 @blueprint.route("/appearance-summary")
 def appearance_summary():
     """View: Hosts Appearance Summary Report"""
-    summary = retrieve_appearance_summaries()
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    summary = retrieve_appearance_summaries(database_connection=_database_connection)
+    _database_connection.close()
     return render_template("hosts/appearance-summary.html", summary=summary)

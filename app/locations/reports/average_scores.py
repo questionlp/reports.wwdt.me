@@ -8,15 +8,18 @@
 from decimal import Decimal
 from typing import Any, List, Dict
 
-from flask import current_app
 import mysql.connector
 
 
-def retrieve_average_scores_by_location() -> List[Dict]:
+def retrieve_average_scores_by_location(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, Any]]:
     """Retrieve average scores sorted by location using a pre-written
     database query"""
 
-    database_connection = mysql.connector.connect(**current_app.config["database"])
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
 
     # Excluding 25th Anniversary Show at Chicago Theatre from calculations
@@ -46,14 +49,16 @@ def retrieve_average_scores_by_location() -> List[Dict]:
 
     _average_scores = []
     for row in result:
-        location = {}
-        location["id"] = row.locationid
-        location["venue"] = row.venue
-        location["city"] = row.city
-        location["state"] = row.state
-        location["average_score"] = Decimal(row.average_score).normalize()
-        location["average_total"] = Decimal(row.average_total).normalize()
-        location["show_count"] = Decimal(row.show_count).normalize()
-        _average_scores.append(location)
+        _average_scores.append(
+            {
+                "id": row.locationid,
+                "venue": row.venue,
+                "city": row.city,
+                "state": row.state,
+                "average_score": Decimal(row.average_score).normalize(),
+                "average_total": Decimal(row.average_total).normalize(),
+                "show_count": Decimal(row.show_count).normalize(),
+            }
+        )
 
     return _average_scores
