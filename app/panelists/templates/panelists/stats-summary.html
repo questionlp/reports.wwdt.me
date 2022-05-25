@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Statistics Summary | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Statistics Summary</h2>
+<p>
+    This report provides a break down of statistics by panelist.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Panelist Statistics Breakdown Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name">
+        <col class="count">
+        <col class="count">
+        <col class="count">
+        <col class="score">
+        <col class="score">
+        <col class="stats float">
+        <col class="stats">
+        <col class="stats float">
+        <col class="stats int">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col" rowspan="2">Panelist</th>
+            <td colspan="3">Appearances</td>
+            <td colspan="6">Scoring</td>
+        </tr>
+        <tr>
+            <th scope="col">Regular</th>
+            <th scope="col">All</th>
+            <th scope="col">With Scores</th>
+            <th scope="col">Min</th>
+            <th scope="col">Max</th>
+            <th scope="col">Mean</th>
+            <th scope="col">Median</th>
+            <th scope="col">Std Dev</th>
+            <th scope="col">Sum</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in panelists_stats %}
+        <tr>
+            <td><a href="{{ stats_url }}/panelists/{{ panelist }}">
+                {{ panelists[panelist] }}</a></td>
+            {% if panelists_stats[panelist]["appearances"] %}
+            <td>{{ panelists_stats[panelist]["appearances"]["regular"] }}</td>
+            <td>{{ panelists_stats[panelist]["appearances"]["all"] }}</td>
+            <td>{{ panelists_stats[panelist]["appearances"]["with_scores"] }}</td>
+            {% else %}
+            <td class="no-data" colspan="3">&nbsp;</td>
+            {% endif %}
+
+            {% if panelists_stats[panelist]["stats"] %}
+            <td>{{ panelists_stats[panelist]["stats"]["minimum"] }}</td>
+            <td>{{ panelists_stats[panelist]["stats"]["maximum"] }}</td>
+            <td>{{ panelists_stats[panelist]["stats"]["mean"] }}</td>
+            <td>{{ panelists_stats[panelist]["stats"]["median"] }}</td>
+            <td>{{ panelists_stats[panelist]["stats"]["standard_deviation"] }}</td>
+            <td>{{ panelists_stats[panelist]["stats"]["total"] }}</td>
+            {% else %}
+            <td class="no-data" colspan="6">&nbsp;</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col" rowspan="2">Panelist</th>
+            <td colspan="3">Appearances</td>
+            <td colspan="6">Scoring</td>
+        </tr>
+        <tr>
+            <th scope="col">Regular</th>
+            <th scope="col">All</th>
+            <th scope="col">With Scores</th>
+            <th scope="col">Min</th>
+            <th scope="col">Max</th>
+            <th scope="col">Mean</th>
+            <th scope="col">Median</th>
+            <th scope="col">Std Dev</th>
+            <th scope="col">Sum</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Panelist Statistics Breakdown Section -->
+{% endblock content %}

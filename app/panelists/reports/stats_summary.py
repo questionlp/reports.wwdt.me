@@ -140,7 +140,7 @@ def retrieve_all_panelists_stats(
         }
 
         scores = retrieve_scores_by_panelist(
-            panelist_slug=panelist_slug, database_conneciton=database_connection
+            panelist_slug=panelist_slug, database_connection=database_connection
         )
         if scores:
             all_stats[panelist_slug]["stats"] = {

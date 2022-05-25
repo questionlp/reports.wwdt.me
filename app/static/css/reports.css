@@ -31,6 +31,11 @@
         width: 32rem;
     }
 
+    form {
+        border: 1px solid #666;
+        padding: 0.75em;
+    }
+
     td.notes p {
         margin-block-start: 0;
         margin-block-end: 1em;
@@ -41,6 +46,19 @@
     td.centered.middle {
         text-align: center;
         vertical-align: middle !important;
+    }
+
+    td.score-higher, td.score-lower, td.score-tied {
+        text-align: center;
+    }
+
+    td.score-higher {
+        background-color: rgba(245, 80, 0, 0.85);
+        font-weight: 600;
+    }
+
+    td.score-lower {
+        background-color: inherit;
     }
 
     table.pure-table {
@@ -144,6 +162,11 @@
         border-color: #666 !important;
     }
 
+    td.score-tied {
+        background-color: #eee;
+        color: black;
+    }
+
     td.no-data {
         background-color: rgba(48, 48, 48, 0.75);
     }
@@ -171,6 +194,10 @@
     table.pure-table thead,
     table.pure-table tfoot {
         background-color: lightgray !important;
+    }
+
+    td.score-tied {
+        background-color: #eee;
     }
 
     td.no-data {

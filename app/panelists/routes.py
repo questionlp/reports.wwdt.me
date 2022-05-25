@@ -30,6 +30,10 @@ from .reports.rankings_summary import (
     retrieve_all_panelist_rankings,
 )
 from .reports.single_appearance import retrieve_single_appearances
+from .reports.stats_summary import (
+    retrieve_all_panelists as summary_retrieve_all_panelists,
+    retrieve_all_panelists_stats as summary_retrieve_all_stats,
+)
 from .reports.streaks import (
     retrieve_panelists as streaks_retrieve_panelists,
     calculate_panelist_losing_streaks,
@@ -238,15 +242,25 @@ def single_appearance():
 def stats_summary():
     """View: Panelists Statistics Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-
+    _panelists = summary_retrieve_all_panelists(
+        database_connection=_database_connection
+    )
+    _stats = summary_retrieve_all_stats(database_connection=_database_connection)
     _database_connection.close()
-    return render_template("panelists/stats-summary.html")
+    return render_template(
+        "panelists/stats-summary.html", panelists=_panelists, panelists_stats=_stats
+    )
 
 
 @blueprint.route("/win-streaks")
 def win_streaks():
     """View: Panelists Win Streaks Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-
+    _panelists = streaks_retrieve_panelists(database_connection=_database_connection)
+    _streaks = calculate_panelist_win_streaks(
+        panelists=_panelists, database_connection=_database_connection
+    )
     _database_connection.close()
-    return render_template("panelists/win-streaks.html")
+    return render_template(
+        "panelists/win-streaks.html", rank_map=RANK_MAP, win_streaks=_streaks
+    )
