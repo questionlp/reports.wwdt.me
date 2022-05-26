@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Panelist vs Panelist | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Panelist vs Panelist</h2>
+<p>
+    This report that provides a way to lookup how well a panelist has faired
+    against other panelists.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<form method="POST" class="pure-form">
+    <fieldset>
+        <legend>Select two panelists to compare scores:</legend>
+        <div class="panelist-fields">
+            <label for="panelist-1">Panelist 1:</label>
+            <select id="panelist-1" name="panelist_1">
+                <option value="">-- Please chose a panelist --</option>
+                {% for panelist in all_panelists %}
+                {% if request.form.panelist_1 == panelist %}
+                <option value="{{ panelist }}" selected>{{ all_panelists[panelist].name}}</option>
+                {% else %}
+                <option value="{{ panelist }}">{{ all_panelists[panelist].name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="panelist-options">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
+</form>
+
+{% if request.method == "POST" %}
+<hr>
+{% if not request.form.panelist_1 %}
+<p class="result-message">No panelist selected.</p>
+{% else %}
+
+<section class="pvp">
+<h3>{{ panelist_info.name }}</h3>
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name panelist">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Ranked vs</th>
+            <th scope="col">Higher</th>
+            <th scope="col">Tied</th>
+            <th scope="col">Lower</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for vs_panelist, result in results.items() %}
+        {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
+        <tr>
+            <td>{{ all_panelists[vs_panelist].name }}</td>
+            <td>{{ result.wins }}</td>
+            <td>{{ result.draws }}</td>
+            <td>{{ result.losses }}</td>
+            <td>{{ result.total }}</td>
+        </tr>
+        {% endif %}
+    {% endfor%}
+    </tbody>
+</table>
+</section>
+{% endif %}
+{% endif %}
+{% endblock content %}

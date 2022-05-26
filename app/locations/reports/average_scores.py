@@ -4,9 +4,8 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Location Score Breakdown Report Functions"""
-
 from decimal import Decimal
-from typing import Any, List, Dict
+from typing import Any, Dict, List
 
 import mysql.connector
 

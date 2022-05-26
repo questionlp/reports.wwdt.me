@@ -8,6 +8,28 @@ from typing import Any, Dict, List
 import mysql.connector
 
 
+def retrieve_panelists(database_connection: mysql.connector.connect) -> Dict[str, str]:
+    """Returns a dictionary containing valid panelists"""
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
+    query = (
+        "SELECT panelistslug, panelist FROM ww_panelists "
+        "WHERE panelistslug <> 'multiple' "
+        "ORDER BY panelist ASC;"
+    )
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+
+    if not result:
+        return None
+
+    return {row.panelistslug: row.panelist for row in result}
+
+
 def retrieve_common_shows(
     panelist_slug_1: str,
     panelist_slug_2: str,

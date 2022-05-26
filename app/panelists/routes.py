@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Panelists Routes for Wait Wait Reports"""
-from flask import Blueprint, current_app, render_template, request, Response
+from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
 from app.dicts import RANK_MAP
@@ -21,8 +21,15 @@ from .reports.appearances_by_year import (
 from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
 from .reports.debut_by_year import retrieve_show_years, panelist_debuts_by_year
 from .reports.gender_stats import retrieve_stats_by_year_gender
+from .reports.panelist_vs_panelist import (
+    retrieve_panelists as pvp_retrieve_panelists,
+    retrieve_panelist_appearances as pvp_retrieve_appearances,
+    retrieve_show_scores as pvp_retrieve_scores,
+    generate_panelist_vs_panelist_results as pvp_generate_results,
+)
 from .reports.panelist_vs_panelist_scoring import (
     retrieve_common_shows,
+    retrieve_panelists as scoring_retrieve_panelists,
     retrieve_panelists_scores,
 )
 from .reports.rankings_summary import (
@@ -39,8 +46,6 @@ from .reports.streaks import (
     calculate_panelist_losing_streaks,
     calculate_panelist_win_streaks,
 )
-
-from app.shows.reports import search_mutliple_panelists
 
 blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
@@ -138,22 +143,78 @@ def losing_streaks():
     )
 
 
-@blueprint.route("/panelist-pvp-report", methods=["GET", "POST"])
-def panelist_pvp_report():
+@blueprint.route("/panelist-pvp", methods=["GET", "POST"])
+def panelist_pvp():
     """View: Panelist vs Panelist Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
+    _panelists_info = {
+        _panelists_list[pnl]["slug"]: _panelists_list[pnl]["name"]
+        for pnl in _panelists_list
+    }
 
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist_1 = "panelist_1" in request.form and request.form["panelist_1"]
+        if panelist_1 in _panelists_info.keys():
+            # Retrieve PvP report for specific panelist
+            panelist = {"slug": panelist_1, "name": _panelists_info[panelist_1]}
+            _appearances = pvp_retrieve_appearances(
+                panelists=_panelists_list, database_connection=_database_connection
+            )
+            _scores = pvp_retrieve_scores(database_connection=_database_connection)
+            _results = pvp_generate_results(
+                panelists=_panelists_list,
+                panelist_appearances=_appearances,
+                show_scores=_scores,
+            )
+            _database_connection.close()
+            return render_template(
+                "panelists/panelist-pvp.html",
+                all_panelists=_panelists_list,
+                panelist_info=panelist,
+                results=_results[panelist_1],
+            )
+        else:
+            # No valid panelist returned
+            _database_connection.close()
+            return render_template(
+                "panelists/panelist-pvp.html", all_panelists=_panelists_list
+            )
+
+    # Fallback for GET request
     _database_connection.close()
-    return render_template("panelists/panelist-pvp-report.html")
+    return render_template("panelists/panelist-pvp.html", all_panelists=_panelists_list)
+
+
+@blueprint.route("/panelist-pvp/all")
+def panelist_pvp_all():
+    """View: Panelist vs Panelist Report"""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = pvp_retrieve_panelists(database_connection=_database_connection)
+    _appearances = pvp_retrieve_appearances(
+        panelists=_panelists, database_connection=_database_connection
+    )
+    _scores = pvp_retrieve_scores(database_connection=_database_connection)
+    _results = pvp_generate_results(
+        panelists=_panelists,
+        panelist_appearances=_appearances,
+        show_scores=_scores,
+    )
+    _database_connection.close()
+
+    return render_template(
+        "panelists/panelist-pvp-all.html",
+        panelists=_panelists,
+        results=_results,
+    )
 
 
 @blueprint.route("/panelist-vs-panelist-scoring", methods=["GET", "POST"])
 def panelist_pvp_scoring():
     """View: Panelist vs Panelist Scoring Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = search_mutliple_panelists.retrieve_panelists(
-        database_connection=_database_connection
-    )
+    _panelists = scoring_retrieve_panelists(database_connection=_database_connection)
 
     if request.method == "POST":
         # Parse panelist dropdown selections

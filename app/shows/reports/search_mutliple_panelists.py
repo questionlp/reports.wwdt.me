@@ -52,11 +52,7 @@ def retrieve_panelists(database_connection: mysql.connector.connect) -> Dict[str
     if not result:
         return None
 
-    panelists = {}
-    for row in result:
-        panelists[row.panelistslug] = row.panelist
-
-    return panelists
+    return {row.panelistslug: row.panelist for row in result}
 
 
 def retrieve_details(

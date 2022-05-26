@@ -17,7 +17,7 @@ def retrieve_all_scores(database_connection: mysql.connector.connect) -> List[in
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=False)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT pm.panelistscore FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
@@ -32,7 +32,7 @@ def retrieve_all_scores(database_connection: mysql.connector.connect) -> List[in
     if not result:
         return None
 
-    return [row[0] for row in result]
+    return [row.panelistscore for row in result]
 
 
 def retrieve_score_spread(
@@ -44,9 +44,9 @@ def retrieve_score_spread(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=False)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
-        "SELECT pm.panelistscore, COUNT(pm.panelistscore) "
+        "SELECT pm.panelistscore, COUNT(pm.panelistscore) AS count "
         "FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistscore IS NOT NULL "
@@ -65,8 +65,8 @@ def retrieve_score_spread(
     for row in result:
         scores.append(
             {
-                "score": row[0],
-                "count": row[1],
+                "score": row.panelistscore,
+                "count": row.count,
             }
         )
 

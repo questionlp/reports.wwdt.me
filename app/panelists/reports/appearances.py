@@ -91,9 +91,8 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        slug = row.panelistslug
-        panelist_appearances[slug]["first"] = row.min.isoformat()
-        panelist_appearances[slug]["most_recent"] = row.max.isoformat()
+        panelist_appearances[row.panelistslug]["first"] = row.min.isoformat()
+        panelist_appearances[row.panelistslug]["most_recent"] = row.max.isoformat()
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -114,8 +113,7 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        slug = row.panelistslug
-        panelist_appearances[slug]["count"] = row.count
+        panelist_appearances[row.panelistslug]["count"] = row.count
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -135,8 +133,7 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        slug = row.panelistslug
-        panelist_appearances[slug]["count_all"] = row.count
+        panelist_appearances[row.panelistslug]["count_all"] = row.count
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -157,8 +154,7 @@ def retrieve_first_most_recent_appearances(
         return panelist_appearances
 
     for row in result:
-        slug = row.panelistslug
-        panelist_appearances[slug]["first_all"] = row.min.isoformat()
-        panelist_appearances[slug]["most_recent_all"] = row.max.isoformat()
+        panelist_appearances[row.panelistslug]["first_all"] = row.min.isoformat()
+        panelist_appearances[row.panelistslug]["most_recent_all"] = row.max.isoformat()
 
     return panelist_appearances

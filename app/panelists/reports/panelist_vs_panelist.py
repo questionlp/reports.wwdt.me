@@ -4,19 +4,20 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist vs Panelist Report Functions"""
-from typing import Any, Dict, List
+from typing import Any, Dict
+
 import mysql.connector
 
 
 def retrieve_panelists(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
+) -> Dict[str, Any]:
     """Retrieve panelists from the Stats Page database"""
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=False)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug "
         "FROM ww_showpnlmap pm "
@@ -29,12 +30,12 @@ def retrieve_panelists(
     result = cursor.fetchall()
     cursor.close()
 
-    panelists = []
+    panelists = {}
     for row in result:
-        panelists[row[2]] = {
-            "id": row[0],
-            "name": row[1],
-            "slug": row[2],
+        panelists[row.panelistslug] = {
+            "id": row.panelistid,
+            "name": row.panelist,
+            "slug": row.panelistslug,
         }
 
     return panelists
@@ -42,7 +43,7 @@ def retrieve_panelists(
 
 def retrieve_panelist_appearances(
     panelists: Dict[str, Any], database_connection: mysql.connector.connect
-) -> Dict[str, Any]:
+) -> Dict[str, str]:
     """Retrieve panelist appearances from the Stats Page database"""
 
     if not database_connection.is_connected():
@@ -50,7 +51,7 @@ def retrieve_panelist_appearances(
 
     panelist_appearances = {}
     for _, panelist_info in panelists.items():
-        cursor = database_connection.cursor()
+        cursor = database_connection.cursor(named_tuple=True)
         query = (
             "SELECT s.showdate FROM ww_showpnlmap pm "
             "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
@@ -82,9 +83,11 @@ def retrieve_show_scores(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor()
+    shows = {}
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
-        "SELECT s.showdate, p.panelistslug, pm.panelistscore FROM ww_showpnlmap pm "
+        "SELECT s.showdate, p.panelistslug, pm.panelistscore "
+        "FROM ww_showpnlmap pm "
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE s.bestof = 0 "
@@ -96,16 +99,13 @@ def retrieve_show_scores(
     result = cursor.fetchall()
     cursor.close()
 
-    shows = {}
     if result:
         for show in result:
-            show_date = show[0].isoformat()
+            show_date = show.showdate.isoformat()
             if show_date not in shows:
                 shows[show_date] = {}
 
-            panelist_slug = show[1]
-            panelist_score = show[2]
-            shows[show_date][panelist_slug] = panelist_score
+            shows[show_date][show.panelistslug] = show.panelistscore
 
     return shows
 

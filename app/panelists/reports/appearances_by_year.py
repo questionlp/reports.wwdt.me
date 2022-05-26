@@ -17,7 +17,7 @@ def retrieve_panelist_appearance_counts(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=False)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT YEAR(s.showdate) AS year, COUNT(p.panelist) AS count "
         "FROM ww_showpnlmap pm "
@@ -38,8 +38,8 @@ def retrieve_panelist_appearance_counts(
     _appearances = {}
     total_appearances = 0
     for row in result:
-        _appearances[row[0]] = row[1]
-        total_appearances += row[1]
+        _appearances[row.year] = row.count
+        total_appearances += row.count
 
     _appearances["total"] = total_appearances
     return _appearances
@@ -92,9 +92,9 @@ def retrieve_all_years(database_connection: mysql.connector.connect) -> List[int
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor()
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
-        "SELECT DISTINCT YEAR(s.showdate) FROM ww_shows s "
+        "SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s "
         "ORDER BY YEAR(s.showdate) ASC"
     )
     cursor.execute(query)
@@ -104,4 +104,4 @@ def retrieve_all_years(database_connection: mysql.connector.connect) -> List[int
     if not result:
         return None
 
-    return [row[0] for row in result]
+    return [row.year for row in result]

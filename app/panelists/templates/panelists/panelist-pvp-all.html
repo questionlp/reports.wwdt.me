@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}All | Panelist vs Panelist | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Panelist vs Panelist: All</h2>
+<p>
+    This report that provides details on how well all panelists has faired
+    against other panelists.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+
+{% for panelist, vs_panelists in results.items() %}
+<section class="pvp">
+<h3>{{ panelists[panelist].name }}</h3>
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name panelist">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+        <col class="count mix">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Ranked vs</th>
+            <th scope="col">Higher</th>
+            <th scope="col">Tied</th>
+            <th scope="col">Lower</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for vs_panelist, result in vs_panelists.items() %}
+        {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
+        <tr>
+            <td>{{ panelists[vs_panelist].name }}</td>
+            <td>{{ result.wins }}</td>
+            <td>{{ result.draws }}</td>
+            <td>{{ result.losses }}</td>
+            <td>{{ result.total }}</td>
+        </tr>
+        {% endif %}
+    {% endfor%}
+    </tbody>
+</table>
+</section>
+{% endfor %}
+
+{% endblock content %}

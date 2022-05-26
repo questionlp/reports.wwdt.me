@@ -15,9 +15,9 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor()
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
-        "SELECT DISTINCT YEAR(s.showdate) FROM ww_shows s "
+        "SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s "
         "ORDER BY YEAR(s.showdate) ASC;"
     )
     cursor.execute(query)
@@ -27,7 +27,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
     if not result:
         return None
 
-    return [row[0] for row in result]
+    return [row.year for row in result]
 
 
 def retrieve_panel_gender_count_by_year(
@@ -44,7 +44,7 @@ def retrieve_panel_gender_count_by_year(
 
     counts = {}
     for gender_count in range(0, 4):
-        cursor = database_connection.cursor()
+        cursor = database_connection.cursor(dictionary=False)
         query = (
             "SELECT s.showdate FROM ww_showpnlmap pm "
             "JOIN ww_shows s ON s.showid = pm.showid "

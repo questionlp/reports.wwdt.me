@@ -49,30 +49,30 @@ def retrieve_rankings_by_panelist(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=True)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT ( "
         "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistid = %s AND pm.showpnlrank = '1' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) as '1', ( "
+        "s.bestof = 0 and s.repeatshowid IS NULL) AS first, ( "
         "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistid = %s AND pm.showpnlrank = '1t' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) as '1t', ( "
+        "s.bestof = 0 and s.repeatshowid IS NULL) AS first_tied, ( "
         "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistid = %s AND pm.showpnlrank = '2' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) as '2', ( "
+        "s.bestof = 0 and s.repeatshowid IS NULL) AS second, ( "
         "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistid = %s AND pm.showpnlrank = '2t' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) as '2t', ( "
+        "s.bestof = 0 and s.repeatshowid IS NULL) AS second_tied, ( "
         "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.panelistid = %s AND pm.showpnlrank = '3' AND "
         "s.bestof = 0 and s.repeatshowid IS NULL "
-        ") as '3';"
+        ") AS third;"
     )
     cursor.execute(
         query,
@@ -91,12 +91,16 @@ def retrieve_rankings_by_panelist(
         return None
 
     rankings = {
-        "first": result["1"],
-        "first_tied": result["1t"],
-        "second": result["2"],
-        "second_tied": result["2t"],
-        "third": result["3"],
-        "count": result["1"] + result["1t"] + result["2"] + result["2t"] + result["3"],
+        "first": result.first,
+        "first_tied": result.first_tied,
+        "second": result.second,
+        "second_tied": result.second_tied,
+        "third": result.third,
+        "count": result.first
+        + result.first_tied
+        + result.second
+        + result.second_tied
+        + result.third,
     }
 
     if rankings["count"]:
