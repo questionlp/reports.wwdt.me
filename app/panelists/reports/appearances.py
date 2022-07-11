@@ -8,40 +8,7 @@ from typing import Any, Dict, List
 
 import mysql.connector
 
-
-def retrieve_all_panelists(
-    database_connection: mysql.connector.connect,
-) -> List[Dict[str, str]]:
-    """Retrieves a dictionary for all available panelists from the
-    database"""
-
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT p.panelistid, p.panelist, p.panelistslug "
-        "FROM ww_panelists p "
-        "WHERE p.panelist <> '<Multiple>' "
-        "ORDER BY p.panelistslug ASC;"
-    )
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    panelists = []
-    for row in result:
-        panelists.append(
-            {
-                "name": row.panelist,
-                "slug": row.panelistslug,
-            }
-        )
-
-    return panelists
+from . import common
 
 
 def retrieve_first_most_recent_appearances(
@@ -49,7 +16,7 @@ def retrieve_first_most_recent_appearances(
 ) -> List[Dict[str, Any]]:
     """Retrieve first and most recent appearances for both regular
     and all shows for all panelists"""
-    panelists = retrieve_all_panelists(database_connection=database_connection)
+    panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not panelists:
         return None

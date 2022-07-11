@@ -74,7 +74,7 @@ def panel_gender_mix():
 @blueprint.route("/panelist/pvp")
 def pvp():
     """View: Panelist vs Panelist Report Redirect"""
-    return redirect_url(url_for("panelists.panelist_pvp_report"), status_code=301)
+    return redirect_url(url_for("panelists.panelist_pvp"), status_code=301)
 
 
 @blueprint.route("/panelist/panelist_vs_panelist_scoring")

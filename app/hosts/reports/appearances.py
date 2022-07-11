@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 import mysql.connector
 
 
-def retrieve_all_hosts(
+def retrieve_hosts(
     database_connection: mysql.connector.connect,
 ) -> List[Dict[str, str]]:
     """Retrieves a dictionary for all available hosts from the database"""
@@ -144,7 +144,7 @@ def retrieve_appearance_summaries(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    _hosts = retrieve_all_hosts(database_connection=database_connection)
+    _hosts = retrieve_hosts(database_connection=database_connection)
 
     if not _hosts:
         return None

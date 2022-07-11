@@ -78,7 +78,7 @@ def create_app():
     app.register_blueprint(locations_redirects_bp)
     app.register_blueprint(locations_bp, url_prefix="/locations")
     app.register_blueprint(panelists_redirects_bp)
-    app.register_blueprint(panelists_bp, url_prefix="/panelists", template_folder="templates")
+    app.register_blueprint(panelists_bp, url_prefix="/panelists")
     # app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     app.register_blueprint(shows_bp, url_prefix="/shows")
 

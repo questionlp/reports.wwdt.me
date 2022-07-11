@@ -8,6 +8,7 @@ from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
 from app.dicts import RANK_MAP
+from .reports.common import retrieve_panelists
 from .reports.aggregate_scores import (
     retrieve_all_scores,
     calculate_stats,
@@ -29,20 +30,16 @@ from .reports.panelist_vs_panelist import (
 )
 from .reports.panelist_vs_panelist_scoring import (
     retrieve_common_shows,
-    retrieve_panelists as scoring_retrieve_panelists,
     retrieve_panelists_scores,
 )
 from .reports.rankings_summary import (
-    retrieve_all_panelists as rankings_retrieve_all_panelists,
     retrieve_all_panelist_rankings,
 )
 from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
-    retrieve_all_panelists as summary_retrieve_all_panelists,
     retrieve_all_panelists_stats as summary_retrieve_all_stats,
 )
 from .reports.streaks import (
-    retrieve_panelists as streaks_retrieve_panelists,
     calculate_panelist_losing_streaks,
     calculate_panelist_win_streaks,
 )
@@ -133,7 +130,7 @@ def gender_stats():
 def losing_streaks():
     """View: Panelists Losing Streaks Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = streaks_retrieve_panelists(database_connection=_database_connection)
+    _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_losing_streaks(
         panelists=_panelists, database_connection=_database_connection
     )
@@ -148,6 +145,7 @@ def panelist_pvp():
     """View: Panelist vs Panelist Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
+
     _panelists_info = {
         _panelists_list[pnl]["slug"]: _panelists_list[pnl]["name"]
         for pnl in _panelists_list
@@ -155,10 +153,10 @@ def panelist_pvp():
 
     if request.method == "POST":
         # Parse panelist dropdown selections
-        panelist_1 = "panelist_1" in request.form and request.form["panelist_1"]
-        if panelist_1 in _panelists_info.keys():
+        panelist = "panelist" in request.form and request.form["panelist"]
+        if panelist in _panelists_info.keys():
             # Retrieve PvP report for specific panelist
-            panelist = {"slug": panelist_1, "name": _panelists_info[panelist_1]}
+            panelist_info = {"slug": panelist, "name": _panelists_info[panelist]}
             _appearances = pvp_retrieve_appearances(
                 panelists=_panelists_list, database_connection=_database_connection
             )
@@ -172,14 +170,16 @@ def panelist_pvp():
             return render_template(
                 "panelists/panelist-pvp.html",
                 all_panelists=_panelists_list,
-                panelist_info=panelist,
-                results=_results[panelist_1],
+                panelist_info=panelist_info,
+                results=_results[panelist],
             )
         else:
             # No valid panelist returned
             _database_connection.close()
             return render_template(
-                "panelists/panelist-pvp.html", all_panelists=_panelists_list
+                "panelists/panelist-pvp.html",
+                all_panelists=_panelists_list,
+                results=None,
             )
 
     # Fallback for GET request
@@ -214,7 +214,7 @@ def panelist_pvp_all():
 def panelist_pvp_scoring():
     """View: Panelist vs Panelist Scoring Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = scoring_retrieve_panelists(database_connection=_database_connection)
+    _panelists = retrieve_panelists(database_connection=_database_connection)
 
     if request.method == "POST":
         # Parse panelist dropdown selections
@@ -274,9 +274,7 @@ def panelist_pvp_scoring():
 def rankings_summary():
     """View: Panelists Rankings Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = rankings_retrieve_all_panelists(
-        database_connection=_database_connection
-    )
+    _panelists = retrieve_panelists(database_connection=_database_connection)
     _rankings = retrieve_all_panelist_rankings(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
@@ -303,9 +301,7 @@ def single_appearance():
 def stats_summary():
     """View: Panelists Statistics Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = summary_retrieve_all_panelists(
-        database_connection=_database_connection
-    )
+    _panelists = retrieve_panelists(database_connection=_database_connection)
     _stats = summary_retrieve_all_stats(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
@@ -317,7 +313,7 @@ def stats_summary():
 def win_streaks():
     """View: Panelists Win Streaks Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = streaks_retrieve_panelists(database_connection=_database_connection)
+    _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_win_streaks(
         panelists=_panelists, database_connection=_database_connection
     )

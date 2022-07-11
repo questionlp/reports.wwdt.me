@@ -23,14 +23,14 @@
     <fieldset>
         <legend>Select two panelists to compare scores:</legend>
         <div class="panelist-fields">
-            <label for="panelist-1">Panelist 1:</label>
-            <select id="panelist-1" name="panelist_1">
+            <label for="panelist">Panelist:</label>
+            <select id="panelist" name="panelist">
                 <option value="">-- Please chose a panelist --</option>
                 {% for panelist in all_panelists %}
-                {% if request.form.panelist_1 == panelist %}
-                <option value="{{ panelist }}" selected>{{ all_panelists[panelist].name}}</option>
+                {% if request.form.panelist == all_panelists[panelist].slug %}
+                <option value="{{ all_panelists[panelist].slug }}" selected>{{ all_panelists[panelist].name }}</option>
                 {% else %}
-                <option value="{{ panelist }}">{{ all_panelists[panelist].name }}</option>
+                <option value="{{ all_panelists[panelist].slug }}">{{ all_panelists[panelist].name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -43,10 +43,9 @@
 
 {% if request.method == "POST" %}
 <hr>
-{% if not request.form.panelist_1 %}
-<p class="result-message">No panelist selected.</p>
+{% if not results %}
+<p class="result-message">Incorrect or no panelist selected.</p>
 {% else %}
-
 <section class="pvp">
 <h3>{{ panelist_info.name }}</h3>
 <table class="pure-table pure-table-bordered">
@@ -70,7 +69,7 @@
     {% for vs_panelist, result in results.items() %}
         {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
         <tr>
-            <td>{{ all_panelists[vs_panelist].name }}</td>
+            <td><a href="{{ stats_url }}/panelists/{{ all_panelists[vs_panelist].slug }}">{{ all_panelists[vs_panelist].name }}</a></td>
             <td>{{ result.wins }}</td>
             <td>{{ result.draws }}</td>
             <td>{{ result.losses }}</td>

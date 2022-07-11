@@ -1,11 +1,16 @@
 @media screen {
+
+    html, body, button, input, select, textarea,
+    .pure-g [class *="pure-u"] {
+        font-family: "IBM Plex Sans", sans-serif !important;
+    }
+
     body {
-        font-family: "IBM Plex Sans", sans-serif;
         line-height: 1.5rem;
         margin: 1.5rem;
     }
 
-    pre, code {
+    pre, code, div.pure-g pre, div.pure-g code {
         font-family: "IBM Plex Mono", monospace;
     }
 
@@ -90,6 +95,7 @@
     div.sections h2 {
         margin: 2rem 0 1.5rem;
     }
+
 }
 
 @media (prefers-color-scheme: dark) {

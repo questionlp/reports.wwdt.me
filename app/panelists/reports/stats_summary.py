@@ -9,34 +9,7 @@ from typing import Any, Dict, List
 import mysql.connector
 import numpy
 
-
-def retrieve_all_panelists(
-    database_connection: mysql.connector.connect,
-) -> Dict[str, str]:
-    """Retrieves a dictionary for all available panelists from the
-    database"""
-
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT p.panelist, p.panelistslug FROM ww_panelists p "
-        "WHERE p.panelist <> '<Multiple>' "
-        "ORDER BY p.panelistslug ASC;"
-    )
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    _panelists = {}
-    for row in result:
-        _panelists[row.panelistslug] = row.panelist
-
-    return _panelists
+from . import common
 
 
 def retrieve_appearances_by_panelist(
@@ -126,13 +99,16 @@ def retrieve_all_panelists_stats(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    panelists = retrieve_all_panelists(database_connection=database_connection)
+    panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not panelists:
         return None
 
     all_stats = {}
-    for panelist_slug, _ in panelists.items():
+
+    # for panelist_slug, _ in panelists.items():
+    for panelist in panelists.items():
+        panelist_slug = panelist["slug"]
         all_stats[panelist_slug] = {
             "appearances": retrieve_appearances_by_panelist(
                 panelist_slug=panelist_slug, database_connection=database_connection
