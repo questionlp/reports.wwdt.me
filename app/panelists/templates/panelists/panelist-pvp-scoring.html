@@ -34,10 +34,10 @@
             <select id="panelist-1" name="panelist_1">
                 <option value="">-- Please chose a panelist --</option>
                 {% for panelist in panelists %}
-                {% if request.form.panelist_1 == panelist %}
-                <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
+                {% if request.form.panelist_1 == panelist.slug %}
+                <option value="{{ panelist.slug }}" selected>{{ panelist.name }}</option>
                 {% else %}
-                <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
+                <option value="{{ panelist.slug }}">{{ panelist.name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -47,10 +47,10 @@
             <select id="panelist-2" name="panelist_2">
                 <option value="">-- Please chose a panelist --</option>
                 {% for panelist in panelists %}
-                {% if request.form.panelist_2 == panelist %}
-                <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
+                {% if request.form.panelist_2 == panelist.slug %}
+                <option value="{{ panelist.slug }}" selected>{{ panelist.name }}</option>
                 {% else %}
-                <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
+                <option value="{{ panelist.slug }}">{{ panelist.name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>

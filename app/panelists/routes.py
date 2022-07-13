@@ -215,6 +215,7 @@ def panelist_pvp_scoring():
     """View: Panelist vs Panelist Scoring Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
 
     if request.method == "POST":
         # Parse panelist dropdown selections
@@ -229,7 +230,7 @@ def panelist_pvp_scoring():
         if None in deduped_panelists:
             deduped_panelists.remove(None)
 
-        if len(deduped_panelists) > 0 and deduped_panelists <= _panelists.keys():
+        if len(deduped_panelists) > 0 and deduped_panelists <= _panelists_dict.keys():
             # Revert set back to list
             panelist_values = list(deduped_panelists)
             if len(panelist_values) == 2:
@@ -302,10 +303,13 @@ def stats_summary():
     """View: Panelists Statistics Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
     _stats = summary_retrieve_all_stats(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
-        "panelists/stats-summary.html", panelists=_panelists, panelists_stats=_stats
+        "panelists/stats-summary.html",
+        panelists=_panelists_dict,
+        panelists_stats=_stats,
     )
 
 

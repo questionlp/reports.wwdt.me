@@ -1,6 +1,6 @@
 @media screen {
 
-    html, body, button, input, select, textarea,
+    html, body, button, input, select, textarea, .pure-table caption,
     .pure-g [class *="pure-u"] {
         font-family: "IBM Plex Sans", sans-serif !important;
     }
@@ -96,11 +96,17 @@
         margin: 2rem 0 1.5rem;
     }
 
+    .pure-table caption {
+        caption-side: bottom;
+        font-size: 90%;
+        margin-top: 0.5rem;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
-    html {
+    html, .pure-table caption {
         background-color: #202124;
+        caption-side: bottom;
         color: white !important;
     }
 
@@ -110,7 +116,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-    html {
+    html, table.pure-table caption {
         background-color: white;
         color: #202124 !important;
     }
