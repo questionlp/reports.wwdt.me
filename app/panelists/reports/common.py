@@ -12,8 +12,7 @@ import mysql.connector
 def retrieve_panelists(
     database_connection: mysql.connector.connect,
 ) -> List[Dict[str, Any]]:
-    """Retrieves a dictionary for all available panelists from the
-    database"""
+    """Retrieves a list of all available panelists from the database"""
 
     if not database_connection.is_connected():
         database_connection.reconnect()
