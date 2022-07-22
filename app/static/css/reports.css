@@ -23,7 +23,7 @@
         width: 20rem;
     }
 
-    col.name.venue {
+    col.name.guest.long, col.name.venue {
         width: 26rem;
     }
 
