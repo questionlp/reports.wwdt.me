@@ -1,4 +1,4 @@
-@media screen {
+@media all {
 
     html, body, button, input, select, textarea, .pure-table caption,
     .pure-g [class *="pure-u"] {
@@ -101,6 +101,152 @@
         font-size: 90%;
         margin-top: 0.5rem;
     }
+
+    col.boolean, col.count, col.date.year, col.score, col.state, col.stats.int {
+        width: 6rem;
+    }
+
+    col.count.mix, col.stats.float {
+        width: 8rem;
+    }
+
+    col.city, col.label, col.score.long {
+        width: 12rem;
+    }
+
+    col.date, col.rank {
+        width: 10rem;
+    }
+
+    col.date.long, col.name.panelist {
+        width: 16rem;
+    }
+
+    col.name.guest {
+        width: 20rem;
+    }
+
+    col.name.guest.long, col.name.venue {
+        width: 26rem;
+    }
+
+    col.notes {
+        width: 32rem;
+    }
+
+    form {
+        border: 1px solid #666;
+        padding: 0.75em;
+    }
+
+    section.pvp {
+        margin: 0 0 2rem 0;
+    }
+
+    td.notes p {
+        margin-block-start: 0;
+        margin-block-end: 1em;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+    }
+
+    td.centered.middle {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    td.score-higher, td.score-lower, td.score-tied {
+        text-align: center;
+    }
+
+    td.score-higher {
+        background-color: rgba(245, 80, 0, 0.85);
+        font-weight: 600;
+    }
+
+    td.score-lower {
+        background-color: inherit;
+    }
+
+    table.pure-table {
+        margin: 1.5rem 0;
+    }
+
+    table.pure-table td {
+        vertical-align: top;
+    }
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: initial;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    ul.no-bullets {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    span.hover.tooltip {
+        cursor: help;
+    }
+
+    #appearance-by-year {
+        max-height: 80vh;
+        overflow: scroll;
+    }
+
+    .pure-form fieldset {
+        margin: 0;
+        padding: 0;
+    }
+
+    .pure-form legend {
+        font-weight: 600;
+    }
+
+    .panelist-fields label {
+        padding-right: 0.5em;
+    }
+
+    .pure-form .panelist-fields {
+        display: inline-block;
+        margin: 0 0.25em;
+        padding-bottom: 0.5em;
+    }
+
+    .pure-form .panelist-options {
+        display: inline-block;
+        margin: 0.5em 0 0 0.25em;
+    }
+
+    .panelist-options label {
+        padding-right: 0.5em;
+    }
+
+    .panelist-options button {
+        margin: 0 0.5em;
+    }
+
+    .pure-form .panelist-option {
+        display: inline-block;
+        margin: 0 1.5em 0 0;
+    }
+
+    .pure-form .panelist-button {
+        display: inline-block;
+    }
+
+    .pure-form label {
+        font-weight: 600;
+    }
+
+    .pure-form select {
+        height: 2.5em;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -113,12 +259,95 @@
     a {
         color: #64b5f6 !important;
     }
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: rgba(240, 240, 240, 0.3) !important;
+        color: white;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table.pure-table-bordered,
+    table.pure-table-bordered thead,
+    table.pure-table-bordered tbody,
+    table.pure-table-bordered tfoot,
+    table.pure-table-bordered th,
+    table.pure-table-bordered td {
+        border-color: #666 !important;
+    }
+
+    td.score-tied {
+        background-color: #eee;
+        color: black;
+    }
+
+    td.no-data {
+        background-color: rgba(48, 48, 48, 0.75);
+    }
+
+    span.hover.tooltip {
+        border-bottom: 1px dotted lightskyblue;
+    }
+
+    .pure-form legend {
+        color: white !important;
+    }
+
+    .pure-form .pure-button-primary {
+        background-color: #0d47a1 !important;
+    }
+
+    .pure-form select {
+        background-color: initial;
+        color: inherit;
+    }
 }
 
 @media (prefers-color-scheme: light) {
     html, table.pure-table caption {
         background-color: white;
         color: #202124 !important;
+    }
+
+    table.pure-table thead,
+    table.pure-table tfoot {
+        background-color: lightgray !important;
+    }
+
+    td.score-tied {
+        background-color: #eee;
+    }
+
+    td.no-data {
+        background-color: rgb(240, 240, 240) !important;
+    }
+
+    span.hover.tooltip {
+        border-bottom: 1px dotted blue !important;
+    }
+
+    .pure-form .pure-button-primary {
+        background-color: #00e !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    #appearance-by-year {
+        font-size: 0.975rem;
+        margin: 0;
+        max-height: 45vh;
+    }
+}
+
+@media only screen and (max-width: 48em) {
+
+    /* Hide Panelist vs Panelist Panelists List on Pure CSS on medium or
+       smaller displays */
+    div.pvp-panelist-list {
+        display: none;
+        visibility: hidden;
     }
 }
 
@@ -128,5 +357,16 @@
         color: initial;
         margin: initial;
         padding: initial;
+    }
+
+    table tfoot {
+        display: none;
+        visibility: hidden;
+    }
+
+    #appearance-by-year {
+        max-height: initial;
+        max-width: initial;
+        overflow: initial;
     }
 }
