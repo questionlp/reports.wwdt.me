@@ -33,11 +33,11 @@
             <label for="panelist-1">Panelist 1:</label>
             <select id="panelist-1" name="panelist_1">
                 <option value="">-- Please chose a panelist --</option>
-                {% for panelist in panelists %}
-                {% if request.form.panelist_1 == panelist.slug %}
-                <option value="{{ panelist.slug }}" selected>{{ panelist.name }}</option>
+                {% for slug, name in panelists.items() %}
+                {% if request.form.panelist_1 == slug %}
+                <option value="{{ slug }}" selected>{{ name }}</option>
                 {% else %}
-                <option value="{{ panelist.slug }}">{{ panelist.name }}</option>
+                <option value="{{ slug }}">{{ name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -46,11 +46,11 @@
             <label for="panelist-2">Panelist 2:</label>
             <select id="panelist-2" name="panelist_2">
                 <option value="">-- Please chose a panelist --</option>
-                {% for panelist in panelists %}
-                {% if request.form.panelist_2 == panelist.slug %}
-                <option value="{{ panelist.slug }}" selected>{{ panelist.name }}</option>
+                {% for slug, name in panelists.items() %}
+                {% if request.form.panelist_2 == slug %}
+                <option value="{{ slug }}" selected>{{ name }}</option>
                 {% else %}
-                <option value="{{ panelist.slug }}">{{ panelist.name }}</option>
+                <option value="{{ slug }}">{{ name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -64,11 +64,18 @@
 {% if request.method == "POST" %}
 <hr>
 {% if not request.form.panelist_1 and not request.form.panelist_2 %}
-<p class="result-message">No panelists were selected.</p>
+<p class="result-message">
+    No panelists were selected.
+</p>
 {% elif not valid_selections %}
-<p class="result-message">Please select two different panelists.</p>
+<p class="result-message">
+    Please select two different panelists.
+</p>
 {% elif not scores %}
-<p class="result-message">No results returned.</p>
+<p class="result-message">
+    No results available for <strong>{{ panelists[request.form.panelist_1] }}</strong>
+    and <strong>{{ panelists[request.form.panelist_2] }}</strong>.
+</p>
 {% else %}
 
 <!-- Start Show Listing -->

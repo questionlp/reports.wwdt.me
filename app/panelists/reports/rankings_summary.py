@@ -107,10 +107,10 @@ def retrieve_all_panelist_rankings(
 
     panelist_rankings = {}
     for panelist in panelists:
-        panelist_id = panelists[panelist]["id"]
+        panelist_id = panelist["id"]
         rankings = retrieve_rankings_by_panelist(
             panelist_id=panelist_id, database_connection=database_connection
         )
-        panelist_rankings[panelist] = rankings
+        panelist_rankings[panelist["slug"]] = rankings
 
     return panelist_rankings

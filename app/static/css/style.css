@@ -130,7 +130,7 @@
         width: 26rem;
     }
 
-    col.notes {
+    col.introduction, col.notes {
         width: 32rem;
     }
 

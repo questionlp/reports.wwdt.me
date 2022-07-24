@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Scorekeepers Reports{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li>Scorekeepers</li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Scorekeepers Reports</h2>
+{% endblock synopsis %}
+
+{% block content %}
+{% include "scorekeepers/_reports.html" %}
+{% endblock content %}

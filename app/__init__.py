@@ -19,8 +19,8 @@ from .main.routes import blueprint as main_bp
 from .main.redirects import blueprint as redirects_bp
 from .panelists.redirects import blueprint as panelists_redirects_bp
 from .panelists.routes import blueprint as panelists_bp
+from app.scorekeepers.routes import blueprint as scorekeepers_bp
 
-# from app.scorekeepers.routes import blueprint as scorekeepers_bp
 # from app.sitemaps.routes import blueprint as sitemaps_bp
 from .shows.routes import blueprint as shows_bp
 from .version import APP_VERSION
@@ -79,7 +79,7 @@ def create_app():
     app.register_blueprint(locations_bp, url_prefix="/locations")
     app.register_blueprint(panelists_redirects_bp)
     app.register_blueprint(panelists_bp, url_prefix="/panelists")
-    # app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
+    app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     app.register_blueprint(shows_bp, url_prefix="/shows")
 
     return app

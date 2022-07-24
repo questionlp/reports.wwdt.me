@@ -45,7 +45,7 @@
         {% for panelist in panelists_rankings %}
         <tr>
             <td><a href="{{ stats_url }}/panelists/{{ panelist }}">
-                {{ panelists[panelist].name }}</a></td>
+                {{ panelists[panelist] }}</a></td>
             {% if panelists_rankings[panelist] %}
             <td>
                 {{ panelists_rankings[panelist]["first"] }}

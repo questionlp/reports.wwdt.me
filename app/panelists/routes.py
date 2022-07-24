@@ -249,7 +249,7 @@ def panelist_pvp_scoring():
 
                 return render_template(
                     "panelists/panelist-pvp-scoring.html",
-                    panelists=_panelists,
+                    panelists=_panelists_dict,
                     valid_selections=True,
                     scores=scores,
                     rank_map=RANK_MAP,
@@ -259,7 +259,7 @@ def panelist_pvp_scoring():
             _database_connection.close()
             return render_template(
                 "panelists/panelist-pvp-scoring.html",
-                panelists=_panelists,
+                panelists=_panelists_dict,
                 valid_selections=False,
                 scores=None,
             )
@@ -267,7 +267,9 @@ def panelist_pvp_scoring():
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "panelists/panelist-pvp-scoring.html", panelists=_panelists, scores=None
+        "panelists/panelist-pvp-scoring.html",
+        panelists=_panelists_dict,
+        scores=None,
     )
 
 
@@ -276,11 +278,12 @@ def rankings_summary():
     """View: Panelists Rankings Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
     _rankings = retrieve_all_panelist_rankings(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
         "panelists/rankings-summary.html",
-        panelists=_panelists,
+        panelists=_panelists_dict,
         panelists_rankings=_rankings,
     )
 
