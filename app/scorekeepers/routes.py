@@ -7,7 +7,6 @@
 from flask import Blueprint, current_app, render_template
 import mysql.connector
 
-# from .reports.average_scores import retrieve_average_scores_by_location
 from .reports.appearances import retrieve_appearance_summaries
 
 from .reports.introductions import (
