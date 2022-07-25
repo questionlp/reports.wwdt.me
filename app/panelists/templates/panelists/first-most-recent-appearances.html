@@ -56,32 +56,32 @@
             {% if panelist_info.first %}
             <td><a href="{{ stats_url }}/shows/{{ panelist_info.first|replace('-', '/') }}">{{ panelist_info.first }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if panelist_info.most_recent %}
             <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent|replace('-', '/') }}">{{ panelist_info.most_recent }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if panelist_info.count %}
             <td>{{ panelist_info.count }}</td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if panelist_info.first_all %}
             <td><a href="{{ stats_url }}/shows/{{ panelist_info.first_all|replace('-', '/') }}">{{ panelist_info.first_all }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if panelist_info.most_recent_all %}
             <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent_all|replace('-', '/') }}">{{ panelist_info.most_recent_all }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if panelist_info.count_all %}
             <td>{{ panelist_info.count_all }}</td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
         </tr>
         {% endfor %}

@@ -50,7 +50,7 @@
                 {% if year in panelist.appearances %}
             <td class="centered middle year">{{ panelist.appearances[year] }}</td>
                 {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
                 {% endif %}
             {% endfor %}
             <td class="centered middle count">{{ panelist.appearances.total }}</td>

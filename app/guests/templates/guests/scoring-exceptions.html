@@ -69,7 +69,11 @@
                 </a>
             </td>
             <td>{{ guest.exceptions[count].score }}</td>
-            <td class="notes">{{ guest.exceptions[count].notes|markdown|safe }}</td>
+            {% if guest.exceptions[count].notes %}
+            <td>{{ guest.exceptions[count].notes|markdown|safe }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
         </tr>
             {% endfor %}
         {% endif %}

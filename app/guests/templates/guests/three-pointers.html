@@ -47,10 +47,10 @@
             <td>{{ guest.show_scorekeeper }}</td>
             <td>{{ guest.score }}</td>
             <td>{{ guest.exception }}</td>
-        {% if guest.exception %}
+        {% if guest.exception and guest.show_notes %}
             <td class="notes">{{ guest.show_notes|markdown|safe }}</td>
         {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
         {% endif %}
         </tr>
     {% endfor %}

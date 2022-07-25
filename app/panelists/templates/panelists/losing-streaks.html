@@ -56,7 +56,7 @@
             <td>{{ panelist.total_losses }}</td>
             <td>{{ panelist.longest_streak }}</td>
             {% if not panelist.longest_streak_dates %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% else %}
             <td class="show-dates">
                 <ul class="no-bullets">
@@ -69,7 +69,7 @@
             <td>{{ panelist.total_third_losses }}</td>
             <td>{{ panelist.longest_third_streak }}</td>
             {% if not panelist.longest_third_streak_dates %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% else %}
             <td class="show-dates">
                 <ul class="no-bullets">

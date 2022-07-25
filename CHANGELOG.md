@@ -38,11 +38,12 @@
 - Renamed `index.html` to `_index.html` in all of the template folders
 - Moved the `Panel Gender Mix` report from being under the `Panelists` section
   to the more appropriate section, `Shows`
-- Consolidation of report CSS files into a single file
+- Consolidation of report CSS files into global `style.css`
 - Standardize column widths across all reports
 - Redesign the Panelist vs Panelist report use the same base temlate as other
   reports
 - Enable Markdown handling for show notes fields in the respective reports
+- Display `-` for table cells containing no data
 
 ### Development Changes
 

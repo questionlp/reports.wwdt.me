@@ -75,7 +75,7 @@
             <td>{{ gender_stats[year]["M"]["count"] }}</td>
             <td>{{ gender_stats[year]["M"]["total"] }}</td>
             {% else %}
-            <td class="no-data" colspan="7">&nbsp;</td>
+            <td class="no-data" colspan="7">-</td>
             {% endif %}
 
             {% if gender_stats[year]["F"] %}
@@ -87,7 +87,7 @@
             <td>{{ gender_stats[year]["F"]["count"] }}</td>
             <td>{{ gender_stats[year]["F"]["total"] }}</td>
             {% else %}
-            <td class="no-data" colspan="7">&nbsp;</td>
+            <td class="no-data" colspan="7">-</td>
             {% endif %}
         </tr>
         {% endfor %}

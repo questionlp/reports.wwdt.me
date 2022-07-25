@@ -52,36 +52,36 @@
         {% for host in summary %}
         {% set info = summary[host] %}
         <tr>
-            <td><a href="{{ stats_url}}/hosts/{{ info.slug }}">{{ info.name }}</a></td>
+            <td><a href="{{ stats_url }}/hosts/{{ info.slug }}">{{ info.name }}</a></td>
             {% if info.first %}
             <td><a href="{{ stats_url }}/shows/{{ info.first|replace('-', '/') }}">{{ info.first }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if info.most_recent %}
             <td><a href="{{ stats_url }}/shows/{{ info.most_recent|replace('-', '/') }}">{{ info.most_recent }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if info.regular_shows %}
             <td>{{ info.regular_shows }}</td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if info.first_all %}
             <td><a href="{{ stats_url }}/shows/{{ info.first_all|replace('-', '/') }}">{{ info.first_all }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if info.most_recent_all %}
             <td><a href="{{ stats_url }}/shows/{{ info.most_recent_all|replace('-', '/') }}">{{ info.most_recent_all }}</a></td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             {% if info.all_shows %}
             <td>{{ info.all_shows }}</td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
         </tr>
         {% endfor %}
