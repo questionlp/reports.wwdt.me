@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Highest Score Equals the Sum of Other Scores | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Highest Score Equals the Sum of Other Scores</h2>
+<p>
+    This report provides a list of shows in which the highest panelist score
+    matches the sum of the two other panelist scores.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Scoring Sum Matches Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date">
+        <col class="name panelist">
+        <col class="score">
+        <col class="rank">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Panelist</th>
+            <th scope="col">Score</th>
+            <th scope="col">Rank</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for show in shows %}
+        <tr>
+            <td rowspan="3"><a href="{{ stats_url }}/shows/{{ show|replace('-', '/') }}">{{ show }}</a></td>
+            <td>
+                {{ shows[show][0]["panelist"] }}
+            </td>
+            <td>
+                {{ shows[show][0]["score"] }}
+            </td>
+            <td>
+                {{ rank_map[shows[show][0]["rank"]] }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ shows[show][1]["panelist"] }}
+            </td>
+            <td>
+                {{ shows[show][1]["score"] }}
+            </td>
+            <td>
+                {{ rank_map[shows[show][1]["rank"]] }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ shows[show][2]["panelist"] }}
+            </td>
+            <td>
+                {{ shows[show][2]["score"] }}
+            </td>
+            <td>
+                {{ rank_map[shows[show][2]["rank"]] }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Panelist</th>
+            <th scope="col">Score</th>
+            <th scope="col">Rank</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Scoring Sum Matches Section -->
+
+{% endblock content %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Lightning Round with Zero Correct Answers | Shows{% endblock %}
+{% block title %}Lightning Round Starting with Zero Points | Shows{% endblock %}
 
 {% block breadcrumb %}
 <div id="breadcrumb">
@@ -11,15 +11,15 @@
 {% endblock breadcrumb %}
 
 {% block synopsis %}
-<h2>Lightning Round with Zero Correct Answers</h2>
+<h2>Lightning Round Starting with Zero Points</h2>
 <p>
-    List of shows in which panelists answered zero Lightning
-    Fill-in-the-Blank round questions correct.
+    List of shows in which panelists start the Lightning Fill-in-the-Blank
+    round with zero points.
 </p>
 {% endblock synopsis %}
 
 {% block content %}
-<!-- Start Lightning Round Zero Correct Answers Section -->
+<!-- Start Lightning Round With Zero Points Section -->
 <table class="pure-table pure-table-bordered">
     <colgroup>
         <col class="date">
@@ -51,6 +51,16 @@
         </tr>
         {% endfor %}
     </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Panelist</th>
+            <th scope="col">Start</th>
+            <th scope="col">Correct</th>
+            <th scope="col">Score</th>
+            <th scope="col">Rank</th>
+        </tr>
+    </tfoot>
 </table>
-<!-- End Lightning Round Zero Correct Answers Section -->
+<!-- End Lightning Round With Zero Points Section -->
 {% endblock content %}

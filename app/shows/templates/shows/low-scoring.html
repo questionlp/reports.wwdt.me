@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Low Scoring Shows | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Low Scoring Shows</h2>
+<p>
+    List of shows in which the panel total score is less than 30. The list
+    does not include the 20th Anniversary show that had a unique format for the
+    Lightning Fill-in-the-Blank segment.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Low Scoring Shows Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="score">
+        <col class="date">
+        <col class="name venue">
+        <col class="name host">
+        <col class="name scorekeeper">
+        <col class="name panelist">
+        <col class="name guest">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Total Score</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for show in shows %}
+        <tr>
+            <td>{{ show.total_score }}</td>
+            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
+            {% if show.location.venue and show.location.city and show.location.city %}
+            <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+            {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+            <td>{{ show.location.venue }}</td>
+            {% elif show.location.city %}
+            <td>{{ show.location.city }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            <td>{{ show.host }}</td>
+            <td>{{ show.scorekeeper }}</td>
+            <td>
+                <ul class="no-bullets">
+                {% for panelist in show.panelists %}
+                    <li>{{ panelist.name }}: {{ panelist.score }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>
+                {{ show.guest.name }}: {{ show.guest.score }}
+                {% if show.guest.exception %}
+                *
+                {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Total Score</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Low Scoring Shows Section -->
+{% endblock content %}

@@ -102,36 +102,40 @@
         margin-top: 0.5rem;
     }
 
-    col.boolean, col.count, col.date.year, col.score, col.state, col.stats.int {
+    col.state {
+        width: 4rem;
+    }
+
+    col.boolean, col.count, col.date.year, col.score, col.stats.int {
         width: 6rem;
     }
 
-    col.count.mix, col.stats.float {
+    col.count.mix, col.date, col.rank, col.stats.float {
         width: 8rem;
     }
 
-    col.city, col.label, col.score.long {
-        width: 12rem;
-    }
-
-    col.date, col.rank {
+    col.city, col.score.long {
         width: 10rem;
     }
 
-    col.date.long, col.name.panelist {
+    col.label, col.name.host, col.name.scorekeeper {
+        width: 12rem;
+    }
+
+    col.date.long, col.name.panelist, col.name.guest {
         width: 16rem;
     }
 
-    col.name.guest {
+    col.name.guest.long, col.name.venue {
         width: 20rem;
     }
 
-    col.name.guest.long, col.name.venue {
-        width: 26rem;
+    col.introduction, col.notes {
+        width: 24rem;
     }
 
-    col.introduction, col.notes {
-        width: 32rem;
+    col.notes {
+        width: 28rem;
     }
 
     form {
@@ -214,7 +218,7 @@
 
     .pure-form .panelist-fields {
         display: inline-block;
-        margin: 0 0.25em;
+        margin: 0 0.75em 0 0;
         padding-bottom: 0.5em;
     }
 
@@ -285,6 +289,7 @@
 
     td.no-data {
         background-color: rgba(48, 48, 48, 0.75);
+        text-align: center;
     }
 
     span.hover.tooltip {

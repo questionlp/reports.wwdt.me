@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}All Shows | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>All Shows</h2>
+<p>
+    Listing of all shows that have been broadcasted, including Best Ofs and
+    Repeats. The list does not include pledge specials or special shows that
+    were not aired in their original form.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Original Show Listing -->
+<p>
+    <strong>Sort Order </strong>
+    {% if ascending %}
+    [ Ascending | <a href="{{ url_for('shows.all_shows', sort='desc') }}">Descending</a> ]
+    {% else %}
+    [ <a href="{{ url_for('shows.all_shows') }}">Ascending</a> | Descending ]
+    {% endif %}
+</p>
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="count">
+        <col class="date">
+        <col class="boolean">
+        <col class="name venue">
+        <col class="name host">
+        <col class="name scorekeeper">
+        <col class="name panelist">
+        <col class="name guest">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Best Of/Repeat</th>
+            <th scope="col">Location</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for show in shows %}
+        <tr>
+            <td>{{ show.count }}</td>
+            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
+            {% if show.best_of and show.repeat %}
+            <td>Best Of / Repeat</td>
+            {% elif show.best_of and not show.repeat %}
+            <td>Best Of</td>
+            {% elif show.repeat and not show.best_of %}
+            <td>Repeat</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if show.location.venue and show.location.city and show.location.city %}
+            <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+            {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+            <td>{{ show.location.venue }}</td>
+            {% elif show.location.city %}
+            <td>{{ show.location.city }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            <td>{{ show.host }}</td>
+            <td>{{ show.scorekeeper }}</td>
+            {% if show.panelists %}
+            <td class="panelist-names">
+                <ul class="no-bullets">
+                {% for panelist in show.panelists %}
+                <li>{{ panelist.name }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if show.guests %}
+            <td class="guest-names">
+                <ul class="no-bullets">
+                {% for guest in show.guests %}
+                <li>{{ guest.name }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Best Of/Repeat</th>
+            <th scope="col">Location</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Original Show Listing -->
+{% endblock content %}

@@ -4,10 +4,10 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Core Application for Wait Wait Reports"""
-from re import template
 from flask import Flask
 
 from app import config, utility
+from .dicts import RANK_MAP
 from .errors import handlers
 from .guests.redirects import blueprint as guests_redirects_bp
 from .guests.routes import blueprint as guests_bp
@@ -19,10 +19,13 @@ from .main.routes import blueprint as main_bp
 from .main.redirects import blueprint as redirects_bp
 from .panelists.redirects import blueprint as panelists_redirects_bp
 from .panelists.routes import blueprint as panelists_bp
-from app.scorekeepers.routes import blueprint as scorekeepers_bp
+from .scorekeepers.redirects import blueprint as scorekeepers_redirects_bp
+from .scorekeepers.routes import blueprint as scorekeepers_bp
+from .shows.redirects import blueprint as shows_redirects_bp
+from .shows.routes import blueprint as shows_bp
 
 # from app.sitemaps.routes import blueprint as sitemaps_bp
-from .shows.routes import blueprint as shows_bp
+
 from .version import APP_VERSION
 
 
@@ -48,7 +51,7 @@ def create_app():
     app.jinja_env.globals["app_version"] = APP_VERSION
     app.jinja_env.globals["date_string_to_date"] = utility.date_string_to_date
     app.jinja_env.globals["current_year"] = utility.current_year
-    # app.jinja_env.globals["rank_map"] = dicts.PANELIST_RANKS
+    app.jinja_env.globals["rank_map"] = RANK_MAP
     app.jinja_env.globals["rendered_at"] = utility.generate_date_time_stamp
 
     app.jinja_env.globals["time_zone"] = app.config["app_settings"]["app_time_zone"]
@@ -79,7 +82,9 @@ def create_app():
     app.register_blueprint(locations_bp, url_prefix="/locations")
     app.register_blueprint(panelists_redirects_bp)
     app.register_blueprint(panelists_bp, url_prefix="/panelists")
+    app.register_blueprint(scorekeepers_redirects_bp)
     app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
+    app.register_blueprint(shows_redirects_bp)
     app.register_blueprint(shows_bp, url_prefix="/shows")
 
     return app

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}All Women Panel | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>All Women Panel</h2>
+<p>
+    List of shows that have had an all women panel.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start All Women Panel Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date">
+        <col class="name venue">
+        <col class="name host">
+        <col class="name scorekeeper">
+        <col class="name panelist">
+        <col class="name guest">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for show in shows %}
+        <tr>
+            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
+            {% if show.location.venue and show.location.city and show.location.city %}
+            <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+            {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+            <td>{{ show.location.venue }}</td>
+            {% elif show.location.city %}
+            <td>{{ show.location.city }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            <td>{{ show.host }}</td>
+            <td>{{ show.scorekeeper }}</td>
+            <td>
+                <ul class="no-bullets">
+                {% for panelist in show.panelists %}
+                    <li>
+                    {% if show.guest.score %}
+                    {{ panelist.name }}: {{ panelist.score }}
+                    {% else %}
+                    {{ panelist.name }}
+                    {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>
+                {% if show.guest.score %}
+                {{ show.guest.name }}: {{ show.guest.score }}
+                {% else %}
+                {{ show.guest.name }}
+                {% endif %}
+                {% if show.guest.exception %}
+                *
+                {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- End All Women Panel Section -->
+{% endblock content %}

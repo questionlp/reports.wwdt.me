@@ -55,7 +55,7 @@
             {% if debut.best_of %}
             <td>Best Of</td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
             <td><a href="{{ stats_url }}/panelists/{{ debut.panelist_slug }}">{{ debut.panelist_name }}</a></td>
             <td>{{ debut.regular_appearances }}</td>
@@ -70,7 +70,7 @@
                 </ul>
             </td>
             {% else %}
-            <td class="no-data">&nbsp;</td>
+            <td class="no-data">-</td>
             {% endif %}
         </tr>
         {% endfor %}

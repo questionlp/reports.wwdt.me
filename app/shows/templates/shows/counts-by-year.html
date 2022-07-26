@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Show Counts by Year | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Show Counts by Year</h2>
+<p>
+    This report provides a count of the number of regular, Best Of, repeat, and
+    repeat Best Of shows on a per-year basis.
+</p>
+<p>
+    Show counts for the current year will only include shows that have aired on
+    or before the current date.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Show Counts by Year Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date year">
+        <col class="count">
+        <col class="count">
+        <col class="count">
+        <col class="count">
+        <col class="count">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Regular Shows</th>
+            <th scope="col">Best Ofs</th>
+            <th scope="col">Repeats</th>
+            <th scope="col">Best Of Repeats</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for year in show_counts %}
+        <tr>
+            <td>{{ year }}</td>
+            <td>{{ show_counts[year].regular }}</td>
+            <td>{{ show_counts[year].best_of }}</td>
+            <td>{{ show_counts[year].repeat }}</td>
+            <td>{{ show_counts[year].repeat_best_of }}</td>
+            <td>{{ show_counts[year].total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Regular Shows</th>
+            <th scope="col">Best Ofs</th>
+            <th scope="col">Repeats</th>
+            <th scope="col">Best Of Repeats</th>
+            <th scope="col">Total</th>
+        </tr>
+    </tfoot>
+</table>
+<!-- End Show Counts by Year Section -->
+{% endblock content %}

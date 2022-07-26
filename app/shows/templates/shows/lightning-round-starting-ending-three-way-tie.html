@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Lightning Round Starting and Ending in a Three-Way Tie | Shows{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Lightning Round Starting and Ending in a Three-Way Tie</h2>
+<p>
+    List of shows in which all three panelists starting and finishing the
+    Lightning Fill-in-the Blank round in a three-way tie.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Lightning Round Three-Way Tie Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date">
+        <col class="name panelist">
+        <col class="score">
+        <col class="score">
+        <col class="score">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Starting Score</th>
+            <th scope="col">Correct</th>
+            <th scope="col">Final Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for show in shows %}
+        <tr>
+            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
+            <td>
+                <ul class="no-bullets">
+                {% for panelist in show.panelists %}
+                    <li> {{ panelist.name }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>{{ show.start }}</td>
+            <td>{{ show.correct }}</td>
+            <td>{{ show.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% if shows|length >= 10 %}
+    <tfoot>
+        <tr>
+            <th scope="col">Show Date</th>
+            <th scope="col">Panelists</th>
+            <th scope="col">Starting Score</th>
+            <th scope="col">Correct</th>
+            <th scope="col">Final Score</th>
+        </tr>
+    </tfoot>
+    {% endif %}
+</table>
+<!-- End Lightning Round Three-Way Tie Section -->
+{% endblock content %}

@@ -1,6 +1,6 @@
 <dl>
     <dt>
-        <a href="{{ url_for('show_all_shows') }}">All Shows</a>
+        <a href="{{ url_for('shows.all_shows') }}">All Shows</a>
     </dt>
     <dd>
         A listing of all shows that have been broadcasted, including Best Ofs
@@ -9,14 +9,14 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_all_women_panel') }}">All Women Panel</a>
+        <a href="{{ url_for('shows.all_women_panel') }}">All Women Panel</a>
     </dt>
     <dd>
         A listing of all shows that have had an all women panel.
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_high_score_equal_sum_other_scores') }}">Highest
+        <a href="{{ url_for('shows.highest_score_equals_sum_other_scores') }}">Highest
         Score Equals Sum of Other Scores</a>
     </dt>
     <dd>
@@ -25,7 +25,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_high_scoring') }}">High Scoring Shows</a>
+        <a href="{{ url_for('shows.high_scoring') }}">High Scoring Shows</a>
     </dt>
     <dd>
         A listing of shows in which the panel total score is greater than or
@@ -33,7 +33,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_lightning_round_end_three_way_tie') }}">Lightning
+        <a href="{{ url_for('shows.lightning_round_ending_three_way_tie') }}">Lightning
         Round Ending in a Three-Way Tie</a>
     </dt>
     <dd>
@@ -42,7 +42,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_lightning_round_start_end_three_way_tie') }}">Lightning
+        <a href="{{ url_for('shows.lightning_round_starting_ending_three_way_tie') }}">Lightning
         Round Starting and Ending in a Three-Way Tie</a>
     </dt>
     <dd>
@@ -51,7 +51,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_lightning_round_start_three_way_tie') }}">Lightning
+        <a href="{{ url_for('shows.lightning_round_starting_three_way_tie') }}">Lightning
         Round Starting in a Three-Way Tie</a>
     </dt>
     <dd>
@@ -60,7 +60,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_lightning_round_start_zero') }}">Lightning
+        <a href="{{ url_for('shows.lightning_round_starting_zero_points') }}">Lightning
         Round Starting with Zero Points</a>
     </dt>
     <dd>
@@ -69,7 +69,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_lightning_round_zero_correct') }}">Lightning
+        <a href="{{ url_for('shows.lightning_round_zero_correct') }}">Lightning
         Round with Zero Correct Answers</a>
     </dt>
     <dd>
@@ -78,14 +78,14 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_low_scoring') }}">Low Scoring Shows</a>
+        <a href="{{ url_for('shows.low_scoring') }}">Low Scoring Shows</a>
     </dt>
     <dd>
         A listing of shows in which the panel total score is less than 30.
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_original_shows') }}">Original Shows</a>
+        <a href="{{ url_for('shows.original_shows') }}">Original Shows</a>
     </dt>
     <dd>
         A listing of each original broadcast show, which excludes: Best Ofs,
@@ -103,7 +103,7 @@
 
 
     <dt>
-        <a href="{{ url_for('show_search_multiple_panelists') }}">Search
+        <a href="{{ url_for('shows.search_multiple_panelists') }}">Search
         Shows by Multiple Panelists</a>
     </dt>
     <dd>
@@ -112,7 +112,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_counts_by_year') }}">Show Counts by Year</a>
+        <a href="{{ url_for('shows.counts_by_year') }}">Show Counts by Year</a>
     </dt>
     <dd>
         A count of the number of regular, Best Of, repeat, and repeat Best Of
@@ -120,7 +120,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_guest_hosts') }}">Shows with Guest Host</a>
+        <a href="{{ url_for('shows.guest_hosts') }}">Shows with Guest Host</a>
     </dt>
     <dd>
         A listing of all shows, including Best Of and repeats, that had a guest
@@ -128,7 +128,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('show_guest_scorekeepers') }}">Shows with Guest
+        <a href="{{ url_for('shows.guest_scorekeepers') }}">Shows with Guest
         Scorekeeper</a>
     </dt>
     <dd>

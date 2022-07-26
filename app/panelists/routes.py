@@ -7,7 +7,6 @@
 from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
-from app.dicts import RANK_MAP
 from .reports.common import retrieve_panelists
 from .reports.aggregate_scores import (
     retrieve_all_scores,
@@ -135,9 +134,7 @@ def losing_streaks():
         panelists=_panelists, database_connection=_database_connection
     )
     _database_connection.close()
-    return render_template(
-        "panelists/losing-streaks.html", rank_map=RANK_MAP, losing_streaks=_streaks
-    )
+    return render_template("panelists/losing-streaks.html", losing_streaks=_streaks)
 
 
 @blueprint.route("/panelist-pvp", methods=["GET", "POST"])
@@ -252,7 +249,6 @@ def panelist_pvp_scoring():
                     panelists=_panelists_dict,
                     valid_selections=True,
                     scores=scores,
-                    rank_map=RANK_MAP,
                 )
 
             # Fallback for invalid panelist selections
@@ -296,7 +292,6 @@ def single_appearance():
     _database_connection.close()
     return render_template(
         "panelists/single-appearance.html",
-        rank_map=RANK_MAP,
         panelists_appearance=_panelists,
     )
 
@@ -325,6 +320,4 @@ def win_streaks():
         panelists=_panelists, database_connection=_database_connection
     )
     _database_connection.close()
-    return render_template(
-        "panelists/win-streaks.html", rank_map=RANK_MAP, win_streaks=_streaks
-    )
+    return render_template("panelists/win-streaks.html", win_streaks=_streaks)

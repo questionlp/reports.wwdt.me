@@ -99,7 +99,7 @@ def retrieve_details(
             show_id=result.showid, database_connection=database_connection
         ),
         "guests": details.retrieve_show_guests(
-            show_id=result.shiwid, database_connection=database_connection
+            show_id=result.showid, database_connection=database_connection
         ),
     }
 

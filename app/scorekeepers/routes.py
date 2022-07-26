@@ -23,7 +23,7 @@ def index():
     return render_template("scorekeepers/_index.html")
 
 
-@blueprint.route("/appearance_summary")
+@blueprint.route("/appearance-summary")
 def appearance_summary():
     """View: Scorekeepers Appearance Summary Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
