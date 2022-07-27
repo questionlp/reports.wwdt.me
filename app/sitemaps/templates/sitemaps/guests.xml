@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site_url }}{{ url_for("guests.best_of_only") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("guests.most_appearances") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("guests.scoring_exceptions") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("guests.three_pointers") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+</urlset>

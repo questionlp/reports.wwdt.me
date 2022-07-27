@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.all_shows") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.all_women_panel") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.counts_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.guest_hosts") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.guest_scorekeepers") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.high_scoring") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.highest_score_equals_sum_other_scores") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.lightning_round_ending_three_way_tie") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.lightning_round_starting_ending_three_way_tie") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.lightning_round_starting_zero_points") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.lightning_round_zero_correct") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.low_scoring") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.original_shows") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.panel_gender_mix") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.search_multiple_panelists") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+</urlset>

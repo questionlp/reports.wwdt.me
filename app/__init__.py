@@ -23,8 +23,7 @@ from .scorekeepers.redirects import blueprint as scorekeepers_redirects_bp
 from .scorekeepers.routes import blueprint as scorekeepers_bp
 from .shows.redirects import blueprint as shows_redirects_bp
 from .shows.routes import blueprint as shows_bp
-
-# from app.sitemaps.routes import blueprint as sitemaps_bp
+from .sitemaps.routes import blueprint as sitemaps_bp
 
 from .version import APP_VERSION
 
@@ -73,7 +72,7 @@ def create_app():
     # Register application blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(redirects_bp)
-    # app.register_blueprint(sitemaps_bp)
+    app.register_blueprint(sitemaps_bp)
     app.register_blueprint(guests_redirects_bp)
     app.register_blueprint(guests_bp, url_prefix="/guests")
     app.register_blueprint(hosts_redirects_bp)

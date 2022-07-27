@@ -15,7 +15,7 @@ blueprint = Blueprint("hosts", __name__, template_folder="templates")
 @blueprint.route("/")
 def index():
     """View: Hosts Index"""
-    return render_template("hosts/index.html")
+    return render_template("hosts/_index.html")
 
 
 @blueprint.route("/appearance-summary")
