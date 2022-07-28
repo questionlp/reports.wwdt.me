@@ -1,6 +1,6 @@
 # Changes
 
-## 2.0.0
+## 2.0.0 (Future Release)
 
 ### Component Changes
 
@@ -17,6 +17,7 @@
     respective section
   - Core templates including core templates, errors and sitemaps still reside
     within the top-level templates directory
+- Change `app.url_map.strict_slashes` from `False` to `True`
 - Convert the application from using uWSGI to serve the application to
   Gunicorn to match the changes made with the Wait Wait Stats applications
 - Changed section names from singular to plural to match the naming convention
@@ -32,6 +33,7 @@
 | scorekeeper     | scorekeepers    |
 | show            | shows           |
 
+- Add appropriate redirects for v1 to v2 URLs
 - Previously, each section's reports code files lived under the `reports`
   module at the top-level of the application. The report code files now reside
   within their respective section
@@ -48,4 +50,4 @@
 
 ### Development Changes
 
-- **PENDING:** Adding tests by way of `pytest`
+- Adding tests by way of `pytest`
