@@ -12,6 +12,7 @@ blueprint = Blueprint("locations_redirects", __name__)
 
 
 @blueprint.route("/location")
+@blueprint.route("/locations")
 def index():
     """View: Locations Index Redirect"""
     return redirect_url(url_for("locations.index"), status_code=301)

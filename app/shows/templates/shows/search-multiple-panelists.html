@@ -31,7 +31,7 @@
         <div class="panelist-fields">
             <label for="panelist-1">Panelist 1:</label>
             <select id="panelist-1" name="panelist_1">
-                <option value="">-- Please chose a panelist --</option>
+                <option value="">-- Please choose a panelist --</option>
                 {% for panelist in panelists %}
                 {% if request.form.panelist_1 == panelist %}
                 <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
@@ -44,7 +44,7 @@
         <div class="panelist-fields">
             <label for="panelist-2">Panelist 2:</label>
             <select id="panelist-2" name="panelist_2">
-                <option value="">-- Please chose a panelist --</option>
+                <option value="">-- Please choose a panelist --</option>
                 {% for panelist in panelists %}
                 {% if request.form.panelist_2 == panelist %}
                 <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
@@ -57,7 +57,7 @@
         <div class="panelist-fields">
             <label for="panelist-3">Panelist 3:</label>
             <select id="panelist-3" name="panelist_3">
-                <option value="">-- Please chose a panelist --</option>
+                <option value="">-- Please choose a panelist --</option>
                 {% for panelist in panelists %}
                 {% if request.form.panelist_3 == panelist %}
                 <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>

@@ -4,6 +4,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Shows Redirect Routes for Wait Wait Reports"""
+from crypt import methods
 from flask import Blueprint, url_for
 
 from app.utility import redirect_url
@@ -12,6 +13,7 @@ blueprint = Blueprint("shows_redirects", __name__)
 
 
 @blueprint.route("/show")
+@blueprint.route("/shows")
 def index():
     """View: Shows Index Redirect"""
     return redirect_url(url_for("shows.index"), status_code=301)
@@ -20,7 +22,7 @@ def index():
 @blueprint.route("/show/all_shows")
 def all_shows():
     """View: All Shows Report Redirect"""
-    return redirect_url(url_for("shows.allow_shows"), status_code=301)
+    return redirect_url(url_for("shows.all_shows"), status_code=301)
 
 
 @blueprint.route("/show/all_shows/asc")
@@ -43,18 +45,26 @@ def all_women_panel():
     return redirect_url(url_for("shows.all_women_panel"), status_code=301)
 
 
+@blueprint.route("/show/guest_host")
 @blueprint.route("/show/guest_hosts")
 @blueprint.route("/shows/guest-hosts")
-def guest_hosts():
-    """View: Guest Hosts Report Redirect"""
+def guest_host():
+    """View: Shows with a Guest Hosts Report Redirect"""
     return redirect_url(url_for("shows.guest_host"), status_code=301)
 
 
+@blueprint.route("/show/guest_scorekeeper")
 @blueprint.route("/show/guest_scorekeepers")
 @blueprint.route("/shows/guest-scorekeepers")
-def guest_scorekeepers():
-    """View: Guest Scorekeepers Report Redirect"""
+def guest_scorekeeper():
+    """View: Shows with a Guest Scorekeeper Report Redirect"""
     return redirect_url(url_for("shows.guest_scorekeeper"), status_code=301)
+
+
+@blueprint.route("/show/high_scoring")
+def high_scoring():
+    """View: High Scoring Shows Report Redirect"""
+    return redirect_url(url_for("shows.high_scoring"), status_code=301)
 
 
 @blueprint.route("/show/high_score_equal_sum_other_scores")
@@ -64,12 +74,6 @@ def highest_score_equals_sum_other_scores():
     return redirect_url(
         url_for("shows.highest_score_equals_sum_other_scores"), status_code=301
     )
-
-
-@blueprint.route("/show/high_scoring")
-def high_scoring():
-    """View: High Scoring Shows Report Redirect"""
-    return redirect_url(url_for("shows.high_scoring"), status_code=301)
 
 
 @blueprint.route("/show/lightning_round_end_three_way_tie")
@@ -138,13 +142,17 @@ def panel_gender_mix():
     return redirect_url(url_for("shows.panel_gender_mix"), status_code=301)
 
 
-@blueprint.route("/show/search_multiple_panelists")
+@blueprint.route("/show/search_multiple_panelists", methods=["GET", "POST"])
 def search_multiple_panelists():
     """View: Search Shows by Multiple Panelists Report Redirect"""
     return redirect_url(url_for("shows.search_multiple_panelists"), status_code=301)
 
 
+@blueprint.route("/show/counts_by_year")
 @blueprint.route("/show/show_counts_by_year")
-def search_counts_by_year():
+@blueprint.route("/shows/counts_by_year")
+@blueprint.route("/shows/show_counts_by_year")
+@blueprint.route("/shows/show-counts-by-year")
+def counts_by_year():
     """View: Show Counts by Year Report Redirect"""
     return redirect_url(url_for("shows.counts_by_year"), status_code=301)

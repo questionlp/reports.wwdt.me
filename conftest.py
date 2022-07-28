@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is relased under the terms of the Apache License 2.0
 """pytest conftest.py File"""
-
+from flask import Flask
 import pytest
 
 from app import create_app
@@ -12,6 +12,6 @@ from app import create_app
 
 @pytest.fixture
 def client():
-    app = create_app()
+    app: Flask = create_app()
     with app.test_client() as client:
         yield client

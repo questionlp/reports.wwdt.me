@@ -12,6 +12,7 @@ blueprint = Blueprint("scorekeepers_redirects", __name__)
 
 
 @blueprint.route("/scorekeeper")
+@blueprint.route("/scorekeepers")
 def index():
     """View: Scorekeepers Index Redirect"""
     return redirect_url(url_for("scorekeepers.index"), status_code=301)

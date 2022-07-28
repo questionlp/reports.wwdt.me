@@ -205,7 +205,7 @@ def retrieve_matching_two(
             continue
 
         shows.append(
-            retrieve_details(show_id=row.showid, databae_connection=database_connection)
+            retrieve_details(show_id=row.showid, database_connection=database_connection)
         )
 
     return shows

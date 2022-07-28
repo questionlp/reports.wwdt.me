@@ -84,8 +84,8 @@ def counts_by_year():
 
 
 @blueprint.route("/guest-host")
-def guest_hosts():
-    """View: Shows with Guest Host Report"""
+def guest_host():
+    """View: Shows with a Guest Host Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_guest_host(database_connection=_database_connection)
     _database_connection.close()
@@ -94,8 +94,8 @@ def guest_hosts():
 
 
 @blueprint.route("/guest-scorekeeper")
-def guest_scorekeepers():
-    """View: Shows with Guest Scorekeeper Report"""
+def guest_scorekeeper():
+    """View: Shows with a Guest Scorekeeper Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_guest_scorekeeper(database_connection=_database_connection)
     _database_connection.close()
@@ -282,7 +282,7 @@ def search_multiple_panelists():
             elif len(_panelist_values) == 1:
                 _shows = retrieve_matching_one(
                     database_connection=_database_connection,
-                    panelist_slug=_panelist_values[0],
+                    panelist_slug_1=_panelist_values[0],
                     include_best_of=_best_of,
                     include_repeats=_repeats,
                 )

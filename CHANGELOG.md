@@ -4,9 +4,10 @@
 
 ### Component Changes
 
-- Upgrade Flask from 2.0.2 to 2.1.2
+- Upgrade Flask from 2.0.2 to 2.1.3
 - Upgrade Pure CSS from 2.0.6 to 2.1.0
   - Include Grid (Responsive) module
+- Set Werkzeug specifically to 2.2.1
 
 ### Application Changes
 
@@ -31,9 +32,9 @@
 | scorekeeper     | scorekeepers    |
 | show            | shows           |
 
-- Previously, each section's reports lived under the `reports` module at the
-  top-level of the application. The reports now reside within their respective
-  section
+- Previously, each section's reports code files lived under the `reports`
+  module at the top-level of the application. The report code files now reside
+  within their respective section
 - Changed underscore in page name in URLs to hyphens
 - Renamed `index.html` to `_index.html` in all of the template folders
 - Moved the `Panel Gender Mix` report from being under the `Panelists` section

@@ -13,11 +13,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.guest_hosts") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.guest_host") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.guest_scorekeepers") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.guest_scorekeeper") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>

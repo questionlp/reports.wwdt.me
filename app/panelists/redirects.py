@@ -12,6 +12,7 @@ blueprint = Blueprint("panelists_redirects", __name__)
 
 
 @blueprint.route("/panelist")
+@blueprint.route("/panelists")
 def index():
     """View: Panelists Index Redirect"""
     return redirect_url(url_for("panelists.index"), status_code=301)
@@ -81,7 +82,7 @@ def pvp():
 def panelist_vs_panelist_scoring():
     """View: Panelist vs Panelist Scoring Report Redirect"""
     return redirect_url(
-        url_for("panelists.panelist_vs_panelist_scoring"), status_code=301
+        url_for("panelists.panelist_pvp_scoring"), status_code=301
     )
 
 

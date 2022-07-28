@@ -16,20 +16,20 @@
     </dd>
 
     <dt>
+        <a href="{{ url_for('shows.high_scoring') }}">High Scoring Shows</a>
+    </dt>
+    <dd>
+        A listing of shows in which the panel total score is greater than or
+        equal to 50.
+    </dd>
+
+    <dt>
         <a href="{{ url_for('shows.highest_score_equals_sum_other_scores') }}">Highest
         Score Equals Sum of Other Scores</a>
     </dt>
     <dd>
         A listing of shows in which the highest panelist score matches the sum
         of the two other panelist scores.
-    </dd>
-
-    <dt>
-        <a href="{{ url_for('shows.high_scoring') }}">High Scoring Shows</a>
-    </dt>
-    <dd>
-        A listing of shows in which the panel total score is greater than or
-        equal to 50.
     </dd>
 
     <dt>
@@ -120,7 +120,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('shows.guest_hosts') }}">Shows with Guest Host</a>
+        <a href="{{ url_for('shows.guest_host') }}">Shows with a Guest Host</a>
     </dt>
     <dd>
         A listing of all shows, including Best Of and repeats, that had a guest
@@ -128,7 +128,7 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('shows.guest_scorekeepers') }}">Shows with Guest
+        <a href="{{ url_for('shows.guest_scorekeeper') }}">Shows with a Guest
         Scorekeeper</a>
     </dt>
     <dd>

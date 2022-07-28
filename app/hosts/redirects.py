@@ -12,6 +12,7 @@ blueprint = Blueprint("hosts_redirects", __name__)
 
 
 @blueprint.route("/host")
+@blueprint.route("/hosts")
 def index():
     """View: Hosts Index Redirect"""
     return redirect_url(url_for("hosts.index"), status_code=301)
