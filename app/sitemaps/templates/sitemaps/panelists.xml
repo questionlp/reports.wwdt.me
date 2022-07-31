@@ -41,6 +41,10 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("panelists.perfect_scores") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("panelists.rankings_summary") }}</loc>
     <changefreq>daily</changefreq>
   </url>
