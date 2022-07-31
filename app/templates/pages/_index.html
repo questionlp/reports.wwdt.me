@@ -16,12 +16,12 @@
 <section id="toc">
 <h2>Available Report Categories</h2>
 <ul>
-    <li><a href="#guests">Guests</a></li>
-    <li><a href="#hosts">Hosts</a></li>
-    <li><a href="#locations">Locations</a></li>
-    <li><a href="#panelists">Panelists</a></li>
-    <li><a href="#scorekeepers">Scorekeepers</a></li>
-    <li><a href="#shows">Shows</a></li>
+    <li><a href="{{ url_for('guests.index') }}">Guests</a></li>
+    <li><a href="{{ url_for('hosts.index') }}">Hosts</a></li>
+    <li><a href="{{ url_for('locations.index') }}">Locations</a></li>
+    <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    <li><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+    <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
 </ul>
 </section>
 
