@@ -3,56 +3,69 @@
         <a href="{{ url_for('panelists.aggregate_scores') }}">Aggregate Scores</a>
     </dt>
     <dd>
-        A break down of general statistics of all total scores and a break down
-        of the number of times a total score has been achieved.
+        This report provides information on general statistics for the aggregate
+        of panelist total scores and a break down of the number of times a total
+        score has occurred.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.appearances_by_year') }}">Appearances by Year</a>
     </dt>
     <dd>
-        A pivot table containing a list of panelists and the number of appearances
-        each panelist has made, broken out by year (excluding Best Of and Repeat shows).
+        This report breaks down the number of times a panelist has appeared on a
+        show for a given year. The counts excludes Best Of and Repeat shows.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.bluff_stats') }}">Bluff the Listener Statistics</a>
     </dt>
     <dd>
-        A report providing a breakdown of the number of times each panelist had
-        their Bluff the Listener story chosen, had the correct story, and the
-        number of appearances on shows that had a Bluff the Listener segment.
+        This report provides a break down of the number of times each panelist has
+        had their Bluff the Listener story chosen, had the correct story, and
+        the number of appearances on both regular shows that had a Bluff the
+        Listener segment and Best Of shows with unique Bluff the Listener segments.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.debut_by_year') }}">Debut by Year</a>
     </dt>
     <dd>
-        A report providing a list of panelist debuts broken down by year.
+        This report provides a break down of when panelists made their debut on
+        the show, grouped by year.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.first_most_recent_appearances') }}">First and Most Recent Appearances</a>
     </dt>
     <dd>
-        A report providing a list of the first and most recent appearances, for
-        both regular and all shows, for each panelist.
+        This report provides a list of panelists and their first appearance and
+        most recent appearance on the show, for both regular shows and all shows,
+        including Best Ofs and repeats.
+    </dd>
+
+    <dt>
+        <a href="{{ url_for('panelists.losing_streaks') }}">Losing Streaks</a>
+    </dt>
+    <dd>
+        This report provides a break down of the longest losing streak for each
+        panelist. "All Losses" includes shows in which a panelist did not finish
+        in first place or tied for first.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.panelist_pvp') }}">Panelist vs Panelist</a>
     </dt>
     <dd>
-        A report that provides a way to lookup how well a panelist has faired
-        against other panelists.
+        This report allows you to lookup how well a panelist has faired
+        against another panelist.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.panelist_pvp_all') }}">Panelist vs Panelist: All</a>
     </dt>
     <dd>
-        A report that provides details on how well all panelists has faired against
-        other panelists.
+        This report compares on how well each all panelists have faired against other
+        panelists based on their scores and ranking, broken down my panelist.
     </dd>
 
     <dt>
@@ -64,54 +77,52 @@
     </dd>
 
     <dt>
-        <a href="{{ url_for('panelists.gender_stats') }}">Statistics by Gender</a>
-    </dt>
-    <dd>
-        A break down of how well all panelists have done by gender and by year.
-    </dd>
-
-    <dt>
-        <a href="{{ url_for('panelists.losing_streaks') }}">Losing Streaks</a>
-    </dt>
-    <dd>
-        A listing of the longest losing streak for each panelist.
-    </dd>
-
-    <dt>
         <a href="{{ url_for('panelists.perfect_scores') }}">Perfect Score Counts</a>
     </dt>
     <dd>
-        A report that provides a count for each panelist that has had a total score
-        of 20 points (what Bill Kurtis calls a "perfect score") or higher.
+        This report provides a count for how many times a panelist that has
+        had a total score of 20 points, which Bill Kurtis calls a "perfect score",
+        or higher. The counts exclude any scores from Best Of and repeat shows.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.rankings_summary') }}">Rankings Summary</a>
     </dt>
     <dd>
-        A break down of the ranking statistics for all panelists.
+        This report provides statistics for the ranking of each panelist after
+        each show.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.single_appearance') }}">Single Appearance</a>
     </dt>
     <dd>
-        A list of panelists that have made only one appearance on the show,
-        excluding any Best Of and Repeat shows.
+        This report provides a list of panelists that have made only one
+        appearance on the show, excluding any Best Of and Repeat shows.
+    </dd>
+
+    <dt>
+        <a href="{{ url_for('panelists.gender_stats') }}">Statistics by Gender</a>
+    </dt>
+    <dd>
+        This report provides a break down of panelist statistics grouped by
+        the gender that each panelist has identified themselves as.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.stats_summary') }}">Statistics Summary</a>
     </dt>
     <dd>
-        A break down of statistics for all panelists.
+        This report provides a break down of scoring statistics for each
+        panelist.
     </dd>
 
     <dt>
         <a href="{{ url_for('panelists.win_streaks') }}">Win Streaks</a>
     </dt>
     <dd>
-        A listing of the longest outright win streak and the longest win streak
-        that includes both outright wins and draws for each panelist.
+        This report provides a break down of the longest winning streak for each
+        panelist. "All Wins" includes shows in which a panelist did not finish
+        in first place or tied for first.
     </dd>
 </dl>
