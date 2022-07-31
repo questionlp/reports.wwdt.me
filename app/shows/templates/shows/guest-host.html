@@ -19,7 +19,7 @@
 {% endblock synopsis %}
 
 {% block content %}
-<!-- Start Guest Host Shows Listing -->
+<!-- Start Report Section -->
 <table class="pure-table pure-table-bordered">
     <colgroup>
         <col class="date">
@@ -56,7 +56,7 @@
             {% endif %}
             <td>{{ show.host }}</td>
             {% if show.scorekeeper_guest %}
-            <td><strong>{{ show.scorekeeper }}</strong></td>
+            <td><b>{{ show.scorekeeper }}</b></td>
             {% else %}
             <td>{{ show.scorekeeper }}</td>
             {% endif %}
@@ -106,5 +106,5 @@
         </tr>
     </tfoot>
 </table>
-<!-- End Guest Host Shows Listing -->
+<!-- End Report Section -->
 {% endblock content %}

@@ -160,9 +160,6 @@ def panelist_debuts_by_year(
     """Returns a dictionary of show years with a list of panelists'
     debut information"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     show_years = retrieve_show_years(database_connection=database_connection)
     panelists = retrieve_panelists_first_shows(database_connection=database_connection)
 

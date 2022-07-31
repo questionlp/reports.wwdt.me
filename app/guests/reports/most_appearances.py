@@ -100,9 +100,6 @@ def guest_multiple_appearances(
     """Get a list of guests that have appeared on the show multiple
     times on all shows and regular shows"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     guests_all_shows = retrieve_guest_most_appearances_all(
         database_connection=database_connection
     )

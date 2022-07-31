@@ -14,7 +14,9 @@ def retrieve_show_guests(
 ) -> List[Dict[str, str]]:
     """Retrieve the Not My Job guest for the requested show ID"""
 
-    guests = []
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT g.guestid, g.guest, g.guestslug "
@@ -29,6 +31,7 @@ def retrieve_show_guests(
     if not result:
         return None
 
+    guests = []
     for row in result:
         guests.append(
             {
@@ -46,7 +49,9 @@ def retrieve_show_panelists(
 ) -> List[Dict[str, str]]:
     """Retrieve panelists for the requested show ID"""
 
-    panelists = []
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT p.panelistid, p.panelist, p.panelistslug "
@@ -62,6 +67,7 @@ def retrieve_show_panelists(
     if not result:
         return None
 
+    panelists = []
     for row in result:
         panelists.append(
             {
@@ -80,7 +86,9 @@ def retrieve_all_shows(
     """Retrieve a list of all shows and basic information including:
     location, host, scorekeeper, panelists and guest"""
 
-    shows = []
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, "
@@ -102,6 +110,7 @@ def retrieve_all_shows(
     if not result:
         return None
 
+    shows = []
     show_count = 1
     for row in result:
         shows.append(
@@ -138,7 +147,9 @@ def retrieve_all_original_shows(
     """Retrieve a list of all original shows and basic information
     including: location, host, scorekeeper, panelists and guest"""
 
-    shows = []
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, l.venue, l.city, l.state, "
@@ -161,6 +172,7 @@ def retrieve_all_original_shows(
     if not result:
         return None
 
+    shows = []
     show_count = 1
     for row in result:
         guest = retrieve_show_guests(

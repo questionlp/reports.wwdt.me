@@ -2,7 +2,6 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Guest Scorekeeper Report Functions"""
-from collections import OrderedDict
 from typing import List, Dict
 
 import mysql.connector
@@ -14,8 +13,11 @@ def retrieve_shows_guest_scorekeeper(
     database_connection: mysql.connector.connect,
 ) -> List[Dict]:
     """Retrieve a list of shows with guest scorekeepers"""
-    shows = []
-    cursor = database_connection.cursor(dictionary=True)
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, h.host, "
         "h.hostslug, hm.guest AS host_guest, sk.scorekeeper, "
@@ -36,25 +38,31 @@ def retrieve_shows_guest_scorekeeper(
     if not result:
         return None
 
+    shows = []
     for row in result:
-        show = OrderedDict()
-        show_id = row["showid"]
-        show["date"] = row["showdate"].isoformat()
-        show["best_of"] = bool(row["bestof"])
-        show["repeat"] = bool(row["repeatshowid"])
-        show["location"] = OrderedDict()
-        show["location"]["venue"] = row["venue"]
-        show["location"]["city"] = row["city"]
-        show["location"]["state"] = row["state"]
-        show["host"] = row["host"]
-        show["host_slug"] = row["hostslug"]
-        show["host_guest"] = bool(row["host_guest"])
-        show["scorekeeper"] = row["scorekeeper"]
-        show["scorekeeper_slug"] = row["scorekeeperslug"]
-        show["panelists"] = show_details.retrieve_show_panelists(
-            show_id, database_connection
+        show_id = row.showid
+        shows.append(
+            {
+                "date": row.showdate.isoformat(),
+                "best_of": bool(row.bestof),
+                "repeat": bool(row.repeatshowid),
+                "location": {
+                    "venue": row.venue,
+                    "city": row.city,
+                    "state": row.state,
+                },
+                "host": row.host,
+                "host_slug": row.hostslug,
+                "host_guest": bool(row.host_guest),
+                "scorekeeper": row.scorekeeper,
+                "scorekeeper_slug": row.scorekeeperslug,
+                "panelists": show_details.retrieve_show_panelists(
+                    show_id, database_connection
+                ),
+                "guests": show_details.retrieve_show_guests(
+                    show_id, database_connection
+                ),
+            }
         )
-        show["guests"] = show_details.retrieve_show_guests(show_id, database_connection)
-        shows.append(show)
 
     return shows

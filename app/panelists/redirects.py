@@ -81,9 +81,7 @@ def pvp():
 @blueprint.route("/panelist/panelist_vs_panelist_scoring")
 def panelist_vs_panelist_scoring():
     """View: Panelist vs Panelist Scoring Report Redirect"""
-    return redirect_url(
-        url_for("panelists.panelist_pvp_scoring"), status_code=301
-    )
+    return redirect_url(url_for("panelists.panelist_pvp_scoring"), status_code=301)
 
 
 @blueprint.route("/panelist/rankings_summary")

@@ -7,7 +7,7 @@
 - Upgrade Flask from 2.0.2 to 2.1.3
 - Upgrade Pure CSS from 2.0.6 to 2.1.0
   - Include Grid (Responsive) module
-- Set Werkzeug specifically to 2.2.1
+- Use Werkzeug version 2.2.1
 
 ### Application Changes
 
@@ -47,7 +47,9 @@
   reports
 - Enable Markdown handling for show notes fields in the respective reports
 - Display `-` for table cells containing no data
+- Change MySQL Connector cursor return type from `dict` to `NamedTuple` where
+  applicable
 
 ### Development Changes
 
-- Adding tests by way of `pytest`
+- Addition of `pytest` testing

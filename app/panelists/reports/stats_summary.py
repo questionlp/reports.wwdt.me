@@ -96,9 +96,6 @@ def retrieve_all_panelists_stats(
     """Retrieve appearance and score statistics for all available
     panelists and calculates common statistics for each panelist"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not panelists:

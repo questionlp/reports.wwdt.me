@@ -43,6 +43,9 @@ def retrieve_scores_by_year_gender(
 
     panelist_gender = gender[0].upper()
 
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT pm.panelistscore FROM ww_showpnlmap pm "

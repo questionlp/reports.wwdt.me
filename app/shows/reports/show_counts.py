@@ -2,8 +2,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Counts Report Functions"""
-from collections import OrderedDict
-from typing import List, Dict
+from typing import Dict
 
 import mysql.connector
 
@@ -14,8 +13,10 @@ def retrieve_show_counts_by_year(
     """Retrieve the number of Regular, Best Of, Repeat and Repeat/Best
     Of shows broken down by year"""
 
-    years = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT YEAR(showdate) AS 'year' FROM ww_shows "
         "ORDER BY showdate ASC;"
@@ -27,12 +28,13 @@ def retrieve_show_counts_by_year(
     if not result:
         return None
 
+    years = []
     for row in result:
-        years.append(int(row["year"]))
+        years.append(int(row.year))
 
-    show_counts = OrderedDict()
+    show_counts = {}
     for year in years:
-        cursor = database_connection.cursor(dictionary=True)
+        cursor = database_connection.cursor(named_tuple=True)
         query = (
             "SELECT "
             "(SELECT COUNT(showid) FROM ww_shows "
@@ -63,17 +65,17 @@ def retrieve_show_counts_by_year(
         if not result:
             show_counts[year] = None
         else:
-            counts = OrderedDict()
-            counts["regular"] = result["regular"]
-            counts["best_of"] = result["bestof"]
-            counts["repeat"] = result["repeat"]
-            counts["repeat_best_of"] = result["repeat_bestof"]
-            counts["total"] = (
-                result["regular"]
-                + result["bestof"]
-                + result["repeat"]
-                + result["repeat_bestof"]
-            )
-            show_counts[year] = counts
+            show_counts[year] = {
+                "regular": result.regular,
+                "best_of": result.bestof,
+                "repeat": result.repeat,
+                "repeat_best_of": result.repeat_bestof,
+                "total": (
+                    result.regular
+                    + result.bestof
+                    + result.repeat
+                    + result.repeat_bestof
+                ),
+            }
 
     return show_counts

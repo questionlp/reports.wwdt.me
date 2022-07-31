@@ -2,7 +2,6 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Scorekeeper Appearances Report Functions"""
-from collections import OrderedDict
 from typing import Dict, List, Text
 
 import mysql.connector
@@ -14,7 +13,10 @@ def retrieve_all_scorekeepers(
     """Retrieves a dictionary for all available scorekeepers from the
     database"""
 
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug "
         "FROM ww_scorekeepers sk "
@@ -30,10 +32,12 @@ def retrieve_all_scorekeepers(
 
     scorekeepers = []
     for row in result:
-        scorekeeper = OrderedDict()
-        scorekeeper["name"] = row["scorekeeper"]
-        scorekeeper["slug"] = row["scorekeeperslug"]
-        scorekeepers.append(scorekeeper)
+        scorekeepers.append(
+            {
+                "name": row.scorekeeper,
+                "slug": row.scorekeeperslug,
+            }
+        )
 
     return scorekeepers
 
@@ -43,7 +47,10 @@ def retrieve_appearances_by_scorekeeper(
 ) -> Dict:
     """Retrieve appearance data for the requested scorekeeper"""
 
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT ( "
         "SELECT COUNT(skm.showid) FROM ww_showskmap skm "
@@ -69,11 +76,10 @@ def retrieve_appearances_by_scorekeeper(
     if not result:
         return None
 
-    appearances = OrderedDict()
-    appearances["regular"] = result["regular"]
-    appearances["all"] = result["allshows"]
-
-    return appearances
+    return {
+        "regular": result.regular,
+        "all": result.allshows,
+    }
 
 
 def retrieve_first_most_recent_appearances(
@@ -82,7 +88,10 @@ def retrieve_first_most_recent_appearances(
     """Retrieve first and most recent appearances for both regular
     and all shows for the requested scorekeeper"""
 
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
         "FROM ww_showskmap skm "
@@ -98,9 +107,10 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    appearance_info = OrderedDict()
-    appearance_info["first"] = result["min"].isoformat()
-    appearance_info["most_recent"] = result["max"].isoformat()
+    appearance_info = {
+        "first": result.min.isoformat(),
+        "most_recent": result.max.isoformat(),
+    }
 
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -116,8 +126,8 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return appearance_info
 
-    appearance_info["first_all"] = result["min"].isoformat()
-    appearance_info["most_recent_all"] = result["max"].isoformat()
+    appearance_info["first_all"] = result.min.isoformat()
+    appearance_info["most_recent_all"] = result.max.isoformat()
 
     return appearance_info
 
@@ -132,7 +142,7 @@ def retrieve_appearance_summaries(
     if not scorekeepers:
         return None
 
-    scorekeepers_summary = OrderedDict()
+    scorekeepers_summary = {}
     for scorekeeper in scorekeepers:
         appearance_count = retrieve_appearances_by_scorekeeper(
             scorekeeper["slug"], database_connection
@@ -140,15 +150,15 @@ def retrieve_appearance_summaries(
         first_most_recent = retrieve_first_most_recent_appearances(
             scorekeeper["slug"], database_connection
         )
-        info = OrderedDict()
-        info["slug"] = scorekeeper["slug"]
-        info["name"] = scorekeeper["name"]
-        info["regular_shows"] = appearance_count["regular"]
-        info["all_shows"] = appearance_count["all"]
-        info["first"] = first_most_recent["first"]
-        info["first_all"] = first_most_recent["first_all"]
-        info["most_recent"] = first_most_recent["most_recent"]
-        info["most_recent_all"] = first_most_recent["most_recent_all"]
-        scorekeepers_summary[scorekeeper["slug"]] = info
+        scorekeepers_summary[scorekeeper["slug"]] = {
+            "slug": scorekeeper["slug"],
+            "name": scorekeeper["name"],
+            "regular_shows": appearance_count["regular"],
+            "all_shows": appearance_count["all"],
+            "first": first_most_recent["first"],
+            "first_all": first_most_recent["first_all"],
+            "most_recent": first_most_recent["most_recent"],
+            "most_recent_all": first_most_recent["most_recent_all"],
+        }
 
     return scorekeepers_summary

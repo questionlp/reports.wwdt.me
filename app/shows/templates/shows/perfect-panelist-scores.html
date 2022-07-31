@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Lightning Round with Zero Correct Answers | Shows{% endblock %}
+{% block title %}Shows with Perfect Panelist Scores | Shows{% endblock %}
 
 {% block breadcrumb %}
 <div id="breadcrumb">
@@ -11,10 +11,11 @@
 {% endblock breadcrumb %}
 
 {% block synopsis %}
-<h2>Lightning Round with Zero Correct Answers</h2>
+<h2>Shows with Perfect Panelist Scores</h2>
 <p>
-    List of shows in which panelists answered zero Lightning
-    Fill-in-the-Blank round questions correct.
+    List of shows where a panelist finishes the show with a total score of
+    20 points, a "perfect score" as referred to by Bill Kurtis. This report
+    also includes any instances of total scores that exceed 20 points.
 </p>
 {% endblock synopsis %}
 
@@ -25,29 +26,24 @@
         <col class="date">
         <col class="name panelist">
         <col class="score">
-        <col class="score">
-        <col class="score">
-        <col class="rank">
     </colgroup>
     <thead>
         <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Panelist</th>
-            <th scope="col">Start</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Score</th>
-            <th scope="col">Rank</th>
+            <td scope="col">Show Date</td>
+            <td scope="col">Panelist</td>
+            <td scope="col">Total Score</td>
         </tr>
     </thead>
     <tbody>
         {% for show in shows %}
         <tr>
             <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
-            <td>{{ show.panelist.name }}</td>
-            <td>{{ show.panelist.start }}</td>
-            <td>{{ show.panelist.correct }}</td>
-            <td>{{ show.panelist.score }}</td>
-            <td>{{ rank_map[show.panelist.rank] }}</td>
+            <td>{{ show.panelist }}</td>
+            {% if show.score > 20 %}
+            <td><b>{{ show.score }}</b></td>
+            {% else %}
+            <td>{{ show.score }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

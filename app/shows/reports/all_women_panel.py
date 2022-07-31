@@ -2,7 +2,6 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM All Women Panel Report Functions"""
-from collections import OrderedDict
 from typing import List, Dict
 
 import mysql.connector
@@ -14,10 +13,11 @@ def retrieve_show_details(
     """Retrieves host, scorekeeper, panelist, guest and location
     information for the requested show ID"""
 
-    show_details = OrderedDict()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
 
     # Retrieve host, scorekeeper and guest
-    cursor = database_connection.cursor(dictionary=True)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showdate, h.host, sk.scorekeeper, g.guest, "
         "gm.guestscore, gm.exception "
@@ -36,14 +36,16 @@ def retrieve_show_details(
     if not result:
         return None
 
-    show_details["date"] = result["showdate"].isoformat()
-    show_details["host"] = result["host"]
-    show_details["scorekeeper"] = result["scorekeeper"]
-    guest = OrderedDict()
-    guest["name"] = result["guest"]
-    guest["score"] = result["guestscore"]
-    guest["exception"] = bool(result["exception"])
-    show_details["guest"] = guest
+    show_details = {
+        "date": result.showdate.isoformat(),
+        "host": result.host,
+        "scorekeeper": result.scorekeeper,
+        "guest": {
+            "name": result.guest,
+            "score": result.guestscore,
+            "exception": bool(result.exception),
+        },
+    }
 
     # Retrieve show location details
     query = (
@@ -58,11 +60,11 @@ def retrieve_show_details(
     if not result:
         show_details["location"] = None
     else:
-        location = OrderedDict()
-        location["city"] = result["city"]
-        location["state"] = result["state"]
-        location["venue"] = result["venue"]
-        show_details["location"] = location
+        show_details["location"] = {
+            "city": result.city,
+            "state": result.state,
+            "venue": result.venue,
+        }
 
     # Retrieve panelists and their respective show rank and score
     query = (
@@ -81,10 +83,12 @@ def retrieve_show_details(
     else:
         panelists = []
         for row in result:
-            panelist = OrderedDict()
-            panelist["name"] = row["panelist"]
-            panelist["score"] = row["panelistscore"]
-            panelists.append(panelist)
+            panelists.append(
+                {
+                    "name": row.panelist,
+                    "score": row.panelistscore,
+                }
+            )
 
         show_details["panelists"] = panelists
 
@@ -96,7 +100,11 @@ def retrieve_shows_all_women_panel(
 ) -> List[Dict]:
     """Retrieves details from all shows that have had an all women
     panel"""
-    cursor = database_connection.cursor(dictionary=True)
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT pm.showid "
         "FROM ww_showpnlmap pm "
@@ -117,7 +125,7 @@ def retrieve_shows_all_women_panel(
 
     shows = []
     for row in result:
-        show_id = row["showid"]
+        show_id = row.showid
         show_details = retrieve_show_details(show_id, database_connection)
         if show_details:
             shows.append(show_details)

@@ -154,6 +154,14 @@ def test_panel_gender_mix(client: FlaskClient) -> None:
     assert b"Total" in response.data
 
 
+def test_perfect_panelist_scores(client: FlaskClient) -> None:
+    """Testing shows.routes.perfect_panelist_scores"""
+    response: TestResponse = client.get("/shows/perfect-panelist-scores")
+    assert response.status_code == 200
+    assert b"Shows with Perfect Panelist Scores"
+    assert b"Show Date"
+
+
 def test_search_multiple_panelists(client: FlaskClient) -> None:
     """Testing shows.routes.search_multiple_panelists (GET)"""
     response: TestResponse = client.get("/shows/search-multiple-panelists")

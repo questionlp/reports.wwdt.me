@@ -20,9 +20,9 @@
 {% endblock synopsis %}
 
 {% block content %}
-<!-- Start Original Show Listing -->
+<!-- Start Report Section -->
 <p>
-    <strong>Sort Order </strong>
+    <b>Sort Order </b>
     {% if ascending %}
     [ Ascending | <a href="{{ url_for('shows.original_shows', ascending=False) }}">Descending</a> ]
     {% else %}
@@ -97,5 +97,5 @@
         </tr>
     </tfoot>
 </table>
-<!-- End Original Show Listing -->
+<!-- End Report Section -->
 {% endblock content %}

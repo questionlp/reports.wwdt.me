@@ -2,7 +2,6 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Lightning Round Report Functions"""
-from collections import OrderedDict
 from typing import List, Dict
 
 import mysql.connector
@@ -12,10 +11,12 @@ def retrieve_all_lightning_round_start(
     database_connection: mysql.connector.connect,
 ) -> Dict:
     """Retrieve all Lightning Fill-in-the-Blank round starting scores
-    and return the values as an OrderedDict"""
+    and return the values as an dictionary"""
 
-    show_lightning_round_starts = OrderedDict()
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
         "pm.panelistlrndstart "
@@ -34,15 +35,17 @@ def retrieve_all_lightning_round_start(
     if not result:
         return None
 
+    show_lightning_round_starts = {}
     for row in result:
-        show_id = row["showid"]
+        show_id = row.showid
         if show_id not in show_lightning_round_starts:
-            show_lightning_round_starts[show_id] = OrderedDict()
-            show_lightning_round_starts[show_id]["id"] = show_id
-            show_lightning_round_starts[show_id]["date"] = row["showdate"].isoformat()
-            show_lightning_round_starts[show_id]["scores"] = []
+            show_lightning_round_starts[show_id] = {
+                "id": show_id,
+                "date": row.showdate.isoformat(),
+                "scores": [],
+            }
 
-        show_lightning_round_starts[show_id]["scores"].append(row["panelistlrndstart"])
+        show_lightning_round_starts[show_id]["scores"].append(row.panelistlrndstart)
 
     return show_lightning_round_starts
 
@@ -54,8 +57,10 @@ def retrieve_scoring_info_by_show_id(
     answers and final score for the requested show ID. Used for
     getting scoring details where the round starts in a three-way tie."""
 
-    info = OrderedDict()
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showdate, pm.panelistlrndstart, "
         "pm.panelistlrndcorrect, pm.panelistscore "
@@ -71,13 +76,13 @@ def retrieve_scoring_info_by_show_id(
     if not result:
         return None
 
-    info["id"] = show_id
-    info["date"] = result["showdate"].isoformat()
-    info["start"] = result["panelistlrndstart"]
-    info["correct"] = result["panelistlrndcorrect"]
-    info["score"] = result["panelistscore"]
-
-    return info
+    return {
+        "id": show_id,
+        "date": result.showdate.isoformat(),
+        "start": result.panelistlrndstart,
+        "correct": result.panelistlrndcorrect,
+        "score": result.panelistscore,
+    }
 
 
 def retrieve_panelists_by_show_id(
@@ -85,8 +90,10 @@ def retrieve_panelists_by_show_id(
 ) -> List[Dict]:
     """Returns a list of panelists for the requested show ID"""
 
-    panelists = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT p.panelistid, p.panelist, p.panelistslug "
         "FROM ww_showpnlmap pm "
@@ -102,12 +109,15 @@ def retrieve_panelists_by_show_id(
     if not result:
         return None
 
+    panelists = []
     for row in result:
-        panelist = OrderedDict()
-        panelist["id"] = row["panelistid"]
-        panelist["name"] = row["panelist"]
-        panelist["slug"] = row["panelistslug"]
-        panelists.append(panelist)
+        panelists.append(
+            {
+                "id": row.panelistid,
+                "name": row.panelist,
+                "slug": row.panelistslug,
+            }
+        )
 
     return panelists
 
@@ -118,8 +128,10 @@ def shows_with_lightning_round_start_zero(
     """Return shows in which panelists start the Lightning
     Fill-in-the-Blank round with zero points"""
 
-    shows = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
         "pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore, "
@@ -138,19 +150,22 @@ def shows_with_lightning_round_start_zero(
     if not result:
         return None
 
+    shows = []
     for row in result:
-        show = OrderedDict()
-        show["id"] = row["showid"]
-        show["date"] = row["showdate"].isoformat()
-        panelist = OrderedDict()
-        panelist["id"] = row["panelistid"]
-        panelist["name"] = row["panelist"]
-        panelist["start"] = row["panelistlrndstart"]
-        panelist["correct"] = row["panelistlrndcorrect"]
-        panelist["score"] = row["panelistscore"]
-        panelist["rank"] = row["showpnlrank"]
-        show["panelist"] = panelist
-        shows.append(show)
+        shows.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "panelist": {
+                    "id": row.panelistid,
+                    "name": row.panelist,
+                    "start": row.panelistlrndstart,
+                    "correct": row.panelistlrndcorrect,
+                    "score": row.panelistscore,
+                    "rank": row.showpnlrank,
+                },
+            }
+        )
 
     return shows
 
@@ -161,8 +176,10 @@ def shows_lightning_round_start_zero(
     """Return list of shows in which a panelist starts the Lightning
     Fill-in-the-Blank round with zero points"""
 
-    shows = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
         "pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore, "
@@ -181,19 +198,22 @@ def shows_lightning_round_start_zero(
     if not result:
         return None
 
+    shows = []
     for row in result:
-        show = OrderedDict()
-        show["id"] = row["showid"]
-        show["date"] = row["showdate"].isoformat()
-        panelist = OrderedDict()
-        panelist["id"] = row["panelistid"]
-        panelist["name"] = row["panelist"]
-        panelist["start"] = row["panelistlrndstart"]
-        panelist["correct"] = row["panelistlrndcorrect"]
-        panelist["score"] = row["panelistscore"]
-        panelist["rank"] = row["showpnlrank"]
-        show["panelist"] = panelist
-        shows.append(show)
+        shows.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "panelist": {
+                    "id": row.panelistid,
+                    "name": row.panelist,
+                    "start": row.panelistlrndstart,
+                    "correct": row.panelistlrndcorrect,
+                    "score": row.panelistscore,
+                    "rank": row.showpnlrank,
+                },
+            }
+        )
 
     return shows
 
@@ -204,7 +224,10 @@ def shows_lightning_round_zero_correct(
     """Return list of shows in which a panelist answers zero Lightning
     Fill-in-the-Blank round questions correct"""
 
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
         "pm.panelistlrndstart, pm.panelistlrndcorrect, "
@@ -225,18 +248,20 @@ def shows_lightning_round_zero_correct(
 
     shows = []
     for row in result:
-        show = OrderedDict()
-        show["id"] = row["showid"]
-        show["date"] = row["showdate"].isoformat()
-        panelist = OrderedDict()
-        panelist["id"] = row["panelistid"]
-        panelist["name"] = row["panelist"]
-        panelist["start"] = row["panelistlrndstart"]
-        panelist["correct"] = row["panelistlrndcorrect"]
-        panelist["score"] = row["panelistscore"]
-        panelist["rank"] = row["showpnlrank"]
-        show["panelist"] = panelist
-        shows.append(show)
+        shows.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "panelist": {
+                    "id": row.panelistid,
+                    "name": row.panelist,
+                    "start": row.panelistlrndstart,
+                    "correct": row.panelistlrndcorrect,
+                    "score": row.panelistscore,
+                    "rank": row.showpnlrank,
+                },
+            }
+        )
 
     return shows
 
@@ -255,15 +280,16 @@ def shows_starting_with_three_way_tie(
         show_date = show_scores[show]["date"]
 
         if len(set(show_scores[show]["scores"])) == 1:
-            show_info = OrderedDict()
-            show_info["id"] = show_id
-            show_info["date"] = show_date
-            show_info["score"] = show_scores[show]["scores"][0]
-            panelists = retrieve_panelists_by_show_id(
-                show_id=show_id, database_connection=database_connection
+            shows.append(
+                {
+                    "id": show_id,
+                    "date": show_date,
+                    "score": show_scores[show]["scores"][0],
+                    "panelists": retrieve_panelists_by_show_id(
+                        show_id=show_id, database_connection=database_connection
+                    ),
+                }
             )
-            show_info["panelists"] = panelists
-            shows.append(show_info)
 
     return shows
 
@@ -274,11 +300,13 @@ def shows_ending_with_three_way_tie(
     """Retrieve all shows in which all three panelists ended the
     Lightning round in a three-way tie"""
 
-    shows = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, pm.panelistscore, "
-        "COUNT(pm.showpnlrank) "
+        "COUNT(pm.showpnlrank) AS count "
         "FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
@@ -295,15 +323,18 @@ def shows_ending_with_three_way_tie(
     if not result:
         return None
 
+    shows = []
     for row in result:
-        show = OrderedDict()
-        show["id"] = row["showid"]
-        show["date"] = row["showdate"].isoformat()
-        show["score"] = row["panelistscore"]
-        show["panelists"] = retrieve_panelists_by_show_id(
-            show_id=show["id"], database_connection=database_connection
+        shows.append(
+            {
+                "id": row.showid,
+                "date": row.showdate.isoformat(),
+                "score": row.panelistscore,
+                "panelists": retrieve_panelists_by_show_id(
+                    show_id=row.showid, database_connection=database_connection
+                ),
+            }
         )
-        shows.append(show)
 
     return shows
 
@@ -336,18 +367,20 @@ def shows_starting_ending_three_way_tie(
 
     show_info = []
     for show_id in shows_intersect:
-        info = OrderedDict()
         score_info = retrieve_scoring_info_by_show_id(show_id, database_connection)
 
         if score_info:
-            info["id"] = show_id
-            info["date"] = score_info["date"]
-            info["panelists"] = retrieve_panelists_by_show_id(
-                show_id, database_connection
+            show_info.append(
+                {
+                    "id": show_id,
+                    "date": score_info["date"],
+                    "panelists": retrieve_panelists_by_show_id(
+                        show_id, database_connection
+                    ),
+                    "start": score_info["start"],
+                    "correct": score_info["correct"],
+                    "score": score_info["score"],
+                }
             )
-            info["start"] = score_info["start"]
-            info["correct"] = score_info["correct"]
-            info["score"] = score_info["score"]
-            show_info.append(info)
 
     return show_info

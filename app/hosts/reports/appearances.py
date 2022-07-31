@@ -141,9 +141,6 @@ def retrieve_appearance_summaries(
     """Retrieve host appearance summary, including appearance counts,
     and first and most recent appearances"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _hosts = retrieve_hosts(database_connection=database_connection)
 
     if not _hosts:

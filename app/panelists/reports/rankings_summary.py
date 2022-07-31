@@ -98,9 +98,6 @@ def retrieve_all_panelist_rankings(
 ) -> Dict[str, Any]:
     """Returns ranking statistics for all available panelists"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     panelists = common.retrieve_panelists(database_connection=database_connection)
     if not panelists:
         return None

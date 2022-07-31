@@ -78,9 +78,6 @@ def panel_gender_mix_breakdown(
     """Calculate the panel gender breakdown for all show years and
     return a dictionary containing count for each year"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     show_years = retrieve_show_years(database_connection=database_connection)
 
     gender_mix_breakdown = {}

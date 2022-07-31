@@ -23,10 +23,10 @@
 <h3 id="y{{ year }}">{{ year }}</h3>
         {% if debuts[year] %}
 <p>
-    <strong>Panelist debuts:</strong> {{ debuts[year]|length }}
+    <b>Panelist debuts:</b> {{ debuts[year]|length }}
 </p>
 
-<!-- Start Panelist Debut by Year Section -->
+<!-- Start Report Section -->
 <table class="pure-table pure-table-bordered">
     <colgroup>
         <col class="date">
@@ -81,5 +81,5 @@
         {% endif %}
     {% endfor %}
 {% endif %}
-<!-- End Panelist Debut by Year Section -->
+<!-- End Report Section -->
 {% endblock content %}

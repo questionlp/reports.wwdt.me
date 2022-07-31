@@ -113,6 +113,9 @@ def retrieve_matching_one(
     """Retrieve show details for shows with a panel containing one of
     the requested panelists"""
 
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.bestof, s.repeatshowid "
@@ -165,6 +168,9 @@ def retrieve_matching_two(
     """Retrieve show details for shows with a panel containing two of
     the requested panelists"""
 
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.bestof, s.repeatshowid "
@@ -205,7 +211,9 @@ def retrieve_matching_two(
             continue
 
         shows.append(
-            retrieve_details(show_id=row.showid, database_connection=database_connection)
+            retrieve_details(
+                show_id=row.showid, database_connection=database_connection
+            )
         )
 
     return shows
@@ -221,6 +229,9 @@ def retrieve_matching_three(
 ) -> List[Dict[str, Any]]:
     """Retrieve show details for shows with a panel containing three of
     the requested panelists"""
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (

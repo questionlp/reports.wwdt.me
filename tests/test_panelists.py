@@ -37,7 +37,7 @@ def test_bluff_stats(client: FlaskClient) -> None:
     """Testing panelists.routes.bluff_stats"""
     response: TestResponse = client.get("/panelists/bluff-stats")
     assert response.status_code == 200
-    assert b"Bluff the Listener Stats" in response.data
+    assert b"Bluff the Listener Statistics" in response.data
     assert b"Unique Best Of" in response.data
 
 
@@ -132,8 +132,16 @@ def test_panelist_pvp_scoring_post(
     assert b"Rank" in response.data
 
 
+def test_perfect_scores(client: FlaskClient) -> None:
+    """Testing panelists.routes.perfect_scores"""
+    response: TestResponse = client.get("/panelists/perfect-scores")
+    assert response.status_code == 200
+    assert b"Perfect Scores Count"
+    assert b"Total Score Count"
+
+
 def test_rankings_summary(client: FlaskClient) -> None:
-    """Testing panelists.routes.ankings_summary"""
+    """Testing panelists.routes.rankings_summary"""
     response: TestResponse = client.get("/panelists/rankings-summary")
     assert response.status_code == 200
     assert b"Rankings Summary" in response.data

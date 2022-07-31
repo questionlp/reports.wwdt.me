@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Perfect Score Counts | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Perfect Score Counts</h2>
+<p>
+    This report provides a count for each panelist that has had a total score
+    of 20 points (Bill Kurtis calls this a "perfect score") or higher.
+</p>
+<p>
+    The count excludes any scores from any Best Of and repeat shows.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Report Section -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name panelist">
+        <col class="count">
+        <col class="count">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col" rowspan="2">Panelist</th>
+            <th scope="col" colspan="2">Total Score Count</th>
+        <tr>
+            <th scope="col">= 20</th>
+            <th scope="col">&#x2265; 20</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in counts %}
+        <tr>
+            <td><a href="{{ stats_url }}/panelists/{{ counts[panelist].slug }}">
+                {{ counts[panelist].name }}</a></td>
+            <td>{{ counts[panelist].perfect }}</td>
+            <td>{{ counts[panelist].more_perfect }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- End Report Section -->
+{% endblock content %}

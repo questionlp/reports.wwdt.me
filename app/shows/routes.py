@@ -23,6 +23,7 @@ from .reports.lightning_round import (
 from .reports.scoring import (
     retrieve_shows_all_high_scoring,
     retrieve_shows_all_low_scoring,
+    retrieve_shows_panelist_perfect_scores,
     retrieve_shows_panelist_score_sum_match,
 )
 from .reports.search_mutliple_panelists import (
@@ -52,6 +53,8 @@ def all_shows():
     _ascending = True
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_all_shows(database_connection=_database_connection)
+    _database_connection.close()
+
     if "sort" in request.args:
         _sort = str(request.args["sort"])
 
@@ -69,6 +72,7 @@ def all_women_panel():
     """View: All Women Panel Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_women_panel(database_connection=_database_connection)
+    _database_connection.close()
 
     return render_template("shows/all-women-panel.html", shows=_shows)
 
@@ -201,7 +205,7 @@ def low_scoring():
 
 
 @blueprint.route("/original-shows")
-def original_shows(ascending: Optional[bool] = True):
+def original_shows():
     """View: Original Shows Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_all_original_shows(database_connection=_database_connection)
@@ -226,13 +230,25 @@ def original_shows(ascending: Optional[bool] = True):
 def panel_gender_mix(gender: Optional[str] = "female"):
     """View: Shows Panel Gender Mix Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    gender_tag = gender[0].upper()
-    mix = panel_gender_mix_breakdown(
+    _gender_tag = gender[0].upper()
+    _mix = panel_gender_mix_breakdown(
         database_connection=_database_connection, gender=gender
     )
+    _database_connection.close()
+
     return render_template(
-        "shows/panel-gender-mix.html", panel_gender_mix=mix, gender=gender_tag
+        "shows/panel-gender-mix.html", panel_gender_mix=_mix, gender=_gender_tag
     )
+
+
+@blueprint.route("/perfect-panelist-scores")
+def perfect_panelist_scores():
+    """View: Shows with Perfect Panelist Scores Report"""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_panelist_perfect_scores(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/perfect-panelist-scores.html", shows=_shows)
 
 
 @blueprint.route("/search-multiple-panelists", methods=["GET", "POST"])
@@ -287,6 +303,7 @@ def search_multiple_panelists():
                     include_repeats=_repeats,
                 )
 
+            _database_connection.close()
             return render_template(
                 "shows/search-multiple-panelists.html",
                 panelists=_panelists,
@@ -294,11 +311,13 @@ def search_multiple_panelists():
             )
 
         # Fallback for no valid panelist(s) selected
+        _database_connection.close()
         return render_template(
             "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
         )
 
     # Fallback for GET request
+    _database_connection.close()
     return render_template(
         "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
     )

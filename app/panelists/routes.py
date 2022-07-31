@@ -31,6 +31,7 @@ from .reports.panelist_vs_panelist_scoring import (
     retrieve_common_shows,
     retrieve_panelists_scores,
 )
+from .reports.perfect_scores import retrieve_perfect_score_counts
 from .reports.rankings_summary import (
     retrieve_all_panelist_rankings,
 )
@@ -267,6 +268,15 @@ def panelist_pvp_scoring():
         panelists=_panelists_dict,
         scores=None,
     )
+
+
+@blueprint.route("/perfect-scores")
+def perfect_scores():
+    """View: Perfect Scores Count Report"""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _counts = retrieve_perfect_score_counts(database_connection=_database_connection)
+    _database_connection.close()
+    return render_template("panelists/perfect-scores.html", counts=_counts)
 
 
 @blueprint.route("/rankings-summary")

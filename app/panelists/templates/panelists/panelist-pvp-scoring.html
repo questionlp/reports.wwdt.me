@@ -26,6 +26,7 @@
 {% endblock synopsis %}
 
 {% block content %}
+<!-- Start Report Section -->
 <form method="POST" class="pure-form">
     <fieldset>
         <legend>Select two panelists to compare scores:</legend>
@@ -73,8 +74,8 @@
 </p>
 {% elif not scores %}
 <p class="result-message">
-    No results available for <strong>{{ panelists[request.form.panelist_1] }}</strong>
-    and <strong>{{ panelists[request.form.panelist_2] }}</strong>.
+    No results available for <b>{{ panelists[request.form.panelist_1] }}</b> and
+    <b>{{ panelists[request.form.panelist_2] }}</b>.
 </p>
 {% else %}
 
@@ -142,5 +143,5 @@
 <!-- End Show Listing -->
 {% endif %}
 {% endif %}
-
+<!-- End Report Section -->
 {% endblock content %}

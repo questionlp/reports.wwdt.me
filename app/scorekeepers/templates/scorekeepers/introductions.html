@@ -19,6 +19,7 @@
 {% endblock synopsis %}
 
 {% block content %}
+<!-- Start Report Section -->
 <h3>Scorekeepers</h3>
 <ul>
 {% for scorekeeper in scorekeepers %}
@@ -26,7 +27,6 @@
 {% endfor %}
 </ul>
 
-<!-- Start Scorekeeper Introductions Section -->
 {% for scorekeeper in scorekeepers %}
 <h3 id="{{ scorekeeper.slug }}">{{ scorekeeper.name }}</h3>
 <table class="pure-table pure-table-bordered">
@@ -64,5 +64,5 @@
     </tfoot>
 </table>
 {% endfor %}
-<!-- End Scorekeeper Introductions Section -->
+<!-- End Report Section -->
 {% endblock content %}

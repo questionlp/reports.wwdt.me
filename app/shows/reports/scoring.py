@@ -2,8 +2,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Scoring Reports Functions"""
-from collections import OrderedDict
-from typing import List, Dict
+from typing import List, Dict, Union
 
 import mysql.connector
 
@@ -14,10 +13,11 @@ def retrieve_show_details(
     """Retrieves host, scorekeeper, panelist, guest and location
     information for the requested show ID"""
 
-    show_details = OrderedDict()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
 
     # Retrieve host, scorekeeper and guest
-    cursor = database_connection.cursor(dictionary=True)
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showdate, h.host, sk.scorekeeper, g.guest, "
         "gm.guestscore, gm.exception "
@@ -36,14 +36,16 @@ def retrieve_show_details(
     if not result:
         return None
 
-    show_details["date"] = result["showdate"].isoformat()
-    show_details["host"] = result["host"]
-    show_details["scorekeeper"] = result["scorekeeper"]
-    guest = OrderedDict()
-    guest["name"] = result["guest"]
-    guest["score"] = result["guestscore"]
-    guest["exception"] = bool(result["exception"])
-    show_details["guest"] = guest
+    show_details = {
+        "date": result.showdate.isoformat(),
+        "host": result.host,
+        "scorekeeper": result.scorekeeper,
+        "guest": {
+            "name": result.guest,
+            "score": result.guestscore,
+            "exception": bool(result.exception),
+        },
+    }
 
     # Retrieve show location details
     query = (
@@ -58,11 +60,11 @@ def retrieve_show_details(
     if not result:
         show_details["location"] = None
     else:
-        location = OrderedDict()
-        location["city"] = result["city"]
-        location["state"] = result["state"]
-        location["venue"] = result["venue"]
-        show_details["location"] = location
+        show_details["location"] = {
+            "city": result.city,
+            "state": result.state,
+            "venue": result.venue,
+        }
 
     # Retrieve panelists and their respective show rank and score
     query = (
@@ -81,10 +83,12 @@ def retrieve_show_details(
     else:
         panelists = []
         for row in result:
-            panelist = OrderedDict()
-            panelist["name"] = row["panelist"]
-            panelist["score"] = row["panelistscore"]
-            panelists.append(panelist)
+            panelists.append(
+                {
+                    "name": row.panelist,
+                    "score": row.panelistscore,
+                }
+            )
 
         show_details["panelists"] = panelists
 
@@ -96,7 +100,11 @@ def retrieve_shows_all_high_scoring(
 ) -> List[Dict]:
     """Retrieves details from shows with a panelist total score greater
     than or equal to 50"""
-    cursor = database_connection.cursor(dictionary=True)
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, SUM(pm.panelistscore) AS total "
         "FROM ww_showpnlmap pm "
@@ -115,9 +123,9 @@ def retrieve_shows_all_high_scoring(
 
     shows = []
     for row in result:
-        show_id = row["showid"]
+        show_id = row.showid
         show_details = retrieve_show_details(show_id, database_connection)
-        show_details["total_score"] = row["total"]
+        show_details["total_score"] = row.total
         if show_details:
             shows.append(show_details)
 
@@ -130,7 +138,11 @@ def retrieve_shows_all_low_scoring(
     """Retrieves details from shows with a panelist total score less
     than 30. Excludes the 20th anniversary show due to unique Lightning
     Fill-in-the-Blank segment."""
-    cursor = database_connection.cursor(dictionary=True)
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showid, s.showdate, SUM(pm.panelistscore) AS total "
         "FROM ww_showpnlmap pm "
@@ -150,9 +162,9 @@ def retrieve_shows_all_low_scoring(
 
     shows = []
     for row in result:
-        show_id = row["showid"]
+        show_id = row.showid
         show_details = retrieve_show_details(show_id, database_connection)
-        show_details["total_score"] = row["total"]
+        show_details["total_score"] = row.total
         if show_details:
             shows.append(show_details)
 
@@ -166,7 +178,11 @@ def retrieve_shows_panelist_score_sum_match(
     matches the sum of the scores for the other two panelists. Excludes
     the 20th anniversary show due to unique Lightning Fill-in-the-Blank
     segment."""
-    cursor = database_connection.cursor(dictionary=True)
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT s.showdate, pm.panelistid, p.panelist, p.panelistslug, "
         "pm.panelistscore, pm.showpnlrank "
@@ -185,21 +201,23 @@ def retrieve_shows_panelist_score_sum_match(
     if not result:
         return None
 
-    shows = OrderedDict()
+    shows = {}
     for row in result:
-        show_date = row["showdate"].isoformat()
+        show_date = row.showdate.isoformat()
         if show_date not in shows:
             shows[show_date] = []
 
-        score = OrderedDict()
-        score["panelist_id"] = row["panelistid"]
-        score["panelist"] = row["panelist"]
-        score["panelist_slug"] = row["panelistslug"]
-        score["score"] = row["panelistscore"]
-        score["rank"] = row["showpnlrank"]
-        shows[show_date].append(score)
+        shows[show_date].append(
+            {
+                "panelist_id": row.panelistid,
+                "panelist": row.panelist,
+                "panelist_slug": row.panelistslug,
+                "score": row.panelistscore,
+                "rank": row.showpnlrank,
+            }
+        )
 
-    shows_match = OrderedDict()
+    shows_match = {}
     for show in shows:
         show_info = shows[show]
         score_1 = show_info[0]["score"]
@@ -209,3 +227,43 @@ def retrieve_shows_panelist_score_sum_match(
             shows_match[show] = show_info
 
     return shows_match
+
+
+def retrieve_shows_panelist_perfect_scores(
+    database_connection: mysql.connector.connect,
+) -> List[Dict[str, Union[str, int]]]:
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    """Retrieves shows in which a panelist scores a total of 20 points,
+    or higher. Best Of and repeat shows are excluded."""
+    cursor = database_connection.cursor(named_tuple=True)
+    query = (
+        "SELECT s.showdate, p.panelist, p.panelistslug, "
+        "pm.panelistscore "
+        "FROM ww_showpnlmap pm "
+        "JOIN ww_shows s ON s.showid = pm.showid "
+        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
+        "WHERE pm.panelistscore >= 20 "
+        "AND s.bestof = 0 AND s.repeatshowid IS NULL "
+        "ORDER BY s.showdate ASC;"
+    )
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    if not result:
+        return None
+
+    shows = []
+    for row in result:
+        shows.append(
+            {
+                "date": row.showdate,
+                "panelist": row.panelist,
+                "panelist_slug": row.panelistslug,
+                "score": row.panelistscore,
+            }
+        )
+
+    return shows

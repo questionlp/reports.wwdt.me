@@ -111,9 +111,6 @@ def retrieve_all_panelist_bluff_stats(
     """Retrieves a list of Bluff the Listener statistics for all
     panelists"""
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not _panelists:

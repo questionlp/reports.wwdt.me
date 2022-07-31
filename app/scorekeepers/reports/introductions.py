@@ -2,7 +2,6 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Scorekeeper Introductions Report Functions"""
-from collections import OrderedDict
 from typing import List, Dict
 
 import mysql.connector
@@ -14,8 +13,10 @@ def retrieve_scorekeepers_with_introductions(
     """Retrieve a list of scorekeepers that have show introduction entries
     in the database"""
 
-    scorekeepers = []
-    cursor = database_connection.cursor(dictionary=True)
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT sk.scorekeeperid, sk.scorekeeper, "
         "sk.scorekeeperslug "
@@ -31,12 +32,15 @@ def retrieve_scorekeepers_with_introductions(
     if not result:
         return None
 
+    scorekeepers = []
     for row in result:
-        scorekeeper_info = OrderedDict()
-        scorekeeper_info["id"] = row["scorekeeperid"]
-        scorekeeper_info["name"] = row["scorekeeper"]
-        scorekeeper_info["slug"] = row["scorekeeperslug"]
-        scorekeepers.append(scorekeeper_info)
+        scorekeepers.append(
+            {
+                "id": row.scorekeeperid,
+                "name": row.scorekeeper,
+                "slug": row.scorekeeperslug,
+            }
+        )
 
     return scorekeepers
 
@@ -46,10 +50,15 @@ def retrieve_all_scorekeeper_introductions(
 ) -> Dict:
     """Retrieve all scorekeeper introductions from the database"""
 
-    scorekeepers = retrieve_scorekeepers_with_introductions(database_connection)
-    all_introductions = OrderedDict()
+    if not database_connection.is_connected():
+        database_connection.reconnect()
 
-    cursor = database_connection.cursor(dictionary=True)
+    scorekeepers = retrieve_scorekeepers_with_introductions(
+        database_connection=database_connection
+    )
+    all_introductions = {}
+
+    cursor = database_connection.cursor(named_tuple=True)
     for scorekeeper in scorekeepers:
         scorekeeper_intros = []
         query = (
@@ -67,13 +76,15 @@ def retrieve_all_scorekeeper_introductions(
 
         if result:
             for row in result:
-                show_info = OrderedDict()
-                show_info["id"] = row["showid"]
-                show_info["date"] = row["showdate"].isoformat()
-                show_info["best_of"] = bool(row["bestof"])
-                show_info["repeat_show"] = bool(row["repeatshowid"])
-                show_info["introduction"] = row["description"]
-                scorekeeper_intros.append(show_info)
+                scorekeeper_intros.append(
+                    {
+                        "id": row.showid,
+                        "date": row.showdate.isoformat(),
+                        "best_of": bool(row.bestof),
+                        "repeat_show": bool(row.repeatshowid),
+                        "introduction": row.description,
+                    }
+                )
 
         all_introductions[scorekeeper["id"]] = scorekeeper_intros
 
