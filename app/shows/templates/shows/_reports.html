@@ -3,24 +3,25 @@
         <a href="{{ url_for('shows.all_shows') }}">All Shows</a>
     </dt>
     <dd>
-        A listing of all shows that have been broadcasted, including Best Ofs
-        and Repeats. The list does not include pledge specials or special shows
-        that were not aired in their original form.
+        This reports provides a list of all shows that have been broadcasted,
+        including Best Of and repeat shows. The list does not include any pledge
+        specials shows or special shows that were not aired in their original form.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.all_women_panel') }}">All Women Panel</a>
     </dt>
     <dd>
-        A listing of all shows that have had an all women panel.
+        This report provides a list of shows that have an all women panel.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.high_scoring') }}">High Scoring Shows</a>
     </dt>
     <dd>
-        A listing of shows in which the panel total score is greater than or
-        equal to 50.
+        This report provides a list of shows in which the total score for all
+        three panelists is greater than or equal to 50, listed in descending
+        order.
     </dd>
 
     <dt>
@@ -28,8 +29,8 @@
         Score Equals Sum of Other Scores</a>
     </dt>
     <dd>
-        A listing of shows in which the highest panelist score matches the sum
-        of the two other panelist scores.
+        This report provides a list of shows in which the highest panelist 
+        total score matches the sum of the two other panelists' scores.
     </dd>
 
     <dt>
@@ -37,8 +38,8 @@
         Round Ending in a Three-Way Tie</a>
     </dt>
     <dd>
-        A list of shows in which all three panelists finishing the Lightning
-        Fill-in-the Blank round in a three-way tie.
+        This report provides a list of shows in which all three panelists
+        finished the Lightning Fill-in-the Blank segment in a three-way tie.
     </dd>
 
     <dt>
@@ -46,8 +47,9 @@
         Round Starting and Ending in a Three-Way Tie</a>
     </dt>
     <dd>
-        A list of shows in which all three panelists starting and ending the
-        Lightning Fill-in-the Blank round in a three-way tie.
+        This report provides a list of shows in which all three panelists
+        started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
+        three-way tie.
     </dd>
 
     <dt>
@@ -55,8 +57,8 @@
         Round Starting in a Three-Way Tie</a>
     </dt>
     <dd>
-        A list of shows in which all three panelists starting the Lightning
-        Fill-in-the Blank round in a three-way tie.
+        This report provides a list of shows in which all three panelists
+        started the Lightning Fill-in-the Blank segment in a three-way tie.
     </dd>
 
     <dt>
@@ -64,8 +66,8 @@
         Round Starting with Zero Points</a>
     </dt>
     <dd>
-        A list of shows in which panelists start the Lightning Fill-in-the-Blank
-        round with zero points.
+        This report provides a list of shows in which a panelist started the
+        Lightning Fill-in-the Blank segment with zero points.
     </dd>
 
     <dt>
@@ -73,58 +75,72 @@
         Round with Zero Correct Answers</a>
     </dt>
     <dd>
-        A list of shows in which panelists answered zero Lightning
-        Fill-in-the-Blank round questions correct.
+        This report provides a list of shows in which a panelist answered zero
+        Lightning Fill-in-the Blank questions correct.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.low_scoring') }}">Low Scoring Shows</a>
     </dt>
     <dd>
-        A listing of shows in which the panel total score is less than 30.
+        This report provides a list of show locations and the corresponding
+        average panelist score and average total score, in descending order.
+    </dd>
+    <dd>
+        One exception from the scoring is that the 25th Anniversary Special, that
+        aired on October 27, 2018, which is excluded due to the unique Lightning
+        Fill-in-the-Blank format.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.original_shows') }}">Original Shows</a>
     </dt>
     <dd>
-        A listing of each original broadcast show, which excludes: Best Ofs,
-        Repeats, pledge specials and other special shows that were not broadcast
-        in their entirety.
+        This reports provides a list of original shows that have been broadcasted,
+        which excludes Best Of and repeat shows.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.panel_gender_mix') }}">Panel Gender Mix</a>
     </dt>
     <dd>
-        A break down of the panel gender mix for each show by year (excluding
-        Best Ofs, Repeat and special shows).
+        This report provides a break down of the gender mix of panels for all
+        broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
+        and the 25th Anniversary special.
     </dd>
-
 
     <dt>
         <a href="{{ url_for('shows.search_multiple_panelists') }}">Search
         Shows by Multiple Panelists</a>
     </dt>
     <dd>
-        Search shows in which the panel includes one to three selected panelists
-        on a panel.
+        This report allows you to search for shows with a particular set of
+        panelists (up to three) with options to include Best Of and repeat shows.
+    </dd>
+
+    <dd>
+        Shows that are repeats of Best Of shows will be included if either option
+        is checked.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.counts_by_year') }}">Show Counts by Year</a>
     </dt>
     <dd>
-        A count of the number of regular, Best Of, repeat, and repeat Best Of
-        shows on a per-year basis.
+        This report provides a count of the number of regular, Best Of and repeat
+        shows, grouped by year.
+    </dd>
+    <dd>
+        The counts for the current year will only include shows that have already
+        aired.
     </dd>
 
     <dt>
         <a href="{{ url_for('shows.guest_host') }}">Shows with a Guest Host</a>
     </dt>
     <dd>
-        A listing of all shows, including Best Of and repeats, that had a guest
-        host filling in.
+        This report provides a list of all shows, including Best Of and repeat
+        shows, that have a guest host.
     </dd>
 
     <dt>
@@ -132,8 +148,8 @@
         Scorekeeper</a>
     </dt>
     <dd>
-        A listing of all shows, including Best Of and repeats, that had a
-        guest scorekeeper filling in.
+        This report provides a list of all shows, including Best Of and repeat
+        shows, that have a guest scorekeeper.
     </dd>
 
     <dt>
@@ -141,8 +157,13 @@
         Perfect Panelist Scores</a>
     </dt>
     <dd>
-        A listing of all shows in which a panelist has a total score of 20
-        (or more) points
+        This report provides a list of shows where a panelist finishes the
+        Lightning Fill-in-the-Blank segment with a total score of 20 points, or
+        as Bill Kurtis calls it, a "perfect score".
+    </dd>
+    <dd>
+        The list also includes shows where a panelist has a total score greater
+        than 20 points.
     </dd>
 
 </dl>
