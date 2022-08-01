@@ -130,12 +130,12 @@
         width: 20rem;
     }
 
-    col.introduction, col.notes {
-        width: 24rem;
-    }
-
     col.notes {
         width: 28rem;
+    }
+
+    col.introduction {
+        width: 36rem;
     }
 
     form {
