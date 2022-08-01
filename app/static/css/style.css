@@ -290,6 +290,9 @@
     td.no-data {
         background-color: rgba(48, 48, 48, 0.75);
         text-align: center;
+    }
+
+    #appearance-by-year td.no-data {
         vertical-align: middle !important;
     }
 
