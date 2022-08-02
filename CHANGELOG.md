@@ -1,5 +1,11 @@
 # Changes
 
+## 2.0.1
+
+### Content Changes
+
+- Update blurb on the main index page
+
 ## 2.0.0
 
 ### Component Changes
