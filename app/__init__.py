@@ -61,7 +61,6 @@ def create_app():
     app.jinja_env.globals["blog_url"] = app.config["app_settings"]["blog_url"]
     app.jinja_env.globals["graphs_url"] = app.config["app_settings"]["graphs_url"]
     app.jinja_env.globals["repo_url"] = app.config["app_settings"]["repo_url"]
-    app.jinja_env.globals["reports_url"] = app.config["app_settings"]["reports_url"]
     app.jinja_env.globals["site_url"] = app.config["app_settings"]["site_url"]
     app.jinja_env.globals["stats_url"] = app.config["app_settings"]["stats_url"]
 
