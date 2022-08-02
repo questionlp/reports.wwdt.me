@@ -17,7 +17,6 @@
     respective section
   - Core templates including core templates, errors and sitemaps still reside
     within the top-level templates directory
-- Change `app.url_map.strict_slashes` from `False` to `True`
 - Convert the application from using uWSGI to serve the application to
   Gunicorn to match the changes made with the Wait Wait Stats applications
 - Changed section names from singular to plural to match the naming convention
