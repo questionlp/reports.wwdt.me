@@ -245,7 +245,9 @@ def panel_gender_mix(gender: Optional[str] = "female"):
 def perfect_panelist_scores():
     """View: Shows with Perfect Panelist Scores Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_panelist_perfect_scores(database_connection=_database_connection)
+    _shows = retrieve_shows_panelist_perfect_scores(
+        database_connection=_database_connection
+    )
     _database_connection.close()
 
     return render_template("shows/perfect-panelist-scores.html", shows=_shows)
