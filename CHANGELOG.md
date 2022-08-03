@@ -1,5 +1,11 @@
 # Changes
 
+## 2.0.2
+
+### Component Changes
+
+- Upgrade Flask to 2.2.0
+
 ## 2.0.1
 
 ### Content Changes
