@@ -150,7 +150,7 @@ def test_panel_gender_mix(client: FlaskClient) -> None:
     response: TestResponse = client.get("/shows/panel-gender-mix")
     assert response.status_code == 200
     assert b"Panel Gender Mix" in response.data
-    assert b"3 F / 0 M" in response.data
+    assert b"3 W / 0 M" in response.data
     assert b"Total" in response.data
 
 

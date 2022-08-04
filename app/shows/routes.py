@@ -227,18 +227,13 @@ def original_shows():
 
 
 @blueprint.route("/panel-gender-mix")
-def panel_gender_mix(gender: Optional[str] = "female"):
+def panel_gender_mix():
     """View: Shows Panel Gender Mix Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _gender_tag = gender[0].upper()
-    _mix = panel_gender_mix_breakdown(
-        database_connection=_database_connection, gender=gender
-    )
+    _mix = panel_gender_mix_breakdown(database_connection=_database_connection)
     _database_connection.close()
 
-    return render_template(
-        "shows/panel-gender-mix.html", panel_gender_mix=_mix, gender=_gender_tag
-    )
+    return render_template("shows/panel-gender-mix.html", panel_gender_mix=_mix)
 
 
 @blueprint.route("/perfect-panelist-scores")
