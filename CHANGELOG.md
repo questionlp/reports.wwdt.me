@@ -1,5 +1,16 @@
 # Changes
 
+## 2.0.3
+
+### Application Changes
+
+- Made changes to how gender is referenced in the Panel Gender Mix report and update the corresponding test
+- Simplify the logic of the backing function for Panel Gender Mix report and template file
+
+### Development Changes
+
+- Replace use of `FLASK_ENV` with `FLASK_DEBUG` in `runner.sh`
+
 ## 2.0.2
 
 ### Component Changes

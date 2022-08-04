@@ -31,13 +31,10 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
 
 
 def retrieve_panel_gender_count_by_year(
-    year: int, gender: str, database_connection: mysql.connector.connect
+    year: int, database_connection: mysql.connector.connect
 ) -> int:
     """Get a count of shows for the requested year that has the
     requested number of panelists of a given gender"""
-
-    # panelistgender field only contains a single letter
-    gender_tag = gender[0].upper()
 
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -50,7 +47,7 @@ def retrieve_panel_gender_count_by_year(
             "JOIN ww_shows s ON s.showid = pm.showid "
             "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
             "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-            "AND p.panelistgender = %s "
+            "AND p.panelistgender = 'F' "
             "AND year(s.showdate) = %s "
             "AND s.showdate <> '2018-10-27' "  # Exclude 25th anniversary special
             "GROUP BY s.showdate "
@@ -59,13 +56,12 @@ def retrieve_panel_gender_count_by_year(
         cursor.execute(
             query,
             (
-                gender_tag,
                 year,
                 gender_count,
             ),
         )
         cursor.fetchall()
-        counts["{}{}".format(gender_count, gender_tag)] = cursor.rowcount
+        counts["{}F".format(gender_count)] = cursor.rowcount
         cursor.close()
 
     counts["total"] = sum(counts.values())
@@ -73,7 +69,7 @@ def retrieve_panel_gender_count_by_year(
 
 
 def panel_gender_mix_breakdown(
-    gender: str, database_connection: mysql.connector.connect
+    database_connection: mysql.connector.connect,
 ) -> Dict[str, Any]:
     """Calculate the panel gender breakdown for all show years and
     return a dictionary containing count for each year"""
@@ -83,7 +79,7 @@ def panel_gender_mix_breakdown(
     gender_mix_breakdown = {}
     for year in show_years:
         count = retrieve_panel_gender_count_by_year(
-            year=year, gender=gender, database_connection=database_connection
+            year=year, database_connection=database_connection
         )
         gender_mix_breakdown[year] = count
 
