@@ -19,7 +19,7 @@ def retrieve_show_counts_by_year(
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT YEAR(showdate) AS 'year' FROM ww_shows "
-        "ORDER BY showdate ASC;"
+        "ORDER BY YEAR(showdate) ASC;"
     )
     cursor.execute(query)
     result = cursor.fetchall()
