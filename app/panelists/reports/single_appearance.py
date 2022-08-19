@@ -24,7 +24,7 @@ def retrieve_single_appearances(
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE pm.showpnlmapid IN ( "
-        "SELECT pm.showpnlmapid "
+        "SELECT ANY_VALUE(pm.showpnlmapid) "
         "FROM ww_showpnlmap pm "
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "
