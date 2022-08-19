@@ -21,7 +21,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
     query = (
         "SELECT DISTINCT YEAR(showdate) AS year "
         "FROM ww_shows "
-        "ORDER BY showdate ASC;"
+        "ORDER BY YEAR(showdate) ASC;"
     )
     cursor.execute(
         query,
@@ -114,7 +114,7 @@ def retrieve_panelists_first_shows(
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE p.panelist <> '<Multiple>' "
-        "GROUP BY p.panelist "
+        "GROUP BY p.panelistid "
         "ORDER BY MIN(s.showdate) ASC;"
     )
     cursor.execute(

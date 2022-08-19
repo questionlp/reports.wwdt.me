@@ -1,5 +1,17 @@
 # Changes
 
+## 2.0.4
+
+### Component Changes
+
+- Upgrade MySQL Connector/Python from 8.0.28 to 8.0.30
+- Upgrade NumPy from 1.22.3 to 1.23.2
+- Upgrade pytz from 2022.1 to 2022.2.1
+
+### Application Changes
+
+- Update SQL queries in panelists and shows reports to be compatible with the MySQL flag `ONLY_FULL_GROUP_BY`
+
 ## 2.0.3
 
 ### Application Changes
@@ -15,7 +27,7 @@
 
 ### Component Changes
 
-- Upgrade Flask to 2.2.0
+- Upgrade Flask from 2.1.3 to 2.2.0
 
 ## 2.0.1
 

@@ -21,7 +21,8 @@ def retrieve_perfect_score_counts(
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (
-        "SELECT p.panelist, p.panelistslug, COUNT(p.panelist) AS count "
+        "SELECT p.panelist, ANY_VALUE(p.panelistslug) AS panelistslug, "
+        "COUNT(p.panelist) AS count "
         "FROM ww_showpnlmap pm "
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "
@@ -45,7 +46,8 @@ def retrieve_perfect_score_counts(
         }
 
     query = (
-        "SELECT p.panelist, p.panelistslug, COUNT(p.panelist) AS count "
+        "SELECT p.panelist, ANY_VALUE(p.panelistslug) AS panelistslug, "
+        "COUNT(p.panelist) AS count "
         "FROM ww_showpnlmap pm "
         "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
         "JOIN ww_shows s ON s.showid = pm.showid "

@@ -110,7 +110,7 @@ def retrieve_shows_all_high_scoring(
         "FROM ww_showpnlmap pm "
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "GROUP BY s.showdate "
+        "GROUP BY s.showid "
         "HAVING SUM(pm.panelistscore) >= 50 "
         "ORDER BY SUM(pm.panelistscore) DESC, s.showdate DESC;"
     )
@@ -149,7 +149,7 @@ def retrieve_shows_all_low_scoring(
         "JOIN ww_shows s ON s.showid = pm.showid "
         "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
         "AND s.showdate <> '2018-10-27' "
-        "GROUP BY s.showdate "
+        "GROUP BY s.showid "
         "HAVING SUM(pm.panelistscore) < 30 "
         "ORDER BY SUM(pm.panelistscore) ASC, s.showdate DESC;"
     )
