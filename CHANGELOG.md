@@ -1,5 +1,11 @@
 # Changes
 
+## 2.0.5
+
+### Bugfix
+
+- Fix an issue where the `time_zone` configuration value was being assigned to `settings_config` twice, instead of being assigned to both `settings_config` and `database_config`
+
 ## 2.0.4
 
 ### Component Changes
