@@ -11,7 +11,7 @@
 {% endblock breadcrumb %}
 
 {% block synopsis %}
-<h2>Debut by Year</h2>
+<h2 id="top">Debut by Year</h2>
 <p>
     This report provides a break down of when panelists made their debut on
     the show, grouped by year.
@@ -19,7 +19,20 @@
 {% endblock synopsis %}
 
 {% block content %}
+<div class="pure-g">
+
+<div class="pure-u-1-8 debut-year-list">
 {% if years and debuts %}
+<h3 class="years-list-header">Years</h3>
+
+<ul class="no-bullets">
+    {% for year in years %}
+    <li><a href="#y{{ year }}">{{ year }}</a></li>
+    {% endfor %}
+</ul>
+</div>
+
+<div class="pure-u-7-8 pure-md-1">
     {% for year in years %}
 <h3 id="y{{ year }}">{{ year }}</h3>
         {% if debuts[year] %}
@@ -77,10 +90,15 @@
         {% endfor %}
     </tbody>
 </table>
+
+<div class="top-link">
+    <a href="#top">^ Top</a>
+</div>
         {% else %}
 <p>No panelists made their debut in {{ year }}.</p>
         {% endif %}
     {% endfor %}
+</div>
 {% endif %}
 <!-- End Report Section -->
 {% endblock content %}

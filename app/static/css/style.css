@@ -352,9 +352,9 @@
 
 @media only screen and (max-width: 48em) {
 
-    /* Hide Panelist vs Panelist Panelists List on Pure CSS on medium or
-       smaller displays */
-    div.pvp-panelist-list {
+    /* Hide Panelist Debut by Years list and Panelist vs Panelist Panelists
+       List on Pure CSS on medium or smaller displays */
+    div.debut-year-list, div.pvp-panelist-list {
         display: none;
         visibility: hidden;
     }
