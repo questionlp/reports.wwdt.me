@@ -1,5 +1,12 @@
 # Changes
 
+## 2.0.6
+
+### Application Changes
+
+- Removed the unused `app/templates/core` directory and blank HTML files
+- Updated Panelist Debut by Year report to include a list of years as part of a side navigation that appears on medium-sized and larger screens (>= 768 px)
+
 ## 2.0.5
 
 ### Bugfix
