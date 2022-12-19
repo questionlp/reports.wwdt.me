@@ -7,6 +7,8 @@
 from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
+from app.dicts import RANK_MAP
+
 from .reports.common import retrieve_panelists
 from .reports.aggregate_scores import (
     retrieve_all_scores,
@@ -20,6 +22,7 @@ from .reports.appearances_by_year import (
 )
 from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
 from .reports.debut_by_year import retrieve_show_years, panelist_debuts_by_year
+from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
 from .reports.gender_stats import retrieve_stats_by_year_gender
 from .reports.panelist_vs_panelist import (
     retrieve_panelists as pvp_retrieve_panelists,
@@ -101,6 +104,19 @@ def debut_by_year():
     _debuts = panelist_debuts_by_year(database_connection=_database_connection)
     _database_connection.close()
     return render_template("panelists/debut-by-year.html", years=_years, debuts=_debuts)
+
+
+@blueprint.route("/first-appearance-wins")
+def first_appearance_wins():
+    """View: Panelists with First Appearance Wins"""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists_first_appearance_wins(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+    return render_template(
+        "panelists/first-appearance-wins.html", panelists=_panelists, rank_map=RANK_MAP
+    )
 
 
 @blueprint.route("/first-most-recent-appearances")

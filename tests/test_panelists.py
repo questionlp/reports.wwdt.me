@@ -4,6 +4,7 @@
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Testing Panelists Module and Blueprint Views"""
+from flask import Flask
 from flask.testing import FlaskClient
 import pytest
 from werkzeug.test import TestResponse
@@ -47,6 +48,14 @@ def test_debut_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Debut by Year" in response.data
     assert b"# of Regular Appearances" in response.data
+
+
+def test_first_appearance_wins(client: FlaskClient) -> None:
+    """Testing panelists.first_appearance_wins"""
+    response: TestResponse = client.get("/panelists/first-appearance-wins")
+    assert response.status_code == 200
+    assert b"First Appearance Win" in response.data
+    assert b"Show Date" in response.data
 
 
 def test_first_most_recent_appearances(client: FlaskClient) -> None:
