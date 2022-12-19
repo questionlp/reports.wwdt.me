@@ -45,7 +45,13 @@
 <footer>
     <div id="timestamp">R: {{ rendered_at(time_zone) }} | V: {{ app_version }}</div>
     <div id="copyright">
-        Copyright &copy; 2019&ndash;{{ current_year(time_zone) }} <a href="http://linhpham.org/">Linh Pham</a>. All rights reserved.
+        Copyright &copy; 2019&ndash;{{ current_year(time_zone) }}
+        {% if mastodon_url and mastodon_user %}
+        <a href="https://linhpham.org/">Linh Pham</a> (<a rel="me" href="{{ mastodon_url }}">{{ mastodon_user }}</a>).
+        {% else %}
+        <a href="https://linhpham.org/">Linh Pham</a>.
+        {% endif %}
+        All rights reserved.
     </div>
     <div id="source">Source code for this project is available on <a href="{{ repo_url }}">GitHub</a>
     under <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</div>

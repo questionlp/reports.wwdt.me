@@ -5,4 +5,4 @@
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Version module for Wait Wait Reports"""
 
-APP_VERSION = "2.0.6"
+APP_VERSION = "2.1.0"

@@ -1,5 +1,29 @@
 # Changes
 
+## 2.1.0
+
+### Application Changes
+
+- Use `dict.get(key, default_value)` in `app/__init__.py` to get/set configuration values in order to avoid application startup errors if configuration keys are not set
+  - Default value for `time_zone` is `UTC`
+  - Default values for any URL is an empty string
+- Addition of Panelists First Appearance Wins report
+- Adding `mastodon_url` and `mastodon_user` configuration keys in the `settings` section of the config file
+- If the `mastodon_url` and `mastodon_user` keys contain a value, insert a link with `rel="me"` attribute for profile link validation, in the page footer
+
+### Component Changes
+
+- Upgrade Flask from 2.2.0 to 2.2.2
+- Upgrade Werkzeug from 2.2.1 to 2.2.2
+- Upgrade pytz from 2022.2.1 to 2022.6
+
+### Development Changes
+
+- Upgrade flake8 from 4.0.1 to 5.0.4
+- Upgrade pycodestyle from 2.8.0 to 2.9.1
+- Upgrade pytest from 7.1.2 to 7.2.0
+- Upgrade black from 22.6.0 to 22.10.0
+
 ## 2.0.6
 
 ### Application Changes

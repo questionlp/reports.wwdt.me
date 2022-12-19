@@ -20,6 +20,8 @@
         "site_url": "",
         "stats_url": "",
         "ga_property_code": null,
-        "time_zone": "UTC"
+        "time_zone": "UTC",
+        "mastodon_url": "",
+        "mastodon_user": ""
     }
 }
