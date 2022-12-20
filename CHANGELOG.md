@@ -6,6 +6,8 @@
 
 - Addition of Not My Job Guests vs Bluff the Listener Win Ratios report
 - Add missing sitemap entry for Panelists First Appearance Wins report
+- Add missing entries into the panelists and shows sitemap template files
+- Fix issues with sitemap generation and XML syntax in `shows.xml` and `sitemap.xml`
 
 ## 2.1.1
 
