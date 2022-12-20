@@ -50,7 +50,7 @@ def retrieve_not_my_job_stats(
         "JOIN ww_guests g ON g.guestid = gm.guestid "
         "JOIN ww_shows s ON s.showid = gm.showid "
         "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND g.guestslug = 'none' "
+        "AND g.guestslug <> 'none' "
         "AND (gm.guestscore >= 2 OR gm.exception = 1);"
     )
     cursor.execute(query)
@@ -71,7 +71,7 @@ def retrieve_not_my_job_stats(
         "JOIN ww_guests g ON g.guestid = gm.guestid "
         "JOIN ww_shows s ON s.showid = gm.showid "
         "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND g.guestslug = 'none' "
+        "AND g.guestslug <> 'none' "
         "AND (gm.guestscore < 2 AND gm.exception = 0);"
     )
     cursor.execute(query)
@@ -130,11 +130,13 @@ def retrieve_not_my_job_stats(
             elif result.guestscore < 2 and not bool(result.exception):
                 best_of_only_guest_losses += 1
 
-    return {
+    ret_val = {
         "total": count_all_guest_scores + len(best_of_only_guest_ids),
         "wins": count_guest_wins + best_of_only_guest_wins,
         "losses": count_guest_losses + best_of_only_guest_losses,
     }
+
+    return ret_val
 
 
 def retrieve_bluff_stats(

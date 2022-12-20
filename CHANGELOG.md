@@ -1,5 +1,12 @@
 # Changes
 
+## 2.2.0
+
+### Application Changes
+
+- Addition of Not My Job Guests vs Bluff the Listener Win Ratios report
+- Add missing sitemap entry for Panelists First Appearance Wins report
+
 ## 2.1.1
 
 ### Application Changes
