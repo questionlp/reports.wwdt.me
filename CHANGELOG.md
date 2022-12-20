@@ -1,5 +1,12 @@
 # Changes
 
+## 2.1.1
+
+### Application Changes
+
+- Correct spelling of `app.shows.reports.search_multiple_panelists` module and references
+- Remove unnecessary comments and general formatting clean-up
+
 ## 2.1.0
 
 ### Application Changes
