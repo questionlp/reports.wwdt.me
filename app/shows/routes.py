@@ -26,7 +26,7 @@ from .reports.scoring import (
     retrieve_shows_panelist_perfect_scores,
     retrieve_shows_panelist_score_sum_match,
 )
-from .reports.search_mutliple_panelists import (
+from .reports.search_multiple_panelists import (
     retrieve_panelists,
     retrieve_matching_one,
     retrieve_matching_two,
