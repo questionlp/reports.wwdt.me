@@ -18,14 +18,6 @@ def retrieve_panelists_first_appearance_wins(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    # cursor = database_connection.cursor(dictionary=False)
-    # query: str = "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));"
-    # cursor.execute(
-    #    query,
-    # )
-    # _ = cursor.fetchall()
-    # cursor.close()
-
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT DISTINCT p.panelistslug "

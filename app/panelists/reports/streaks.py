@@ -83,9 +83,6 @@ def retrieve_panelist_ranks(
     return ranks
 
 
-# endregion
-
-# region Report Functions
 def calculate_panelist_losing_streaks(
     panelists: List[Dict[str, Any]], database_connection: mysql.connector.connect
 ) -> List[Dict[str, Any]]:

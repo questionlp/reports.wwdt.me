@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2018-2022 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Apperances by Year Report Functions"""
+"""WWDTM Panelist Appearances by Year Report Functions"""
 from typing import Any, Dict, List, Union
 
 import mysql.connector
