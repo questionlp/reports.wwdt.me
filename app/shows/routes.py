@@ -13,6 +13,7 @@ from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.show_counts import retrieve_show_counts_by_year
 from .reports.guest_host import retrieve_shows_guest_host
 from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
+from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_stats
 from .reports.lightning_round import (
     shows_ending_with_three_way_tie,
     shows_lightning_round_start_zero,
@@ -202,6 +203,31 @@ def low_scoring():
     _database_connection.close()
 
     return render_template("shows/low-scoring.html", shows=_shows)
+
+
+@blueprint.route("/not-my-job-vs-bluffs")
+def not_my_job_vs_bluffs():
+    """View: Not My Job Guests vs Bluff the Listener Win Ratios Report"""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _guest_stats = retrieve_not_my_job_stats(database_connection=_database_connection)
+    _bluff_stats = retrieve_bluff_stats(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "total" in _guest_stats and "wins" in _guest_stats:
+        _guest_stats["win_ratio"] = round(
+            100 * (_guest_stats["wins"] / _guest_stats["total"]), 4
+        )
+
+    if "total" in _bluff_stats and "correct" in _bluff_stats:
+        _bluff_stats["correct_ratio"] = round(
+            100 * (_bluff_stats["correct"] / _bluff_stats["total"]), 4
+        )
+
+    return render_template(
+        "shows/guests-vs-bluffs.html",
+        guest_stats=_guest_stats,
+        bluff_stats=_bluff_stats,
+    )
 
 
 @blueprint.route("/original-shows")

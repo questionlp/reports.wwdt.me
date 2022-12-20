@@ -17,6 +17,10 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("panelists.first_appearance_wins") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("panelists.first_most_recent_appearances") }}</loc>
     <changefreq>daily</changefreq>
   </url>
