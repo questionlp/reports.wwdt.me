@@ -93,6 +93,24 @@
     </dd>
 
     <dt>
+        <a href="{{ url_for('shows.not_my_job_vs_bluffs') }}">Not My Job Guests vs Bluff
+        the Listener Win Ratios</a>
+    </dt>
+    <dd>
+        This report compares the rates in which a Not My Job guest wins compared
+        to how often a listener contestant chooses the correct Bluff the Listener
+        story.
+    </dd>
+    <dd>
+        For Not My Job guests, a win is considered when a guest answers 2 or more
+        questions correct or when a
+        <a href="{{ url_for('guests.scoring_exceptions') }}">scorekeeper grants an
+        exception</a>. The report also takes into account
+        <a href="{{ url_for('guests.best_of_only') }}">Not My Job guests that were only
+        included in Best Of shows</a>.
+    </dd>
+
+    <dt>
         <a href="{{ url_for('shows.original_shows') }}">Original Shows</a>
     </dt>
     <dd>

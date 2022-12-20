@@ -16,7 +16,8 @@ def test_primary(client: FlaskClient) -> None:
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
     assert b"?xml" in response.data
     assert b"urlset" in response.data
-    assert b"/guests" in response.data
+    assert b"guests" in response.data
+    assert b"hosts" in response.data
 
 
 def test_guest(client: FlaskClient) -> None:

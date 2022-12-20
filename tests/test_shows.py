@@ -136,6 +136,15 @@ def test_low_scoring(client: FlaskClient) -> None:
     assert b"Panelists" in response.data
 
 
+def test_not_my_job_vs_bluffs(client: FlaskClient) -> None:
+    """Testing shows.routes.not_my_job_vs_bluffs"""
+    response: TestResponse = client.get("/shows/not-my-job-vs-bluffs")
+    assert response.status_code == 200
+    assert b"Not My Job Guests" in response.data
+    assert b"Bluff the Listener" in response.data
+    assert b"Win %" in response.data
+
+
 def test_original_shows(client: FlaskClient) -> None:
     """Testing shows.routes.original_shows"""
     response: TestResponse = client.get("/shows/original-shows")

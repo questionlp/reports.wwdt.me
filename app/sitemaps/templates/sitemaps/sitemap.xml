@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>{{ site_url }}{{ url_for("main.index") }}</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("guests.index") }}</loc>
+    <loc>{{ site_url }}{{ url_for("sitemaps.guests") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("hosts.index") }}</loc>
+    <loc>{{ site_url }}{{ url_for("sitemaps.hosts") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.index") }}</loc>
+    <loc>{{ site_url }}{{ url_for("sitemaps.locations") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("scorekeepers.index") }}</loc>
+    <loc>{{ site_url }}{{ url_for("sitemaps.panelists") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.index") }}</loc>
+    <loc>{{ site_url }}{{ url_for("sitemaps.scorekeepers") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("sitemaps.shows") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
 </urlset>
