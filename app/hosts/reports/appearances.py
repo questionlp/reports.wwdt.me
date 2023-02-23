@@ -75,7 +75,10 @@ def retrieve_appearances_by_host(
     cursor.close()
 
     if not result:
-        return None
+        return {
+            "regular": None,
+            "all": None,
+        }
 
     return {
         "regular": result.regular,
@@ -109,6 +112,16 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
+    if result.min:
+        first = result.min.isoformat()
+    else:
+        first = None
+
+    if result.max:
+        most_recent = result.max.isoformat()
+    else:
+        most_recent = None
+
     cursor = database_connection.cursor(named_tuple=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -121,17 +134,29 @@ def retrieve_first_most_recent_appearances(
     result_all = cursor.fetchone()
     cursor.close()
 
-    if not result:
+    if not result_all:
         return {
-            "first": result.min.isoformat(),
-            "most_recent": result.max.isoformat(),
+            "first": first,
+            "most_recent": most_recent,
+            "first_all": None,
+            "most_recent_all": None,
         }
 
+    if result_all.min:
+        first_all = result_all.min.isoformat()
+    else:
+        first_all = None
+
+    if result_all.max:
+        most_recent_all = result_all.max.isoformat()
+    else:
+        most_recent_all = None
+
     return {
-        "first": result.min.isoformat(),
-        "most_recent": result.max.isoformat(),
-        "first_all": result_all.min.isoformat(),
-        "most_recent_all": result_all.max.isoformat(),
+        "first": first,
+        "most_recent": most_recent,
+        "first_all": first_all,
+        "most_recent_all": most_recent_all,
     }
 
 
@@ -154,15 +179,17 @@ def retrieve_appearance_summaries(
         first_most_recent = retrieve_first_most_recent_appearances(
             host_slug=host["slug"], database_connection=database_connection
         )
-        hosts_summary[host["slug"]] = {
-            "slug": host["slug"],
-            "name": host["name"],
-            "regular_shows": appearance_count["regular"],
-            "all_shows": appearance_count["all"],
-            "first": first_most_recent["first"],
-            "first_all": first_most_recent["first_all"],
-            "most_recent": first_most_recent["most_recent"],
-            "most_recent_all": first_most_recent["most_recent_all"],
-        }
+
+        if appearance_count and first_most_recent:
+            hosts_summary[host["slug"]] = {
+                "slug": host["slug"],
+                "name": host["name"],
+                "regular_shows": appearance_count["regular"],
+                "all_shows": appearance_count["all"],
+                "first": first_most_recent["first"],
+                "first_all": first_most_recent["first_all"],
+                "most_recent": first_most_recent["most_recent"],
+                "most_recent_all": first_most_recent["most_recent_all"],
+            }
 
     return hosts_summary
