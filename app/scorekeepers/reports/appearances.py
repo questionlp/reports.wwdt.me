@@ -74,7 +74,10 @@ def retrieve_appearances_by_scorekeeper(
     cursor.close()
 
     if not result:
-        return None
+        return {
+            "regular": None,
+            "all": None,
+        }
 
     return {
         "regular": result.regular,
@@ -107,10 +110,15 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    appearance_info = {
-        "first": result.min.isoformat(),
-        "most_recent": result.max.isoformat(),
-    }
+    if result.min:
+        first = result.min.isoformat()
+    else:
+        first = None
+
+    if result.max:
+        most_recent = result.max.isoformat()
+    else:
+        most_recent = None
 
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -120,16 +128,33 @@ def retrieve_first_most_recent_appearances(
         "WHERE sk.scorekeeperslug = %s;"
     )
     cursor.execute(query, (scorekeeper_slug,))
-    result = cursor.fetchone()
+    result_all = cursor.fetchone()
     cursor.close()
 
-    if not result:
-        return appearance_info
+    if not result_all:
+        return {
+            "first": first,
+            "most_recent": most_recent,
+            "first_all": None,
+            "most_recent_all": None,
+        }
 
-    appearance_info["first_all"] = result.min.isoformat()
-    appearance_info["most_recent_all"] = result.max.isoformat()
+    if result_all.min:
+        first_all = result_all.min.isoformat()
+    else:
+        first_all = None
 
-    return appearance_info
+    if result_all.max:
+        most_recent_all = result_all.max.isoformat()
+    else:
+        most_recent_all = None
+
+    return {
+        "first": first,
+        "most_recent": most_recent,
+        "first_all": first_all,
+        "most_recent_all": most_recent_all,
+    }
 
 
 def retrieve_appearance_summaries(

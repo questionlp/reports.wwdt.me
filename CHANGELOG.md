@@ -1,5 +1,11 @@
 # Changes
 
+## 2.2.2
+
+### Application Changes
+
+- Fix an issue in which adding a new host or scorekeeper entry in the database without a corresponding appearance record would cause the Host or Scorekeeper Appearances Summary reports to throw an error
+
 ## 2.2.1
 
 ### Component Changes
