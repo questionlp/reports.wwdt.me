@@ -1,5 +1,11 @@
 # Changes
 
+## 2.2.3
+
+### Component Changes
+
+- Upgrade Pure CSS from 2.1.0 to 2.2.0
+
 ## 2.2.2
 
 ### Application Changes
