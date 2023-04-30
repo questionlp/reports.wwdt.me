@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM All Women Panel Report Functions"""
 from typing import List, Dict
@@ -114,7 +114,8 @@ def retrieve_shows_all_women_panel(
         "AND s.showdate <> '2018-10-27' "
         "AND p.panelistgender = 'F' "
         "GROUP BY pm.showid "
-        "HAVING COUNT(s.showid) = 3;"
+        "HAVING COUNT(s.showid) = 3 "
+        "ORDER BY s.showdate ASC;"
     )
     cursor.execute(query)
     result = cursor.fetchall()

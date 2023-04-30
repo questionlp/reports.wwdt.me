@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Scoring Reports Functions"""
 from typing import List, Dict, Union
@@ -232,7 +232,6 @@ def retrieve_shows_panelist_score_sum_match(
 def retrieve_shows_panelist_perfect_scores(
     database_connection: mysql.connector.connect,
 ) -> List[Dict[str, Union[str, int]]]:
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
