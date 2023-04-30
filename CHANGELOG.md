@@ -1,5 +1,26 @@
 # Changes
 
+## 2.2.4
+
+### Application Changes
+
+- Correct sorting of "All Women Panel" report to sort by date
+
+### Component Changes
+
+- Upgrade MySQL Connector/Python from 8.0.30 to 8.0.33
+- Upgrade NumPy from 1.23.2 to 1.24.2
+- Upgrade pytz from 2022.6 to 2023.3
+- Upgrade Markdown from 3.4.1 to 3.4.3
+
+### Development Changes
+
+- Move pytest configuration from `pytest.ini` into `pyproject.toml`
+- Upgrade flake8 from 5.0.4 to 6.0.0
+- Upgrade pycodestyle from 2.9.1 to 2.10.0
+- Upgrade pytest from 7.2.0 to 7.3.1
+- Upgrade black from 22.10.0 to 23.3.0
+
 ## 2.2.3
 
 ### Component Changes
