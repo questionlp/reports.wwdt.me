@@ -4,7 +4,7 @@
 
 ### Component Changes
 
-- Upgrade Flask from 2.2.3 to 2.3.2
+- Upgrade Flask from 2.2.3 to 2.3.3
 
 ## 2.2.4
 
