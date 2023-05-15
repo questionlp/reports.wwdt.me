@@ -20,6 +20,7 @@ from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
     retrieve_all_years,
 )
+from .reports.average_scores_by_year import retrieve_panelist_yearly_average
 from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
 from .reports.debut_by_year import retrieve_show_years, panelist_debuts_by_year
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
@@ -83,6 +84,23 @@ def appearances_by_year():
         panelists=_panelists,
         show_years=_show_years,
     )
+
+
+@blueprint.route("/average-scores-by-year")
+def average_scores_by_year():
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    average_scores = retrieve_panelist_yearly_average(
+        database_connection=_database_connection
+    )
+    years = retrieve_all_years(database_connection=_database_connection)
+    if average_scores and years:
+        return render_template(
+            "panelists/average-scores-by-year.html",
+            average_scores=average_scores,
+            years=years,
+        )
+
+    return render_template("panelists/average-scores-by-year.html")
 
 
 @blueprint.route("/bluff-stats")

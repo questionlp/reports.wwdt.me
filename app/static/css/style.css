@@ -198,9 +198,18 @@
         cursor: help;
     }
 
-    #appearance-by-year {
+    #appearance-by-year, #average-scores-by-year {
         max-height: 80vh;
         overflow: scroll;
+    }
+
+    #appearance-by-year td.name.panelist,
+    #average-scores-by-year td.name.panelist {
+        min-width: 7.5rem;
+    }
+
+    #average-scores-by-year td.stats.float {
+        min-width: 5rem;
     }
 
     .pure-form fieldset {
@@ -292,7 +301,7 @@
         text-align: center;
     }
 
-    #appearance-by-year td.no-data {
+    #appearance-by-year td.no-data, #average-scores-by-year td.no-data {
         vertical-align: middle !important;
     }
 
@@ -343,7 +352,7 @@
 }
 
 @media only screen and (max-width: 480px) {
-    #appearance-by-year {
+    #appearance-by-year, #average-scores-by-year {
         font-size: 0.975rem;
         margin: 0;
         max-height: 45vh;
@@ -373,9 +382,9 @@
         visibility: hidden;
     }
 
-    #appearance-by-year {
+    #appearance-by-year, #average-scores-by-year {
         max-height: initial;
-        max-width: initial;
-        overflow: initial;
+        max-width: 100%;
+        overflow: visible;
     }
 }

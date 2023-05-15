@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Average Scores by Year | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Average Scores by Year</h2>
+<p>
+    This report breaks down the average scores for each panelist, broken out
+    by year. The counts excludes scores Best Of and Repeat shows.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+{% if average_scores and years %}
+<!-- Start Report Section -->
+<div id="average-scores-by-year">
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="name panelist">
+        {% for col in range((years|length + 1)) %}
+            <col class="stats float">
+        {% endfor %}
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in average_scores %}
+        <tr>
+            <td class="name panelist">
+                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
+                    {{ panelist.name }}
+                </a>
+            </td>
+            {% for year in years %}
+                {% if year in panelist.averages and panelist.averages[year] > 0%}
+            <td class="centered middle stats float">{{ panelist.averages[year] }}</td>
+                {% else %}
+            <td class="no-data stats float">-</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+        </tr>
+    </tfoot>
+</table>
+</div>
+<!-- End Report Section -->
+{% else %}
+<p>No data available.</p>
+{% endif %}
+{% endblock content %}
