@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Panelist vs Panelist | Panelists{% endblock %}
+{% block title %}Average Scores by Year | Panelists{% endblock %}
 
 {% block breadcrumb %}
 <div id="breadcrumb">
@@ -11,10 +11,12 @@
 {% endblock breadcrumb %}
 
 {% block synopsis %}
-<h2>Panelist vs Panelist</h2>
+<h2>Average Scores by Year</h2>
 <p>
-    This report allows you to lookup how well a panelist has faired
-    against another panelist.
+    This report breaks down the average scores for a given panelist, broken out
+    by year. The averages excludes scores from Best Of and Repeat shows; in
+    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+    show are also excluded, due to the unique scoring used.
 </p>
 {% endblock synopsis %}
 
@@ -22,7 +24,7 @@
 <!-- Start Report Section -->
 <form method="POST" class="pure-form">
     <fieldset>
-        <legend>Select a panelist to compare scores:</legend>
+        <legend>Select a panelist to view average scores by year:</legend>
         <div class="panelist-fields">
             <label for="panelist">Panelist:</label>
             <select id="panelist" name="panelist">
@@ -44,39 +46,32 @@
 
 {% if request.method == "POST" %}
 <hr>
-{% if not results %}
+{% if not average_scores %}
 <p class="result-message">Incorrect or no panelist selected.</p>
 {% else %}
 <section class="pvp">
 <h3>{{ panelist_info.name }}</h3>
 <table class="pure-table pure-table-bordered">
     <colgroup>
-        <col class="name panelist">
-        <col class="count mix">
-        <col class="count mix">
-        <col class="count mix">
-        <col class="count mix">
+        <col class="date year">
+        <col class="stats float">
     </colgroup>
     <thead>
         <tr>
-            <th scope="col">Ranked vs</th>
-            <th scope="col">Higher</th>
-            <th scope="col">Tied</th>
-            <th scope="col">Lower</th>
-            <th scope="col">Total</th>
+            <th scope="col">Year</th>
+            <th scope="col">Average</th>
         </tr>
     </thead>
     <tbody>
-    {% for vs_panelist, result in results.items() %}
-        {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
+    {% for year in average_scores.averages %}
         <tr>
-            <td><a href="{{ stats_url }}/panelists/{{ all_panelists[vs_panelist].slug }}">{{ all_panelists[vs_panelist].name }}</a></td>
-            <td>{{ result.wins }}</td>
-            <td>{{ result.draws }}</td>
-            <td>{{ result.losses }}</td>
-            <td>{{ result.total }}</td>
+            <td>{{ year }}</td>
+            {% if average_scores.averages[year] %}
+            <td>{{ average_scores.averages[year] }}</td>
+            {% else %}
+            <td class="no-data stats float">-</td>
+            {% endif %}
         </tr>
-        {% endif %}
     {% endfor%}
     </tbody>
 </table>
