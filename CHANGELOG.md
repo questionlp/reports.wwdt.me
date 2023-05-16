@@ -1,5 +1,11 @@
 # Changes
 
+## 2.3.1
+
+### Application Changes
+
+- Add filter to Panelist Average Scores by Year database query to exclude any `NULL` values for panelist scores to prevent skewing of results
+
 ## 2.3.0
 
 ### Application Changes
