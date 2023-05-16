@@ -26,21 +26,41 @@ def test_aggregate_scores(client: FlaskClient) -> None:
     assert b"Aggregate Score Spread" in response.data
 
 
+def test_average_scores_by_year(client) -> None:
+    """Testing panelists.routes.average_scores_by_year (GET)"""
+    response: TestResponse = client.get("/panelists/average-scores-by-year")
+    assert response.status_code == 200
+    assert b"Average Scores by Year" in response.data
+    assert b"Please choose a panelist" in response.data
+
+
+@pytest.mark.parametrize("panelist_slug", ["faith-salie"])
+def test_average_scores_by_year_post(client: FlaskClient, panelist_slug: str) -> None:
+    """Testing panelists.routes.average_scores_by_year (POST)"""
+    response: TestResponse = client.post(
+        "/panelists/average-scores-by-year", data={"panelist": panelist_slug}
+    )
+    assert response.status_code == 200
+    assert b"Average Scores by Year" in response.data
+    assert panelist_slug.encode("utf-8") in response.data
+    assert b"stats float" in response.data
+
+
+def test_average_scores_by_year_all(client: FlaskClient) -> None:
+    """Testing panelists.routes.all_average_scores_by_year_all"""
+    response: TestResponse = client.get("/panelists/average-scores-by-year-all")
+    assert response.status_code == 200
+    assert b"Average Scores by Year: All" in response.data
+    assert b"stats float" in response.data
+    assert b"No data available" not in response.data
+
+
 def test_appearances_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.appearances_by_year"""
     response: TestResponse = client.get("/panelists/appearances-by-year")
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
     assert b"Total" in response.data
-    assert b"No data available" not in response.data
-
-
-def test_average_scores_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.average_scores_by_year"""
-    response: TestResponse = client.get("/panelists/average-scores-by-year")
-    assert response.status_code == 200
-    assert b"Average Scores by Year" in response.data
-    assert b"stats float" in response.data
     assert b"No data available" not in response.data
 
 
@@ -99,7 +119,7 @@ def test_panelist_pvp(client) -> None:
     response: TestResponse = client.get("/panelists/panelist-pvp")
     assert response.status_code == 200
     assert b"Panelist vs Panelist" in response.data
-    assert b"Please chose a panelist" in response.data
+    assert b"Please choose a panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -128,7 +148,7 @@ def test_panelist_pvp_scoring(client: FlaskClient) -> None:
     response: TestResponse = client.get("/panelists/panelist-vs-panelist-scoring")
     assert response.status_code == 200
     assert b"Panelist vs Panelist Scoring" in response.data
-    assert b"Please chose a panelist" in response.data
+    assert b"Please choose a panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_1, panelist_2", [("adam-felber", "faith-salie")])

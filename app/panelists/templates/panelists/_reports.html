@@ -20,7 +20,17 @@
         <a href="{{ url_for('panelists.average_scores_by_year') }}">Average Scores by Year</a>
     </dt>
     <dd>
-        This report breaks down the average scores for each panelist, broken out
+        This report breaks down the average scores for a given panelist, broken out
+        by year. The averages excludes scores from Best Of and Repeat shows; in
+        addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+        show are also excluded, due to the unique scoring used.
+    </dd>
+
+    <dt>
+        <a href="{{ url_for('panelists.average_scores_by_year_all') }}">Average Scores by Year: All</a>
+    </dt>
+    <dd>
+        This report breaks down the average scores for all panelists, broken out
         by year. The averages excludes scores from Best Of and Repeat shows; in
         addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
         show are also excluded, due to the unique scoring used.

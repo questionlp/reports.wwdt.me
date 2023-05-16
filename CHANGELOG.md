@@ -4,15 +4,16 @@
 
 ### Application Changes
 
-- Addition of Panelist Average Scores by Year report
+- Addition of Panelist Average Scores by Year and Panelist Average Scores by Year: All reports
 - Modify CSS for Panelist Appearances by Year report to correct column sizes
 - Add tooltips to each data cell in the Panelist Appearances by Year report to display the panelist name and year
 - Fix issue where printing out Panelist Appearances by Year report from cropping out the table when page scaling is reduced
+- Fixed typos in dropdown menus when choosing panelists
 
 ### Development Changes
 
-- Added tests for Panelist Average Scores by Year report
-- Update tests for Panelist Appearances by Year report
+- Added tests for Panelist Average Scores by Year and Panelist Average Scores by Year: All reports
+- Updated tests for Panelist Appearances by Year and Panelist vs Panelist reports
 
 ## 2.2.5
 

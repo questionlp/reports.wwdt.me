@@ -26,7 +26,7 @@
         <div class="panelist-fields">
             <label for="panelist">Panelist:</label>
             <select id="panelist" name="panelist">
-                <option value="">-- Please chose a panelist --</option>
+                <option value="">-- Please choose a panelist --</option>
                 {% for panelist in all_panelists %}
                 {% if request.form.panelist == all_panelists[panelist].slug %}
                 <option value="{{ all_panelists[panelist].slug }}" selected>{{ all_panelists[panelist].name }}</option>

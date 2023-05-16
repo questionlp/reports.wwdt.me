@@ -13,7 +13,7 @@
 {% block synopsis %}
 <h2>Average Scores by Year</h2>
 <p>
-    This report breaks down the average scores for each panelist, broken out
+    This report breaks down the average scores for a given panelist, broken out
     by year. The averages excludes scores from Best Of and Repeat shows; in
     addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
     show are also excluded, due to the unique scoring used.
@@ -21,54 +21,62 @@
 {% endblock synopsis %}
 
 {% block content %}
-{% if average_scores and years %}
 <!-- Start Report Section -->
-<div id="average-scores-by-year">
+<form method="POST" class="pure-form">
+    <fieldset>
+        <legend>Select a panelist to view average scores by year:</legend>
+        <div class="panelist-fields">
+            <label for="panelist">Panelist:</label>
+            <select id="panelist" name="panelist">
+                <option value="">-- Please choose a panelist --</option>
+                {% for panelist in all_panelists %}
+                {% if request.form.panelist == all_panelists[panelist].slug %}
+                <option value="{{ all_panelists[panelist].slug }}" selected>{{ all_panelists[panelist].name }}</option>
+                {% else %}
+                <option value="{{ all_panelists[panelist].slug }}">{{ all_panelists[panelist].name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="panelist-options">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
+</form>
+
+{% if request.method == "POST" %}
+<hr>
+{% if not average_scores %}
+<p class="result-message">Incorrect or no panelist selected.</p>
+{% else %}
+<section class="pvp">
+<h3>{{ panelist_info.name }}</h3>
 <table class="pure-table pure-table-bordered">
     <colgroup>
-        <col class="name panelist">
-        {% for col in range((years|length + 1)) %}
-            <col class="stats float">
-        {% endfor %}
+        <col class="date year">
+        <col class="stats float">
     </colgroup>
     <thead>
         <tr>
-            <th scope="col">Panelist</th>
-            {% for year in years %}
-            <th scope="col">{{ year }}</th>
-            {% endfor %}
+            <th scope="col">Year</th>
+            <th scope="col">Average</th>
         </tr>
     </thead>
     <tbody>
-        {% for panelist in average_scores %}
+    {% for year in average_scores.averages %}
         <tr>
-            <td class="name panelist">
-                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                    {{ panelist.name }}
-                </a>
-            </td>
-            {% for year in years %}
-                {% if year in panelist.averages and panelist.averages[year] > 0%}
-            <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">{{ panelist.averages[year] }}</td>
-                {% else %}
+            <td>{{ year }}</td>
+            {% if average_scores.averages[year] %}
+            <td>{{ average_scores.averages[year] }}</td>
+            {% else %}
             <td class="no-data stats float">-</td>
-                {% endif %}
-            {% endfor %}
+            {% endif %}
         </tr>
-        {% endfor %}
+    {% endfor%}
     </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Panelist</th>
-            {% for year in years %}
-            <th scope="col">{{ year }}</th>
-            {% endfor %}
-        </tr>
-    </tfoot>
 </table>
-</div>
-<!-- End Report Section -->
-{% else %}
-<p>No data available.</p>
+</section>
 {% endif %}
+{% endif %}
+<!-- End Report Section -->
 {% endblock content %}

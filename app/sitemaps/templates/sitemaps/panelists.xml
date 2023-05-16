@@ -9,6 +9,10 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("panelists.average_scores_by_year_all") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("panelists.bluff_stats") }}</loc>
     <changefreq>daily</changefreq>
   </url>

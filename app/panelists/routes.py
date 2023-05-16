@@ -20,7 +20,10 @@ from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
     retrieve_all_years,
 )
-from .reports.average_scores_by_year import retrieve_panelist_yearly_average
+from .reports.average_scores_by_year import (
+    retrieve_panelist_yearly_average,
+    retrieve_all_panelists_yearly_average,
+)
 from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
 from .reports.debut_by_year import retrieve_show_years, panelist_debuts_by_year
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
@@ -86,21 +89,64 @@ def appearances_by_year():
     )
 
 
-@blueprint.route("/average-scores-by-year")
+@blueprint.route("/average-scores-by-year", methods=["GET", "POST"])
 def average_scores_by_year():
+    """View: Average Scores by Year Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    average_scores = retrieve_panelist_yearly_average(
+    _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
+
+    _panelists_info = {
+        _panelists_list[pnl]["slug"]: _panelists_list[pnl]["name"]
+        for pnl in _panelists_list
+    }
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist = "panelist" in request.form and request.form["panelist"]
+        if panelist in _panelists_info.keys():
+            # Retrieve average scores for the panelist
+            panelist_info = {"slug": panelist, "name": _panelists_info[panelist]}
+            average_scores = retrieve_panelist_yearly_average(
+                panelist_slug=panelist, database_connection=_database_connection
+            )
+            _database_connection.close()
+            return render_template(
+                "panelists/average-scores-by-year.html",
+                all_panelists=_panelists_list,
+                panelist_info=panelist_info,
+                average_scores=average_scores,
+            )
+        else:
+            # No valid panelist returned
+            _database_connection.close()
+            return render_template(
+                "panelists/average-scores-by-year.html",
+                all_panelists=_panelists_list,
+                average_scores=None,
+            )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/average-scores-by-year.html", all_panelists=_panelists_list
+    )
+
+
+@blueprint.route("/average-scores-by-year-all")
+def average_scores_by_year_all():
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    average_scores = retrieve_all_panelists_yearly_average(
         database_connection=_database_connection
     )
     years = retrieve_all_years(database_connection=_database_connection)
     if average_scores and years:
         return render_template(
-            "panelists/average-scores-by-year.html",
+            "panelists/average-scores-by-year-all.html",
             average_scores=average_scores,
             years=years,
         )
 
-    return render_template("panelists/average-scores-by-year.html")
+    return render_template("panelists/average-scores-by-year-all.html")
 
 
 @blueprint.route("/bluff-stats")
