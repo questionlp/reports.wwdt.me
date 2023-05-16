@@ -32,6 +32,16 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
     assert b"Total" in response.data
+    assert b"No data available" not in response.data
+
+
+def test_average_scores_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.average_scores_by_year"""
+    response: TestResponse = client.get("/panelists/average-scores-by-year")
+    assert response.status_code == 200
+    assert b"Average Scores by Year" in response.data
+    assert b"stats float" in response.data
+    assert b"No data available" not in response.data
 
 
 def test_bluff_stats(client: FlaskClient) -> None:

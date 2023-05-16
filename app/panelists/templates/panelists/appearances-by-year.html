@@ -19,6 +19,7 @@
 {% endblock synopsis %}
 
 {% block content %}
+{% if panelists and show_years %}
 <!-- Start Report Section -->
 <div id="appearance-by-year">
 <table class="pure-table pure-table-bordered">
@@ -47,7 +48,7 @@
             </td>
             {% for year in show_years %}
                 {% if year in panelist.appearances %}
-            <td class="centered middle year">{{ panelist.appearances[year] }}</td>
+            <td class="centered middle year" title="{{ panelist.name }}: {{ year }}">{{ panelist.appearances[year] }}</td>
                 {% else %}
             <td class="no-data">-</td>
                 {% endif %}
@@ -68,4 +69,7 @@
 </table>
 </div>
 <!-- End Report Section -->
+{% else %}
+<p>No data available.</p>
+{% endif %}
 {% endblock content %}

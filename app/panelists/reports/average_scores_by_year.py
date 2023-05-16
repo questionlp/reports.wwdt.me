@@ -74,6 +74,7 @@ def retrieve_panelist_yearly_average(
         JOIN ww_shows s ON s.showid = pm.showid
         WHERE p.panelistslug = %s
         AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND s.showdate <> '2018-10-27'
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC
         """

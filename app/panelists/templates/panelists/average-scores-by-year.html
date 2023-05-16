@@ -14,7 +14,9 @@
 <h2>Average Scores by Year</h2>
 <p>
     This report breaks down the average scores for each panelist, broken out
-    by year. The counts excludes scores Best Of and Repeat shows.
+    by year. The averages excludes scores from Best Of and Repeat shows; in
+    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+    show are also excluded, due to the unique scoring used.
 </p>
 {% endblock synopsis %}
 
@@ -47,7 +49,7 @@
             </td>
             {% for year in years %}
                 {% if year in panelist.averages and panelist.averages[year] > 0%}
-            <td class="centered middle stats float">{{ panelist.averages[year] }}</td>
+            <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">{{ panelist.averages[year] }}</td>
                 {% else %}
             <td class="no-data stats float">-</td>
                 {% endif %}

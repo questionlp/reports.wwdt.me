@@ -203,13 +203,16 @@
         overflow: scroll;
     }
 
+    #appearance-by-year col.name.panelist,
     #appearance-by-year td.name.panelist,
+    #average-scores-by-year col.name.panelist,
     #average-scores-by-year td.name.panelist {
         min-width: 7.5rem;
     }
 
+    #average-scores-by-year col.stats.float,
     #average-scores-by-year td.stats.float {
-        min-width: 5rem;
+        min-width: 4.5rem;
     }
 
     .pure-form fieldset {
