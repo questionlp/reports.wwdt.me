@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Appearances by Year | Panelists{% endblock %}
+{% block title %}Average Scores by Year: All | Panelists{% endblock %}
 
 {% block breadcrumb %}
 <div id="breadcrumb">
@@ -11,59 +11,58 @@
 {% endblock breadcrumb %}
 
 {% block synopsis %}
-<h2>Appearances by Year</h2>
+<h2>Average Scores by Year: All</h2>
 <p>
-    This report breaks down the number of times a panelist has appeared on a
-    show for a given year. The counts excludes Best Of and Repeat shows.
+    This report breaks down the average scores for all panelists, broken out
+    by year. The averages excludes scores from Best Of and Repeat shows; in
+    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+    show are also excluded, due to the unique scoring used.
 </p>
 {% endblock synopsis %}
 
 {% block content %}
-{% if panelists and show_years %}
+{% if average_scores and years %}
 <!-- Start Report Section -->
-<div id="appearance-by-year">
+<div id="average-scores-by-year-all">
 <table class="pure-table pure-table-bordered">
     <colgroup>
         <col class="name panelist">
-        {% for col in range((show_years|length + 1)) %}
-            <col class="count">
+        {% for col in range((years|length + 1)) %}
+            <col class="stats float">
         {% endfor %}
     </colgroup>
     <thead>
         <tr>
             <th scope="col">Panelist</th>
-            {% for year in show_years %}
+            {% for year in years %}
             <th scope="col">{{ year }}</th>
             {% endfor %}
-            <th scope="col">Total</th>
         </tr>
     </thead>
     <tbody>
-        {% for panelist in panelists %}
+        {% for panelist in average_scores %}
         <tr>
             <td class="name panelist">
                 <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
                     {{ panelist.name }}
                 </a>
             </td>
-            {% for year in show_years %}
-                {% if year in panelist.appearances %}
-            <td class="centered middle year" title="{{ panelist.name }}: {{ year }}">{{ panelist.appearances[year] }}</td>
+            {% for year in years %}
+                {% if year in panelist.averages and panelist.averages[year] > 0%}
+            <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">{{ panelist.averages[year] }}</td>
                 {% else %}
-            <td class="no-data">-</td>
+            <td class="no-data stats float">-</td>
                 {% endif %}
             {% endfor %}
-            <td class="centered middle count">{{ panelist.appearances.total }}</td>
         </tr>
         {% endfor %}
     </tbody>
     <tfoot>
         <tr>
             <th scope="col">Panelist</th>
-            {% for year in show_years %}
+            {% for year in years %}
             <th scope="col">{{ year }}</th>
             {% endfor %}
-            <th scope="col">Total</th>
         </tr>
     </tfoot>
 </table>
