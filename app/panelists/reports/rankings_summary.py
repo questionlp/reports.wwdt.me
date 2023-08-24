@@ -19,7 +19,7 @@ def retrieve_rankings_by_panelist(
         database_connection.reconnect()
 
     query = """
-        SELECT ( "
+        SELECT (
         SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
         WHERE pm.panelistid = %s AND pm.showpnlrank = '1' AND
