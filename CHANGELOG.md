@@ -1,5 +1,11 @@
 # Changes
 
+## 2.3.2
+
+### Application Changes
+
+- Fix issue with shows with empty details causing Low Scoring and High Scoring show reports to error out
+
 ## 2.3.1
 
 ### Application Changes
