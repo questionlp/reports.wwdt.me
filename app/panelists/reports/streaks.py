@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist Win/Loss Streaks Report Functions"""
 from typing import Any, Dict, List
 
+from flask import current_app
 import mysql.connector
 
 
@@ -13,17 +14,16 @@ def retrieve_panelists(
     database_connection: mysql.connector.connect,
 ) -> List[Dict[str, Any]]:
     """Retrieve a list of panelists with their panelist ID and name"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug
+        FROM ww_panelists p
+        WHERE p.panelistid <> 17
+        ORDER BY p.panelist ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT p.panelistid, p.panelist, p.panelistslug "
-        "FROM ww_panelists p "
-        "WHERE p.panelistid <> 17 "
-        "ORDER BY p.panelist ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -45,24 +45,42 @@ def retrieve_panelists(
 
 
 def retrieve_panelist_ranks(
-    panelist_id: int, database_connection: mysql.connector.connect
+    panelist_id: int,
+    database_connection: mysql.connector.connect,
+    use_decimal_scores: bool = False,
 ) -> List[Dict[str, Any]]:
     """Retrieve a list of show dates and the panelist rank for the
     requested panelist ID"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE pm.panelistid = %s
+            AND s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistscore_decimal IS NOT NULL
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE pm.panelistid = %s
+            AND s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistscore IS NOT NULL
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, pm.showpnlrank "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s "
-        "AND s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND pm.panelistscore IS NOT NULL "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()
     cursor.close()

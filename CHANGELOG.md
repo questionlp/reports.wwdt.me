@@ -1,5 +1,19 @@
 # Changes
 
+## 2.4.0
+
+### Application Changes
+
+- Add support for generating reports using panelist decimal scores
+
+### Component Changes
+
+- Upgrade NumPy from 1.24.2 to 1.24.3
+
+### Development Changes
+
+- Upgrade black from 23.3.0 to 23.7.0
+
 ## 2.3.1
 
 ### Application Changes
