@@ -125,9 +125,10 @@ def retrieve_shows_all_high_scoring(
     for row in result:
         show_id = row.showid
         show_details = retrieve_show_details(show_id, database_connection)
-        show_details["total_score"] = row.total
         if show_details:
-            shows.append(show_details)
+            show_details["total_score"] = row.total
+            if show_details:
+                shows.append(show_details)
 
     return shows
 
@@ -164,9 +165,10 @@ def retrieve_shows_all_low_scoring(
     for row in result:
         show_id = row.showid
         show_details = retrieve_show_details(show_id, database_connection)
-        show_details["total_score"] = row.total
         if show_details:
-            shows.append(show_details)
+            show_details["total_score"] = row.total
+            if show_details:
+                shows.append(show_details)
 
     return shows
 
