@@ -122,7 +122,6 @@ def panelist_decimal_score_exists(database_settings: Dict) -> bool:
     """Checks to see if the panelistscore_decimal column exists in the
     ww_showpnlmap table in the Wait Wait Stats Database and returns
     a bool reflecting the results"""
-
     try:
         database_connection = connect(**database_settings)
         cursor = database_connection.cursor()

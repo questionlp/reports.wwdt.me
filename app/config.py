@@ -59,7 +59,9 @@ def load_config(
     database_config["time_zone"] = time_zone_string
 
     # Read in setting on whether to use decimal scores
-    settings_config["use_decimal_scores"] = bool(settings_config.get("use_decimal_scores", False))
+    settings_config["use_decimal_scores"] = bool(
+        settings_config.get("use_decimal_scores", False)
+    )
 
     return {
         "database": database_config,
