@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist Bluff the Listener Statistics Report Functions"""
 from typing import Any, Dict, List
@@ -17,28 +17,27 @@ def retrieve_panelist_bluff_counts(
     """Retrieves a dictionary containing the count of the number of
     times a panelist's Bluff story was chosen and the number of times
     a panelist had the correct story"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT (
+        SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
+        JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
+        JOIN ww_shows s ON s.showid = blm.showid
+        WHERE blm.chosenbluffpnlid = %s
+        AND s.repeatshowid IS NULL
+        AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
+        ) AS chosen, (
+        SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
+        JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        JOIN ww_shows s ON s.showid = blm.showid
+        WHERE blm.correctbluffpnlid = %s
+        AND s.repeatshowid IS NULL
+        AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
+        ) AS correct;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT ( "
-        "SELECT COUNT(blm.showid) FROM ww_showbluffmap blm "
-        "JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid "
-        "JOIN ww_shows s ON s.showid = blm.showid "
-        "WHERE blm.chosenbluffpnlid = %s "
-        "AND s.repeatshowid IS NULL "
-        "AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1)) "
-        ") AS chosen, ( "
-        "SELECT COUNT(blm.showid) FROM ww_showbluffmap blm "
-        "JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid "
-        "JOIN ww_shows s ON s.showid = blm.showid "
-        "WHERE blm.correctbluffpnlid = %s "
-        "AND s.repeatshowid IS NULL "
-        "AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1)) "
-        ") AS correct;"
-    )
     cursor.execute(
         query,
         (
@@ -56,20 +55,20 @@ def retrieve_panelist_bluff_counts(
         counts["chosen"] = result.chosen
         counts["correct"] = result.correct
 
+    query = """
+        SELECT COUNT(s.showdate) as appearances
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_showdescriptions sd ON sd.showid = pm.showid
+        JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        WHERE pm.panelistid = %s
+        AND sd.showdescription LIKE '%bluff%'
+        AND s.repeatshowid IS NULL AND s.bestof = 0
+        AND (blm.chosenbluffpnlid IS NOT NULL
+        AND blm.correctbluffpnlid IS NOT NULL)
+        ORDER BY s.showdate ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT COUNT(s.showdate) as appearances "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_showdescriptions sd ON sd.showid = pm.showid "
-        "JOIN ww_showbluffmap blm ON blm.showid = pm.showid "
-        "WHERE pm.panelistid = %s "
-        "AND sd.showdescription LIKE '%bluff%' "
-        "AND s.repeatshowid IS NULL AND s.bestof = 0 "
-        "AND (blm.chosenbluffpnlid IS NOT NULL "
-        "AND blm.correctbluffpnlid IS NOT NULL) "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -79,20 +78,20 @@ def retrieve_panelist_bluff_counts(
     else:
         counts["appearances"] = result.appearances
 
+    query = """
+        SELECT COUNT(s.showdate) as appearances
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_showdescriptions sd ON sd.showid = pm.showid
+        JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        WHERE pm.panelistid = %s
+        AND s.repeatshowid IS NULL
+        AND s.bestof = 1 AND s.bestofuniquebluff = 1
+        AND (blm.chosenbluffpnlid IS NOT NULL
+        AND blm.correctbluffpnlid IS NOT NULL)
+        ORDER BY s.showdate ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT COUNT(s.showdate) as appearances "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_showdescriptions sd ON sd.showid = pm.showid "
-        "JOIN ww_showbluffmap blm ON blm.showid = pm.showid "
-        "WHERE pm.panelistid = %s "
-        "AND s.repeatshowid IS NULL "
-        "AND s.bestof = 1 AND s.bestofuniquebluff = 1 "
-        "AND (blm.chosenbluffpnlid IS NOT NULL "
-        "AND blm.correctbluffpnlid IS NOT NULL) "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -110,7 +109,6 @@ def retrieve_all_panelist_bluff_stats(
 ) -> List[Dict[str, Any]]:
     """Retrieves a list of Bluff the Listener statistics for all
     panelists"""
-
     _panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not _panelists:

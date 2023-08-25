@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# vim: set noai syntax=python ts=4 sw=4:
+#
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate
 Report Functions"""
 from typing import Any, Dict
 
 import mysql.connector
-
-from app.guests.reports.best_of_only import retrieve_best_of_only_guests
 
 
 def retrieve_not_my_job_stats(
@@ -22,16 +22,16 @@ def retrieve_not_my_job_stats(
 
     # Get a count of all Not My Job guest entries with scores and are
     # from shows that are not Best Of or repeats
+    query = """
+        SELECT COUNT(g.guestid)
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON  s.showid = gm.showid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND g.guestslug <> 'none'
+        AND gm.guestscore IS NOT NULL;
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(g.guestid) "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shows s ON  s.showid = gm.showid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND g.guestslug <> 'none' "
-        "AND gm.guestscore IS NOT NULL;"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -43,16 +43,16 @@ def retrieve_not_my_job_stats(
 
     # Get a count of all Not My Job guest entries in which a guest won
     # outright or was given a win via a scoring exception
+    query = """
+        SELECT COUNT(g.guestid)
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND g.guestslug <> 'none'
+        AND (gm.guestscore >= 2 OR gm.exception = 1);
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(g.guestid) "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND g.guestslug <> 'none' "
-        "AND (gm.guestscore >= 2 OR gm.exception = 1);"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -64,16 +64,16 @@ def retrieve_not_my_job_stats(
 
     # Get a count of all Not My Job guest entries in which a guest did
     # not win
+    query = """
+        SELECT COUNT(g.guestid)
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND g.guestslug <> 'none'
+        AND (gm.guestscore < 2 AND gm.exception = 0);
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(g.guestid) "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND g.guestslug <> 'none' "
-        "AND (gm.guestscore < 2 AND gm.exception = 0);"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -85,19 +85,19 @@ def retrieve_not_my_job_stats(
 
     # Get a list of Not My Job guests that have only appeared on Best Of
     # shows
+    query = """
+        SELECT DISTINCT g.guestid
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        WHERE s.bestof = 1 AND s.repeatshowid IS NULL
+        AND g.guestid NOT IN (
+        SELECT gm.guestid
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL );
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT DISTINCT g.guestid "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE s.bestof = 1 AND s.repeatshowid IS NULL "
-        "AND g.guestid NOT IN ( "
-        "SELECT gm.guestid "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL );"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -110,16 +110,16 @@ def retrieve_not_my_job_stats(
     best_of_only_guest_losses = 0
 
     for guest_id in best_of_only_guest_ids:
+        query = """
+            SELECT s.showdate, gm.guestscore, gm.exception
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            WHERE s.repeatshowid IS NULL
+            AND gm.guestid = %s
+            ORDER BY s.showdate ASC
+            LIMIT 1;
+            """
         cursor = database_connection.cursor(named_tuple=True)
-        query = (
-            "SELECT s.showdate, gm.guestscore, gm.exception "
-            "FROM ww_showguestmap gm "
-            "JOIN ww_shows s ON s.showid = gm.showid "
-            "WHERE s.repeatshowid IS NULL "
-            "AND gm.guestid = %s "
-            "ORDER BY s.showdate ASC "
-            "LIMIT 1;"
-        )
         cursor.execute(query, (guest_id,))
         result = cursor.fetchone()
         cursor.close()
@@ -134,6 +134,14 @@ def retrieve_not_my_job_stats(
         "total": count_all_guest_scores + len(best_of_only_guest_ids),
         "wins": count_guest_wins + best_of_only_guest_wins,
         "losses": count_guest_losses + best_of_only_guest_losses,
+        "win_ratio": round(
+            100
+            * (
+                (count_guest_wins + best_of_only_guest_wins)
+                / (count_all_guest_scores + len(best_of_only_guest_ids))
+            ),
+            5,
+        ),
     }
 
     return ret_val
@@ -150,18 +158,18 @@ def retrieve_bluff_stats(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT COUNT(s.showid)
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        WHERE
+        (s.bestof = 0 AND blm.chosenbluffpnlid IS NOT NULL AND
+         blm.correctbluffpnlid IS NOT NULL) OR
+        (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
+         blm.chosenbluffpnlid IS NOT NULL AND blm.correctbluffpnlid IS NOT
+         NULL);
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(s.showid) "
-        "FROM ww_showbluffmap blm "
-        "JOIN ww_shows s ON s.showid = blm.showid "
-        "WHERE "
-        "(s.bestof = 0 AND blm.chosenbluffpnlid IS NOT NULL AND "
-        " blm.correctbluffpnlid IS NOT NULL) OR "
-        "(s.bestof = 1 AND s.bestofuniquebluff = 1 AND "
-        " blm.chosenbluffpnlid IS NOT NULL AND blm.correctbluffpnlid IS NOT "
-        " NULL);"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -171,16 +179,16 @@ def retrieve_bluff_stats(
 
     count_unique_bluffs = result[0]
 
+    query = """
+        SELECT COUNT(s.showid)
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        WHERE
+        (s.bestof = 0 AND blm.chosenbluffpnlid = blm.correctbluffpnlid) OR
+        (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
+         blm.chosenbluffpnlid = blm.correctbluffpnlid);
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(s.showid) "
-        "FROM ww_showbluffmap blm "
-        "JOIN ww_shows s ON s.showid = blm.showid "
-        "WHERE "
-        "(s.bestof = 0 AND blm.chosenbluffpnlid = blm.correctbluffpnlid) OR "
-        "(s.bestof = 1 AND s.bestofuniquebluff = 1 AND "
-        " blm.chosenbluffpnlid = blm.correctbluffpnlid);"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -190,16 +198,16 @@ def retrieve_bluff_stats(
 
     count_chosen_correct = result[0]
 
+    query = """
+        SELECT COUNT(s.showid)
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        WHERE
+        (s.bestof = 0 AND blm.chosenbluffpnlid <> blm.correctbluffpnlid) OR
+        (s.bestof = 1 AND s.bestofuniquebluff = 1 AND blm.chosenbluffpnlid
+         <> blm.correctbluffpnlid);
+        """
     cursor = database_connection.cursor(dictionary=False)
-    query = (
-        "SELECT COUNT(s.showid) "
-        "FROM ww_showbluffmap blm "
-        "JOIN ww_shows s ON s.showid = blm.showid "
-        "WHERE "
-        "(s.bestof = 0 AND blm.chosenbluffpnlid <> blm.correctbluffpnlid) OR "
-        "(s.bestof = 1 AND s.bestofuniquebluff = 1 AND blm.chosenbluffpnlid "
-        " <> blm.correctbluffpnlid);"
-    )
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -213,4 +221,5 @@ def retrieve_bluff_stats(
         "total": count_unique_bluffs,
         "correct": count_chosen_correct,
         "incorrect": count_chosen_incorrect,
+        "correct_ratio": round(100 * (count_chosen_correct / count_unique_bluffs), 5),
     }

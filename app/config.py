@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Configuration Loading and Parsing for Wait Wait Reports"""
 
@@ -57,6 +57,9 @@ def load_config(
     settings_config["app_time_zone"] = time_zone_object
     settings_config["time_zone"] = time_zone_string
     database_config["time_zone"] = time_zone_string
+
+    # Read in setting on whether to use decimal scores
+    settings_config["use_decimal_scores"] = bool(settings_config.get("use_decimal_scores", False))
 
     return {
         "database": database_config,

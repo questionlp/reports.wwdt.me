@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist Rankings Summary Report Functions"""
 from typing import Any, Dict
@@ -15,35 +15,34 @@ def retrieve_rankings_by_panelist(
     panelist_id: int, database_connection: mysql.connector.connect
 ) -> Dict[str, Any]:
     """Retrieves ranking statistics for the requested panelist"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT (
+        SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s AND pm.showpnlrank = '1' AND
+        s.bestof = 0 and s.repeatshowid IS NULL) AS first, (
+        SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s AND pm.showpnlrank = '1t' AND
+        s.bestof = 0 and s.repeatshowid IS NULL) AS first_tied, (
+        SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s AND pm.showpnlrank = '2' AND
+        s.bestof = 0 and s.repeatshowid IS NULL) AS second, (
+        SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s AND pm.showpnlrank = '2t' AND
+        s.bestof = 0 and s.repeatshowid IS NULL) AS second_tied, (
+        SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s AND pm.showpnlrank = '3' AND
+        s.bestof = 0 and s.repeatshowid IS NULL
+        ) AS third;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT ( "
-        "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s AND pm.showpnlrank = '1' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) AS first, ( "
-        "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s AND pm.showpnlrank = '1t' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) AS first_tied, ( "
-        "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s AND pm.showpnlrank = '2' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) AS second, ( "
-        "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s AND pm.showpnlrank = '2t' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL) AS second_tied, ( "
-        "SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE pm.panelistid = %s AND pm.showpnlrank = '3' AND "
-        "s.bestof = 0 and s.repeatshowid IS NULL "
-        ") AS third;"
-    )
     cursor.execute(
         query,
         (
@@ -75,19 +74,19 @@ def retrieve_rankings_by_panelist(
 
     if rankings["count"]:
         rankings["percent_first"] = round(
-            100 * (rankings["first"] / rankings["count"]), 4
+            100 * (rankings["first"] / rankings["count"]), 5
         )
         rankings["percent_first_tied"] = round(
-            100 * (rankings["first_tied"] / rankings["count"]), 4
+            100 * (rankings["first_tied"] / rankings["count"]), 5
         )
         rankings["percent_second"] = round(
-            100 * (rankings["second"] / rankings["count"]), 4
+            100 * (rankings["second"] / rankings["count"]), 5
         )
         rankings["percent_second_tied"] = round(
-            100 * (rankings["second_tied"] / rankings["count"]), 4
+            100 * (rankings["second_tied"] / rankings["count"]), 5
         )
         rankings["percent_third"] = round(
-            100 * (rankings["third"] / rankings["count"]), 4
+            100 * (rankings["third"] / rankings["count"]), 5
         )
 
     return rankings
@@ -97,7 +96,6 @@ def retrieve_all_panelist_rankings(
     database_connection: mysql.connector.connect,
 ) -> Dict[str, Any]:
     """Returns ranking statistics for all available panelists"""
-
     panelists = common.retrieve_panelists(database_connection=database_connection)
     if not panelists:
         return None

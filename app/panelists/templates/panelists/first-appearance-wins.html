@@ -51,9 +51,21 @@
         <tr>
             <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelist_info.name }}</a></td>
             <td><a href="{{ stats_url }}/shows/{{ panelist_info.show_date|replace('-', '/') }}">{{ panelist_info.show_date }}</a></td>
+            {% if panelist_info.start %}
             <td>{{ panelist_info.start }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if panelist_info.correct %}
             <td>{{ panelist_info.correct }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if use_decimal_scores %}
+            <td>{{ "{:f}".format(panelist_info.score_decimal.normalize()) }}</td>
+            {% else %}
             <td>{{ panelist_info.score }}</td>
+            {% endif %}
             <td>{{ rank_map[panelist_info.rank] }}</td>
         </tr>
         {% endfor %}

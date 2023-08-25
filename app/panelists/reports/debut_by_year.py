@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist Debut by Year Report Functions"""
 from typing import Any, Dict, List
@@ -13,19 +13,16 @@ from .stats_summary import retrieve_appearances_by_panelist
 
 def retrieve_show_years(database_connection: mysql.connector.connect) -> List[int]:
     """Retrieve a list of all show years"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT DISTINCT YEAR(showdate) AS year
+        FROM ww_shows
+        ORDER BY YEAR(showdate) ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT DISTINCT YEAR(showdate) AS year "
-        "FROM ww_shows "
-        "ORDER BY YEAR(showdate) ASC;"
-    )
-    cursor.execute(
-        query,
-    )
+    cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
 
@@ -40,20 +37,19 @@ def retrieve_show_info(
 ) -> Dict[str, Any]:
     """Retrieve show host, scorekeeper and Not My Job guest for the
     requested show ID"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT s.showid, s.bestof, h.host, sk.scorekeeper
+        FROM ww_showhostmap hm
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_showskmap skm ON skm.showid = hm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE s.showdate = %s;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.bestof, h.host, sk.scorekeeper "
-        "FROM ww_showhostmap hm "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_showskmap skm ON skm.showid = hm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "WHERE s.showdate = %s;"
-    )
     cursor.execute(query, (show_date,))
     result = cursor.fetchone()
     cursor.close()
@@ -74,19 +70,18 @@ def retrieve_show_guests(
 ) -> List[str]:
     """Retrieves a list of Not My Job guest(s) for the requested show
     ID"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT g.guest
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        WHERE gm.showid = %s
+        AND g.guestid <> 76
+        ORDER BY gm.showguestmapid ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT g.guest "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE gm.showid = %s "
-        "AND g.guestid <> 76 "
-        "ORDER BY gm.showguestmapid ASC;"
-    )
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -102,24 +97,21 @@ def retrieve_panelists_first_shows(
 ) -> Dict[str, Any]:
     """Returns a dictionary containing all panelists and their
     respective first shows"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        MIN(s.showdate) AS first, YEAR(MIN(s.showdate)) AS year
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE p.panelist <> '<Multiple>'
+        GROUP BY p.panelistid
+        ORDER BY MIN(s.showdate) ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT p.panelistid, p.panelist, p.panelistslug, "
-        "MIN(s.showdate) AS first, YEAR(MIN(s.showdate)) AS year "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE p.panelist <> '<Multiple>' "
-        "GROUP BY p.panelistid "
-        "ORDER BY MIN(s.showdate) ASC;"
-    )
-    cursor.execute(
-        query,
-    )
+    cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
 
@@ -159,7 +151,6 @@ def panelist_debuts_by_year(
 ) -> Dict[str, Any]:
     """Returns a dictionary of show years with a list of panelists'
     debut information"""
-
     show_years = retrieve_show_years(database_connection=database_connection)
     panelists = retrieve_panelists_first_shows(database_connection=database_connection)
 

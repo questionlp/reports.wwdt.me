@@ -24,7 +24,8 @@ def average_scores():
     """View: Locations Average Scores Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _locations = retrieve_average_scores_by_location(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template("locations/average-scores.html", locations=_locations)

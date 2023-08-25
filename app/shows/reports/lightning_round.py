@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# vim: set noai syntax=python ts=4 sw=4:
+#
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Lightning Round Report Functions"""
 from typing import List, Dict
 
+from flask import current_app
 import mysql.connector
 
 
@@ -12,22 +15,21 @@ def retrieve_all_lightning_round_start(
 ) -> Dict:
     """Retrieve all Lightning Fill-in-the-Blank round starting scores
     and return the values as an dictionary"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+        pm.panelistlrndstart
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
+        AND pm.panelistlrndstart IS NOT NULL
+        ORDER BY s.showdate ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
-        "pm.panelistlrndstart "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND s.showdate <> '2018-10-27' "  # Excluding 25th anniversary special
-        "AND pm.panelistlrndstart IS NOT NULL "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -51,24 +53,42 @@ def retrieve_all_lightning_round_start(
 
 
 def retrieve_scoring_info_by_show_id(
-    show_id: int, database_connection: mysql.connector.connect
+    show_id: int,
+    database_connection: mysql.connector.connect,
+    use_decimal_scores: bool = False,
 ) -> Dict:
     """Return Lightning round starting points, number of correct
     answers and final score for the requested show ID. Used for
     getting scoring details where the round starts in a three-way tie."""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showdate, pm.panelistlrndstart,
+            pm.panelistlrndcorrect, pm.panelistscore,
+            pm.panelistscore_decimal
+            FROM ww_shows s
+            JOIN ww_showpnlmap pm ON pm.showid = s.showid
+            WHERE s.showid = %s
+            LIMIT 1;
+            """
+    else:
+        query = """
+            SELECT s.showdate, pm.panelistlrndstart,
+            pm.panelistlrndcorrect, pm.panelistscore
+            FROM ww_shows s
+            JOIN ww_showpnlmap pm ON pm.showid = s.showid
+            WHERE s.showid = %s
+            LIMIT 1;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showdate, pm.panelistlrndstart, "
-        "pm.panelistlrndcorrect, pm.panelistscore "
-        "FROM ww_shows s "
-        "JOIN ww_showpnlmap pm ON pm.showid = s.showid "
-        "WHERE s.showid = %s "
-        "LIMIT 1;"
-    )
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -76,32 +96,41 @@ def retrieve_scoring_info_by_show_id(
     if not result:
         return None
 
-    return {
-        "id": show_id,
-        "date": result.showdate.isoformat(),
-        "start": result.panelistlrndstart,
-        "correct": result.panelistlrndcorrect,
-        "score": result.panelistscore,
-    }
+    if use_decimal_scores:
+        return {
+            "id": show_id,
+            "date": result.showdate.isoformat(),
+            "start": result.panelistlrndstart,
+            "correct": result.panelistlrndcorrect,
+            "score": result.panelistscore,
+            "score_decimal": result.panelistscore_decimal,
+        }
+    else:
+        return {
+            "id": show_id,
+            "date": result.showdate.isoformat(),
+            "start": result.panelistlrndstart,
+            "correct": result.panelistlrndcorrect,
+            "score": result.panelistscore,
+        }
 
 
 def retrieve_panelists_by_show_id(
     show_id: int, database_connection: mysql.connector.connect
 ) -> List[Dict]:
     """Returns a list of panelists for the requested show ID"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE s.showid = %s
+        ORDER BY pm.showpnlmapid ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT p.panelistid, p.panelist, p.panelistslug "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE s.showid = %s "
-        "ORDER BY pm.showpnlmapid ASC;"
-    )
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -123,26 +152,44 @@ def retrieve_panelists_by_show_id(
 
 
 def shows_with_lightning_round_start_zero(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Return shows in which panelists start the Lightning
     Fill-in-the-Blank round with zero points"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
+            pm.panelistscore_decimal, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndstart = 0
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
+            pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndstart = 0
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
-        "pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore, "
-        "pm.showpnlrank "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND pm.panelistlrndstart = 0 "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -152,45 +199,80 @@ def shows_with_lightning_round_start_zero(
 
     shows = []
     for row in result:
-        shows.append(
-            {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "panelist": {
-                    "id": row.panelistid,
-                    "name": row.panelist,
-                    "start": row.panelistlrndstart,
-                    "correct": row.panelistlrndcorrect,
-                    "score": row.panelistscore,
-                    "rank": row.showpnlrank,
-                },
-            }
-        )
+        if use_decimal_scores:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "score_decimal": row.panelistscore_decimal,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
+        else:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
 
     return shows
 
 
 def shows_lightning_round_start_zero(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Return list of shows in which a panelist starts the Lightning
     Fill-in-the-Blank round with zero points"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
+            pm.panelistscore_decimal, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndstart = 0
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
+            pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndstart = 0
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
-        "pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore, "
-        "pm.showpnlrank "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND pm.panelistlrndstart = 0 "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -200,45 +282,79 @@ def shows_lightning_round_start_zero(
 
     shows = []
     for row in result:
-        shows.append(
-            {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "panelist": {
-                    "id": row.panelistid,
-                    "name": row.panelist,
-                    "start": row.panelistlrndstart,
-                    "correct": row.panelistlrndcorrect,
-                    "score": row.panelistscore,
-                    "rank": row.showpnlrank,
-                },
-            }
-        )
-
+        if use_decimal_scores:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "score_decimal": row.panelistscore_decimal,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
+        else:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
     return shows
 
 
 def shows_lightning_round_zero_correct(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Return list of shows in which a panelist answers zero Lightning
     Fill-in-the-Blank round questions correct"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect,
+            pm.panelistscore, pm.panelistscore_decimal, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS null
+            AND pm.panelistlrndcorrect = 0
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart, pm.panelistlrndcorrect,
+            pm.panelistscore, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS null
+            AND pm.panelistlrndcorrect = 0
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, p.panelistid, p.panelist, "
-        "pm.panelistlrndstart, pm.panelistlrndcorrect, "
-        "pm.panelistscore, pm.showpnlrank "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS null "
-        "AND pm.panelistlrndcorrect = 0 "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -248,20 +364,37 @@ def shows_lightning_round_zero_correct(
 
     shows = []
     for row in result:
-        shows.append(
-            {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "panelist": {
-                    "id": row.panelistid,
-                    "name": row.panelist,
-                    "start": row.panelistlrndstart,
-                    "correct": row.panelistlrndcorrect,
-                    "score": row.panelistscore,
-                    "rank": row.showpnlrank,
-                },
-            }
-        )
+        if use_decimal_scores:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "score_decimal": row.panelistscore_decimal,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
+        else:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "panelist": {
+                        "id": row.panelistid,
+                        "name": row.panelist,
+                        "start": row.panelistlrndstart,
+                        "correct": row.panelistlrndcorrect,
+                        "score": row.panelistscore,
+                        "rank": row.showpnlrank,
+                    },
+                }
+            )
 
     return shows
 
@@ -295,27 +428,46 @@ def shows_starting_with_three_way_tie(
 
 
 def shows_ending_with_three_way_tie(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Retrieve all shows in which all three panelists ended the
     Lightning round in a three-way tie"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, pm.panelistscore,
+            pm.panelistscore_decimal, COUNT(pm.showpnlrank) AS count
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.showpnlrank = '1t'
+            GROUP BY s.showid, pm.panelistscore, pm.panelistscore_decimal
+            HAVING COUNT(pm.showpnlrank) = 3
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, pm.panelistscore,
+            COUNT(pm.showpnlrank) AS count
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.showpnlrank = '1t'
+            GROUP BY s.showid, pm.panelistscore
+            HAVING COUNT(pm.showpnlrank) = 3
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, pm.panelistscore, "
-        "COUNT(pm.showpnlrank) AS count "
-        "FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND pm.showpnlrank = '1t' "
-        "GROUP BY s.showid, pm.panelistscore "
-        "HAVING COUNT(pm.showpnlrank) = 3 "
-        "ORDER BY s.showdate ASC;"
-    )
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -325,28 +477,48 @@ def shows_ending_with_three_way_tie(
 
     shows = []
     for row in result:
-        shows.append(
-            {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "score": row.panelistscore,
-                "panelists": retrieve_panelists_by_show_id(
-                    show_id=row.showid, database_connection=database_connection
-                ),
-            }
-        )
+        if use_decimal_scores:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "score": row.panelistscore,
+                    "score_decimal": row.panelistscore_decimal,
+                    "panelists": retrieve_panelists_by_show_id(
+                        show_id=row.showid, database_connection=database_connection
+                    ),
+                }
+            )
+        else:
+            shows.append(
+                {
+                    "id": row.showid,
+                    "date": row.showdate.isoformat(),
+                    "score": row.panelistscore,
+                    "panelists": retrieve_panelists_by_show_id(
+                        show_id=row.showid, database_connection=database_connection
+                    ),
+                }
+            )
 
     return shows
 
 
 def shows_starting_ending_three_way_tie(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Retrieve all shows in which all three panelists started and
     ended the Lightning round in a three-way tie"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     start_tie = shows_starting_with_three_way_tie(database_connection)
-    end_tie = shows_ending_with_three_way_tie(database_connection)
+    end_tie = shows_ending_with_three_way_tie(
+        database_connection, use_decimal_scores=use_decimal_scores
+    )
 
     if not start_tie or not end_tie:
         return None
@@ -367,20 +539,37 @@ def shows_starting_ending_three_way_tie(
 
     show_info = []
     for show_id in shows_intersect:
-        score_info = retrieve_scoring_info_by_show_id(show_id, database_connection)
+        score_info = retrieve_scoring_info_by_show_id(
+            show_id, database_connection, use_decimal_scores=use_decimal_scores
+        )
 
         if score_info:
-            show_info.append(
-                {
-                    "id": show_id,
-                    "date": score_info["date"],
-                    "panelists": retrieve_panelists_by_show_id(
-                        show_id, database_connection
-                    ),
-                    "start": score_info["start"],
-                    "correct": score_info["correct"],
-                    "score": score_info["score"],
-                }
-            )
+            if use_decimal_scores:
+                show_info.append(
+                    {
+                        "id": show_id,
+                        "date": score_info["date"],
+                        "panelists": retrieve_panelists_by_show_id(
+                            show_id, database_connection
+                        ),
+                        "start": score_info["start"],
+                        "correct": score_info["correct"],
+                        "score": score_info["score"],
+                        "score_decimal": score_info["score_decimal"],
+                    }
+                )
+            else:
+                show_info.append(
+                    {
+                        "id": show_id,
+                        "date": score_info["date"],
+                        "panelists": retrieve_panelists_by_show_id(
+                            show_id, database_connection
+                        ),
+                        "start": score_info["start"],
+                        "correct": score_info["correct"],
+                        "score": score_info["score"],
+                    }
+                )
 
     return show_info

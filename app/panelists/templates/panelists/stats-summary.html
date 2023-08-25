@@ -46,9 +46,9 @@
             <th scope="col">With Scores</th>
             <th scope="col">Min</th>
             <th scope="col">Max</th>
-            <th scope="col">Mean</th>
-            <th scope="col">Median</th>
-            <th scope="col">Std Dev</th>
+            <th scope="col stats float">Mean</th>
+            <th scope="col stats float">Median</th>
+            <th scope="col stats float">Std Dev</th>
             <th scope="col">Sum</th>
         </tr>
     </thead>
@@ -68,12 +68,21 @@
             {% endif %}
 
             {% if panelists_stats[panelist]["stats"] %}
+                {% if use_decimal_scores %}
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["minimum"].normalize()) }}</td>
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["maximum"].normalize()) }}</td>
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["mean"].normalize()) }}</td>
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["median"].normalize()) }}</td>
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["standard_deviation"].normalize()) }}</td>
+            <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["total"].normalize()) }}</td>
+                {% else %}
             <td>{{ panelists_stats[panelist]["stats"]["minimum"] }}</td>
             <td>{{ panelists_stats[panelist]["stats"]["maximum"] }}</td>
             <td>{{ panelists_stats[panelist]["stats"]["mean"] }}</td>
             <td>{{ panelists_stats[panelist]["stats"]["median"] }}</td>
             <td>{{ panelists_stats[panelist]["stats"]["standard_deviation"] }}</td>
             <td>{{ panelists_stats[panelist]["stats"]["total"] }}</td>
+                {% endif %}
             {% else %}
             <td class="no-data">-</td>
             <td class="no-data">-</td>

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Panelist Statistics Summary Report Functions"""
+from decimal import Decimal
 from typing import Any, Dict, List
 
+from flask import current_app
 import mysql.connector
 import numpy
 
@@ -13,34 +15,62 @@ from . import common
 
 
 def retrieve_appearances_by_panelist(
-    panelist_slug: str, database_connection: mysql.connector.connect
+    panelist_slug: str,
+    database_connection: mysql.connector.connect,
+    use_decimal_scores: bool = False,
 ) -> Dict[str, int]:
     """Retrieve appearance data for the requested panelist by the
     panelist's slug string"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT (
+            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND
+            p.panelistslug = %s ) AS regular, (
+            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE p.panelistslug = %s ) AS all_shows, (
+            SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON pm.showid = s.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE p.panelistslug = %s AND s.bestof = 0 AND
+            s.repeatshowid IS NULL
+            AND pm.panelistscore_decimal IS NOT NULL )
+            AS with_scores;
+            """
+    else:
+        query = """
+            SELECT (
+            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND
+            p.panelistslug = %s ) AS regular, (
+            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE p.panelistslug = %s ) AS all_shows, (
+            SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm
+            JOIN ww_shows s ON pm.showid = s.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE p.panelistslug = %s AND s.bestof = 0 AND
+            s.repeatshowid IS NULL
+            AND pm.panelistscore IS NOT NULL )
+            AS with_scores;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT ( "
-        "SELECT COUNT(pm.showid) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND "
-        "p.panelistslug = %s ) AS regular, ( "
-        "SELECT COUNT(pm.showid) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE p.panelistslug = %s ) AS allshows, ( "
-        "SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm "
-        "JOIN ww_shows s ON pm.showid = s.showid "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "WHERE p.panelistslug = %s AND s.bestof = 0 AND "
-        "s.repeatshowid IS NULL "
-        "AND pm.panelistscore IS NOT NULL ) "
-        "AS withscores;"
-    )
     cursor.execute(
         query,
         (
@@ -57,29 +87,46 @@ def retrieve_appearances_by_panelist(
 
     return {
         "regular": result.regular,
-        "all": result.allshows,
-        "with_scores": result.withscores,
+        "all": result.all_shows,
+        "with_scores": result.with_scores,
     }
 
 
 def retrieve_scores_by_panelist(
-    panelist_slug: str, database_connection: mysql.connector.connect
+    panelist_slug: str,
+    database_connection: mysql.connector.connect,
+    use_decimal_scores: bool = False,
 ) -> List[int]:
     """Retrieve all scores for the requested panelist by the panelist's
     slug string"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    if use_decimal_scores:
+        query = """
+            SELECT pm.panelistscore_decimal AS score FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND p.panelistslug = %s
+            AND pm.panelistscore_decimal IS NOT NULL;
+            """
+    else:
+        query = """
+            SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND p.panelistslug = %s
+            AND pm.panelistscore IS NOT NULL;
+            """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT pm.panelistscore FROM ww_showpnlmap pm "
-        "JOIN ww_panelists p ON p.panelistid = pm.panelistid "
-        "JOIN ww_shows s ON s.showid = pm.showid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND p.panelistslug = %s "
-        "AND pm.panelistscore IS NOT NULL;"
-    )
     cursor.execute(query, (panelist_slug,))
     result = cursor.fetchall()
     cursor.close()
@@ -87,14 +134,19 @@ def retrieve_scores_by_panelist(
     if not result:
         return None
 
-    return [row.panelistscore for row in result]
+    return [row.score for row in result]
 
 
 def retrieve_all_panelists_stats(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> Dict[str, Any]:
     """Retrieve appearance and score statistics for all available
     panelists and calculates common statistics for each panelist"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
 
     panelists = common.retrieve_panelists(database_connection=database_connection)
 
@@ -108,22 +160,36 @@ def retrieve_all_panelists_stats(
         panelist_slug = panelist["slug"]
         all_stats[panelist_slug] = {
             "appearances": retrieve_appearances_by_panelist(
-                panelist_slug=panelist_slug, database_connection=database_connection
+                panelist_slug=panelist_slug,
+                database_connection=database_connection,
+                use_decimal_scores=use_decimal_scores,
             ),
         }
 
         scores = retrieve_scores_by_panelist(
-            panelist_slug=panelist_slug, database_connection=database_connection
+            panelist_slug=panelist_slug,
+            database_connection=database_connection,
+            use_decimal_scores=use_decimal_scores,
         )
         if scores:
-            all_stats[panelist_slug]["stats"] = {
-                "minimum": int(numpy.amin(scores)),
-                "maximum": int(numpy.amax(scores)),
-                "mean": round(numpy.mean(scores), 4),
-                "median": int(numpy.median(scores)),
-                "standard_deviation": round(numpy.std(scores), 4),
-                "total": int(numpy.sum(scores)),
-            }
+            if use_decimal_scores:
+                all_stats[panelist_slug]["stats"] = {
+                    "minimum": Decimal(numpy.amin(scores)),
+                    "maximum": Decimal(numpy.amax(scores)),
+                    "mean": round(Decimal(numpy.mean(scores)), 5),
+                    "median": Decimal(numpy.median(scores)),
+                    "standard_deviation": round(Decimal(numpy.std(scores)), 5),
+                    "total": Decimal(numpy.sum(scores)),
+                }
+            else:
+                all_stats[panelist_slug]["stats"] = {
+                    "minimum": int(numpy.amin(scores)),
+                    "maximum": int(numpy.amax(scores)),
+                    "mean": round(numpy.mean(scores), 5),
+                    "median": int(numpy.median(scores)),
+                    "standard_deviation": round(numpy.std(scores), 5),
+                    "total": int(numpy.sum(scores)),
+                }
         else:
             all_stats[panelist_slug]["stats"] = None
 
