@@ -51,7 +51,13 @@
             </td>
             <td>{{ show.start }}</td>
             <td>{{ show.correct }}</td>
-            <td>{{ show.score }}</td>
+            <td>
+            {% if use_decimal_scores %}
+            {{ "{:f}".format(show.score_decimal.normalize()) }}
+            {% else %}
+            {{ show.score }}
+            {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

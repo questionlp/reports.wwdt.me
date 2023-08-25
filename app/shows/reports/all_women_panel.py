@@ -160,7 +160,9 @@ def retrieve_shows_all_women_panel(
     shows = []
     for row in result:
         show_id = row.showid
-        show_details = retrieve_show_details(show_id, database_connection)
+        show_details = retrieve_show_details(
+            show_id, database_connection, use_decimal_scores=use_decimal_scores
+        )
         if show_details:
             shows.append(show_details)
 

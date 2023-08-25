@@ -45,7 +45,13 @@
     <tbody>
         {% for show in shows %}
         <tr>
-            <td>{{ show.total_score }}</td>
+            <td>
+            {% if use_decimal_scores %}
+            {{ "{:f}".format(show.total_score.normalize()) }}
+            {% else %}
+            {{ show.total_score }}
+            {% endif %}
+            </td>
             <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
             {% if show.location.venue and show.location.city and show.location.city %}
             <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
@@ -61,15 +67,29 @@
             <td>
                 <ul class="no-bullets">
                 {% for panelist in show.panelists %}
-                    <li>{{ panelist.name }}: {{ panelist.score }}</li>
+                    <li>{{ panelist.name }}:
+                    {% if use_decimal_scores %}
+                    {{ "{:f}".format(panelist.score_decimal.normalize()) }}
+                    {% else %}
+                    {{ panelist.score }}
+                    {% endif %}
+                    </li>
                 {% endfor %}
                 </ul>
             </td>
+            {% if show.guests %}
             <td>
-                {{ show.guest.name }}: {{ show.guest.score }}
-                {% if show.guest.exception %}
-                *
-                {% endif %}
+                <ul class="no-bullets">
+                    {% for guest in show.guests %}
+                    <li>{{ guest.name }}: {{ guest.score }}
+                    {% if guest.exception %} *{% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

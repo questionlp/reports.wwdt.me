@@ -41,7 +41,11 @@
         <tr>
             <td><a href="{{ stats_url }}/panelists/{{ counts[panelist].slug }}">
                 {{ counts[panelist].name }}</a></td>
+            {% if counts[panelist].perfect %}
             <td>{{ counts[panelist].perfect }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
             <td>{{ counts[panelist].more_perfect }}</td>
         </tr>
         {% endfor %}

@@ -6,6 +6,7 @@
 """Utility functions used by the Wait Wait Reports"""
 
 from datetime import datetime
+from decimal import Decimal
 from functools import cmp_to_key
 import json
 from typing import Dict, List

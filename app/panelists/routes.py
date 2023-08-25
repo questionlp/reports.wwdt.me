@@ -64,9 +64,18 @@ def index():
 def aggregate_scores():
     """View: Panelists Aggregate Scores Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _scores = retrieve_all_scores(database_connection=_database_connection)
-    _stats = calculate_stats(_scores)
-    _aggregate = retrieve_score_spread(database_connection=_database_connection)
+    _scores = retrieve_all_scores(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _stats = calculate_stats(
+        _scores,
+        decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _aggregate = retrieve_score_spread(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
     return render_template(
         "panelists/aggregate-scores.html", stats=_stats, aggregate=_aggregate
@@ -107,7 +116,11 @@ def average_scores_by_year():
             # Retrieve average scores for the panelist
             panelist_info = {"slug": panelist, "name": _panelists_info[panelist]}
             average_scores = retrieve_panelist_yearly_average(
-                panelist_slug=panelist, database_connection=_database_connection
+                panelist_slug=panelist,
+                database_connection=_database_connection,
+                use_decimal_scores=current_app.config["app_settings"][
+                    "use_decimal_scores"
+                ],
             )
             _database_connection.close()
             return render_template(
@@ -136,7 +149,8 @@ def average_scores_by_year():
 def average_scores_by_year_all():
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     average_scores = retrieve_all_panelists_yearly_average(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     years = retrieve_all_years(database_connection=_database_connection)
     if average_scores and years:
@@ -175,7 +189,8 @@ def first_appearance_wins():
     """View: Panelists with First Appearance Wins"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists_first_appearance_wins(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template(
@@ -201,7 +216,10 @@ def first_most_recent_appearances():
 def gender_stats():
     """View: Panelists Statistics by Gender Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _stats = retrieve_stats_by_year_gender(database_connection=_database_connection)
+    _stats = retrieve_stats_by_year_gender(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
     return render_template("panelists/gender-stats.html", gender_stats=_stats)
 
@@ -316,12 +334,18 @@ def panelist_pvp_scoring():
                     panelist_slug_1=panelist_values[0],
                     panelist_slug_2=panelist_values[1],
                     database_connection=_database_connection,
+                    use_decimal_scores=current_app.config["app_settings"][
+                        "use_decimal_scores"
+                    ],
                 )
                 scores = retrieve_panelists_scores(
                     show_ids=shows,
                     panelist_slug_a=panelist_values[0],
                     panelist_slug_b=panelist_values[1],
                     database_connection=_database_connection,
+                    use_decimal_scores=current_app.config["app_settings"][
+                        "use_decimal_scores"
+                    ],
                 )
                 _database_connection.close()
 
@@ -354,7 +378,10 @@ def panelist_pvp_scoring():
 def perfect_scores():
     """View: Perfect Scores Count Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _counts = retrieve_perfect_score_counts(database_connection=_database_connection)
+    _counts = retrieve_perfect_score_counts(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
     return render_template("panelists/perfect-scores.html", counts=_counts)
 
@@ -378,7 +405,10 @@ def rankings_summary():
 def single_appearance():
     """View: Panelists Single Appearance Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _panelists = retrieve_single_appearances(database_connection=_database_connection)
+    _panelists = retrieve_single_appearances(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
     return render_template(
         "panelists/single-appearance.html",
@@ -392,7 +422,10 @@ def stats_summary():
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
-    _stats = summary_retrieve_all_stats(database_connection=_database_connection)
+    _stats = summary_retrieve_all_stats(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
     return render_template(
         "panelists/stats-summary.html",

@@ -96,7 +96,8 @@ def retrieve_panelists_scores(
         if use_decimal_scores:
             query = """
                 SELECT s.showdate, p.panelist, p.panelistslug,
-                pm.panelistscore_decimal, pm.showpnlrank FROM ww_showpnlmap pm
+                pm.panelistscore_decimal AS score, pm.showpnlrank
+                FROM ww_showpnlmap pm
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE s.showid = %s
@@ -105,7 +106,8 @@ def retrieve_panelists_scores(
         else:
             query = """
                 SELECT s.showdate, p.panelist, p.panelistslug,
-                pm.panelistscore, pm.showpnlrank FROM ww_showpnlmap pm
+                pm.panelistscore AS score, pm.showpnlrank
+                FROM ww_showpnlmap pm
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE s.showid = %s
@@ -130,21 +132,13 @@ def retrieve_panelists_scores(
             if show_date not in show_scores:
                 show_scores[show_date] = {}
 
-            if use_decimal_scores:
-                panelist_info = {
-                    "slug": row.panelistslug,
-                    "name": row.panelist,
-                    "score": row.panelistscore,
-                    "score_decimal": row.panelistscore_decimal,
-                    "rank": row.showpnlrank,
-                }
-            else:
-                panelist_info = {
-                    "slug": row.panelistslug,
-                    "name": row.panelist,
-                    "score": row.panelistscore,
-                    "rank": row.showpnlrank,
-                }
+            panelist_info = {
+                "slug": row.panelistslug,
+                "name": row.panelist,
+                "score": row.score,
+                "rank": row.showpnlrank,
+            }
+
             show_scores[show_date][row.panelistslug] = panelist_info
 
     return show_scores

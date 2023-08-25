@@ -176,18 +176,18 @@ def retrieve_all_panelists_stats(
                 all_stats[panelist_slug]["stats"] = {
                     "minimum": Decimal(numpy.amin(scores)),
                     "maximum": Decimal(numpy.amax(scores)),
-                    "mean": Decimal(numpy.mean(scores)),
+                    "mean": round(Decimal(numpy.mean(scores)), 5),
                     "median": Decimal(numpy.median(scores)),
-                    "standard_deviation": Decimal(numpy.std(scores)),
+                    "standard_deviation": round(Decimal(numpy.std(scores)), 5),
                     "total": Decimal(numpy.sum(scores)),
                 }
             else:
                 all_stats[panelist_slug]["stats"] = {
                     "minimum": int(numpy.amin(scores)),
                     "maximum": int(numpy.amax(scores)),
-                    "mean": round(numpy.mean(scores), 4),
+                    "mean": round(numpy.mean(scores), 5),
                     "median": int(numpy.median(scores)),
-                    "standard_deviation": round(numpy.std(scores), 4),
+                    "standard_deviation": round(numpy.std(scores), 5),
                     "total": int(numpy.sum(scores)),
                 }
         else:

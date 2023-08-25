@@ -4,6 +4,7 @@
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Scoring Reports Functions"""
+from decimal import Decimal
 from typing import List, Dict, Union
 
 from flask import current_app
@@ -26,20 +27,17 @@ def retrieve_show_details(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    # Retrieve host, scorekeeper and guest
+    # Retrieve host and scorekeeper
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showdate, h.host, sk.scorekeeper, g.guest, "
-        "gm.guestscore, gm.exception "
-        "FROM ww_showhostmap hm "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "JOIN ww_showskmap skm ON skm.showid = hm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "JOIN ww_showguestmap gm ON gm.showid = hm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE hm.showid = %s;"
-    )
+    query = """
+        SELECT s.showdate, h.host, sk.scorekeeper
+        FROM ww_shows s
+        JOIN ww_showhostmap hm on hm.showid = s.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = hm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE hm.showid = %s;
+        """
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
 
@@ -50,12 +48,33 @@ def retrieve_show_details(
         "date": result.showdate.isoformat(),
         "host": result.host,
         "scorekeeper": result.scorekeeper,
-        "guest": {
-            "name": result.guest,
-            "score": result.guestscore,
-            "exception": bool(result.exception),
-        },
     }
+
+    # Retrieve guest details
+    query = """
+        SELECT g.guest, gm.guestscore, gm.exception
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE gm.showid = %s;
+        """
+    cursor.execute(query, (show_id,))
+    result = cursor.fetchall()
+
+    if not result:
+        show_details["guests"] = None
+    else:
+        guests = []
+        for row in result:
+            guests.append(
+                {
+                    "name": row.guest,
+                    "score": row.guestscore,
+                    "exception": bool(row.exception),
+                }
+            )
+
+        show_details["guests"] = guests
 
     # Retrieve show location details
     query = (
@@ -173,7 +192,11 @@ def retrieve_shows_all_high_scoring(
         )
 
         if show_details:
-            show_details["total_score"] = row.total
+            if use_decimal_scores:
+                show_details["total_score"] = Decimal(row.total)
+            else:
+                show_details["total_score"] = row.total
+
             if show_details:
                 shows.append(show_details)
 
@@ -233,7 +256,11 @@ def retrieve_shows_all_low_scoring(
         )
 
         if show_details:
-            show_details["total_score"] = row.total
+            if use_decimal_scores:
+                show_details["total_score"] = Decimal(row.total)
+            else:
+                show_details["total_score"] = row.total
+
             if show_details:
                 shows.append(show_details)
 

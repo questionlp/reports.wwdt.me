@@ -110,8 +110,12 @@
         width: 6rem;
     }
 
-    col.count.mix, col.date, col.rank, col.stats.float {
+    col.count.mix, col.date, col.stats.float {
         width: 8rem;
+    }
+
+    col.rank {
+        width: 9rem;
     }
 
     col.city, col.score.long {

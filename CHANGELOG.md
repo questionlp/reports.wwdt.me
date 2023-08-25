@@ -4,7 +4,10 @@
 
 ### Application Changes
 
-- Add support for generating reports using panelist decimal scores
+- Add support for the new decimal panelist score column, `panelistscore_decimal` in the `ww_showpnlmap` table of the Wait Wait Stats Database.
+- Add a `use_decimal_scores` setting in `config.json` to enable or disable pulling data from the new column. The default is `false`
+- All calculations that use of decimal scores, versus integer scores, use the Python Decimal data type
+- Change the rounding of certain stats from 4 decimal places to 5 decimal places
 
 ### Component Changes
 

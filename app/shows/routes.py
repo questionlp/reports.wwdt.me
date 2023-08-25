@@ -70,7 +70,10 @@ def all_shows():
 def all_women_panel():
     """View: All Women Panel Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_all_women_panel(database_connection=_database_connection)
+    _shows = retrieve_shows_all_women_panel(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template("shows/all-women-panel.html", shows=_shows)
@@ -110,7 +113,10 @@ def guest_scorekeeper():
 def high_scoring():
     """View: High Scoring Shows Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_all_high_scoring(database_connection=_database_connection)
+    _shows = retrieve_shows_all_high_scoring(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template("shows/high-scoring.html", shows=_shows)
@@ -121,7 +127,8 @@ def highest_score_equals_sum_other_scores():
     """View: Highest Score Equals the Sum of Other Scores Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_score_sum_match(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -134,7 +141,10 @@ def highest_score_equals_sum_other_scores():
 def lightning_round_ending_three_way_tie():
     """View: Lightning Round Ending in a Three-Way Tie Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = shows_ending_with_three_way_tie(database_connection=_database_connection)
+    _shows = shows_ending_with_three_way_tie(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template(
@@ -148,7 +158,8 @@ def lightning_round_starting_ending_three_way_tie():
     Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_ending_three_way_tie(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -173,7 +184,10 @@ def lightning_round_starting_three_way_tie():
 def lightning_round_starting_zero_points():
     """View: Lightning Round Starting with Zero Points Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = shows_lightning_round_start_zero(database_connection=_database_connection)
+    _shows = shows_lightning_round_start_zero(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template(
@@ -186,7 +200,8 @@ def lightning_round_zero_correct():
     """View: Lightning Round with Zero Correct Answers Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_zero_correct(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -197,7 +212,10 @@ def lightning_round_zero_correct():
 def low_scoring():
     """View: Low Scoring Shows Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_all_low_scoring(database_connection=_database_connection)
+    _shows = retrieve_shows_all_low_scoring(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template("shows/low-scoring.html", shows=_shows)
@@ -210,16 +228,6 @@ def not_my_job_vs_bluffs():
     _guest_stats = retrieve_not_my_job_stats(database_connection=_database_connection)
     _bluff_stats = retrieve_bluff_stats(database_connection=_database_connection)
     _database_connection.close()
-
-    if "total" in _guest_stats and "wins" in _guest_stats:
-        _guest_stats["win_ratio"] = round(
-            100 * (_guest_stats["wins"] / _guest_stats["total"]), 4
-        )
-
-    if "total" in _bluff_stats and "correct" in _bluff_stats:
-        _bluff_stats["correct_ratio"] = round(
-            100 * (_bluff_stats["correct"] / _bluff_stats["total"]), 4
-        )
 
     return render_template(
         "shows/guests-vs-bluffs.html",
@@ -265,7 +273,8 @@ def perfect_panelist_scores():
     """View: Shows with Perfect Panelist Scores Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_perfect_scores(
-        database_connection=_database_connection
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 

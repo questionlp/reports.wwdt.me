@@ -111,9 +111,9 @@ def retrieve_panelist_yearly_average(
     for row in result:
         if row.total and row.count:
             if use_decimal_scores:
-                averages[row.year] = Decimal(Decimal(row.total) / Decimal(row.count))
+                averages[row.year] = round(Decimal(row.total) / Decimal(row.count), 5)
             else:
-                averages[row.year] = round(int(row.total) / int(row.count), 4)
+                averages[row.year] = round(int(row.total) / int(row.count), 5)
 
     panelist["averages"] = averages
     return panelist

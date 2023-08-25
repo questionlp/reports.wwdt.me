@@ -21,6 +21,10 @@
     The list also includes shows where a panelist has a total score greater
     than 20 points.
 </p>
+<p>
+    Note: Shows that aired in 1998 used a different show format and scoring
+    system compared to the current show format and scoring system.
+</p>
 {% endblock synopsis %}
 
 {% block content %}
@@ -44,9 +48,17 @@
             <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
             <td>{{ show.panelist }}</td>
             {% if show.score > 20 %}
+                {% if use_decimal_scores %}
+            <td><b>{{ "{:f}".format(show.score_decimal.normalize()) }}</b></td>
+                {% else %}
             <td><b>{{ show.score }}</b></td>
+                {% endif %}
+            {% else %}
+            {% if use_decimal_scores %}
+            <td>{{ "{:f}".format(show.score_decimal.normalize()) }}</td>
             {% else %}
             <td>{{ show.score }}</td>
+            {% endif %}
             {% endif %}
         </tr>
         {% endfor %}

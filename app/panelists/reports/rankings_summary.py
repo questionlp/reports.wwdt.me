@@ -74,19 +74,19 @@ def retrieve_rankings_by_panelist(
 
     if rankings["count"]:
         rankings["percent_first"] = round(
-            100 * (rankings["first"] / rankings["count"]), 4
+            100 * (rankings["first"] / rankings["count"]), 5
         )
         rankings["percent_first_tied"] = round(
-            100 * (rankings["first_tied"] / rankings["count"]), 4
+            100 * (rankings["first_tied"] / rankings["count"]), 5
         )
         rankings["percent_second"] = round(
-            100 * (rankings["second"] / rankings["count"]), 4
+            100 * (rankings["second"] / rankings["count"]), 5
         )
         rankings["percent_second_tied"] = round(
-            100 * (rankings["second_tied"] / rankings["count"]), 4
+            100 * (rankings["second_tied"] / rankings["count"]), 5
         )
         rankings["percent_third"] = round(
-            100 * (rankings["third"] / rankings["count"]), 4
+            100 * (rankings["third"] / rankings["count"]), 5
         )
 
     return rankings

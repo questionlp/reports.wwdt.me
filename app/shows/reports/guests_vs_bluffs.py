@@ -134,6 +134,14 @@ def retrieve_not_my_job_stats(
         "total": count_all_guest_scores + len(best_of_only_guest_ids),
         "wins": count_guest_wins + best_of_only_guest_wins,
         "losses": count_guest_losses + best_of_only_guest_losses,
+        "win_ratio": round(
+            100
+            * (
+                (count_guest_wins + best_of_only_guest_wins)
+                / (count_all_guest_scores + len(best_of_only_guest_ids))
+            ),
+            5,
+        ),
     }
 
     return ret_val
@@ -213,4 +221,5 @@ def retrieve_bluff_stats(
         "total": count_unique_bluffs,
         "correct": count_chosen_correct,
         "incorrect": count_chosen_incorrect,
+        "correct_ratio": round(100 * (count_chosen_correct / count_unique_bluffs), 5),
     }

@@ -28,7 +28,7 @@ def retrieve_all_scores(
 
     if use_decimal_scores:
         query = """
-            SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
+            SELECT pm.panelistscore_decimal AS score FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore_decimal IS NOT NULL
@@ -36,7 +36,7 @@ def retrieve_all_scores(
             """
     else:
         query = """
-            SELECT pm.panelistscore FROM ww_showpnlmap pm
+            SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore IS NOT NULL
@@ -50,7 +50,7 @@ def retrieve_all_scores(
     if not result:
         return None
 
-    return [row.panelistscore for row in result]
+    return [row.score for row in result]
 
 
 def retrieve_score_spread(
@@ -69,7 +69,8 @@ def retrieve_score_spread(
 
     if use_decimal_scores:
         query = """
-            SELECT pm.panelistscore_decimal, COUNT(pm.panelistscore_decimal) AS count
+            SELECT pm.panelistscore_decimal AS score,
+            COUNT(pm.panelistscore_decimal) AS count
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             WHERE pm.panelistscore_decimal IS NOT NULL
@@ -79,7 +80,8 @@ def retrieve_score_spread(
             """
     else:
         query = """
-            SELECT pm.panelistscore, COUNT(pm.panelistscore) AS count
+            SELECT pm.panelistscore AS score,
+            COUNT(pm.panelistscore) AS count
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             WHERE pm.panelistscore IS NOT NULL
@@ -99,7 +101,7 @@ def retrieve_score_spread(
     for row in result:
         scores.append(
             {
-                "score": row.panelistscore,
+                "score": row.score,
                 "count": row.count,
             }
         )
@@ -115,9 +117,9 @@ def calculate_stats(scores: List[int], decimal_scores: bool = False) -> Dict[str
             "count": len(scores),
             "minimum": Decimal(numpy.amin(scores)),
             "maximum": Decimal(numpy.amax(scores)),
-            "mean": Decimal(numpy.mean(scores)),
+            "mean": round(Decimal(numpy.mean(scores)), 5),
             "median": Decimal(numpy.median(scores)),
-            "standard_deviation": Decimal(numpy.std(scores)),
+            "standard_deviation": round(Decimal(numpy.std(scores)), 5),
             "sum": Decimal(numpy.sum(scores)),
         }
     else:
@@ -125,8 +127,8 @@ def calculate_stats(scores: List[int], decimal_scores: bool = False) -> Dict[str
             "count": len(scores),
             "minimum": int(numpy.amin(scores)),
             "maximum": int(numpy.amax(scores)),
-            "mean": round(numpy.mean(scores), 4),
+            "mean": round(numpy.mean(scores), 5),
             "median": int(numpy.median(scores)),
-            "standard_deviation": round(numpy.std(scores), 4),
+            "standard_deviation": round(numpy.std(scores), 5),
             "sum": int(numpy.sum(scores)),
         }
