@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Shows Redirect Routes for Wait Wait Reports"""
-from crypt import methods
 from flask import Blueprint, url_for
 
 from app.utility import redirect_url

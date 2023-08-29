@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# vim: set noai syntax=python ts=4 sw=4:
+#
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """WWDTM Show Guest Scorekeeper Report Functions"""
 from typing import List, Dict
@@ -13,25 +15,24 @@ def retrieve_shows_guest_scorekeeper(
     database_connection: mysql.connector.connect,
 ) -> List[Dict]:
     """Retrieve a list of shows with guest scorekeepers"""
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, h.host,
+        h.hostslug, hm.guest AS host_guest, sk.scorekeeper,
+        sk.scorekeeperslug, l.venue, l.city, l.state
+        FROM ww_showhostmap hm
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = hm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_showlocationmap lm ON lm.showid = hm.showid
+        JOIN ww_locations l ON l.locationid = lm.locationid
+        WHERE skm.guest = 1
+        ORDER BY s.showdate ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, h.host, "
-        "h.hostslug, hm.guest AS host_guest, sk.scorekeeper, "
-        "sk.scorekeeperslug, l.venue, l.city, l.state "
-        "FROM ww_showhostmap hm "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "JOIN ww_showskmap skm ON skm.showid = hm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_showlocationmap lm ON lm.showid = hm.showid "
-        "JOIN ww_locations l ON l.locationid = lm.locationid "
-        "WHERE skm.guest = 1 "
-        "ORDER BY s.showdate ASC "
-    )
     cursor.execute(query)
     result = cursor.fetchall()
 

@@ -30,8 +30,8 @@
         <col class="name venue">
         <col class="name city">
         <col class="name state">
-        <col class="score">
-        <col class="score">
+        <col class="stats float">
+        <col class="stats float">
         <col class="dates">
     </colgroup>
     <thead>
@@ -62,12 +62,15 @@
             {% else %}
             <td class="no-data">-</td>
             {% endif %}
-            {# Using str.format() in order to get clean, floating output
-                from Decimal numbers
-            #}
-            <td>{{ "{:f}".format(location.average_score) }}</td>
-            <td>{{ "{:f}".format(location.average_total) }}</td>
-            <td>{{ "{:f}".format(location.show_count) }}</td>
+            {% if use_decimal_scores %}
+            <td>{{ "{:f}".format(location.average_score.normalize()) }}</td>
+            <td>{{ "{:f}".format(location.average_total.normalize()) }}</td>
+            <td>{{ location.show_count }}</td>
+            {% else %}
+            <td>{{ location.average_score }}</td>
+            <td>{{ location.average_total }}</td>
+            <td>{{ location.show_count }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

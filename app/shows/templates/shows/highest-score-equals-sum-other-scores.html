@@ -43,7 +43,11 @@
                 {{ shows[show][0]["panelist"] }}
             </td>
             <td>
+                {% if use_decimal_scores %}
+                {{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) }}
+                {% else %}
                 {{ shows[show][0]["score"] }}
+                {% endif %}
             </td>
             <td>
                 {{ rank_map[shows[show][0]["rank"]] }}
@@ -54,7 +58,11 @@
                 {{ shows[show][1]["panelist"] }}
             </td>
             <td>
+                {% if use_decimal_scores %}
+                {{ "{:f}".format(shows[show][1]["score_decimal"].normalize()) }}
+                {% else %}
                 {{ shows[show][1]["score"] }}
+                {% endif %}
             </td>
             <td>
                 {{ rank_map[shows[show][1]["rank"]] }}
@@ -65,7 +73,11 @@
                 {{ shows[show][2]["panelist"] }}
             </td>
             <td>
+                {% if use_decimal_scores %}
+                {{ "{:f}".format(shows[show][2]["score_decimal"].normalize()) }}
+                {% else %}
                 {{ shows[show][2]["score"] }}
+                {% endif %}
             </td>
             <td>
                 {{ rank_map[shows[show][2]["rank"]] }}

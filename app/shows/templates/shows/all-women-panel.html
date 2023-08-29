@@ -57,8 +57,13 @@
                 <ul class="no-bullets">
                 {% for panelist in show.panelists %}
                     <li>
-                    {% if show.guest.score %}
-                    {{ panelist.name }}: {{ panelist.score }}
+                    {% if panelist.score %}
+                    {{ panelist.name }}:
+                        {% if use_decimal_scores %}
+                    {{ "{:f}".format(panelist.score_decimal.normalize()) }}
+                        {% else %}
+                    {{ panelist.score }}
+                        {% endif %}
                     {% else %}
                     {{ panelist.name }}
                     {% endif %}

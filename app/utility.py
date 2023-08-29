@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Utility functions used by the Wait Wait Reports"""
 
 from datetime import datetime
+from decimal import Decimal
 from functools import cmp_to_key
 import json
 from typing import Dict, List
@@ -13,6 +14,7 @@ from typing import Dict, List
 from dateutil import parser
 from flask import current_app
 import markdown
+from mysql.connector import connect, DatabaseError
 from operator import itemgetter
 import pytz
 
@@ -114,3 +116,22 @@ def time_zone_parser(time_zone: str) -> pytz.timezone:
         time_zone_string = time_zone_object.zone
 
     return time_zone_object, time_zone_string
+
+
+def panelist_decimal_score_exists(database_settings: Dict) -> bool:
+    """Checks to see if the panelistscore_decimal column exists in the
+    ww_showpnlmap table in the Wait Wait Stats Database and returns
+    a bool reflecting the results"""
+    try:
+        database_connection = connect(**database_settings)
+        cursor = database_connection.cursor()
+        query = "SHOW COLUMNS FROM ww_showpnlmap WHERE Field = 'panelistscore_decimal'"
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        if result:
+            return True
+        else:
+            return False
+    except DatabaseError:
+        return False

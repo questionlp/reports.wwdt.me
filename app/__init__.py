@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: set noai syntax=python ts=4 sw=4:
 #
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 """Core Application for Wait Wait Reports"""
 from flask import Flask
@@ -67,10 +67,18 @@ def create_app():
     app.jinja_env.globals["mastodon_user"] = _config["settings"].get(
         "mastodon_user", ""
     )
+    app.jinja_env.globals["use_decimal_scores"] = _config["settings"][
+        "use_decimal_scores"
+    ]
 
     # Register Jinja template filters
     app.jinja_env.filters["pretty_jsonify"] = utility.pretty_jsonify
     app.jinja_env.filters["markdown"] = utility.md_to_html
+
+    # Check to see if panelistscore_decimal column exists and set a flag
+    app.config["app_settings"][
+        "has_decimal_scores_column"
+    ] = utility.panelist_decimal_score_exists(database_settings=app.config["database"])
 
     # Register application blueprints
     app.register_blueprint(main_bp)
