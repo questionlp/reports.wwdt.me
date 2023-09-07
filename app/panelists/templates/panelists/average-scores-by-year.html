@@ -67,11 +67,7 @@
         <tr>
             <td>{{ year }}</td>
             {% if average_scores.averages[year] %}
-                {%if use_decimal_scores %}
-            <td>{{ "{:f}".format(average_scores.averages[year].normalize()) }}</td>
-                {% else %}
-            <td>{{ average_scores.averages[year] }}</td>
-                {% endif %}
+            <td>{{ "{:f}".format(average_scores.averages[year].normalize()) if use_decimal_scores else average_scores.averages[year] }}</td>
             {% else %}
             <td class="no-data stats float">-</td>
             {% endif %}

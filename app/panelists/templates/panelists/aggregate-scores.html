@@ -38,57 +38,30 @@
             <td>Count</td>
             <td>{{ stats.count }}</td>
         </tr>
-        {% if use_decimal_scores %}
         <tr>
             <td>Minimum</td>
-            <td>{{ "{:f}".format(stats.minimum.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.minimum.normalize()) if use_decimal_scores else stats.minimum }}</td>
         </tr>
         <tr>
             <td>Maximum</td>
-            <td>{{ "{:f}".format(stats.maximum.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.maximum.normalize()) if use_decimal_scores else stats.maximum }}</td>
         </tr>
         <tr>
             <td>Mean</td>
-            <td>{{ "{:f}".format(stats.mean.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.mean.normalize()) if use_decimal_scores else stats.mean }}</td>
         </tr>
         <tr>
             <td>Median</td>
-            <td>{{ "{:f}".format(stats.median.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.median.normalize()) if use_decimal_scores else stats.median }}</td>
         </tr>
         <tr>
             <td>Standard Deviation</td>
-            <td>{{ "{:f}".format(stats.standard_deviation.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else stats.standard_deviation }}</td>
         </tr>
         <tr>
             <td>Sum</td>
-            <td>{{ "{:f}".format(stats.sum.normalize()) }}</td>
+            <td>{{ "{:f}".format(stats.sum.normalize()) if use_decimal_scores else stats.sum }}</td>
         </tr>
-        {% else %}
-        <tr>
-            <td>Minimum</td>
-            <td>{{ stats.minimum }}</td>
-        </tr>
-        <tr>
-            <td>Maximum</td>
-            <td>{{ stats.maximum }}</td>
-        </tr>
-        <tr>
-            <td>Mean</td>
-            <td>{{ stats.mean }}</td>
-        </tr>
-        <tr>
-            <td>Median</td>
-            <td>{{ stats.median }}</td>
-        </tr>
-        <tr>
-            <td>Standard Deviation</td>
-            <td>{{ stats.standard_deviation }}</td>
-        </tr>
-        <tr>
-            <td>Sum</td>
-            <td>{{ stats.sum }}</td>
-        </tr>
-        {% endif %}
     </tbody>
 </table>
 <!-- End Aggregate Score Statistics Section -->
@@ -109,11 +82,7 @@
     <tbody>
     {% for score in aggregate %}
         <tr>
-            {% if use_decimal_scores %}
-            <td>{{ "{:f}".format(score.score.normalize()) }}</td>
-            {% else %}
-            <td>{{ score.score }}</td>
-            {% endif %}
+            <td>{{ "{:f}".format(score.score.normalize()) if use_decimal_scores else score.score }}</td>
             <td>{{ score.count }}</td>
         </tr>
     {% endfor %}

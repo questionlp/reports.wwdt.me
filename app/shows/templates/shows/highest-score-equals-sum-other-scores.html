@@ -43,11 +43,7 @@
                 {{ shows[show][0]["panelist"] }}
             </td>
             <td>
-                {% if use_decimal_scores %}
-                {{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) }}
-                {% else %}
-                {{ shows[show][0]["score"] }}
-                {% endif %}
+                {{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) if use_decimal_scores else shows[show][0]["score"] }}
             </td>
             <td>
                 {{ rank_map[shows[show][0]["rank"]] }}

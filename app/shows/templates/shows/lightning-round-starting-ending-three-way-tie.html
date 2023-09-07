@@ -49,14 +49,10 @@
                 {% endfor %}
                 </ul>
             </td>
-            <td>{{ show.start }}</td>
-            <td>{{ show.correct }}</td>
+            <td>{{ "{:f}".format(show.start_decimal.normalize()) if use_decimal_scores else show.start }}</td>
+            <td>{{ "{:f}".format(show.correct_decimal.normalize()) if use_decimal_scores else show.correct }}</td>
             <td>
-            {% if use_decimal_scores %}
-            {{ "{:f}".format(show.score_decimal.normalize()) }}
-            {% else %}
-            {{ show.score }}
-            {% endif %}
+            {{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}
             </td>
         </tr>
         {% endfor %}
