@@ -11,24 +11,43 @@ import mysql.connector
 
 
 def retrieve_all_lightning_round_start(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> Dict:
     """Retrieve all Lightning Fill-in-the-Blank round starting scores
     and return the values as an dictionary"""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
+
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    query = """
-        SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-        pm.panelistlrndstart
-        FROM ww_showpnlmap pm
-        JOIN ww_shows s ON s.showid = pm.showid
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
-        AND pm.panelistlrndstart IS NOT NULL
-        ORDER BY s.showdate ASC;
-        """
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart_decimal AS start
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
+            AND pm.panelistlrndstart_decimal IS NOT NULL
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate, p.panelistid, p.panelist,
+            pm.panelistlrndstart AS start
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
+            AND pm.panelistlrndstart IS NOT NULL
+            ORDER BY s.showdate ASC;
+            """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -47,7 +66,7 @@ def retrieve_all_lightning_round_start(
                 "scores": [],
             }
 
-        show_lightning_round_starts[show_id]["scores"].append(row.panelistlrndstart)
+        show_lightning_round_starts[show_id]["scores"].append(row.start)
 
     return show_lightning_round_starts
 
@@ -71,9 +90,13 @@ def retrieve_scoring_info_by_show_id(
 
     if use_decimal_scores:
         query = """
-            SELECT s.showdate, pm.panelistlrndstart,
-            pm.panelistlrndcorrect, pm.panelistscore,
-            pm.panelistscore_decimal
+            SELECT s.showdate,
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndstart_decimal AS start_decimal,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistlrndcorrect_decimal AS correct_decimal,
+            pm.panelistscore AS score,
+            pm.panelistscore_decimal AS score_decimal
             FROM ww_shows s
             JOIN ww_showpnlmap pm ON pm.showid = s.showid
             WHERE s.showid = %s
@@ -81,8 +104,10 @@ def retrieve_scoring_info_by_show_id(
             """
     else:
         query = """
-            SELECT s.showdate, pm.panelistlrndstart,
-            pm.panelistlrndcorrect, pm.panelistscore
+            SELECT s.showdate,
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistscore AS score
             FROM ww_shows s
             JOIN ww_showpnlmap pm ON pm.showid = s.showid
             WHERE s.showid = %s
@@ -100,18 +125,20 @@ def retrieve_scoring_info_by_show_id(
         return {
             "id": show_id,
             "date": result.showdate.isoformat(),
-            "start": result.panelistlrndstart,
-            "correct": result.panelistlrndcorrect,
-            "score": result.panelistscore,
-            "score_decimal": result.panelistscore_decimal,
+            "start": result.start,
+            "start_decimal": result.start_decimal,
+            "correct": result.correct,
+            "correct_decimal": result.correct_decimal,
+            "score": result.score,
+            "score_decimal": result.score_decimal,
         }
     else:
         return {
             "id": show_id,
             "date": result.showdate.isoformat(),
-            "start": result.panelistlrndstart,
-            "correct": result.panelistlrndcorrect,
-            "score": result.panelistscore,
+            "start": result.start,
+            "correct": result.correct,
+            "score": result.score,
         }
 
 
@@ -168,20 +195,27 @@ def shows_with_lightning_round_start_zero(
     if use_decimal_scores:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.panelistscore_decimal, pm.showpnlrank
+            pm.panelistlrndstart AS start
+            pm.panelistlrndstart_decimal AS start_decimal,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistlrndcorrect_decimal AS correct_decimal,
+            pm.panelistscore AS score,
+            pm.panelistscore_decimal AS score_decimal,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistlrndstart = 0
+            AND pm.panelistlrndstart_decimal = 0
             ORDER BY s.showdate ASC;
             """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.showpnlrank
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistscore AS score,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -207,11 +241,13 @@ def shows_with_lightning_round_start_zero(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "score_decimal": row.panelistscore_decimal,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "start_decimal": row.start_decimal,
+                        "correct": row.correct,
+                        "correct_decimal": row.correct_decimal,
+                        "score": row.score,
+                        "score_decimal": row.score_decimal,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -223,10 +259,10 @@ def shows_with_lightning_round_start_zero(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "correct": row.correct,
+                        "score": row.score,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -251,20 +287,27 @@ def shows_lightning_round_start_zero(
     if use_decimal_scores:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.panelistscore_decimal, pm.showpnlrank
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndstart_decimal AS start_decimal,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistlrndcorrect AS correct_decimal,
+            pm.panelistscore AS score,
+            pm.panelistscore_decimal AS score_decimal,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistlrndstart = 0
+            AND pm.panelistlrndstart_decimal = 0
             ORDER BY s.showdate ASC;
             """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.showpnlrank
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistscore AS score,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -290,11 +333,13 @@ def shows_lightning_round_start_zero(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "score_decimal": row.panelistscore_decimal,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "start_decimal": row.start_decimal,
+                        "correct": row.correct,
+                        "correct_decimal": row.correct_decimal,
+                        "score": row.score,
+                        "score_decimal": row.score_decimal,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -306,10 +351,10 @@ def shows_lightning_round_start_zero(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "correct": row.correct,
+                        "score": row.score,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -333,20 +378,27 @@ def shows_lightning_round_zero_correct(
     if use_decimal_scores:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect,
-            pm.panelistscore, pm.panelistscore_decimal, pm.showpnlrank
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndstart_decimal AS start_decimal,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistlrndcorrect_decimal AS correct_decimal,
+            pm.panelistscore AS score,
+            pm.panelistscore_decimal AS score_decimal,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE s.bestof = 0 AND s.repeatshowid IS null
-            AND pm.panelistlrndcorrect = 0
+            AND pm.panelistlrndcorrect_decimal = 0
             ORDER BY s.showdate ASC;
             """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect,
-            pm.panelistscore, pm.showpnlrank
+            pm.panelistlrndstart AS start,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistscore AS score,
+            pm.showpnlrank AS show_rank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -372,11 +424,13 @@ def shows_lightning_round_zero_correct(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "score_decimal": row.panelistscore_decimal,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "start_decimal": row.start_decimal,
+                        "correct": row.correct,
+                        "correct_decimal": row.correct_decimal,
+                        "score": row.score,
+                        "score_decimal": row.score_decimal,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -388,10 +442,10 @@ def shows_lightning_round_zero_correct(
                     "panelist": {
                         "id": row.panelistid,
                         "name": row.panelist,
-                        "start": row.panelistlrndstart,
-                        "correct": row.panelistlrndcorrect,
-                        "score": row.panelistscore,
-                        "rank": row.showpnlrank,
+                        "start": row.start,
+                        "correct": row.correct,
+                        "score": row.score,
+                        "rank": row.show_rank,
                     },
                 }
             )
@@ -400,12 +454,14 @@ def shows_lightning_round_zero_correct(
 
 
 def shows_starting_with_three_way_tie(
-    database_connection: mysql.connector.connect,
+    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict]:
     """Retrieve all shows in which all three panelists started the
     Lightning round in a three-way tie"""
 
-    show_scores = retrieve_all_lightning_round_start(database_connection)
+    show_scores = retrieve_all_lightning_round_start(
+        database_connection, use_decimal_scores=use_decimal_scores
+    )
     shows = []
 
     for show in show_scores:
@@ -443,8 +499,10 @@ def shows_ending_with_three_way_tie(
 
     if use_decimal_scores:
         query = """
-            SELECT s.showid, s.showdate, pm.panelistscore,
-            pm.panelistscore_decimal, COUNT(pm.showpnlrank) AS count
+            SELECT s.showid, s.showdate,
+            pm.panelistscore AS score,
+            pm.panelistscore_decimal AS score_decimal,
+            COUNT(pm.showpnlrank) AS count
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -456,7 +514,8 @@ def shows_ending_with_three_way_tie(
             """
     else:
         query = """
-            SELECT s.showid, s.showdate, pm.panelistscore,
+            SELECT s.showid, s.showdate,
+            pm.panelistscore AS score,
             COUNT(pm.showpnlrank) AS count
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
@@ -482,8 +541,8 @@ def shows_ending_with_three_way_tie(
                 {
                     "id": row.showid,
                     "date": row.showdate.isoformat(),
-                    "score": row.panelistscore,
-                    "score_decimal": row.panelistscore_decimal,
+                    "score": row.score,
+                    "score_decimal": row.score_decimal,
                     "panelists": retrieve_panelists_by_show_id(
                         show_id=row.showid, database_connection=database_connection
                     ),
@@ -494,7 +553,7 @@ def shows_ending_with_three_way_tie(
                 {
                     "id": row.showid,
                     "date": row.showdate.isoformat(),
-                    "score": row.panelistscore,
+                    "score": row.score,
                     "panelists": retrieve_panelists_by_show_id(
                         show_id=row.showid, database_connection=database_connection
                     ),
@@ -553,7 +612,9 @@ def shows_starting_ending_three_way_tie(
                             show_id, database_connection
                         ),
                         "start": score_info["start"],
+                        "start_decimal": score_info["start_decimal"],
                         "correct": score_info["correct"],
+                        "correct_decimal": score_info["correct_decimal"],
                         "score": score_info["score"],
                         "score_decimal": score_info["score_decimal"],
                     }

@@ -45,11 +45,7 @@
                 </ul>
             </td>
             <td>
-            {% if use_decimal_scores %}
-            {{ "{:f}".format(show.score_decimal.normalize()) }}
-            {% else %}
-            {{ show.score }}
-            {% endif %}
+            {{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}
             </td>
         </tr>
         {% endfor %}

@@ -48,17 +48,9 @@
             <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
             <td>{{ show.panelist }}</td>
             {% if show.score > 20 %}
-                {% if use_decimal_scores %}
-            <td><b>{{ "{:f}".format(show.score_decimal.normalize()) }}</b></td>
-                {% else %}
-            <td><b>{{ show.score }}</b></td>
-                {% endif %}
+            <td><b>{{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}</b></td>
             {% else %}
-            {% if use_decimal_scores %}
-            <td>{{ "{:f}".format(show.score_decimal.normalize()) }}</td>
-            {% else %}
-            <td>{{ show.score }}</td>
-            {% endif %}
+            <td>{{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}</td>
             {% endif %}
         </tr>
         {% endfor %}

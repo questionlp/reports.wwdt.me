@@ -172,7 +172,10 @@ def lightning_round_starting_ending_three_way_tie():
 def lightning_round_starting_three_way_tie():
     """View: Lightning Round Starting with a Three-Way Tie Report"""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = shows_starting_with_three_way_tie(database_connection=_database_connection)
+    _shows = shows_starting_with_three_way_tie(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
     _database_connection.close()
 
     return render_template(

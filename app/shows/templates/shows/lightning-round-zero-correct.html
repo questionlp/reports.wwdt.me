@@ -47,11 +47,7 @@
             <td>{{ show.panelist.start }}</td>
             <td>{{ show.panelist.correct }}</td>
             <td>
-            {% if use_decimal_scores %}
-            {{ "{:f}".format(show.panelist.score_decimal.normalize()) }}
-            {% else %}
-            {{ show.panelist.score }}
-            {% endif %}
+            {{ "{:f}".format(show.panelist.score_decimal.normalize()) if use_decimal_scores else show.panelist.score }}
             </td>
             <td>{{ rank_map[show.panelist.rank] }}</td>
         </tr>
