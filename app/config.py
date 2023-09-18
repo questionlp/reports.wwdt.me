@@ -22,6 +22,13 @@ def load_config(
 
     database_config = app_config.get("database", None)
     settings_config = app_config.get("settings", None)
+    caching_config = app_config.get("caching", None)
+    if not caching_config or "CACHE_TYPE" not in caching_config:
+        caching_config = {
+            "CACHE_TYPE": "NullCache",
+        }
+    else:
+        caching_config["CACHE_KEY_PREFIX"] = caching_config.get("CACHE_KEY_PREFIX", "wwdtm_reports_")
 
     if "database" in app_config:
         database_config = app_config["database"]
@@ -66,4 +73,5 @@ def load_config(
     return {
         "database": database_config,
         "settings": settings_config,
+        "caching": caching_config,
     }

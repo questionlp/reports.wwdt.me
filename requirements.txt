@@ -1,4 +1,5 @@
 Flask==2.3.2
+Flask-Caching==2.0.2
 gunicorn==20.1.0
 Markdown==3.4.3
 mysql-connector-python==8.0.33

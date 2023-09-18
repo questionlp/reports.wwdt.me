@@ -8,6 +8,7 @@ from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
 from app.dicts import RANK_MAP
+from app.ext import cache
 
 from .reports.common import retrieve_panelists
 from .reports.aggregate_scores import (
@@ -55,6 +56,7 @@ blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
+@cache.cached(timeout=30)
 def index():
     """View: Panelists Index"""
     return render_template("panelists/_index.html")

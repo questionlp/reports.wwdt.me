@@ -8,6 +8,7 @@ from flask import Flask
 
 from app import config, utility
 from .dicts import RANK_MAP
+from .ext import cache
 from .errors import handlers
 from .guests.redirects import blueprint as guests_redirects_bp
 from .guests.routes import blueprint as guests_bp
@@ -43,8 +44,10 @@ def create_app():
 
     # Load configuration file
     _config = config.load_config()
+    app.config["caching"] = _config["caching"]
     app.config["database"] = _config["database"]
     app.config["app_settings"] = _config["settings"]
+    register_extensions(app, config=_config["caching"])
 
     # Set up Jinja globals
     app.jinja_env.globals["app_version"] = APP_VERSION
@@ -98,3 +101,7 @@ def create_app():
     app.register_blueprint(shows_bp, url_prefix="/shows")
 
     return app
+
+
+def register_extensions(app, config):
+    cache.init_app(app, config=config)
