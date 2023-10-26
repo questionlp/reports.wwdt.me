@@ -56,7 +56,7 @@ blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
-@cache.cached(timeout=30)
+@cache.cached()
 def index():
     """View: Panelists Index"""
     return render_template("panelists/_index.html")

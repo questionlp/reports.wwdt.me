@@ -7,6 +7,7 @@
 from flask import Blueprint, current_app, render_template, request
 import mysql.connector
 
+from app.ext import cache
 from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.show_counts import retrieve_show_counts_by_year
 from .reports.guest_host import retrieve_shows_guest_host
@@ -47,6 +48,7 @@ def index():
 
 
 @blueprint.route("/all-shows")
+@cache.cached()
 def all_shows():
     """View: All Shows Report"""
     _ascending = True
