@@ -1,5 +1,19 @@
 # Changes
 
+## 2.6.0
+
+### Component Changes
+
+- Upgrade Flask from 2.3.2 to 3.0.0
+- Upgrade gunicorn from 20.1.0 to 21.2.0
+- Upgrade pytz from 2023.3 to 2023.3.post1
+
+### Development Changes
+
+- Upgrade pycodestyle from 2.11.0 to 2.11.1
+- Upgrade pytest from 7.4.0 to 7.4.3
+- Upgrade black from 23.7.0 to 23.10.1
+
 ## 2.5.0
 
 ### Application Changes
