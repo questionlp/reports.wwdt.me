@@ -1,5 +1,11 @@
 # Changes
 
+## 2.6.1
+
+### Application Changes
+
+- Improve handling of conditions where shows have missing hosts, scorekeepers, panelists and guests for several show reports
+
 ## 2.6.0
 
 ### Component Changes

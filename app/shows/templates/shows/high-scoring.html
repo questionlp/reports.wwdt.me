@@ -20,6 +20,7 @@
 {% endblock synopsis %}
 
 {% block content %}
+{% if shows %}
 <!-- Start Report Section -->
 <table class="pure-table pure-table-bordered">
     <colgroup>
@@ -62,8 +63,17 @@
             {% else %}
             <td class="no-data">-</td>
             {% endif %}
+            {% if show.host %}
             <td>{{ show.host }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if show.scorekeeper %}
             <td>{{ show.scorekeeper }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if show.panelists %}
             <td>
                 <ul class="no-bullets">
                 {% for panelist in show.panelists %}
@@ -73,6 +83,9 @@
                 {% endfor %}
                 </ul>
             </td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
             {% if show.guests %}
             <td>
                 <ul class="no-bullets">
@@ -102,4 +115,7 @@
     </tfoot>
 </table>
 <!-- End Report Section -->
+{% else %}
+No data is currently available.
+{% endif %}
 {% endblock content %}
