@@ -1,5 +1,11 @@
 # Changes
 
+## 2.6.2
+
+### Application Changes
+
+- Correct wording for the Low Scoring Shows report description to reflect that the report only includes shows with a panelist total score of less than 30 points
+
 ## 2.6.1
 
 ### Application Changes
