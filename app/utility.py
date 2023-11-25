@@ -6,12 +6,10 @@
 """Utility functions used by the Wait Wait Reports"""
 
 from datetime import datetime
-from decimal import Decimal
 from functools import cmp_to_key
 import json
 from typing import Dict, List
 
-from dateutil import parser
 from flask import current_app
 import markdown
 from mysql.connector import connect, DatabaseError
@@ -60,7 +58,7 @@ def date_string_to_date(**kwargs):
     """Used to convert an ISO-style date string into a datetime object"""
     if "date_string" in kwargs and kwargs["date_string"]:
         try:
-            date_object = parser.parse(kwargs["date_string"])
+            date_object = datetime.datetime.strptime(kwargs["date_string"], "%Y-%m-%d")
             return date_object
 
         except ValueError:

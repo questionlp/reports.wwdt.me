@@ -1,12 +1,11 @@
 flake8==6.1.0
 pycodestyle==2.11.1
 pytest==7.4.3
-black==23.10.1
+black==23.11.0
 
 Flask==3.0.0
 gunicorn==21.2.0
 Markdown==3.4.3
-mysql-connector-python==8.0.33
-numpy==1.24.3
-python-dateutil==2.8.2
+mysql-connector-python==8.2.0
+numpy==1.26.0
 pytz==2023.3.post1
