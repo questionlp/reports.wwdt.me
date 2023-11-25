@@ -1,5 +1,24 @@
 # Changes
 
+## 2.7.0
+
+**Starting with version 2.7.0, support for all versions of Python prior to 3.10 have been deprecated.**
+
+### Application Changes
+
+- Replace `dateutil.parser.parse` with `datetime.datetime.strptime`
+
+### Component Changes
+
+- Upgrade MySQL Connector/Python from 8.0.33 to 8.2.0
+- Upgrade numpy from 1.24.3 to 1.26.0
+- Remove python-dateutil from dependencies
+
+### Development Changes
+
+- Upgrade black from 23.10.1 to 23.11.0
+- Remove `py38` and `py39` from `tool.black` in `pyproject.toml`
+
 ## 2.6.2
 
 ### Application Changes
