@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist First Appearance Wins"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist First Appearance Wins."""
 from decimal import Decimal
-from typing import Dict, Union
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_panelists_first_appearance_wins(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict[str, Union[str, Union[int, Decimal]]]:
-    """Returns a dictionary containing panelists that have won first
-    place or were tied for first place on their first appearance."""
+) -> dict[str, str | int | Decimal]:
+    """Returns a dictionary containing wins or tied for first for panelists' first appearance."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -77,26 +75,28 @@ def retrieve_panelists_first_appearance_wins(
         result = cursor.fetchone()
         cursor.close()
 
-        if result:
-            if result.showpnlrank == "1" or result.showpnlrank == "1t":
-                if use_decimal_scores:
-                    panelists[panelist_slug] = {
-                        "name": result.panelist,
-                        "show_date": result.showdate.isoformat(),
-                        "start": result.panelistlrndstart,
-                        "correct": result.panelistlrndcorrect,
-                        "score": result.panelistscore,
-                        "score_decimal": result.panelistscore_decimal,
-                        "rank": result.showpnlrank,
-                    }
-                else:
-                    panelists[panelist_slug] = {
-                        "name": result.panelist,
-                        "show_date": result.showdate.isoformat(),
-                        "start": result.panelistlrndstart,
-                        "correct": result.panelistlrndcorrect,
-                        "score": result.panelistscore,
-                        "rank": result.showpnlrank,
-                    }
+        if not result:
+            return None
+
+        if result.showpnlrank == "1" or result.showpnlrank == "1t":
+            if use_decimal_scores:
+                panelists[panelist_slug] = {
+                    "name": result.panelist,
+                    "show_date": result.showdate.isoformat(),
+                    "start": result.panelistlrndstart,
+                    "correct": result.panelistlrndcorrect,
+                    "score": result.panelistscore,
+                    "score_decimal": result.panelistscore_decimal,
+                    "rank": result.showpnlrank,
+                }
+            else:
+                panelists[panelist_slug] = {
+                    "name": result.panelist,
+                    "show_date": result.showdate.isoformat(),
+                    "start": result.panelistlrndstart,
+                    "correct": result.panelistlrndcorrect,
+                    "score": result.panelistscore,
+                    "rank": result.showpnlrank,
+                }
 
     return panelists

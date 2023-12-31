@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Core Application for Wait Wait Reports"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""Core Application for Wait Wait Reports."""
 from flask import Flask
 
 from app import config, utility
+
 from .dicts import RANK_MAP
 from .errors import handlers
 from .guests.redirects import blueprint as guests_redirects_bp
@@ -15,8 +16,8 @@ from .hosts.redirects import blueprint as hosts_redirects_bp
 from .hosts.routes import blueprint as hosts_bp
 from .locations.redirects import blueprint as locations_redirects_bp
 from .locations.routes import blueprint as locations_bp
-from .main.routes import blueprint as main_bp
 from .main.redirects import blueprint as redirects_bp
+from .main.routes import blueprint as main_bp
 from .panelists.redirects import blueprint as panelists_redirects_bp
 from .panelists.routes import blueprint as panelists_bp
 from .scorekeepers.redirects import blueprint as scorekeepers_redirects_bp
@@ -24,7 +25,6 @@ from .scorekeepers.routes import blueprint as scorekeepers_bp
 from .shows.redirects import blueprint as shows_redirects_bp
 from .shows.routes import blueprint as shows_bp
 from .sitemaps.routes import blueprint as sitemaps_bp
-
 from .version import APP_VERSION
 
 

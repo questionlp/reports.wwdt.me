@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Common Panelist Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Common Panelist Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
 def retrieve_panelists(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieves a list of all available panelists from the database"""
+) -> list[dict[str, Any]]:
+    """Retrieves a list of all available panelists from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

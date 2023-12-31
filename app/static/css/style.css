@@ -118,7 +118,7 @@
         width: 9rem;
     }
 
-    col.city, col.score.long {
+    col.city, col.count.long, col.score.long {
         width: 10rem;
     }
 

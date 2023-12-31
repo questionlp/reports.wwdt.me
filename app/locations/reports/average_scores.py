@@ -1,21 +1,20 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Location Score Breakdown Report Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Location Score Breakdown Report Functions."""
 from decimal import Decimal
 from typing import Any, Dict, List
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_average_scores_by_location(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
 ) -> List[Dict[str, Any]]:
-    """Retrieve average scores sorted by location using a pre-written
-    database query"""
+    """Retrieve average scores sorted by location."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

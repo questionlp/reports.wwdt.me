@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Scorekeeper Introductions Report Functions"""
-from typing import List, Dict
-
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Scorekeeper Introductions Report Functions."""
 import mysql.connector
 
 
 def retrieve_scorekeepers_with_introductions(
     database_connection: mysql.connector.connect,
-) -> List[Dict]:
-    """Retrieve a list of scorekeepers that have show introduction entries
-    in the database"""
-
+) -> list[dict]:
+    """Retrieve a list of scorekeepers that have show introduction entries in the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -47,9 +45,8 @@ def retrieve_scorekeepers_with_introductions(
 
 def retrieve_all_scorekeeper_introductions(
     database_connection: mysql.connector.connect,
-) -> Dict:
-    """Retrieve all scorekeeper introductions from the database"""
-
+) -> dict:
+    """Retrieve all scorekeeper introductions from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Perfect Scores Report Functions"""
-from typing import Dict, Union
-
-from flask import current_app
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Perfect Scores Report Functions."""
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_perfect_score_counts(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict[str, Union[str, int]]:
-    """Returns a dictionary containing counts of how many times
-    panelists have scored a "perfect" score (20 points or higher).
-    Excludes Best Of and repeat shows."""
+) -> dict[str, str | int]:
+    """Returns a dictionary with counts of how many times panelists have scored a "perfect" score.
+
+    A "perfect" score is one that greater than or equals to 20 points. Excludes
+    Best Of and repeat shows.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
