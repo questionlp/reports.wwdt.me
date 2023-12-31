@@ -1,20 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Single Appearance Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Single Appearance Report Functions."""
+from typing import Any
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_single_appearances(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of panelists that have only made a single
-    appearance on the show"""
+) -> list[dict[str, Any]]:
+    """Retrieve a list of panelists that have only made a single appearance on the show."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -73,7 +72,7 @@ def retrieve_single_appearances(
                 "slug": row.panelistslug,
                 "appearance": row.showdate.isoformat(),
                 "score": row.score,
-                "score_decimal" "rank": row.showpnlrank,
+                "rank": row.showpnlrank,
             }
         )
 

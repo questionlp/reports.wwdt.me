@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist vs Panelist Report Functions"""
-from typing import Any, Dict
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist vs Panelist Report Functions."""
+from typing import Any
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_panelists(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict[str, Any]:
-    """Retrieve panelists from the Stats Page database"""
+) -> dict[str, Any]:
+    """Retrieve panelists from the Stats Page database."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -58,11 +58,11 @@ def retrieve_panelists(
 
 
 def retrieve_panelist_appearances(
-    panelists: Dict[str, Any],
+    panelists: dict[str, Any],
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict[str, str]:
-    """Retrieve panelist appearances from the Stats Page database"""
+) -> dict[str, str]:
+    """Retrieve panelist appearances from the Stats Page database."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -111,9 +111,8 @@ def retrieve_panelist_appearances(
 
 def retrieve_show_scores(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict[str, Any]:
-    """Retrieve scores for each show and panelist from the Stats Page
-    Database"""
+) -> dict[str, Any]:
+    """Retrieve scores for each show and panelist from the Stats Page Database."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -164,11 +163,11 @@ def retrieve_show_scores(
 
 
 def generate_panelist_vs_panelist_results(
-    panelists: Dict[str, Any],
-    panelist_appearances: Dict[str, Any],
-    show_scores: Dict[str, Any],
-) -> Dict[str, Any]:
-    """Generate panelist vs panelist results"""
+    panelists: dict[str, Any],
+    panelist_appearances: dict[str, Any],
+    show_scores: dict[str, Any],
+) -> dict[str, Any]:
+    """Generate panelist vs panelist results."""
     pvp_results = {}
     for _, panelist_a in panelists.items():
         panelist_a = panelist_a["slug"]

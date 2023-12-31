@@ -1,23 +1,21 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Show Scoring Reports Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Show Scoring Reports Functions."""
 from decimal import Decimal
-from typing import List, Dict, Union
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_show_details(
     show_id: int,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict:
-    """Retrieves host, scorekeeper, panelist, guest and location
-    information for the requested show ID"""
+) -> dict:
+    """Retrieves host, scorekeeper, panelist, guest and location information for the requested show ID."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -144,9 +142,8 @@ def retrieve_show_details(
 
 def retrieve_shows_all_high_scoring(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieves details from shows with a panelist total score greater
-    than or equal to 50"""
+) -> list[dict]:
+    """Retrieves details from shows with a panelist total score greater than or equal to 50."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -205,10 +202,12 @@ def retrieve_shows_all_high_scoring(
 
 def retrieve_shows_all_low_scoring(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieves details from shows with a panelist total score less
-    than 30. Excludes the 20th anniversary show due to unique Lightning
-    Fill-in-the-Blank segment."""
+) -> list[dict]:
+    """Retrieves details from shows with a panelist total score of less than 30.
+
+    Excludes the 20th anniversary show due to unique Lightning
+    Fill-in-the-Blank segment.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -269,11 +268,12 @@ def retrieve_shows_all_low_scoring(
 
 def retrieve_shows_panelist_score_sum_match(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieves shows in which the score of panelist in first place
-    matches the sum of the scores for the other two panelists. Excludes
-    the 20th anniversary show due to unique Lightning Fill-in-the-Blank
-    segment."""
+) -> list[dict]:
+    """Retrieves shows where a panelist's first place score matches the sum of the scores of the other two panelists.
+
+    Excludes the 20th anniversary show due to unique Lightning
+    Fill-in-the-Blank segment.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -365,7 +365,7 @@ def retrieve_shows_panelist_score_sum_match(
 
 def retrieve_shows_panelist_perfect_scores(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict[str, Union[str, int]]]:
+) -> list[dict[str, str | int]]:
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

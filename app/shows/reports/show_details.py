@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Show Details Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Show Details Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
 def retrieve_show_guests(
     show_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[str, str]]:
-    """Retrieve the Not My Job guest for the requested show ID"""
+) -> list[dict[str, str]]:
+    """Retrieve the Not My Job guest for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -45,8 +45,8 @@ def retrieve_show_guests(
 
 def retrieve_show_panelists(
     show_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[str, str]]:
-    """Retrieve panelists for the requested show ID"""
+) -> list[dict[str, str]]:
+    """Retrieve panelists for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -80,9 +80,12 @@ def retrieve_show_panelists(
 
 def retrieve_all_shows(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of all shows and basic information including:
-    location, host, scorekeeper, panelists and guest"""
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all shows and basic information.
+
+    Basic information for each show includes location, host,
+    scorekeeper, panelists and guest.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -140,9 +143,12 @@ def retrieve_all_shows(
 
 def retrieve_all_original_shows(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of all original shows and basic information
-    including: location, host, scorekeeper, panelists and guest"""
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all original shows and basic information.
+
+    Basic information for each show includes location, host,
+    scorekeeper, panelists and guest.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -175,10 +181,7 @@ def retrieve_all_original_shows(
             show_id=row.showid, database_connection=database_connection
         )
 
-        if guest:
-            show_guest = guest[0]
-        else:
-            show_guest = None
+        show_guest = guest[0] if guest else None
 
         shows.append(
             {

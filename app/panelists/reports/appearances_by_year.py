@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Appearances by Year Report Functions"""
-from typing import Any, Dict, List, Union
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Appearances by Year Report Functions."""
+from typing import Any, Union
 
 import mysql.connector
 
 
 def retrieve_panelist_appearance_counts(
     panelist_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[Union[str, int], int]]:
-    """Retrieve yearly appearance count for the requested panelist ID"""
+) -> list[dict[str | int, int]]:
+    """Retrieve yearly appearance count for the requested panelist ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -46,9 +46,8 @@ def retrieve_panelist_appearance_counts(
 
 def retrieve_all_appearance_counts(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve all appearance counts for all panelists from the
-    database"""
+) -> list[dict[str, Any]]:
+    """Retrieve all appearance counts for all panelists from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -84,8 +83,8 @@ def retrieve_all_appearance_counts(
     return _panelists
 
 
-def retrieve_all_years(database_connection: mysql.connector.connect) -> List[int]:
-    """Retrieve a list of all available show years"""
+def retrieve_all_years(database_connection: mysql.connector.connect) -> list[int]:
+    """Retrieve a list of all available show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

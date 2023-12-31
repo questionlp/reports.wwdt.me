@@ -1,22 +1,24 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate
-Report Functions"""
-from typing import Any, Dict
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
 def retrieve_not_my_job_stats(
     database_connection: mysql.connector.connect,
-) -> Dict[str, Any]:
-    """Returns a dictionary containing the total number of Not My Job
-    guest entries that have a score entered, total number of times a
-    Not My Job guest has won (including exceptions), and a total number
-    of times a Not My Job guest has lost."""
+) -> dict[str, Any]:
+    """Returns a dictionary containing Not My Job statistics.
+
+    Returned statistics includes the total number of Not My Job guest
+    entries that have a score entered, total number of times a Not My
+    Job guest has won (including exceptions), and a total number of
+    times a Not My Job guest has lost.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -149,12 +151,14 @@ def retrieve_not_my_job_stats(
 
 def retrieve_bluff_stats(
     database_connection: mysql.connector.connect,
-) -> Dict[str, Any]:
-    """Retrieves a dictionary containing statistics for the Bluff the
-    Listener segment with a total count of shows with a unique Bluff
-    the Listener segment, a count of times where the contestant chooses
-    the correct story, and a count of times where the contestant
-    does not choose the correct story."""
+) -> dict[str, Any]:
+    """Retrieves a dictionary containing Bluff the Listener statistics.
+
+    Returned statistics includes a total count of shows with a unique
+    Bluff the Listener segment, a count of times where the contestant
+    chooses the correct story, and a count of times where the contestant
+    does not choose the correct story.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 

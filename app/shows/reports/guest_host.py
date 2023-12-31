@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Show Guest Hosts Report Functions"""
-from typing import List, Dict
-
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Show Guest Hosts Report Functions."""
 import mysql.connector
 
 from app.shows.reports import show_details
@@ -13,8 +11,8 @@ from app.shows.reports import show_details
 
 def retrieve_shows_guest_host(
     database_connection: mysql.connector.connect,
-) -> List[Dict]:
-    """Retrieve a list of shows with guest hosts"""
+) -> list[dict]:
+    """Retrieve a list of shows with guest hosts."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

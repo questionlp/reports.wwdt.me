@@ -1,22 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM All Women Panel Report Functions"""
-from typing import List, Dict
-
-from flask import current_app
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM All Women Panel Report Functions."""
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_show_details(
     show_id: int,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict:
-    """Retrieves host, scorekeeper, panelist, guest and location
-    information for the requested show ID"""
+) -> dict:
+    """Retrieves host, scorekeeper, panelist, guest and location information for the requested show ID."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -125,9 +122,8 @@ def retrieve_show_details(
 
 def retrieve_shows_all_women_panel(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieves details from all shows that have had an all women
-    panel"""
+) -> list[dict]:
+    """Retrieves details from all shows that have had an all women panel."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

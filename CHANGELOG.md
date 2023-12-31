@@ -1,5 +1,22 @@
 # Changes
 
+## 2.8.0
+
+### Application Changes
+
+- Addition of Panelist Bluff Statistics by Year report (in progress)
+- Fix a bug in the Panelist Single Appearance report where the panelists' ranking was not being rendered
+
+### Component Changes
+
+- Upgrade Pure CSS from 2.3.2 to 3.0.0
+- Upgrade Markdown from 3.4.3 to 3.5.1
+
+### Development Changes
+
+- Migrate to using Ruff for linting and formatting
+- Migrate use of `typing.Dict`, `typing.List` and `typing.Union` to `dict`, `list` and `|` respectively
+
 ## 2.7.0
 
 **Starting with version 2.7.0, support for all versions of Python prior to 3.10 have been deprecated.**

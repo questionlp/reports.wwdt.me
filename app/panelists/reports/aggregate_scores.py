@@ -1,22 +1,21 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Aggregate Scores Report Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Aggregate Scores Report Functions."""
 from decimal import Decimal
-from typing import Any, Dict, List, Union
-from flask import current_app
+from typing import Any
 
 import mysql.connector
 import numpy
+from flask import current_app
 
 
 def retrieve_all_scores(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Union[int, Decimal]]:
-    """Retrieve a list of all panelist scores from non-Best Of and
-    non-Repeat shows"""
+) -> list[int | Decimal]:
+    """Retrieve a list of all panelist scores from non-Best Of and non-Repeat shows."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -55,9 +54,8 @@ def retrieve_all_scores(
 
 def retrieve_score_spread(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict[str, Union[int, Decimal]]]:
-    """Retrieve a list of grouped panelist scores from non-Best Of and
-    non-Repeat shows"""
+) -> list[dict[str, int | Decimal]]:
+    """Retrieve a list of grouped panelist scores from non-Best Of and non-Repeat shows."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -109,9 +107,8 @@ def retrieve_score_spread(
     return scores
 
 
-def calculate_stats(scores: List[int], decimal_scores: bool = False) -> Dict[str, Any]:
-    """Calculate stats for all of the panelist scores"""
-
+def calculate_stats(scores: list[int], decimal_scores: bool = False) -> dict[str, Any]:
+    """Calculate stats for all of the panelist scores."""
     if decimal_scores:
         return {
             "count": len(scores),

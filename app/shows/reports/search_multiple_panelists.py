@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Search Shows by Multiple Selected Panelists Report Functions"""
-from typing import Any, Dict, List, Optional
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Search Shows by Multiple Selected Panelists Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 from . import show_details as details
 
 
-def retrieve_panelist_slugs(database_connection: mysql.connector.connect) -> List[str]:
-    """Returns a list of valid panelist slugs"""
+def retrieve_panelist_slugs(database_connection: mysql.connector.connect) -> list[str]:
+    """Returns a list of valid panelist slugs."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -32,8 +32,8 @@ def retrieve_panelist_slugs(database_connection: mysql.connector.connect) -> Lis
     return [row.panelistslug for row in result]
 
 
-def retrieve_panelists(database_connection: mysql.connector.connect) -> Dict[str, str]:
-    """Returns a dictionary containing valid panelists"""
+def retrieve_panelists(database_connection: mysql.connector.connect) -> dict[str, str]:
+    """Returns a dictionary containing valid panelists."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -55,8 +55,8 @@ def retrieve_panelists(database_connection: mysql.connector.connect) -> Dict[str
 
 def retrieve_details(
     show_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[str, Any]]:
-    """Retrieve show details for the requested show ID"""
+) -> list[dict[str, Any]]:
+    """Retrieve show details for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -104,11 +104,10 @@ def retrieve_details(
 def retrieve_matching_one(
     database_connection: mysql.connector.connect,
     panelist_slug_1: str,
-    include_best_of: Optional[bool] = False,
-    include_repeats: Optional[bool] = False,
-) -> List[Dict[str, Any]]:
-    """Retrieve show details for shows with a panel containing one of
-    the requested panelists"""
+    include_best_of: bool = False,
+    include_repeats: bool = False,
+) -> list[dict[str, Any]]:
+    """Retrieve show details for shows with a panel containing one of the requested panelists."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -158,11 +157,10 @@ def retrieve_matching_two(
     database_connection: mysql.connector.connect,
     panelist_slug_1: str,
     panelist_slug_2: str,
-    include_best_of: Optional[bool] = False,
-    include_repeats: Optional[bool] = False,
-) -> List[Dict[str, Any]]:
-    """Retrieve show details for shows with a panel containing two of
-    the requested panelists"""
+    include_best_of: bool = False,
+    include_repeats: bool = False,
+) -> list[dict[str, Any]]:
+    """Retrieve show details for shows with a panel containing two of the requested panelists."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -219,11 +217,10 @@ def retrieve_matching_three(
     panelist_slug_1: str,
     panelist_slug_2: str,
     panelist_slug_3: str,
-    include_best_of: Optional[bool] = False,
-    include_repeats: Optional[bool] = False,
-) -> List[Dict[str, Any]]:
-    """Retrieve show details for shows with a panel containing three of
-    the requested panelists"""
+    include_best_of: bool = False,
+    include_repeats: bool = False,
+) -> list[dict[str, Any]]:
+    """Retrieve show details for shows with a panel containing three of the requested panelists."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

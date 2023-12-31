@@ -1,24 +1,25 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Utility functions used by the Wait Wait Reports"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""Utility functions used by the Wait Wait Reports."""
 
+import json
 from datetime import datetime
 from functools import cmp_to_key
-import json
-from typing import Dict, List
-
-from flask import current_app
-import markdown
-from mysql.connector import connect, DatabaseError
 from operator import itemgetter
+
+import markdown
 import pytz
+from flask import current_app
+from mysql.connector import DatabaseError, connect
+
+_utc_timezone = pytz.timezone("UTC")
 
 
 def cmp(object_a, object_b):
-    """Replacement for built-in function cmp that was removed in Python 3
+    """Replacement for built-in function cmp that was removed in Python 3.
 
     Compare the two objects a and b and return an integer according to
     the outcome. The return value is negative if a < b, zero if a == b
@@ -26,12 +27,11 @@ def cmp(object_a, object_b):
 
     https://portingguide.readthedocs.io/en/latest/comparisons.html#the-cmp-function
     """
-
     return (object_a > object_b) - (object_a < object_b)
 
 
-def multi_key_sort(items: List[Dict], columns: List) -> List[Dict]:
-    """Sorts a list of dictionaries based on a list of one or more keys"""
+def multi_key_sort(items: list[dict], columns: list) -> list[dict]:
+    """Sorts a list of dictionaries based on a list of one or more keys."""
     comparers = [
         (
             (itemgetter(col[1:].strip()), -1)
@@ -48,45 +48,41 @@ def multi_key_sort(items: List[Dict], columns: List) -> List[Dict]:
     return sorted(items, key=cmp_to_key(comparer))
 
 
-def current_year(time_zone: pytz.timezone = pytz.timezone("UTC")):
-    """Return the current year"""
+def current_year(time_zone: pytz.timezone = _utc_timezone):
+    """Return the current year."""
     now = datetime.now(time_zone)
     return now.strftime("%Y")
 
 
 def date_string_to_date(**kwargs):
-    """Used to convert an ISO-style date string into a datetime object"""
+    """Used to convert an ISO-style date string into a datetime object."""
     if "date_string" in kwargs and kwargs["date_string"]:
         try:
-            date_object = datetime.datetime.strptime(kwargs["date_string"], "%Y-%m-%d")
-            return date_object
-
+            return datetime.datetime.strptime(kwargs["date_string"], "%Y-%m-%d")
         except ValueError:
             return None
 
     return None
 
 
-def generate_date_time_stamp(time_zone: pytz.timezone = pytz.timezone("UTC")):
-    """Generate a current date/timestamp string"""
+def generate_date_time_stamp(time_zone: pytz.timezone = _utc_timezone):
+    """Generate a current date/timestamp string."""
     now = datetime.now(time_zone)
     return now.strftime("%Y-%m-%d %H:%M:%S %Z")
 
 
 def md_to_html(text: str):
-    """Converts Markdown text into HTML"""
+    """Converts Markdown text into HTML."""
     return markdown.markdown(text, output_format="html")
 
 
 def pretty_jsonify(data):
-    """Returns a prettier JSON output for an object than Flask's default
-    tojson filter"""
+    """Returns a prettier JSON output for an object than Flask's default tojson filter."""
     return json.dumps(data, indent=2)
 
 
 def redirect_url(url: str, status_code: int = 302):
-    """Returns a redirect response for a given URL"""
-
+    """Returns a redirect response for a given URL."""
     # Use a custom response class to force set response headers
     # and handle the redirect to prevent browsers from caching redirect
     response = current_app.response_class(
@@ -104,8 +100,8 @@ def time_zone_parser(time_zone: str) -> pytz.timezone:
     """Parses a time zone name into a pytz.timezone object.
 
     Returns pytz.timezone object and string if time_zone is valid.
-    Otherwise, returns UTC if time zone is not a valid tz value."""
-
+    Otherwise, returns UTC if time zone is not a valid tz value.
+    """
     try:
         time_zone_object = pytz.timezone(time_zone)
         time_zone_string = time_zone_object.zone
@@ -116,10 +112,8 @@ def time_zone_parser(time_zone: str) -> pytz.timezone:
     return time_zone_object, time_zone_string
 
 
-def panelist_decimal_score_exists(database_settings: Dict) -> bool:
-    """Checks to see if the panelistscore_decimal column exists in the
-    ww_showpnlmap table in the Wait Wait Stats Database and returns
-    a bool reflecting the results"""
+def panelist_decimal_score_exists(database_settings: dict) -> bool:
+    """Returns if the panelistscore_decimal column exists in the Wait Wait Stats Database."""
     try:
         database_connection = connect(**database_settings)
         cursor = database_connection.cursor()
@@ -127,9 +121,7 @@ def panelist_decimal_score_exists(database_settings: Dict) -> bool:
         cursor.execute(query)
         result = cursor.fetchone()
         cursor.close()
-        if result:
-            return True
-        else:
-            return False
+
+        return bool(result)
     except DatabaseError:
         return False

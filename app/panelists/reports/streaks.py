@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Win/Loss Streaks Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Win/Loss Streaks Report Functions."""
+from typing import Any
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_panelists(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of panelists with their panelist ID and name"""
+) -> list[dict[str, Any]]:
+    """Retrieve a list of panelists with their panelist ID and name."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -48,9 +48,8 @@ def retrieve_panelist_ranks(
     panelist_id: int,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of show dates and the panelist rank for the
-    requested panelist ID"""
+) -> list[dict[str, Any]]:
+    """Retrieve a list of show dates and the panelist rank for the requested panelist ID."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -102,10 +101,9 @@ def retrieve_panelist_ranks(
 
 
 def calculate_panelist_losing_streaks(
-    panelists: List[Dict[str, Any]], database_connection: mysql.connector.connect
-) -> List[Dict[str, Any]]:
-    """Retrieve panelist stats and calculate their losing streaks"""
-
+    panelists: list[dict[str, Any]], database_connection: mysql.connector.connect
+) -> list[dict[str, Any]]:
+    """Retrieve panelist stats and calculate their losing streaks."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -179,10 +177,9 @@ def calculate_panelist_losing_streaks(
 
 
 def calculate_panelist_win_streaks(
-    panelists: List[Dict[str, Any]], database_connection: mysql.connector.connect
-) -> List[Dict[str, Any]]:
-    """Retrieve panelist stats and calculate their win streaks"""
-
+    panelists: list[dict[str, Any]], database_connection: mysql.connector.connect
+) -> list[dict[str, Any]]:
+    """Retrieve panelist stats and calculate their win streaks."""
     win_streaks = []
 
     for panelist in panelists:

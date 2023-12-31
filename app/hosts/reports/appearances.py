@@ -1,19 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Hosts Appearances Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Hosts Appearances Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
 def retrieve_hosts(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, str]]:
-    """Retrieves a dictionary for all available hosts from the database"""
-
+) -> list[dict[str, str]]:
+    """Retrieves a dictionary for all available hosts from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -45,9 +44,8 @@ def retrieve_hosts(
 
 def retrieve_appearances_by_host(
     host_slug: str, database_connection: mysql.connector.connect
-) -> Dict[str, int]:
-    """Retrieve appearance data for the requested host"""
-
+) -> dict[str, int]:
+    """Retrieve appearance data for the requested host."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -88,10 +86,8 @@ def retrieve_appearances_by_host(
 
 def retrieve_first_most_recent_appearances(
     host_slug: str, database_connection: mysql.connector.connect
-) -> Dict[str, str]:
-    """Retrieve first and most recent appearances for both regular
-    and all shows for the requested host"""
-
+) -> dict[str, str]:
+    """Retrieve first and most recent appearances for both regular and all shows for a host."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -112,15 +108,8 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    if result.min:
-        first = result.min.isoformat()
-    else:
-        first = None
-
-    if result.max:
-        most_recent = result.max.isoformat()
-    else:
-        most_recent = None
+    first = result.min.isoformat() if result.min else None
+    most_recent = result.max.isoformat() if result.max else None
 
     cursor = database_connection.cursor(named_tuple=True)
     query = (
@@ -142,15 +131,8 @@ def retrieve_first_most_recent_appearances(
             "most_recent_all": None,
         }
 
-    if result_all.min:
-        first_all = result_all.min.isoformat()
-    else:
-        first_all = None
-
-    if result_all.max:
-        most_recent_all = result_all.max.isoformat()
-    else:
-        most_recent_all = None
+    first_all = result_all.min.isoformat() if result_all.min else None
+    most_recent_all = result_all.max.isoformat() if result_all.max else None
 
     return {
         "first": first,
@@ -162,10 +144,11 @@ def retrieve_first_most_recent_appearances(
 
 def retrieve_appearance_summaries(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve host appearance summary, including appearance counts,
-    and first and most recent appearances"""
+) -> list[dict[str, Any]]:
+    """Retrieve host appearance summary.
 
+    Returned summary includes appearance counts, appearances.
+    """
     _hosts = retrieve_hosts(database_connection=database_connection)
 
     if not _hosts:

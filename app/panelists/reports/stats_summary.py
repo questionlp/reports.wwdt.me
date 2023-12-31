@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Statistics Summary Report Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Statistics Summary Report Functions."""
 from decimal import Decimal
-from typing import Any, Dict, List
+from typing import Any
 
-from flask import current_app
 import mysql.connector
 import numpy
+from flask import current_app
 
 from . import common
 
@@ -18,9 +18,8 @@ def retrieve_appearances_by_panelist(
     panelist_slug: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict[str, int]:
-    """Retrieve appearance data for the requested panelist by the
-    panelist's slug string"""
+) -> dict[str, int]:
+    """Retrieve appearance data for the requested panelist by the panelist's slug string."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -96,9 +95,8 @@ def retrieve_scores_by_panelist(
     panelist_slug: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> List[int]:
-    """Retrieve all scores for the requested panelist by the panelist's
-    slug string"""
+) -> list[int]:
+    """Retrieve all scores for the requested panelist by the panelist's slug string."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -139,9 +137,8 @@ def retrieve_scores_by_panelist(
 
 def retrieve_all_panelists_stats(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict[str, Any]:
-    """Retrieve appearance and score statistics for all available
-    panelists and calculates common statistics for each panelist"""
+) -> dict[str, Any]:
+    """Retrieve common statistics for all available panelists."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

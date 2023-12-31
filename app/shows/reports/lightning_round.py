@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Lightning Round Report Functions"""
-from typing import List, Dict
-
-from flask import current_app
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Lightning Round Report Functions."""
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_all_lightning_round_start(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> Dict:
-    """Retrieve all Lightning Fill-in-the-Blank round starting scores
-    and return the values as an dictionary"""
+) -> dict:
+    """Retrieve a dictionary of all Lightning Fill-in-the-Blank round starting scores."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -75,10 +72,13 @@ def retrieve_scoring_info_by_show_id(
     show_id: int,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict:
-    """Return Lightning round starting points, number of correct
+) -> dict:
+    """Return Lightning Fill-in-the-Blank round scoring information.
+
+    Returned information includes starting points, number of correct
     answers and final score for the requested show ID. Used for
-    getting scoring details where the round starts in a three-way tie."""
+    getting scoring details where the round starts in a three-way tie.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -144,8 +144,8 @@ def retrieve_scoring_info_by_show_id(
 
 def retrieve_panelists_by_show_id(
     show_id: int, database_connection: mysql.connector.connect
-) -> List[Dict]:
-    """Returns a list of panelists for the requested show ID"""
+) -> list[dict]:
+    """Returns a list of panelists for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -180,9 +180,8 @@ def retrieve_panelists_by_show_id(
 
 def shows_with_lightning_round_start_zero(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Return shows in which panelists start the Lightning
-    Fill-in-the-Blank round with zero points"""
+) -> list[dict]:
+    """Return shows in which panelists start the Lightning Fill-in-the-Blank round with zero points."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -272,9 +271,8 @@ def shows_with_lightning_round_start_zero(
 
 def shows_lightning_round_start_zero(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Return list of shows in which a panelist starts the Lightning
-    Fill-in-the-Blank round with zero points"""
+) -> list[dict]:
+    """Return list of shows in which a panelist starts the Lightning Fill-in-the-Blank round with zero points."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -363,9 +361,8 @@ def shows_lightning_round_start_zero(
 
 def shows_lightning_round_zero_correct(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Return list of shows in which a panelist answers zero Lightning
-    Fill-in-the-Blank round questions correct"""
+) -> list[dict]:
+    """Return list of shows in which a panelist answers zero Lightning Fill-in-the-Blank round questions correct."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -455,10 +452,8 @@ def shows_lightning_round_zero_correct(
 
 def shows_starting_with_three_way_tie(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieve all shows in which all three panelists started the
-    Lightning round in a three-way tie"""
-
+) -> list[dict]:
+    """Retrieve all shows in which all three panelists started the Lightning round in a three-way tie."""
     show_scores = retrieve_all_lightning_round_start(
         database_connection, use_decimal_scores=use_decimal_scores
     )
@@ -485,9 +480,8 @@ def shows_starting_with_three_way_tie(
 
 def shows_ending_with_three_way_tie(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieve all shows in which all three panelists ended the
-    Lightning round in a three-way tie"""
+) -> list[dict]:
+    """Retrieve all shows in which all three panelists ended the Lightning round in a three-way tie."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -565,9 +559,8 @@ def shows_ending_with_three_way_tie(
 
 def shows_starting_ending_three_way_tie(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieve all shows in which all three panelists started and
-    ended the Lightning round in a three-way tie"""
+) -> list[dict]:
+    """Retrieve all shows in which all three panelists started and ended the Lightning round in a three-way tie."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

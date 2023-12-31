@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Testing Guests Module and Blueprint Views"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""Testing Guests Module and Blueprint Views."""
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
 
 def test_index(client: FlaskClient) -> None:
-    """Testing guests.routes.index"""
+    """Testing guests.routes.index."""
     response: TestResponse = client.get("/guests/")
     assert response.status_code == 200
     assert b"Guests Reports" in response.data
@@ -17,7 +17,7 @@ def test_index(client: FlaskClient) -> None:
 
 
 def test_best_of_only(client: FlaskClient) -> None:
-    """Testing guests.routes.best_of_only"""
+    """Testing guests.routes.best_of_only."""
     response: TestResponse = client.get("/guests/best-of-only")
     assert response.status_code == 200
     assert b"Best Of Only Not My Job Guests" in response.data
@@ -25,7 +25,7 @@ def test_best_of_only(client: FlaskClient) -> None:
 
 
 def test_most_appearances(client: FlaskClient) -> None:
-    """Testing guests.routes.most_appearances"""
+    """Testing guests.routes.most_appearances."""
     response: TestResponse = client.get("/guests/most-appearances")
     assert response.status_code == 200
     assert b"Most Appearances" in response.data
@@ -33,7 +33,7 @@ def test_most_appearances(client: FlaskClient) -> None:
 
 
 def test_scoring_exceptions(client: FlaskClient) -> None:
-    """Testing guests.routes.scoring_exceptions"""
+    """Testing guests.routes.scoring_exceptions."""
     response: TestResponse = client.get("/guests/scoring-exceptions")
     assert response.status_code == 200
     assert b"Not My Job Scoring Exceptions" in response.data
@@ -41,7 +41,7 @@ def test_scoring_exceptions(client: FlaskClient) -> None:
 
 
 def test_three_pointers(client: FlaskClient) -> None:
-    """Testing guests.routes.three_pointers"""
+    """Testing guests.routes.three_pointers."""
     response: TestResponse = client.get("/guests/three-pointers")
     assert response.status_code == 200
     assert b"Not My Job Three Pointers" in response.data
