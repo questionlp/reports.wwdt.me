@@ -4,7 +4,7 @@
 
 ### Application Changes
 
-- Addition of Panelist Bluff Statistics by Year report (in progress)
+- Addition of Panelist Bluff the Listener Statistics by Year report
 - Fix a bug in the Panelist Single Appearance report where the panelists' ranking was not being rendered
 
 ### Component Changes
