@@ -23,7 +23,10 @@ from .reports.average_scores_by_year import (
     retrieve_all_panelists_yearly_average,
     retrieve_panelist_yearly_average,
 )
-from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
+from .reports.bluff_stats import (
+    retrieve_all_panelist_bluff_stats,
+    retrieve_panelist_bluffs_by_year,
+)
 from .reports.common import retrieve_panelists
 from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
@@ -172,6 +175,52 @@ def bluff_stats():
     )
     _database_connection.close()
     return render_template("panelists/bluff-stats.html", panelists=_panelists)
+
+
+@blueprint.route("/bluff-stats-by-year", methods=["GET", "POST"])
+def bluff_stats_by_year():
+    """View: Panelists Bluff the Listener Statistics by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist = "panelist" in request.form and request.form["panelist"]
+
+        if panelist not in _panelists_dict:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-stats-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_panelist_bluffs_by_year(
+            panelist_slug=panelist, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-stats-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/bluff-stats-by-year.html",
+            panelists=_panelists_dict,
+            bluff_stats=_bluff_stats,
+        )
+    else:
+        # Fallback for GET request
+        _database_connection.close()
+        return render_template(
+            "panelists/bluff-stats-by-year.html",
+            panelists=_panelists_dict,
+            bluff_stats=None,
+        )
 
 
 @blueprint.route("/debut-by-year")

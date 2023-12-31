@@ -71,6 +71,26 @@ def test_bluff_stats(client: FlaskClient) -> None:
     assert b"Unique Best Of" in response.data
 
 
+def test_bluff_stats_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.bluff_stats_by_year."""
+    response: TestResponse = client.get("/panelists/bluff-stats-by-year")
+    assert response.status_code == 200
+    assert b"Bluff the Listener Statistics by Year" in response.data
+    assert b"Panelist:" in response.data
+
+
+@pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
+def test_bluff_stats_by_year_post(client: FlaskClient, panelist_slug: str) -> None:
+    """Testing panelists.routes.bluff_stats_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/bluff-stats-by-year", data={"panelist": panelist_slug}
+    )
+    assert response.status_code == 200
+    assert b"Bluff the Listener Statistics by Year" in response.data
+    assert b"Panelist:" in response.data
+    assert b"Unique Best Of" in response.data
+
+
 def test_debut_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.debut_by_year."""
     response: TestResponse = client.get("/panelists/debut-by-year")
