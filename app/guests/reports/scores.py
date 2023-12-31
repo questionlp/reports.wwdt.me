@@ -1,20 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Guest Scores Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Guest Scores Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
 def retrieve_scoring_exceptions(
     guest_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of instances where a requested Not My Job guest
-    has had a scoring exception"""
-
+) -> list[dict[str, Any]]:
+    """Retrieve a list of instances where a Not My Job guest has had a scoring exception."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -55,10 +53,8 @@ def retrieve_scoring_exceptions(
 
 def retrieve_guest_scores(
     guest_id: int, database_connection: mysql.connector.connect
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of instances where a requested Not My Job guest
-    has received three points"""
-
+) -> list[dict[str, Any]]:
+    """Retrieve a list of instances where a requested Not My Job guest has received three points."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -99,9 +95,8 @@ def retrieve_guest_scores(
 
 def retrieve_all_scoring_exceptions(
     database_connection: mysql.connector.connect,
-) -> List[Dict[str, Any]]:
-    """Retrieve a list of all Not My Job scoring exceptions"""
-
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all Not My Job scoring exceptions."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -141,10 +136,12 @@ def retrieve_all_scoring_exceptions(
 
 def retrieve_all_three_pointers(
     database_connection: mysql.connector.connect,
-) -> List[Dict]:
-    """Retrieve a list instances where Not My Job guests have answered
-    all three questions correctly or received all three points"""
+) -> list[dict]:
+    """Retrieve a list instances where Not My Job guests have won.
 
+    This includes instances where a guest has answered all three questions
+    correct or received all three points.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 

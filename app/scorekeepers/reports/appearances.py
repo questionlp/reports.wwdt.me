@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Scorekeeper Appearances Report Functions"""
-from typing import Dict, List, Text
-
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Scorekeeper Appearances Report Functions."""
 import mysql.connector
 
 
 def retrieve_all_scorekeepers(
     database_connection: mysql.connector.connect,
-) -> List[Dict]:
-    """Retrieves a dictionary for all available scorekeepers from the
-    database"""
-
+) -> list[dict]:
+    """Retrieves a dictionary for all available scorekeepers from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -43,10 +41,9 @@ def retrieve_all_scorekeepers(
 
 
 def retrieve_appearances_by_scorekeeper(
-    scorekeeper_slug: Text, database_connection: mysql.connector.connect
-) -> Dict:
-    """Retrieve appearance data for the requested scorekeeper"""
-
+    scorekeeper_slug: str, database_connection: mysql.connector.connect
+) -> dict:
+    """Retrieve appearance data for the requested scorekeeper."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -86,11 +83,9 @@ def retrieve_appearances_by_scorekeeper(
 
 
 def retrieve_first_most_recent_appearances(
-    scorekeeper_slug: Text, database_connection: mysql.connector.connect
-) -> Dict:
-    """Retrieve first and most recent appearances for both regular
-    and all shows for the requested scorekeeper"""
-
+    scorekeeper_slug: str, database_connection: mysql.connector.connect
+) -> dict:
+    """Retrieve a scorekeeper's first and most recent appearances for both regular and all shows."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -110,15 +105,8 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    if result.min:
-        first = result.min.isoformat()
-    else:
-        first = None
-
-    if result.max:
-        most_recent = result.max.isoformat()
-    else:
-        most_recent = None
+    first = result.min.isoformat() if result.min else None
+    most_recent = result.max.isoformat() if result.max else None
 
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
@@ -139,15 +127,8 @@ def retrieve_first_most_recent_appearances(
             "most_recent_all": None,
         }
 
-    if result_all.min:
-        first_all = result_all.min.isoformat()
-    else:
-        first_all = None
-
-    if result_all.max:
-        most_recent_all = result_all.max.isoformat()
-    else:
-        most_recent_all = None
+    first_all = result_all.min.isoformat() if result_all.min else None
+    most_recent_all = result_all.max.isoformat() if result_all.max else None
 
     return {
         "first": first,
@@ -159,9 +140,12 @@ def retrieve_first_most_recent_appearances(
 
 def retrieve_appearance_summaries(
     database_connection: mysql.connector.connection,
-) -> List[Dict]:
-    """Retrieve scorekeeper appearance summary, including appearance
-    counts, and first and most recent appearances"""
+) -> list[dict]:
+    """Retrieve scorekeeper appearance summary.
+
+    Returned summary includes appearance counts, and first and most
+    recent appearances.
+    """
     scorekeepers = retrieve_all_scorekeepers(database_connection)
 
     if not scorekeepers:

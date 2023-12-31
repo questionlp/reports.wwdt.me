@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Show Panel Gender Mix Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Show Panel Gender Mix Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> List[int]:
-    """Retrieve a list of show years available in the database"""
+def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+    """Retrieve a list of show years available in the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -32,8 +32,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
 def retrieve_panel_gender_count_by_year(
     year: int, database_connection: mysql.connector.connect
 ) -> int:
-    """Get a count of shows for the requested year that has the
-    requested number of panelists of a given gender"""
+    """Get a count of shows for the requested year that has the requested number of panelists of a given gender."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -59,7 +58,7 @@ def retrieve_panel_gender_count_by_year(
             ),
         )
         cursor.fetchall()
-        counts["{}F".format(gender_count)] = cursor.rowcount
+        counts[f"{gender_count}F"] = cursor.rowcount
         cursor.close()
 
     counts["total"] = sum(counts.values())
@@ -68,9 +67,8 @@ def retrieve_panel_gender_count_by_year(
 
 def panel_gender_mix_breakdown(
     database_connection: mysql.connector.connect,
-) -> Dict[str, Any]:
-    """Calculate the panel gender breakdown for all show years and
-    return a dictionary containing count for each year"""
+) -> dict[str, Any]:
+    """Return a dictionary of panel gender breakdown for all show years with count for each year."""
     show_years = retrieve_show_years(database_connection=database_connection)
 
     gender_mix_breakdown = {}

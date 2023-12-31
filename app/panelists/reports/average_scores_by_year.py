@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelists Average Scores Report Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelists Average Scores Report Functions."""
 from decimal import Decimal
-from re import U
-from typing import List, Dict, Union
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
-def empty_years_average(database_connection: mysql.connector.connect) -> Dict[int, int]:
-    """Retrieve a dictionary containing a list of available years as
-    keys and zeroes for values"""
+def empty_years_average(database_connection: mysql.connector.connect) -> dict[int, int]:
+    """Retrieve a dictionary containing a list of available years as keys and zeroes for values."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -39,9 +36,8 @@ def retrieve_panelist_yearly_average(
     panelist_slug: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict[str, Union[str, List[Union[float, Decimal]]]]:
-    """Retrieves panelist name, slug string and average scores for each
-    year"""
+) -> dict[str, str | list[float | Decimal]]:
+    """Retrieves panelist name, slug string and average scores for each year."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -121,10 +117,8 @@ def retrieve_panelist_yearly_average(
 
 def retrieve_all_panelists_yearly_average(
     database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict]:
-    """Retrieves a list of dictionaries for each panelist with panelist
-    name, slug string and dictionary containing average scores for
-    each year"""
+) -> list[dict]:
+    """Retrieves a list of dictionaries for each panelist's yearly average scores."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

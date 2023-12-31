@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Bluff the Listener Statistics by Year | Panelists{% endblock %}
+
+{% block breadcrumb %}
+<div id="breadcrumb">
+    <ul>
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+    </ul>
+</div>
+{% endblock breadcrumb %}
+
+{% block synopsis %}
+<h2>Bluff the Listener Statistics by Year</h2>
+<p>
+    This report allows you to lookup the Bluff the Listener statistics for a
+    panelist, including how many times their story was chosen and how many times
+    they had the correct story, aggregated by year.
+</p>
+{% endblock synopsis %}
+
+{% block content %}
+<!-- Start Report Section -->
+<form method="POST" class="pure-form">
+    <fieldset>
+        <legend>Select a panelist to get Bluff the Listener statistics:</legend>
+        <div class="panelist-fields">
+            <label for="panelist">Panelist:</label>
+            <select id="panelist" name="panelist">
+                <option value="">-- Please choose a panelist --</option>
+                {% for slug, name in panelists.items() %}
+                {% if request.form.panelist == slug %}
+                <option value="{{ slug }}" selected>{{ name }}</option>
+                {% else %}
+                <option value="{{ slug }}">{{ name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="panelist-options">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
+</form>
+
+{% if request.method == "POST" %}
+<hr>
+{% if not request.form.panelist %}
+<p class="result-message">
+    No panelists were selected.
+</p>
+{% elif not bluff_stats %}
+<p class="result-message">
+    No Bluff the Listener statistics available for <b>{{ panelists[request.form.panelist] }}</b>.
+</p>
+{% else %}
+<!-- Start Stats Table -->
+<table class="pure-table pure-table-bordered">
+    <colgroup>
+        <col class="date">
+        <col class="count">
+        <col class="count">
+        <col class="count long">
+        <col class="count long">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Chosen</th>
+            <th scope="col">Correct</th>
+            <th scope="col">Regular Bluff Segments</th>
+            <th scope="col">Unique Best Of Bluff Segments</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for year in bluff_stats %}
+        <tr>
+            <td>{{ year }}</td>
+            {% if bluff_stats[year].chosen %}
+            <td>{{ bluff_stats[year].chosen }}</td>
+            {% else %}
+            <td class="no-data count float">-</td>
+            {% endif %}
+            {% if bluff_stats[year].correct %}
+            <td>{{ bluff_stats[year].correct }}</td>
+            {% else %}
+            <td class="no-data count float">-</td>
+            {% endif %}
+            {% if bluff_stats[year].appearances %}
+            <td>{{ bluff_stats[year].appearances }}</td>
+            {% else%}
+            <td class="no-data count float">-</td>
+            {% endif %}
+            {% if bluff_stats[year].unique_bluff_appearances %}
+            <td>{{ bluff_stats[year].unique_bluff_appearances }}</td>
+            {% else %}
+            <td class="no-data count float">-</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- End Stats Table -->
+{% endif %}
+{% endif %}
+<!-- Start Report Section -->
+{% endblock content %}

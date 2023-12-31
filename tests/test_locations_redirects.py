@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
-# Copyright (c) 2018-2022 Linh Pham
+# Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Testing Locations Redirects Module and Blueprint Views"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""Testing Locations Redirects Module and Blueprint Views."""
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
 
 def test_index(client: FlaskClient) -> None:
-    """Testing locations.redirects.index"""
+    """Testing locations.redirects.index."""
     response: TestResponse = client.get("/location")
     assert response.status_code == 301
     assert response.location
@@ -20,7 +20,7 @@ def test_index(client: FlaskClient) -> None:
 
 
 def test_average_scores(client: FlaskClient) -> None:
-    """Testing locations.redirects.average_scores"""
+    """Testing locations.redirects.average_scores."""
     response: TestResponse = client.get("/location/average_scores")
     assert response.status_code == 301
     assert response.location

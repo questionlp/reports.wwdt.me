@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist Debut by Year Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist Debut by Year Report Functions."""
+from typing import Any
 
 import mysql.connector
 
 from .stats_summary import retrieve_appearances_by_panelist
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> List[int]:
-    """Retrieve a list of all show years"""
+def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+    """Retrieve a list of all show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -34,9 +34,8 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> List[in
 
 def retrieve_show_info(
     show_date: str, database_connection: mysql.connector.connect
-) -> Dict[str, Any]:
-    """Retrieve show host, scorekeeper and Not My Job guest for the
-    requested show ID"""
+) -> dict[str, Any]:
+    """Retrieve show host, scorekeeper and Not My Job guest for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -67,9 +66,8 @@ def retrieve_show_info(
 
 def retrieve_show_guests(
     show_id: int, database_connection: mysql.connector.connect
-) -> List[str]:
-    """Retrieves a list of Not My Job guest(s) for the requested show
-    ID"""
+) -> list[str]:
+    """Retrieves a list of Not My Job guest(s) for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -94,9 +92,8 @@ def retrieve_show_guests(
 
 def retrieve_panelists_first_shows(
     database_connection: mysql.connector.connect,
-) -> Dict[str, Any]:
-    """Returns a dictionary containing all panelists and their
-    respective first shows"""
+) -> dict[str, Any]:
+    """Returns a dictionary containing all panelists and their first shows."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -148,9 +145,8 @@ def retrieve_panelists_first_shows(
 
 def panelist_debuts_by_year(
     database_connection: mysql.connector.connect,
-) -> Dict[str, Any]:
-    """Returns a dictionary of show years with a list of panelists'
-    debut information"""
+) -> dict[str, Any]:
+    """Returns a dictionary of show years with a list of panelists' debut information."""
     show_years = retrieve_show_years(database_connection=database_connection)
     panelists = retrieve_panelists_first_shows(database_connection=database_connection)
 

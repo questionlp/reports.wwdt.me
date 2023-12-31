@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panelist vs Panelist Scoring Report Functions"""
-from typing import Any, Dict, List
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panelist vs Panelist Scoring Report Functions."""
+from typing import Any
 
-from flask import current_app
 import mysql.connector
+from flask import current_app
 
 
 def retrieve_common_shows(
@@ -15,10 +15,11 @@ def retrieve_common_shows(
     panelist_slug_2: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> List[int]:
-    """Retrieve shows in which the two panelists have appeared
-    together on a panel, excluding Best Of, Repeats and the 20th
-    Anniversary special"""
+) -> list[int]:
+    """Retrieve shows in which the two panelists have appeared together on a panel.
+
+    Returned results excludins Best Of, Repeats and the 20th Anniversary special.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -72,13 +73,13 @@ def retrieve_common_shows(
 
 
 def retrieve_panelists_scores(
-    show_ids: List[int],
+    show_ids: list[int],
     panelist_slug_a: str,
     panelist_slug_b: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict[str, Any]:
-    """Retrieves panelists scores for the two requested panelists"""
+) -> dict[str, Any]:
+    """Retrieves panelists scores for the two requested panelists."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

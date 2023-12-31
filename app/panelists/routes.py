@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""Panelists Routes for Wait Wait Reports"""
-from flask import Blueprint, current_app, render_template, request
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""Panelists Routes for Wait Wait Reports."""
 import mysql.connector
+from flask import Blueprint, current_app, render_template, request
 
 from app.dicts import RANK_MAP
 
-from .reports.common import retrieve_panelists
 from .reports.aggregate_scores import (
-    retrieve_all_scores,
     calculate_stats,
+    retrieve_all_scores,
     retrieve_score_spread,
 )
 from .reports.appearances import retrieve_first_most_recent_appearances
@@ -21,27 +20,31 @@ from .reports.appearances_by_year import (
     retrieve_all_years,
 )
 from .reports.average_scores_by_year import (
-    retrieve_panelist_yearly_average,
     retrieve_all_panelists_yearly_average,
+    retrieve_panelist_yearly_average,
 )
-from .reports.bluff_stats import retrieve_all_panelist_bluff_stats
-from .reports.debut_by_year import retrieve_show_years, panelist_debuts_by_year
+from .reports.bluff_stats import (
+    retrieve_all_panelist_bluff_stats,
+    retrieve_panelist_bluffs_by_year,
+)
+from .reports.common import retrieve_panelists
+from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
 from .reports.gender_stats import retrieve_stats_by_year_gender
 from .reports.panelist_vs_panelist import (
-    retrieve_panelists as pvp_retrieve_panelists,
-    retrieve_panelist_appearances as pvp_retrieve_appearances,
-    retrieve_show_scores as pvp_retrieve_scores,
     generate_panelist_vs_panelist_results as pvp_generate_results,
 )
+from .reports.panelist_vs_panelist import (
+    retrieve_panelist_appearances as pvp_retrieve_appearances,
+)
+from .reports.panelist_vs_panelist import retrieve_panelists as pvp_retrieve_panelists
+from .reports.panelist_vs_panelist import retrieve_show_scores as pvp_retrieve_scores
 from .reports.panelist_vs_panelist_scoring import (
     retrieve_common_shows,
     retrieve_panelists_scores,
 )
 from .reports.perfect_scores import retrieve_perfect_score_counts
-from .reports.rankings_summary import (
-    retrieve_all_panelist_rankings,
-)
+from .reports.rankings_summary import retrieve_all_panelist_rankings
 from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
     retrieve_all_panelists_stats as summary_retrieve_all_stats,
@@ -56,13 +59,13 @@ blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
 @blueprint.route("/")
 def index():
-    """View: Panelists Index"""
+    """View: Panelists Index."""
     return render_template("panelists/_index.html")
 
 
 @blueprint.route("/aggregate-scores")
 def aggregate_scores():
-    """View: Panelists Aggregate Scores Report"""
+    """View: Panelists Aggregate Scores Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _scores = retrieve_all_scores(
         database_connection=_database_connection,
@@ -84,7 +87,7 @@ def aggregate_scores():
 
 @blueprint.route("/appearances-by-year")
 def appearances_by_year():
-    """View: Panelists Appearances by Year Report"""
+    """View: Panelists Appearances by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_appearance_counts(
         database_connection=_database_connection
@@ -100,7 +103,7 @@ def appearances_by_year():
 
 @blueprint.route("/average-scores-by-year", methods=["GET", "POST"])
 def average_scores_by_year():
-    """View: Average Scores by Year Report"""
+    """View: Average Scores by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
 
@@ -112,7 +115,7 @@ def average_scores_by_year():
     if request.method == "POST":
         # Parse panelist dropdown selections
         panelist = "panelist" in request.form and request.form["panelist"]
-        if panelist in _panelists_info.keys():
+        if panelist in _panelists_info:
             # Retrieve average scores for the panelist
             panelist_info = {"slug": panelist, "name": _panelists_info[panelist]}
             average_scores = retrieve_panelist_yearly_average(
@@ -165,7 +168,7 @@ def average_scores_by_year_all():
 
 @blueprint.route("/bluff-stats")
 def bluff_stats():
-    """View: Panelists Bluff the Listener Statistics Report"""
+    """View: Panelists Bluff the Listener Statistics Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_panelist_bluff_stats(
         database_connection=_database_connection
@@ -174,9 +177,55 @@ def bluff_stats():
     return render_template("panelists/bluff-stats.html", panelists=_panelists)
 
 
+@blueprint.route("/bluff-stats-by-year", methods=["GET", "POST"])
+def bluff_stats_by_year():
+    """View: Panelists Bluff the Listener Statistics by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist = "panelist" in request.form and request.form["panelist"]
+
+        if panelist not in _panelists_dict:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-stats-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_panelist_bluffs_by_year(
+            panelist_slug=panelist, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-stats-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/bluff-stats-by-year.html",
+            panelists=_panelists_dict,
+            bluff_stats=_bluff_stats,
+        )
+    else:
+        # Fallback for GET request
+        _database_connection.close()
+        return render_template(
+            "panelists/bluff-stats-by-year.html",
+            panelists=_panelists_dict,
+            bluff_stats=None,
+        )
+
+
 @blueprint.route("/debut-by-year")
 def debut_by_year():
-    """View: Panelists Debut by Year Report"""
+    """View: Panelists Debut by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _years = retrieve_show_years(database_connection=_database_connection)
     _debuts = panelist_debuts_by_year(database_connection=_database_connection)
@@ -186,7 +235,7 @@ def debut_by_year():
 
 @blueprint.route("/first-appearance-wins")
 def first_appearance_wins():
-    """View: Panelists with First Appearance Wins"""
+    """View: Panelists with First Appearance Wins."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists_first_appearance_wins(
         database_connection=_database_connection,
@@ -200,7 +249,7 @@ def first_appearance_wins():
 
 @blueprint.route("/first-most-recent-appearances")
 def first_most_recent_appearances():
-    """View: Panelists First and Most Recent Appearances Report"""
+    """View: Panelists First and Most Recent Appearances Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_appearances = retrieve_first_most_recent_appearances(
         database_connection=_database_connection
@@ -214,7 +263,7 @@ def first_most_recent_appearances():
 
 @blueprint.route("/gender-stats")
 def gender_stats():
-    """View: Panelists Statistics by Gender Report"""
+    """View: Panelists Statistics by Gender Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _stats = retrieve_stats_by_year_gender(
         database_connection=_database_connection,
@@ -226,7 +275,7 @@ def gender_stats():
 
 @blueprint.route("/losing-streaks")
 def losing_streaks():
-    """View: Panelists Losing Streaks Report"""
+    """View: Panelists Losing Streaks Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_losing_streaks(
@@ -238,7 +287,7 @@ def losing_streaks():
 
 @blueprint.route("/panelist-pvp", methods=["GET", "POST"])
 def panelist_pvp():
-    """View: Panelist vs Panelist Report"""
+    """View: Panelist vs Panelist Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
 
@@ -250,7 +299,7 @@ def panelist_pvp():
     if request.method == "POST":
         # Parse panelist dropdown selections
         panelist = "panelist" in request.form and request.form["panelist"]
-        if panelist in _panelists_info.keys():
+        if panelist in _panelists_info:
             # Retrieve PvP report for specific panelist
             panelist_info = {"slug": panelist, "name": _panelists_info[panelist]}
             _appearances = pvp_retrieve_appearances(
@@ -285,7 +334,7 @@ def panelist_pvp():
 
 @blueprint.route("/panelist-pvp/all")
 def panelist_pvp_all():
-    """View: Panelist vs Panelist Report"""
+    """View: Panelist vs Panelist Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = pvp_retrieve_panelists(database_connection=_database_connection)
     _appearances = pvp_retrieve_appearances(
@@ -308,7 +357,7 @@ def panelist_pvp_all():
 
 @blueprint.route("/panelist-vs-panelist-scoring", methods=["GET", "POST"])
 def panelist_pvp_scoring():
-    """View: Panelist vs Panelist Scoring Report"""
+    """View: Panelist vs Panelist Scoring Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -319,7 +368,8 @@ def panelist_pvp_scoring():
         panelist_2 = "panelist_2" in request.form and request.form["panelist_2"]
 
         # Create a set of panelist values to de-duplicate values
-        deduped_panelists = set([panelist_1, panelist_2])
+        # deduped_panelists = set([panelist_1, panelist_2])
+        deduped_panelists = {panelist_1, panelist_2}
         if "" in deduped_panelists:
             deduped_panelists.remove("")
 
@@ -376,7 +426,7 @@ def panelist_pvp_scoring():
 
 @blueprint.route("/perfect-scores")
 def perfect_scores():
-    """View: Perfect Scores Count Report"""
+    """View: Perfect Scores Count Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _counts = retrieve_perfect_score_counts(
         database_connection=_database_connection,
@@ -388,7 +438,7 @@ def perfect_scores():
 
 @blueprint.route("/rankings-summary")
 def rankings_summary():
-    """View: Panelists Rankings Summary Report"""
+    """View: Panelists Rankings Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -403,7 +453,7 @@ def rankings_summary():
 
 @blueprint.route("/single-appearance")
 def single_appearance():
-    """View: Panelists Single Appearance Report"""
+    """View: Panelists Single Appearance Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_single_appearances(
         database_connection=_database_connection,
@@ -418,7 +468,7 @@ def single_appearance():
 
 @blueprint.route("/stats-summary")
 def stats_summary():
-    """View: Panelists Statistics Summary Report"""
+    """View: Panelists Statistics Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -436,7 +486,7 @@ def stats_summary():
 
 @blueprint.route("/win-streaks")
 def win_streaks():
-    """View: Panelists Win Streaks Report"""
+    """View: Panelists Win Streaks Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_win_streaks(

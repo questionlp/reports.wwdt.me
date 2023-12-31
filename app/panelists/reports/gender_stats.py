@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# vim: set noai syntax=python ts=4 sw=4:
-#
 # Copyright (c) 2018-2023 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
-"""WWDTM Panel Gender Mix Report Functions"""
+# SPDX-License-Identifier: Apache-2.0
+#
+# vim: set noai syntax=python ts=4 sw=4:
+"""WWDTM Panel Gender Mix Report Functions."""
 from decimal import Decimal
-from typing import Any, Dict, List, Union
+from typing import Any
 
-from flask import current_app
 import mysql.connector
 import numpy
+from flask import current_app
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> List[int]:
-    """Retrieve a list of available show years"""
+def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+    """Retrieve a list of available show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -38,9 +38,8 @@ def retrieve_scores_by_year_gender(
     gender: str,
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> List[Union[int, Decimal]]:
-    """Retrieve a list of panelist scores for a given year and
-    panelists of the requested gender"""
+) -> list[int | Decimal]:
+    """Retrieve a list of panelist scores for a given year and panelists of the requested gender."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -91,9 +90,8 @@ def retrieve_scores_by_year_gender(
 def retrieve_stats_by_year_gender(
     database_connection: mysql.connector.connect,
     use_decimal_scores: bool = False,
-) -> Dict[str, Any]:
-    """Retrieve statistics about panelist scores broken out by year
-    and gender"""
+) -> dict[str, Any]:
+    """Retrieve statistics about panelist scores broken out by year and gender."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
