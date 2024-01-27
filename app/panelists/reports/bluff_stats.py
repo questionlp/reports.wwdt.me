@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,12 +6,15 @@
 """WWDTM Panelist Bluff the Listener Statistics Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from .common import retrieve_panelists
 
 
-def empty_years_bluff(database_connection: mysql.connector.connect) -> dict[int, int]:
+def empty_years_bluff(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> dict[int, int]:
     """Retrieve a dictionary containing a list of available years as keys and zeroes for values."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -42,7 +45,7 @@ def empty_years_bluff(database_connection: mysql.connector.connect) -> dict[int,
 
 
 def retrieve_panelist_bluff_counts(
-    panelist_id: int, database_connection: mysql.connector.connect
+    panelist_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, Any]:
     """Retrieves a dictionary containing Bluff the Listener counts for a panelist.
 
@@ -128,7 +131,7 @@ def retrieve_panelist_bluff_counts(
 
 
 def retrieve_all_panelist_bluff_stats(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of Bluff the Listener statistics for all panelists."""
     _panelists = retrieve_panelists(database_connection=database_connection)
@@ -149,8 +152,7 @@ def retrieve_all_panelist_bluff_stats(
 
 
 def retrieve_panelist_bluffs_by_year(
-    panelist_slug: str,
-    database_connection: mysql.connector.connect,
+    panelist_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[int, int]:
     """Retrieve a panelist's Bluff the Listener statistics per year."""
     if not database_connection.is_connected():

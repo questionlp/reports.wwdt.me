@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -7,16 +7,17 @@
 from decimal import Decimal
 from typing import Any
 
-import mysql.connector
 import numpy
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from . import common
 
 
 def retrieve_appearances_by_panelist(
     panelist_slug: str,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict[str, int]:
     """Retrieve appearance data for the requested panelist by the panelist's slug string."""
@@ -93,7 +94,7 @@ def retrieve_appearances_by_panelist(
 
 def retrieve_scores_by_panelist(
     panelist_slug: str,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[int]:
     """Retrieve all scores for the requested panelist by the panelist's slug string."""
@@ -136,7 +137,8 @@ def retrieve_scores_by_panelist(
 
 
 def retrieve_all_panelists_stats(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve common statistics for all available panelists."""
     if (

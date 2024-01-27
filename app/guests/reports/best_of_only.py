@@ -1,14 +1,15 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Guest Best Of Only Appearances Report Functions."""
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_guest_appearances(
-    guest_id: int, database_connection: mysql.connector.connect
+    guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict]:
     """Retrieve a list of shows a Not My Job guest has made an appearance on (including Best Of and Repeats)."""
     if not database_connection.is_connected():
@@ -48,7 +49,7 @@ def retrieve_guest_appearances(
 
 
 def retrieve_best_of_only_guests(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves a list of Not My Job guests that have only appeared on Best Of shows."""
     if not database_connection.is_connected():

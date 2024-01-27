@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,10 +6,13 @@
 """WWDTM Show Panel Gender Mix Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+def retrieve_show_years(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[int]:
     """Retrieve a list of show years available in the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -30,7 +33,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> list[in
 
 
 def retrieve_panel_gender_count_by_year(
-    year: int, database_connection: mysql.connector.connect
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> int:
     """Get a count of shows for the requested year that has the requested number of panelists of a given gender."""
     if not database_connection.is_connected():
@@ -66,7 +69,7 @@ def retrieve_panel_gender_count_by_year(
 
 
 def panel_gender_mix_breakdown(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Return a dictionary of panel gender breakdown for all show years with count for each year."""
     show_years = retrieve_show_years(database_connection=database_connection)

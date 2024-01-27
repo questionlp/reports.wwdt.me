@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -66,6 +66,10 @@ def create_app():
     app.jinja_env.globals["mastodon_url"] = _config["settings"].get("mastodon_url", "")
     app.jinja_env.globals["mastodon_user"] = _config["settings"].get(
         "mastodon_user", ""
+    )
+    app.jinja_env.globals["patreon_url"] = _config["settings"].get("patreon_url", "")
+    app.jinja_env.globals["github_sponsor_url"] = _config["settings"].get(
+        "github_sponsor_url", ""
     )
     app.jinja_env.globals["use_decimal_scores"] = _config["settings"][
         "use_decimal_scores"

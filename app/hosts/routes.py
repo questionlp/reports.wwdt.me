@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -13,13 +13,13 @@ blueprint = Blueprint("hosts", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
-def index():
+def index() -> str:
     """View: Hosts Index."""
     return render_template("hosts/_index.html")
 
 
 @blueprint.route("/appearance-summary")
-def appearance_summary():
+def appearance_summary() -> str:
     """View: Hosts Appearance Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     summary = retrieve_appearance_summaries(database_connection=_database_connection)

@@ -1,14 +1,15 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Show Counts Report Functions."""
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_show_counts_by_year(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, int]:
     """Retrieve the number of Regular, Best Of, Repeat and Repeat/Best Of shows broken down by year."""
     if not database_connection.is_connected():

@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -7,13 +7,15 @@
 from decimal import Decimal
 from typing import Any
 
-import mysql.connector
 import numpy
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_all_scores(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[int | Decimal]:
     """Retrieve a list of all panelist scores from non-Best Of and non-Repeat shows."""
     if (
@@ -53,7 +55,8 @@ def retrieve_all_scores(
 
 
 def retrieve_score_spread(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict[str, int | Decimal]]:
     """Retrieve a list of grouped panelist scores from non-Best Of and non-Repeat shows."""
     if (

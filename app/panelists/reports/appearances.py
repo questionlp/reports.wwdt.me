@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,13 +6,14 @@
 """WWDTM Panelist Appearances Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from . import common
 
 
 def retrieve_first_most_recent_appearances(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve first and most recent appearances for both regular and all shows for all panelists."""
     panelists = common.retrieve_panelists(database_connection=database_connection)

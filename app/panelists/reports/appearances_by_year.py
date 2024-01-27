@@ -1,16 +1,17 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Appearances by Year Report Functions."""
-from typing import Any, Union
+from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_panelist_appearance_counts(
-    panelist_id: int, database_connection: mysql.connector.connect
+    panelist_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str | int, int]]:
     """Retrieve yearly appearance count for the requested panelist ID."""
     if not database_connection.is_connected():
@@ -45,7 +46,7 @@ def retrieve_panelist_appearance_counts(
 
 
 def retrieve_all_appearance_counts(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve all appearance counts for all panelists from the database."""
     if not database_connection.is_connected():
@@ -83,7 +84,9 @@ def retrieve_all_appearance_counts(
     return _panelists
 
 
-def retrieve_all_years(database_connection: mysql.connector.connect) -> list[int]:
+def retrieve_all_years(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[int]:
     """Retrieve a list of all available show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
