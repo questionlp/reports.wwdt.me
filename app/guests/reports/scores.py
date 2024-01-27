@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,11 +6,12 @@
 """WWDTM Guest Scores Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_scoring_exceptions(
-    guest_id: int, database_connection: mysql.connector.connect
+    guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, Any]]:
     """Retrieve a list of instances where a Not My Job guest has had a scoring exception."""
     if not database_connection.is_connected():
@@ -52,7 +53,7 @@ def retrieve_scoring_exceptions(
 
 
 def retrieve_guest_scores(
-    guest_id: int, database_connection: mysql.connector.connect
+    guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, Any]]:
     """Retrieve a list of instances where a requested Not My Job guest has received three points."""
     if not database_connection.is_connected():
@@ -94,7 +95,7 @@ def retrieve_guest_scores(
 
 
 def retrieve_all_scoring_exceptions(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of all Not My Job scoring exceptions."""
     if not database_connection.is_connected():
@@ -135,7 +136,7 @@ def retrieve_all_scoring_exceptions(
 
 
 def retrieve_all_three_pointers(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve a list instances where Not My Job guests have won.
 

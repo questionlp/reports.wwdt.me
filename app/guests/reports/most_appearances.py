@@ -1,16 +1,17 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Guest Most Appearances Report Functions."""
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from app.utility import multi_key_sort
 
 
 def retrieve_guest_most_appearances_all(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, dict]:
     """Returns a dictionary of all guests that have appeared on the show more than once.
 
@@ -53,7 +54,7 @@ def retrieve_guest_most_appearances_all(
 
 
 def retrieve_guest_most_appearances_regular(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, dict]:
     """Returns a dictionary of all guests that have appeared on the show more than once.
 
@@ -95,7 +96,7 @@ def retrieve_guest_most_appearances_regular(
 
 
 def guest_multiple_appearances(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Get a list of guests that have appeared on the show multiple times.
 

@@ -1,5 +1,24 @@
 # Changes
 
+## 2.9.0
+
+### Application Changes
+
+- Add type hints for a majority of the return types for routes and utility modules
+- Replace use of `typing.Optional` and `typing.Union` with the with the conventions documented in PEP-484 and PEP-604
+- Change handling of `time_zone` configuration value to prevent use of `pytz.timezone()` in function arguments
+
+### Component Changes
+
+- Upgrade Markdown from 3.5.1 to 3.5.2
+- Upgrade numpy from 1.26.0 to 1.26.3
+
+### Development Changes
+
+- Switch to Ruff for code linting and formatting (with the help of Black)
+- Upgrade pytest from 7.4.3 to 7.4.4
+- Upgrade black from 23.11.0 to 23.12.1
+
 ## 2.8.0
 
 ### Application Changes

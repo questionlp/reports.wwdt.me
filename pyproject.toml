@@ -1,6 +1,7 @@
 [tool.black]
-required-version = "23.11.0"
+required-version = "23.12.1"
 target-version = ["py310", "py311", "py312"]
+line-length = 88
 
 [tool.pytest.ini_options]
 minversion = "7.4"
@@ -58,7 +59,7 @@ ignore = [
     "TRY003", # Avoid specifying messages outside exception class; overly strict, especially for ValueError
     "S608",
 ]
-line-length = 120 # Must agree with Black
+line-length = 88 # Must agree with Black
 
 [tool.ruff.flake8-bugbear]
 extend-immutable-calls = ["chr", "typer.Argument", "typer.Option"]

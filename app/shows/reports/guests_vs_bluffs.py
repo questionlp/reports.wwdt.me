@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,11 +6,12 @@
 """WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_not_my_job_stats(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns a dictionary containing Not My Job statistics.
 
@@ -150,7 +151,7 @@ def retrieve_not_my_job_stats(
 
 
 def retrieve_bluff_stats(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Retrieves a dictionary containing Bluff the Listener statistics.
 

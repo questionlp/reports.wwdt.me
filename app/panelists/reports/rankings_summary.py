@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,13 +6,14 @@
 """WWDTM Panelist Rankings Summary Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from . import common
 
 
 def retrieve_rankings_by_panelist(
-    panelist_id: int, database_connection: mysql.connector.connect
+    panelist_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, Any]:
     """Retrieves ranking statistics for the requested panelist."""
     if not database_connection.is_connected():
@@ -93,7 +94,7 @@ def retrieve_rankings_by_panelist(
 
 
 def retrieve_all_panelist_rankings(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns ranking statistics for all available panelists."""
     panelists = common.retrieve_panelists(database_connection=database_connection)

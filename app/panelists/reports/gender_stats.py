@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -7,12 +7,15 @@
 from decimal import Decimal
 from typing import Any
 
-import mysql.connector
 import numpy
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+def retrieve_show_years(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[int]:
     """Retrieve a list of available show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -36,7 +39,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> list[in
 def retrieve_scores_by_year_gender(
     year: int,
     gender: str,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[int | Decimal]:
     """Retrieve a list of panelist scores for a given year and panelists of the requested gender."""
@@ -88,7 +91,7 @@ def retrieve_scores_by_year_gender(
 
 
 def retrieve_stats_by_year_gender(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve statistics about panelist scores broken out by year and gender."""

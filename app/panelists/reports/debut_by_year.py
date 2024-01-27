@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,12 +6,15 @@
 """WWDTM Panelist Debut by Year Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from .stats_summary import retrieve_appearances_by_panelist
 
 
-def retrieve_show_years(database_connection: mysql.connector.connect) -> list[int]:
+def retrieve_show_years(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[int]:
     """Retrieve a list of all show years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -33,7 +36,7 @@ def retrieve_show_years(database_connection: mysql.connector.connect) -> list[in
 
 
 def retrieve_show_info(
-    show_date: str, database_connection: mysql.connector.connect
+    show_date: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, Any]:
     """Retrieve show host, scorekeeper and Not My Job guest for the requested show ID."""
     if not database_connection.is_connected():
@@ -65,7 +68,7 @@ def retrieve_show_info(
 
 
 def retrieve_show_guests(
-    show_id: int, database_connection: mysql.connector.connect
+    show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[str]:
     """Retrieves a list of Not My Job guest(s) for the requested show ID."""
     if not database_connection.is_connected():
@@ -91,7 +94,7 @@ def retrieve_show_guests(
 
 
 def retrieve_panelists_first_shows(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns a dictionary containing all panelists and their first shows."""
     if not database_connection.is_connected():
@@ -144,7 +147,7 @@ def retrieve_panelists_first_shows(
 
 
 def panelist_debuts_by_year(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns a dictionary of show years with a list of panelists' debut information."""
     show_years = retrieve_show_years(database_connection=database_connection)

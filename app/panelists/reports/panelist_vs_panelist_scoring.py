@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,14 +6,15 @@
 """WWDTM Panelist vs Panelist Scoring Report Functions."""
 from typing import Any
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_common_shows(
     panelist_slug_1: str,
     panelist_slug_2: str,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[int]:
     """Retrieve shows in which the two panelists have appeared together on a panel.
@@ -76,7 +77,7 @@ def retrieve_panelists_scores(
     show_ids: list[int],
     panelist_slug_a: str,
     panelist_slug_b: str,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieves panelists scores for the two requested panelists."""
