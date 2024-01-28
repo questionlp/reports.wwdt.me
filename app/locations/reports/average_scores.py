@@ -1,19 +1,21 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Location Score Breakdown Report Functions."""
 from decimal import Decimal
-from typing import Any, Dict, List
+from typing import Any
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_average_scores_by_location(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
-) -> List[Dict[str, Any]]:
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
+) -> list[dict[str, Any]]:
     """Retrieve average scores sorted by location."""
     if (
         use_decimal_scores

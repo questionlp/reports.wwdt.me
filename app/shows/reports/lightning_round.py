@@ -1,15 +1,17 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Lightning Round Report Functions."""
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_all_lightning_round_start(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> dict:
     """Retrieve a dictionary of all Lightning Fill-in-the-Blank round starting scores."""
     if (
@@ -70,7 +72,7 @@ def retrieve_all_lightning_round_start(
 
 def retrieve_scoring_info_by_show_id(
     show_id: int,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict:
     """Return Lightning Fill-in-the-Blank round scoring information.
@@ -143,7 +145,8 @@ def retrieve_scoring_info_by_show_id(
 
 
 def retrieve_panelists_by_show_id(
-    show_id: int, database_connection: mysql.connector.connect
+    show_id: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Returns a list of panelists for the requested show ID."""
     if not database_connection.is_connected():
@@ -179,7 +182,8 @@ def retrieve_panelists_by_show_id(
 
 
 def shows_with_lightning_round_start_zero(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Return shows in which panelists start the Lightning Fill-in-the-Blank round with zero points."""
     if (
@@ -270,7 +274,8 @@ def shows_with_lightning_round_start_zero(
 
 
 def shows_lightning_round_start_zero(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Return list of shows in which a panelist starts the Lightning Fill-in-the-Blank round with zero points."""
     if (
@@ -360,7 +365,8 @@ def shows_lightning_round_start_zero(
 
 
 def shows_lightning_round_zero_correct(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Return list of shows in which a panelist answers zero Lightning Fill-in-the-Blank round questions correct."""
     if (
@@ -451,7 +457,8 @@ def shows_lightning_round_zero_correct(
 
 
 def shows_starting_with_three_way_tie(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieve all shows in which all three panelists started the Lightning round in a three-way tie."""
     show_scores = retrieve_all_lightning_round_start(
@@ -479,7 +486,8 @@ def shows_starting_with_three_way_tie(
 
 
 def shows_ending_with_three_way_tie(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieve all shows in which all three panelists ended the Lightning round in a three-way tie."""
     if (
@@ -558,7 +566,8 @@ def shows_ending_with_three_way_tie(
 
 
 def shows_starting_ending_three_way_tie(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieve all shows in which all three panelists started and ended the Lightning round in a three-way tie."""
     if (

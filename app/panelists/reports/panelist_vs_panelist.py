@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,12 +6,14 @@
 """WWDTM Panelist vs Panelist Report Functions."""
 from typing import Any
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_panelists(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve panelists from the Stats Page database."""
     if (
@@ -59,7 +61,7 @@ def retrieve_panelists(
 
 def retrieve_panelist_appearances(
     panelists: dict[str, Any],
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict[str, str]:
     """Retrieve panelist appearances from the Stats Page database."""
@@ -110,7 +112,8 @@ def retrieve_panelist_appearances(
 
 
 def retrieve_show_scores(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve scores for each show and panelist from the Stats Page Database."""
     if (

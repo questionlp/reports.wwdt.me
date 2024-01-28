@@ -53,6 +53,18 @@
         {% endif %}
         All rights reserved.
     </div>
+    {% if patreon_url or github_sponsor_url %}
+    <div id="sponsor">
+        Sponsor this project at:
+        {% if patreon_url and github_sponsor_url %}
+        <a href="{{ github_sponsor_url }}">GitHub</a> and <a href="{{ patreon_url }}">Patreon</a>.
+        {% elif patreon_url %}
+        <a href="{{ patreon_url }}">Patreon</a>.
+        {% elif github_sponsor_url %}
+        <a href="{{ github_sponsor_url }}">GitHub</a>.
+        {% endif %}
+    </div>
+    {% endif %}
     <div id="source">Source code for this project is available on <a href="{{ repo_url }}">GitHub</a>
     under <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</div>
 </footer>

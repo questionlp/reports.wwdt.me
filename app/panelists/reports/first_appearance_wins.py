@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,12 +6,14 @@
 """WWDTM Panelist First Appearance Wins."""
 from decimal import Decimal
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_panelists_first_appearance_wins(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> dict[str, str | int | Decimal]:
     """Returns a dictionary containing wins or tied for first for panelists' first appearance."""
     if (

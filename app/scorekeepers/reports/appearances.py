@@ -1,14 +1,15 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Scorekeeper Appearances Report Functions."""
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_all_scorekeepers(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves a dictionary for all available scorekeepers from the database."""
     if not database_connection.is_connected():
@@ -41,7 +42,7 @@ def retrieve_all_scorekeepers(
 
 
 def retrieve_appearances_by_scorekeeper(
-    scorekeeper_slug: str, database_connection: mysql.connector.connect
+    scorekeeper_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict:
     """Retrieve appearance data for the requested scorekeeper."""
     if not database_connection.is_connected():
@@ -83,7 +84,7 @@ def retrieve_appearances_by_scorekeeper(
 
 
 def retrieve_first_most_recent_appearances(
-    scorekeeper_slug: str, database_connection: mysql.connector.connect
+    scorekeeper_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict:
     """Retrieve a scorekeeper's first and most recent appearances for both regular and all shows."""
     if not database_connection.is_connected():
@@ -139,7 +140,7 @@ def retrieve_first_most_recent_appearances(
 
 
 def retrieve_appearance_summaries(
-    database_connection: mysql.connector.connection,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve scorekeeper appearance summary.
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,11 +6,12 @@
 """WWDTM Hosts Appearances Report Functions."""
 from typing import Any
 
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_hosts(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str]]:
     """Retrieves a dictionary for all available hosts from the database."""
     if not database_connection.is_connected():
@@ -43,7 +44,7 @@ def retrieve_hosts(
 
 
 def retrieve_appearances_by_host(
-    host_slug: str, database_connection: mysql.connector.connect
+    host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, int]:
     """Retrieve appearance data for the requested host."""
     if not database_connection.is_connected():
@@ -85,7 +86,7 @@ def retrieve_appearances_by_host(
 
 
 def retrieve_first_most_recent_appearances(
-    host_slug: str, database_connection: mysql.connector.connect
+    host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str]:
     """Retrieve first and most recent appearances for both regular and all shows for a host."""
     if not database_connection.is_connected():
@@ -143,7 +144,7 @@ def retrieve_first_most_recent_appearances(
 
 
 def retrieve_appearance_summaries(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve host appearance summary.
 

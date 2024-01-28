@@ -1,16 +1,17 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Show Guest Scorekeeper Report Functions."""
-import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 from app.shows.reports import show_details
 
 
 def retrieve_shows_guest_scorekeeper(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve a list of shows with guest scorekeepers."""
     if not database_connection.is_connected():

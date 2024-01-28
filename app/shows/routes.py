@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -41,13 +41,13 @@ blueprint = Blueprint("shows", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
-def index():
+def index() -> str:
     """View: Shows Index."""
     return render_template("shows/_index.html")
 
 
 @blueprint.route("/all-shows")
-def all_shows():
+def all_shows() -> str:
     """View: All Shows Report."""
     _ascending = True
     _database_connection = mysql.connector.connect(**current_app.config["database"])
@@ -67,7 +67,7 @@ def all_shows():
 
 
 @blueprint.route("/all-women-panel")
-def all_women_panel():
+def all_women_panel() -> str:
     """View: All Women Panel Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_women_panel(
@@ -80,7 +80,7 @@ def all_women_panel():
 
 
 @blueprint.route("/counts-by-year")
-def counts_by_year():
+def counts_by_year() -> str:
     """View: Show Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _counts = retrieve_show_counts_by_year(database_connection=_database_connection)
@@ -90,7 +90,7 @@ def counts_by_year():
 
 
 @blueprint.route("/guest-host")
-def guest_host():
+def guest_host() -> str:
     """View: Shows with a Guest Host Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_guest_host(database_connection=_database_connection)
@@ -100,7 +100,7 @@ def guest_host():
 
 
 @blueprint.route("/guest-scorekeeper")
-def guest_scorekeeper():
+def guest_scorekeeper() -> str:
     """View: Shows with a Guest Scorekeeper Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_guest_scorekeeper(database_connection=_database_connection)
@@ -110,7 +110,7 @@ def guest_scorekeeper():
 
 
 @blueprint.route("/high-scoring")
-def high_scoring():
+def high_scoring() -> str:
     """View: High Scoring Shows Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_high_scoring(
@@ -123,7 +123,7 @@ def high_scoring():
 
 
 @blueprint.route("/highest-score-equals-sum-other-scores")
-def highest_score_equals_sum_other_scores():
+def highest_score_equals_sum_other_scores() -> str:
     """View: Highest Score Equals the Sum of Other Scores Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_score_sum_match(
@@ -138,7 +138,7 @@ def highest_score_equals_sum_other_scores():
 
 
 @blueprint.route("/lightning-round-ending-three-way-tie")
-def lightning_round_ending_three_way_tie():
+def lightning_round_ending_three_way_tie() -> str:
     """View: Lightning Round Ending in a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_ending_with_three_way_tie(
@@ -153,7 +153,7 @@ def lightning_round_ending_three_way_tie():
 
 
 @blueprint.route("/lightning-round-starting-ending-three-way-tie")
-def lightning_round_starting_ending_three_way_tie():
+def lightning_round_starting_ending_three_way_tie() -> str:
     """View: Lightning Round Starting and Ending in a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_ending_three_way_tie(
@@ -168,7 +168,7 @@ def lightning_round_starting_ending_three_way_tie():
 
 
 @blueprint.route("/lightning-round-starting-three-way-tie")
-def lightning_round_starting_three_way_tie():
+def lightning_round_starting_three_way_tie() -> str:
     """View: Lightning Round Starting with a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_with_three_way_tie(
@@ -183,7 +183,7 @@ def lightning_round_starting_three_way_tie():
 
 
 @blueprint.route("/lightning-round-starting-zero-points")
-def lightning_round_starting_zero_points():
+def lightning_round_starting_zero_points() -> str:
     """View: Lightning Round Starting with Zero Points Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_start_zero(
@@ -198,7 +198,7 @@ def lightning_round_starting_zero_points():
 
 
 @blueprint.route("/lightning-round-zero-correct")
-def lightning_round_zero_correct():
+def lightning_round_zero_correct() -> str:
     """View: Lightning Round with Zero Correct Answers Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_zero_correct(
@@ -211,7 +211,7 @@ def lightning_round_zero_correct():
 
 
 @blueprint.route("/low-scoring")
-def low_scoring():
+def low_scoring() -> str:
     """View: Low Scoring Shows Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_low_scoring(
@@ -224,7 +224,7 @@ def low_scoring():
 
 
 @blueprint.route("/not-my-job-vs-bluffs")
-def not_my_job_vs_bluffs():
+def not_my_job_vs_bluffs() -> str:
     """View: Not My Job Guests vs Bluff the Listener Win Ratios Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _guest_stats = retrieve_not_my_job_stats(database_connection=_database_connection)
@@ -239,7 +239,7 @@ def not_my_job_vs_bluffs():
 
 
 @blueprint.route("/original-shows")
-def original_shows():
+def original_shows() -> str:
     """View: Original Shows Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_all_original_shows(database_connection=_database_connection)
@@ -261,7 +261,7 @@ def original_shows():
 
 
 @blueprint.route("/panel-gender-mix")
-def panel_gender_mix():
+def panel_gender_mix() -> str:
     """View: Shows Panel Gender Mix Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _mix = panel_gender_mix_breakdown(database_connection=_database_connection)
@@ -271,7 +271,7 @@ def panel_gender_mix():
 
 
 @blueprint.route("/perfect-panelist-scores")
-def perfect_panelist_scores():
+def perfect_panelist_scores() -> str:
     """View: Shows with Perfect Panelist Scores Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_perfect_scores(
@@ -284,7 +284,7 @@ def perfect_panelist_scores():
 
 
 @blueprint.route("/search-multiple-panelists", methods=["GET", "POST"])
-def search_multiple_panelists():
+def search_multiple_panelists() -> str:
     """View: Search Shows by Multiple Panelists Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)

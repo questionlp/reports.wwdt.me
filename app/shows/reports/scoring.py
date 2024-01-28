@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,13 +6,14 @@
 """WWDTM Show Scoring Reports Functions."""
 from decimal import Decimal
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_show_details(
     show_id: int,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict:
     """Retrieves host, scorekeeper, panelist, guest and location information for the requested show ID."""
@@ -141,7 +142,8 @@ def retrieve_show_details(
 
 
 def retrieve_shows_all_high_scoring(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieves details from shows with a panelist total score greater than or equal to 50."""
     if (
@@ -201,7 +203,8 @@ def retrieve_shows_all_high_scoring(
 
 
 def retrieve_shows_all_low_scoring(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieves details from shows with a panelist total score of less than 30.
 
@@ -267,7 +270,8 @@ def retrieve_shows_all_low_scoring(
 
 
 def retrieve_shows_panelist_score_sum_match(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieves shows where a panelist's first place score matches the sum of the scores of the other two panelists.
 
@@ -364,7 +368,8 @@ def retrieve_shows_panelist_score_sum_match(
 
 
 def retrieve_shows_panelist_perfect_scores(
-    database_connection: mysql.connector.connect, use_decimal_scores: bool = False
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
 ) -> list[dict[str, str | int]]:
     if (
         use_decimal_scores

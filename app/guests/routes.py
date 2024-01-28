@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -15,13 +15,13 @@ blueprint = Blueprint("guests", __name__, template_folder="templates")
 
 
 @blueprint.route("/")
-def index():
+def index() -> str:
     """View: Guests Index."""
     return render_template("guests/_index.html")
 
 
 @blueprint.route("/best-of-only")
-def best_of_only():
+def best_of_only() -> str:
     """View: Guests Best Of Only Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _guests = retrieve_best_of_only_guests(database_connection=_database_connection)
@@ -30,7 +30,7 @@ def best_of_only():
 
 
 @blueprint.route("/most-appearances")
-def most_appearances():
+def most_appearances() -> str:
     """View: Guests Most Appearances Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _guests = guest_multiple_appearances(database_connection=_database_connection)
@@ -39,7 +39,7 @@ def most_appearances():
 
 
 @blueprint.route("/scoring-exceptions")
-def scoring_exceptions():
+def scoring_exceptions() -> str:
     """View: Guests Scoring Exceptions Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _exceptions = retrieve_all_scoring_exceptions(
@@ -50,7 +50,7 @@ def scoring_exceptions():
 
 
 @blueprint.route("/three-pointers")
-def three_pointers():
+def three_pointers() -> str:
     """View: Guests Three Pointers Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _three_pointers = retrieve_all_three_pointers(

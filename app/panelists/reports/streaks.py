@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023 Linh Pham
+# Copyright (c) 2018-2024 Linh Pham
 # reports.wwdt.me is released under the terms of the Apache License 2.0
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -6,12 +6,13 @@
 """WWDTM Panelist Win/Loss Streaks Report Functions."""
 from typing import Any
 
-import mysql.connector
 from flask import current_app
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_panelists(
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of panelists with their panelist ID and name."""
     if not database_connection.is_connected():
@@ -46,7 +47,7 @@ def retrieve_panelists(
 
 def retrieve_panelist_ranks(
     panelist_id: int,
-    database_connection: mysql.connector.connect,
+    database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of show dates and the panelist rank for the requested panelist ID."""
@@ -101,7 +102,8 @@ def retrieve_panelist_ranks(
 
 
 def calculate_panelist_losing_streaks(
-    panelists: list[dict[str, Any]], database_connection: mysql.connector.connect
+    panelists: list[dict[str, Any]],
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve panelist stats and calculate their losing streaks."""
     if not database_connection.is_connected():
@@ -177,7 +179,8 @@ def calculate_panelist_losing_streaks(
 
 
 def calculate_panelist_win_streaks(
-    panelists: list[dict[str, Any]], database_connection: mysql.connector.connect
+    panelists: list[dict[str, Any]],
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve panelist stats and calculate their win streaks."""
     win_streaks = []
