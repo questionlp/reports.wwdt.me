@@ -24,6 +24,7 @@
         "mastodon_url": "",
         "mastodon_user": "",
         "patreon_url": "",
+        "github_sponsor_url": "",
         "use_decimal_scores": false
     }
 }
