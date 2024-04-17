@@ -246,9 +246,9 @@ def calculate_panelist_win_streaks(
             panelist["longest_streak"] = longest_streak
             panelist["longest_streak_dates"] = longest_streak_show_dates
             panelist["longest_streak_with_draws"] = longest_streak_with_draws
-            panelist[
-                "longest_streak_with_draws_dates"
-            ] = longest_streak_show_dates_with_draws
+            panelist["longest_streak_with_draws_dates"] = (
+                longest_streak_show_dates_with_draws
+            )
             win_streaks.append(panelist)
 
     return win_streaks
