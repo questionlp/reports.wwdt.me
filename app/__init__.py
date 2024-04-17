@@ -80,9 +80,9 @@ def create_app():
     app.jinja_env.filters["markdown"] = utility.md_to_html
 
     # Check to see if panelistscore_decimal column exists and set a flag
-    app.config["app_settings"][
-        "has_decimal_scores_column"
-    ] = utility.panelist_decimal_score_exists(database_settings=app.config["database"])
+    app.config["app_settings"]["has_decimal_scores_column"] = (
+        utility.panelist_decimal_score_exists(database_settings=app.config["database"])
+    )
 
     # Register application blueprints
     app.register_blueprint(main_bp)

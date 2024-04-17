@@ -1,5 +1,19 @@
 # Changes
 
+## 2.9.2
+
+### Component Changes
+
+- Upgrade flask from 3.0.0
+- Upgrade gunicorn from 21.2.0 to 22.0.0
+- Upgrade numpy from 1.26.3 to 1.26.4
+- Upgrade pytz from 2023.3.post1 to 2024.1
+
+### Development Changes
+
+- Upgrade ruff from 0.1.13 to 0.3.6
+- Upgrade pytest from 7.4.4 to 8.1.1
+
 ## 2.9.1
 
 ### Development Changes
