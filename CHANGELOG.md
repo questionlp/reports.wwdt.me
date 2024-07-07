@@ -1,5 +1,11 @@
 # Changes
 
+## 2.10.0
+
+### Application Changes
+
+- Change the database queries and application logic for the panelist "Perfect Score Counts" and "Single Appearance" reports to allow the application to experimentally support MariaDB 11.4.2
+
 ## 2.9.2
 
 ### Component Changes

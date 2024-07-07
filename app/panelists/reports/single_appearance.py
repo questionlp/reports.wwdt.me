@@ -25,39 +25,52 @@ def retrieve_single_appearances(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    query = """
+        SELECT p.panelistid
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        GROUP BY p.panelistid
+        HAVING COUNT(p.panelistid) = 1
+        ORDER BY p.panelistid;
+    """
+    cursor = database_connection.cursor(named_tuple=True)
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    list_panelists = []
+    for row in results:
+        list_panelists.append(row.panelistid)
+
+    # panelist_ids = ", ".join(str(ids) for ids in list_panelists)
+
     if use_decimal_scores:
-        query = """
+        query = f"""
             SELECT p.panelist, p.panelistslug, s.showdate,
             pm.panelistscore_decimal AS score, pm.showpnlrank
             FROM ww_showpnlmap pm
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             JOIN ww_shows s ON s.showid = pm.showid
-            WHERE pm.showpnlmapid IN (
-            SELECT ANY_VALUE(pm.showpnlmapid)
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-            GROUP BY p.panelist
-            HAVING COUNT(p.panelist) = 1 )
+            WHERE pm.panelistid IN ({", ".join(str(ids) for ids in list_panelists)})
+            AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY p.panelist ASC;
             """
     else:
-        query = """
+        query = f"""
             SELECT p.panelist, p.panelistslug, s.showdate,
             pm.panelistscore AS score, pm.showpnlrank FROM ww_showpnlmap pm
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             JOIN ww_shows s ON s.showid = pm.showid
-            WHERE pm.showpnlmapid IN (
-            SELECT ANY_VALUE(pm.showpnlmapid)
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-            GROUP BY p.panelist
-            HAVING COUNT(p.panelist) = 1 )
+            WHERE pm.panelistid IN ({", ".join(str(ids) for ids in list_panelists)})
+            AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY p.panelist ASC;
             """
+
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query)
     result = cursor.fetchall()
