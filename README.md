@@ -11,6 +11,8 @@ Flask-based web application that serves up a collection of reports based on coll
 
 **Note:** Experimental support for MariaDB Server is only available starting with version 2.10.0 of the application. Older versions of MariaDB Server are not supported.
 
+Also, due to potential incompatibilities with the divergence of MySQL and MariaDB, including the Python Connector libraries, support for MariaDB may not be feasible in the long term.
+
 ## Installation
 
 Refer to [INSTALLING.md](./INSTALLING.md) for information on how to set up an instance of this web application that can be served through NGINX and Gunicorn.

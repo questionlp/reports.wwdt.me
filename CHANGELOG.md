@@ -255,6 +255,12 @@
 - Removed the unused `app/templates/core` directory and blank HTML files
 - Updated Panelist Debut by Year report to include a list of years as part of a side navigation that appears on medium-sized and larger screens (>= 768 px)
 
+### Development Changes
+
+- Upgrade ruff from 0.3.6 to 0.5.1
+- Upgrade black from 24.3.0 to 24.4.2
+- Upgrade pytest from 8.1.1 to 8.1.2
+
 ## 2.0.5
 
 ### Bugfix
