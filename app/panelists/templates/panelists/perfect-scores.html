@@ -32,8 +32,8 @@
             <th scope="col" rowspan="2">Panelist</th>
             <th scope="col" colspan="2">Total Score Count</th>
         <tr>
-            <th scope="col">= 20</th>
-            <th scope="col">&#x2265; 20</th>
+            <th scope="col"> &#x2265; 20</th>
+            <th scope="col"> = 20</th>
         </tr>
     </thead>
     <tbody>
@@ -41,12 +41,12 @@
         <tr>
             <td><a href="{{ stats_url }}/panelists/{{ counts[panelist].slug }}">
                 {{ counts[panelist].name }}</a></td>
+            <td>{{ counts[panelist].more_perfect }}</td>
             {% if counts[panelist].perfect %}
             <td>{{ counts[panelist].perfect }}</td>
             {% else %}
             <td class="no-data">-</td>
             {% endif %}
-            <td>{{ counts[panelist].more_perfect }}</td>
         </tr>
         {% endfor %}
     </tbody>

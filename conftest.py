@@ -12,6 +12,7 @@ from app import create_app
 
 @pytest.fixture
 def client():
+    """Pytest Client Fixture."""
     app: Flask = create_app()
-    with app.test_client() as client:
-        yield client
+    with app.test_client() as _client:
+        yield _client

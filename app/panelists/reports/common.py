@@ -42,3 +42,34 @@ def retrieve_panelists(
         )
 
     return _panelists
+
+
+def retrieve_panelists_id_key(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> dict[int, dict]:
+    """Retrieves a dictionary of all available panelists from the database."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug
+        FROM ww_panelists p
+        WHERE p.panelist <> '<Multiple>'
+        ORDER BY p.panelistslug ASC;
+        """
+    cursor = database_connection.cursor(named_tuple=True)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+
+    if not result:
+        return None
+
+    _panelists = {}
+    for row in result:
+        _panelists[row.panelistid] = {
+            "name": row.panelist,
+            "slug": row.panelistslug,
+        }
+
+    return _panelists
