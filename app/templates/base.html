@@ -26,6 +26,11 @@
     gtag('config', '{{ ga_property_code }}');
     </script>
     {% endif %}
+
+    {% if umami_analytics %}
+    <!-- Umami Analytics -->
+    {{ umami_analytics|safe }}
+    {% endif %}
     {% endblock head %}
 </head>
 

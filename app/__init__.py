@@ -25,10 +25,12 @@ from .scorekeepers.routes import blueprint as scorekeepers_bp
 from .shows.redirects import blueprint as shows_redirects_bp
 from .shows.routes import blueprint as shows_bp
 from .sitemaps.routes import blueprint as sitemaps_bp
+from .utility import format_umami_analytics
 from .version import APP_VERSION
 
 
 def create_app():
+    """Create Flask application."""
     app = Flask(__name__)
     app.url_map.strict_slashes = False
 
@@ -48,7 +50,6 @@ def create_app():
 
     # Set up Jinja globals
     app.jinja_env.globals["app_version"] = APP_VERSION
-    app.jinja_env.globals["date_string_to_date"] = utility.date_string_to_date
     app.jinja_env.globals["current_year"] = utility.current_year
     app.jinja_env.globals["rank_map"] = RANK_MAP
     app.jinja_env.globals["rendered_at"] = utility.generate_date_time_stamp
@@ -56,6 +57,10 @@ def create_app():
     app.jinja_env.globals["time_zone"] = _config["settings"]["app_time_zone"]
     app.jinja_env.globals["ga_property_code"] = _config["settings"].get(
         "ga_property_code", ""
+    )
+    umami = _config["settings"].get("umami_analytics", None)
+    app.jinja_env.globals["umami_analytics"] = format_umami_analytics(
+        umami_analytics=umami
     )
     app.jinja_env.globals["api_url"] = _config["settings"].get("api_url", "")
     app.jinja_env.globals["blog_url"] = _config["settings"].get("blog_url", "")

@@ -20,6 +20,14 @@
         "site_url": "",
         "stats_url": "",
         "ga_property_code": null,
+        "umami_analytics": {
+            "_enabled": false,
+            "url": "",
+            "data_website_id": "",
+            "data_domains": "",
+            "data_host_url": "",
+            "data_auto_track": true
+        },
         "time_zone": "UTC",
         "mastodon_url": "",
         "mastodon_user": "",
