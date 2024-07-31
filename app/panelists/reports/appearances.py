@@ -15,7 +15,7 @@ from . import common
 def retrieve_first_most_recent_appearances(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
-    """Retrieve first and most recent appearances for both regular and all shows for all panelists."""
+    """Retrieve first/most recent appearances for both regular and all shows for all panelists."""
     panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not panelists:
