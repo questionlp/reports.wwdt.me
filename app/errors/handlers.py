@@ -16,4 +16,4 @@ def not_found(error) -> tuple[str, Literal[404]]:
 
 def handle_exception(error) -> tuple[str, Literal[500]]:
     """Handle exceptions in a slightly more graceful manner."""
-    return render_template("errors/500.html"), 500
+    return render_template("errors/500.html", error=error), 500

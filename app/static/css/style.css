@@ -142,6 +142,28 @@
         width: 36rem;
     }
 
+    col.long-text {
+        width: 48rem;
+    }
+
+    .description-text p, .notes-text p {
+        margin-top: 0;
+    }
+
+    .description-text p:last-of-type, .notes-text p:last-of-type {
+        margin-top: revert;
+        margin-bottom: 0;
+    }
+
+    .description-text p:only-of-type, .notes-text p:only-of-type {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .description-text ul:last-of-type, .notes-text ul:last-of-type {
+        margin-bottom: 0 !important;
+    }
+
     form {
         border: 1px solid #666;
         padding: 0.75em;

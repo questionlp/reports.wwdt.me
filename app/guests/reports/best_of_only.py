@@ -11,7 +11,10 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_guest_appearances(
     guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict]:
-    """Retrieve a list of shows a Not My Job guest has made an appearance on (including Best Of and Repeats)."""
+    """Retrieve a list of shows a Not My Job guest has made an appearance.
+
+    Includes Best Of and Repeats.
+    """
     if not database_connection.is_connected():
         database_connection.reconnect()
 

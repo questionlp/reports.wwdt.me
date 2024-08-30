@@ -47,8 +47,6 @@ def retrieve_single_appearances(
     for row in results:
         list_panelists.append(row.panelistid)
 
-    # panelist_ids = ", ".join(str(ids) for ids in list_panelists)
-
     if use_decimal_scores:
         query = f"""
             SELECT p.panelist, p.panelistslug, s.showdate,
