@@ -44,6 +44,14 @@ def test_counts_by_year(client: FlaskClient) -> None:
     assert b"Best Of Repeats" in response.data
 
 
+def test_descriptions(client: FlaskClient) -> None:
+    """Testing shows.routes.descriptions."""
+    response: TestResponse = client.get("/shows/descriptions")
+    assert response.status_code == 200
+    assert b"Show Descriptions" in response.data
+    assert b"Show Date" in response.data
+
+
 def test_guest_host(client: FlaskClient) -> None:
     """Testing shows.routes.guest_host."""
     response: TestResponse = client.get("/shows/guest-host")
@@ -145,6 +153,14 @@ def test_not_my_job_vs_bluffs(client: FlaskClient) -> None:
     assert b"Win %" in response.data
 
 
+def test_notes(client: FlaskClient) -> None:
+    """Testing shows.routes.notes."""
+    response: TestResponse = client.get("/shows/notes")
+    assert response.status_code == 200
+    assert b"Show Notes" in response.data
+    assert b"Show Date" in response.data
+
+
 def test_original_shows(client: FlaskClient) -> None:
     """Testing shows.routes.original_shows."""
     response: TestResponse = client.get("/shows/original-shows")
@@ -242,7 +258,10 @@ def test_search_multiple_panelists_post_3(
 def test_search_multiple_panelists_post_3_best_of(
     client: FlaskClient, panelist_1: str, panelist_2: str, panelist_3: str
 ) -> None:
-    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists and including Best Of shows."""
+    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists.
+
+    Includes Best Of shows.
+    """
     response: TestResponse = client.post(
         "/shows/search-multiple-panelists",
         data={
@@ -264,7 +283,10 @@ def test_search_multiple_panelists_post_3_best_of(
 def test_search_multiple_panelists_post_3_repeat(
     client: FlaskClient, panelist_1: str, panelist_2: str, panelist_3: str
 ) -> None:
-    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists and including repeat shows."""
+    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists.
+
+    Includes repeat shows.
+    """
     response: TestResponse = client.post(
         "/shows/search-multiple-panelists",
         data={
@@ -286,7 +308,10 @@ def test_search_multiple_panelists_post_3_repeat(
 def test_search_multiple_panelists_post_3_repeat_best_of(
     client: FlaskClient, panelist_1: str, panelist_2: str, panelist_3: str
 ) -> None:
-    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists and including Best Of and repeat shows."""
+    """Testing shows.routes.search_multiple_panelists (POST) with 3 panelists.
+
+    Includes Best Of and repeat shows.
+    """
     response: TestResponse = client.post(
         "/shows/search-multiple-panelists",
         data={

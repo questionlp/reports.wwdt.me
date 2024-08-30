@@ -150,6 +150,7 @@ def average_scores_by_year() -> str:
 
 @blueprint.route("/average-scores-by-year-all")
 def average_scores_by_year_all() -> str:
+    """View: Average Scores by Year All."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     average_scores = retrieve_all_panelists_yearly_average(
         database_connection=_database_connection,

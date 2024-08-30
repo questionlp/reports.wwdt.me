@@ -1,5 +1,16 @@
 # Changes
 
+## 2.12.0
+
+### Application Changes
+
+- Add show descriptions and show notes reports
+- Fix issues reported by Pylint
+
+### Component Changes
+
+- Upgrade gunicorn from 22.0.0 to 23.0.0
+
 ## 2.11.0
 
 ### Application Changes

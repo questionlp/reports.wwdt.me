@@ -11,6 +11,7 @@ from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.guest_host import retrieve_shows_guest_host
 from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
 from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_stats
+from .reports.info import retrieve_show_descriptions, retrieve_show_notes
 from .reports.lightning_round import (
     shows_ending_with_three_way_tie,
     shows_lightning_round_start_zero,
@@ -87,6 +88,16 @@ def counts_by_year() -> str:
     _database_connection.close()
 
     return render_template("shows/counts-by-year.html", show_counts=_counts)
+
+
+@blueprint.route("/descriptions")
+def descriptions() -> str:
+    """View: Show Descriptions."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _descriptions = retrieve_show_descriptions(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/descriptions.html", descriptions=_descriptions)
 
 
 @blueprint.route("/guest-host")
@@ -238,6 +249,16 @@ def not_my_job_vs_bluffs() -> str:
     )
 
 
+@blueprint.route("/notes")
+def notes() -> str:
+    """View: Show Notes."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _notes = retrieve_show_notes(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/notes.html", notes=_notes)
+
+
 @blueprint.route("/original-shows")
 def original_shows() -> str:
     """View: Original Shows Report."""
@@ -311,6 +332,7 @@ def search_multiple_panelists() -> str:
         if len(deduped_panelists) > 0 and deduped_panelists <= _panelists.keys():
             # Revert set back to list
             _panelist_values = list(deduped_panelists)
+            _shows = []
             if len(_panelist_values) == 3:
                 _shows = retrieve_matching_three(
                     database_connection=_database_connection,
@@ -337,10 +359,15 @@ def search_multiple_panelists() -> str:
                 )
 
             _database_connection.close()
+            if _shows:
+                return render_template(
+                    "shows/search-multiple-panelists.html",
+                    panelists=_panelists,
+                    shows=_shows,
+                )
+
             return render_template(
-                "shows/search-multiple-panelists.html",
-                panelists=_panelists,
-                shows=_shows,
+                "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
             )
 
         # Fallback for no valid panelist(s) selected

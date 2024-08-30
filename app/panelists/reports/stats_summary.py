@@ -154,7 +154,6 @@ def retrieve_all_panelists_stats(
 
     all_stats = {}
 
-    # for panelist_slug, _ in panelists.items():
     for panelist in panelists:
         panelist_slug = panelist["slug"]
         all_stats[panelist_slug] = {
