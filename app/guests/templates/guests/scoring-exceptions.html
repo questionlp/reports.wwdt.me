@@ -52,7 +52,11 @@
                 </a>
             </td>
             <td>{{ guest.exceptions[0].score }}</td>
+            {% if guest.exceptions[0].notes %}
             <td class="notes">{{ guest.exceptions[0].notes|markdown|safe }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
         </tr>
         {% else %}
             {% for count in range(0, guest.exceptions|length) %}
@@ -71,7 +75,7 @@
             </td>
             <td>{{ guest.exceptions[count].score }}</td>
             {% if guest.exceptions[count].notes %}
-            <td>{{ guest.exceptions[count].notes|markdown|safe }}</td>
+            <td class="notes">{{ guest.exceptions[count].notes|markdown|safe }}</td>
             {% else %}
             <td class="no-data">-</td>
             {% endif %}

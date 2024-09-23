@@ -24,5 +24,5 @@ def robots_txt() -> Response:
     if not static_robots.exists():
         response = render_template("robots.txt")
         return Response(response, mimetype="text/plain")
-    else:
-        return send_file(static_robots, mimetype="text/plain")
+
+    return send_file(static_robots, mimetype="text/plain")

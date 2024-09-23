@@ -169,10 +169,10 @@ def retrieve_bluff_stats(
         JOIN ww_shows s ON s.showid = blm.showid
         WHERE
         (s.bestof = 0 AND blm.chosenbluffpnlid IS NOT NULL AND
-         blm.correctbluffpnlid IS NOT NULL) OR
+            blm.correctbluffpnlid IS NOT NULL) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
-         blm.chosenbluffpnlid IS NOT NULL AND blm.correctbluffpnlid IS NOT
-         NULL);
+            blm.chosenbluffpnlid IS NOT NULL AND blm.correctbluffpnlid IS NOT
+            NULL);
         """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
@@ -191,7 +191,7 @@ def retrieve_bluff_stats(
         WHERE
         (s.bestof = 0 AND blm.chosenbluffpnlid = blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
-         blm.chosenbluffpnlid = blm.correctbluffpnlid);
+            blm.chosenbluffpnlid = blm.correctbluffpnlid);
         """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
@@ -210,7 +210,7 @@ def retrieve_bluff_stats(
         WHERE
         (s.bestof = 0 AND blm.chosenbluffpnlid <> blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND blm.chosenbluffpnlid
-         <> blm.correctbluffpnlid);
+            <> blm.correctbluffpnlid);
         """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
