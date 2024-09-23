@@ -11,7 +11,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_show_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, int]:
-    """Retrieve the number of Regular, Best Of, Repeat and Repeat/Best Of shows broken down by year."""
+    """Retrieve number of Regular, Best Of, Repeat and Repeat/Best Of shows broken down by year."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -36,17 +36,17 @@ def retrieve_show_counts_by_year(
         query = """
             SELECT
             (SELECT COUNT(showid) FROM ww_shows
-             WHERE YEAR(showdate) = %s AND showdate <= NOW()
-             AND bestof = 0 AND repeatshowid IS NULL) AS 'regular',
+                WHERE YEAR(showdate) = %s AND showdate <= NOW()
+                AND bestof = 0 AND repeatshowid IS NULL) AS 'regular',
             (SELECT COUNT(showid) FROM ww_shows
-             WHERE YEAR(showdate) = %s AND showdate <= NOW()
-             AND bestof = 1 AND repeatshowid IS NULL) AS 'bestof',
+                WHERE YEAR(showdate) = %s AND showdate <= NOW()
+                AND bestof = 1 AND repeatshowid IS NULL) AS 'bestof',
             (SELECT COUNT(showid) FROM ww_shows
-             WHERE YEAR(showdate) = %s AND showdate <= NOW()
-             AND bestof = 0 AND repeatshowid IS NOT NULL) AS 'repeat',
+                WHERE YEAR(showdate) = %s AND showdate <= NOW()
+                AND bestof = 0 AND repeatshowid IS NOT NULL) AS 'repeat',
             (SELECT COUNT(showid) FROM ww_shows
-             WHERE YEAR(showdate) = %s AND showdate <= NOW()
-             AND bestof = 1 AND repeatshowid IS NOT NULL) AS 'repeat_bestof';
+                WHERE YEAR(showdate) = %s AND showdate <= NOW()
+                AND bestof = 1 AND repeatshowid IS NOT NULL) AS 'repeat_bestof';
             """
         cursor = database_connection.cursor(named_tuple=True)
         cursor.execute(

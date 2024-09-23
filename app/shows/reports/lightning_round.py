@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
+# pylint: disable=C0301
 """WWDTM Lightning Round Report Functions."""
 from flask import current_app
 from mysql.connector.connection import MySQLConnection

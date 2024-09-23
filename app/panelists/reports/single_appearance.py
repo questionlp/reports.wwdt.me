@@ -34,7 +34,7 @@ def retrieve_single_appearances(
         GROUP BY p.panelistid
         HAVING COUNT(p.panelistid) = 1
         ORDER BY p.panelistid;
-    """
+        """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query)
     results = cursor.fetchall()

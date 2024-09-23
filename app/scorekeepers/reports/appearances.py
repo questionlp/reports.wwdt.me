@@ -16,12 +16,12 @@ def retrieve_all_scorekeepers(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug "
-        "FROM ww_scorekeepers sk "
-        "WHERE sk.scorekeeper <> '(TBD)' "
-        "ORDER BY sk.scorekeeperslug ASC;"
-    )
+    query = """
+        SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
+        FROM ww_scorekeepers sk
+        WHERE sk.scorekeeper <> '(TBD)'
+        ORDER BY sk.scorekeeperslug ASC;
+        """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -49,18 +49,18 @@ def retrieve_appearances_by_scorekeeper(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT ( "
-        "SELECT COUNT(skm.showid) FROM ww_showskmap skm "
-        "JOIN ww_shows s ON s.showid = skm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND "
-        "sk.scorekeeperslug = %s ) AS regular, ( "
-        "SELECT COUNT(skm.showid) FROM ww_showskmap skm "
-        "JOIN ww_shows s ON s.showid = skm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "WHERE sk.scorekeeperslug = %s ) AS allshows;"
-    )
+    query = """
+        SELECT (
+        SELECT COUNT(skm.showid) FROM ww_showskmap skm
+        JOIN ww_shows s ON s.showid = skm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND
+        sk.scorekeeperslug = %s ) AS regular, (
+        SELECT COUNT(skm.showid) FROM ww_showskmap skm
+        JOIN ww_shows s ON s.showid = skm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE sk.scorekeeperslug = %s ) AS allshows;
+        """
     cursor.execute(
         query,
         (
@@ -91,15 +91,15 @@ def retrieve_first_most_recent_appearances(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(named_tuple=True)
-    query = (
-        "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
-        "FROM ww_showskmap skm "
-        "JOIN ww_shows s ON s.showid = skm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "WHERE sk.scorekeeperslug = %s "
-        "AND s.bestof = 0 "
-        "AND s.repeatshowid IS null;"
-    )
+    query = """
+        SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
+        FROM ww_showskmap skm
+        JOIN ww_shows s ON s.showid = skm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE sk.scorekeeperslug = %s
+        AND s.bestof = 0
+        AND s.repeatshowid IS null;
+        """
     cursor.execute(query, (scorekeeper_slug,))
     result = cursor.fetchone()
 
@@ -109,13 +109,13 @@ def retrieve_first_most_recent_appearances(
     first = result.min.isoformat() if result.min else None
     most_recent = result.max.isoformat() if result.max else None
 
-    query = (
-        "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
-        "FROM ww_showskmap skm "
-        "JOIN ww_shows s ON s.showid = skm.showid "
-        "JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        "WHERE sk.scorekeeperslug = %s;"
-    )
+    query = """
+        SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
+        FROM ww_showskmap skm
+        JOIN ww_shows s ON s.showid = skm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE sk.scorekeeperslug = %s;
+        """
     cursor.execute(query, (scorekeeper_slug,))
     result_all = cursor.fetchone()
     cursor.close()

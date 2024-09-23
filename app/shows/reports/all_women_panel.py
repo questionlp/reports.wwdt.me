@@ -14,7 +14,7 @@ def retrieve_show_details(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict:
-    """Retrieves host, scorekeeper, panelist, guest and location information for the requested show ID."""
+    """Retrieves host, scorekeeper, panelist, guest and location information."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]

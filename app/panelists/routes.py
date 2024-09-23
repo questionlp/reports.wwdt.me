@@ -132,14 +132,14 @@ def average_scores_by_year() -> str:
                 panelist_info=panelist_info,
                 average_scores=average_scores,
             )
-        else:
-            # No valid panelist returned
-            _database_connection.close()
-            return render_template(
-                "panelists/average-scores-by-year.html",
-                all_panelists=_panelists_list,
-                average_scores=None,
-            )
+
+        # No valid panelist returned
+        _database_connection.close()
+        return render_template(
+            "panelists/average-scores-by-year.html",
+            all_panelists=_panelists_list,
+            average_scores=None,
+        )
 
     # Fallback for GET request
     _database_connection.close()
@@ -214,14 +214,14 @@ def bluff_stats_by_year() -> str:
             panelists=_panelists_dict,
             bluff_stats=_bluff_stats,
         )
-    else:
-        # Fallback for GET request
-        _database_connection.close()
-        return render_template(
-            "panelists/bluff-stats-by-year.html",
-            panelists=_panelists_dict,
-            bluff_stats=None,
-        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/bluff-stats-by-year.html",
+        panelists=_panelists_dict,
+        bluff_stats=None,
+    )
 
 
 @blueprint.route("/debut-by-year")
@@ -319,14 +319,14 @@ def panelist_pvp() -> str:
                 panelist_info=panelist_info,
                 results=_results[panelist],
             )
-        else:
-            # No valid panelist returned
-            _database_connection.close()
-            return render_template(
-                "panelists/panelist-pvp.html",
-                all_panelists=_panelists_list,
-                results=None,
-            )
+
+        # No valid panelist returned
+        _database_connection.close()
+        return render_template(
+            "panelists/panelist-pvp.html",
+            all_panelists=_panelists_list,
+            results=None,
+        )
 
     # Fallback for GET request
     _database_connection.close()

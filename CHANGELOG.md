@@ -1,5 +1,16 @@
 # Changes
 
+## 2.13.0
+
+### Application Changes
+
+- Fix Guest Scoring Exceptions report where an exception does not contain any notes
+- Code cleanup and fix Pylint errors and warnings
+
+### Development Changes
+
+- Upgrade black from 0.5.1 to 0.6.7
+
 ## 2.12.0
 
 ### Application Changes

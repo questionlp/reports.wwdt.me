@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
+# pylint: disable=C0301
 """WWDTM Show Scoring Reports Functions."""
 from decimal import Decimal
 
@@ -16,7 +17,7 @@ def retrieve_show_details(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> dict:
-    """Retrieves host, scorekeeper, panelist, guest and location information for the requested show ID."""
+    """Retrieves host, scorekeeper, panelist, guest and location information."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -371,6 +372,10 @@ def retrieve_shows_panelist_perfect_scores(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[dict[str, str | int]]:
+    """Retrieves shows in which a panelist scores a total of 20 points or higher.
+
+    Best Of and repeat shows are excluded.
+    """
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -380,8 +385,6 @@ def retrieve_shows_panelist_perfect_scores(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    """Retrieves shows in which a panelist scores a total of 20 points,
-    or higher. Best Of and repeat shows are excluded."""
     if use_decimal_scores:
         query = """
             SELECT s.showdate, p.panelist, p.panelistslug,

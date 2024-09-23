@@ -53,7 +53,7 @@ def retrieve_perfect_score_counts(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             GROUP BY p.panelistid
             ORDER BY COUNT(p.panelistid) DESC;
-        """
+            """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query)
     results_eq_20 = cursor.fetchall()
@@ -70,7 +70,7 @@ def retrieve_perfect_score_counts(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             GROUP BY p.panelistid
             ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
-        """
+            """
     else:
         query = """
             SELECT p.panelistid, COUNT(p.panelistid) AS score_count
@@ -81,7 +81,7 @@ def retrieve_perfect_score_counts(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             GROUP BY p.panelistid
             ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
-        """
+            """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query)
     results_ge_20 = cursor.fetchall()

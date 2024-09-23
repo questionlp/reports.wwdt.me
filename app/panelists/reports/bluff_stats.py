@@ -159,27 +159,27 @@ def retrieve_panelist_bluffs_by_year(
         database_connection.reconnect()
 
     query = """
-    SELECT YEAR(s.showdate) AS year, count(blm.chosenbluffpnlid) AS chosen
-    FROM ww_showbluffmap blm
-    JOIN ww_shows s ON s.showid = blm.showid
-    JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
-    WHERE p.panelistslug = %s
-    GROUP BY YEAR(s.showdate)
-    ORDER BY YEAR(s.showdate) ASC;
-    """
+        SELECT YEAR(s.showdate) AS year, count(blm.chosenbluffpnlid) AS chosen
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
+        WHERE p.panelistslug = %s
+        GROUP BY YEAR(s.showdate)
+        ORDER BY YEAR(s.showdate) ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query, (panelist_slug,))
     chosen_results = cursor.fetchall()
 
     query = """
-    SELECT YEAR(s.showdate) AS year, count(blm.correctbluffpnlid) AS correct
-    FROM ww_showbluffmap blm
-    JOIN ww_shows s ON s.showid = blm.showid
-    JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
-    WHERE p.panelistslug = %s
-    GROUP BY YEAR(s.showdate)
-    ORDER BY YEAR(s.showdate) ASC;
-    """
+        SELECT YEAR(s.showdate) AS year, count(blm.correctbluffpnlid) AS correct
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        WHERE p.panelistslug = %s
+        GROUP BY YEAR(s.showdate)
+        ORDER BY YEAR(s.showdate) ASC;
+        """
     cursor = database_connection.cursor(named_tuple=True)
     cursor.execute(query, (panelist_slug,))
     correct_results = cursor.fetchall()
