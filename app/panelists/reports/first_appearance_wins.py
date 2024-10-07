@@ -35,7 +35,7 @@ def retrieve_panelists_first_appearance_wins(
         AND pm.showpnlrank IN ('1', '1t')
         ORDER BY p.panelistslug;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -43,11 +43,11 @@ def retrieve_panelists_first_appearance_wins(
     if not result:
         return None
 
-    panelist_slugs = [panelist.panelistslug for panelist in result]
+    panelist_slugs = [panelist["panelistslug"] for panelist in result]
 
     panelists = {}
     for panelist_slug in panelist_slugs:
-        cursor = database_connection.cursor(named_tuple=True)
+        cursor = database_connection.cursor(dictionary=True)
         if use_decimal_scores:
             query = """
                 SELECT p.panelist, s.showid, s.showdate, pm.panelistlrndstart,
@@ -80,25 +80,25 @@ def retrieve_panelists_first_appearance_wins(
         if not result:
             return None
 
-        if result.showpnlrank == "1" or result.showpnlrank == "1t":
+        if result["showpnlrank"] in ("1", "1t"):
             if use_decimal_scores:
                 panelists[panelist_slug] = {
-                    "name": result.panelist,
-                    "show_date": result.showdate.isoformat(),
-                    "start": result.panelistlrndstart,
-                    "correct": result.panelistlrndcorrect,
-                    "score": result.panelistscore,
-                    "score_decimal": result.panelistscore_decimal,
-                    "rank": result.showpnlrank,
+                    "name": result["panelist"],
+                    "show_date": result["showdate"].isoformat(),
+                    "start": result["panelistlrndstart"],
+                    "correct": result["panelistlrndcorrect"],
+                    "score": result["panelistscore"],
+                    "score_decimal": result["panelistscore_decimal"],
+                    "rank": result["showpnlrank"],
                 }
             else:
                 panelists[panelist_slug] = {
-                    "name": result.panelist,
-                    "show_date": result.showdate.isoformat(),
-                    "start": result.panelistlrndstart,
-                    "correct": result.panelistlrndcorrect,
-                    "score": result.panelistscore,
-                    "rank": result.showpnlrank,
+                    "name": result["panelist"],
+                    "show_date": result["showdate"].isoformat(),
+                    "start": result["panelistlrndstart"],
+                    "correct": result["panelistlrndcorrect"],
+                    "score": result["panelistscore"],
+                    "rank": result["showpnlrank"],
                 }
 
     return panelists

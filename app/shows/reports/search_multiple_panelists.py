@@ -24,7 +24,7 @@ def retrieve_panelist_slugs(
         WHERE panelistslug <> 'multiple'
         ORDER BY panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -32,7 +32,7 @@ def retrieve_panelist_slugs(
     if not result:
         return None
 
-    return [row.panelistslug for row in result]
+    return [row["panelistslug"] for row in result]
 
 
 def retrieve_panelists(
@@ -47,7 +47,7 @@ def retrieve_panelists(
         WHERE panelistslug <> 'multiple'
         ORDER BY panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -55,7 +55,7 @@ def retrieve_panelists(
     if not result:
         return None
 
-    return {row.panelistslug: row.panelist for row in result}
+    return {row["panelistslug"]: row["panelist"] for row in result}
 
 
 def retrieve_details(
@@ -77,7 +77,7 @@ def retrieve_details(
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showid = %s;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -86,22 +86,22 @@ def retrieve_details(
         return None
 
     return {
-        "id": result.showid,
-        "date": result.showdate.isoformat(),
-        "best_of": bool(result.bestof),
-        "repeat": bool(result.repeatshowid),
+        "id": result["showid"],
+        "date": result["showdate"].isoformat(),
+        "best_of": bool(result["bestof"]),
+        "repeat": bool(result["repeatshowid"]),
         "location": {
-            "venue": result.venue,
-            "city": result.city,
-            "state": result.state,
+            "venue": result["venue"],
+            "city": result["city"],
+            "state": result["state"],
         },
-        "host": result.host,
-        "scorekeeper": result.scorekeeper,
+        "host": result["host"],
+        "scorekeeper": result["scorekeeper"],
         "panelists": details.retrieve_show_panelists(
-            show_id=result.showid, database_connection=database_connection
+            show_id=result["showid"], database_connection=database_connection
         ),
         "guests": details.retrieve_show_guests(
-            show_id=result.showid, database_connection=database_connection
+            show_id=result["showid"], database_connection=database_connection
         ),
     }
 
@@ -126,7 +126,7 @@ def retrieve_matching_one(
         HAVING COUNT(s.showid) = 1
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug_1,))
     result = cursor.fetchall()
     cursor.close()
@@ -136,13 +136,13 @@ def retrieve_matching_one(
 
     shows = []
     for row in result:
-        best_of = bool(row.bestof)
-        repeat = bool(row.repeatshowid)
+        best_of = bool(row["bestof"])
+        repeat = bool(row["repeatshowid"])
 
         if (best_of and repeat) and (include_best_of or include_repeats):
             shows.append(
                 retrieve_details(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 )
             )
 
@@ -151,7 +151,7 @@ def retrieve_matching_one(
 
         shows.append(
             retrieve_details(
-                show_id=row.showid, database_connection=database_connection
+                show_id=row["showid"], database_connection=database_connection
             )
         )
 
@@ -179,7 +179,7 @@ def retrieve_matching_two(
         HAVING COUNT(s.showid) = 2
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -195,13 +195,13 @@ def retrieve_matching_two(
 
     shows = []
     for row in result:
-        best_of = bool(row.bestof)
-        repeat = bool(row.repeatshowid)
+        best_of = bool(row["bestof"])
+        repeat = bool(row["repeatshowid"])
 
         if (best_of and repeat) and (include_best_of or include_repeats):
             shows.append(
                 retrieve_details(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 )
             )
 
@@ -210,7 +210,7 @@ def retrieve_matching_two(
 
         shows.append(
             retrieve_details(
-                show_id=row.showid, database_connection=database_connection
+                show_id=row["showid"], database_connection=database_connection
             )
         )
 
@@ -239,7 +239,7 @@ def retrieve_matching_three(
         HAVING COUNT(s.showid) = 3
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -256,13 +256,13 @@ def retrieve_matching_three(
 
     shows = []
     for row in result:
-        best_of = bool(row.bestof)
-        repeat = bool(row.repeatshowid)
+        best_of = bool(row["bestof"])
+        repeat = bool(row["repeatshowid"])
 
         if (best_of and repeat) and (include_best_of or include_repeats):
             shows.append(
                 retrieve_details(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 )
             )
 
@@ -271,7 +271,7 @@ def retrieve_matching_three(
 
         shows.append(
             retrieve_details(
-                show_id=row.showid, database_connection=database_connection
+                show_id=row["showid"], database_connection=database_connection
             )
         )
 

@@ -62,7 +62,7 @@ def retrieve_average_scores_by_location(
             ORDER BY average_score DESC, average_total DESC,
             show_count DESC, l.venue ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -75,25 +75,25 @@ def retrieve_average_scores_by_location(
         if use_decimal_scores:
             _average_scores.append(
                 {
-                    "id": row.locationid,
-                    "venue": row.venue,
-                    "city": row.city,
-                    "state": row.state,
-                    "average_score": round(Decimal(row.average_score), 5),
-                    "average_total": round(Decimal(row.average_total), 5),
-                    "show_count": int(row.show_count),
+                    "id": row["locationid"],
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
+                    "average_score": round(Decimal(row["average_score"]), 5),
+                    "average_total": round(Decimal(row["average_total"]), 5),
+                    "show_count": int(row["show_count"]),
                 }
             )
         else:
             _average_scores.append(
                 {
-                    "id": row.locationid,
-                    "venue": row.venue,
-                    "city": row.city,
-                    "state": row.state,
-                    "average_score": round(row.average_score, 5),
-                    "average_total": round(row.average_total, 5),
-                    "show_count": int(row.show_count),
+                    "id": row["locationid"],
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
+                    "average_score": round(row["average_score"], 5),
+                    "average_total": round(row["average_total"], 5),
+                    "show_count": int(row["show_count"]),
                 }
             )
 

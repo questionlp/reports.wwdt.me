@@ -37,7 +37,7 @@ def retrieve_show_details(
         JOIN ww_guests g ON g.guestid = gm.guestid
         WHERE hm.showid = %s;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
 
@@ -45,13 +45,13 @@ def retrieve_show_details(
         return None
 
     show_details = {
-        "date": result.showdate.isoformat(),
-        "host": result.host,
-        "scorekeeper": result.scorekeeper,
+        "date": result["showdate"].isoformat(),
+        "host": result["host"],
+        "scorekeeper": result["scorekeeper"],
         "guest": {
-            "name": result.guest,
-            "score": result.guestscore,
-            "exception": bool(result.exception),
+            "name": result["guest"],
+            "score": result["guestscore"],
+            "exception": bool(result["exception"]),
         },
     }
 
@@ -69,9 +69,9 @@ def retrieve_show_details(
         show_details["location"] = None
     else:
         show_details["location"] = {
-            "city": result.city,
-            "state": result.state,
-            "venue": result.venue,
+            "city": result["city"],
+            "state": result["state"],
+            "venue": result["venue"],
         }
 
     # Retrieve panelists and their respective show rank and score
@@ -103,16 +103,16 @@ def retrieve_show_details(
             if use_decimal_scores:
                 panelists.append(
                     {
-                        "name": row.panelist,
-                        "score": row.panelistscore,
-                        "score_decimal": row.panelistscore_decimal,
+                        "name": row["panelist"],
+                        "score": row["panelistscore"],
+                        "score_decimal": row["panelistscore_decimal"],
                     }
                 )
             else:
                 panelists.append(
                     {
-                        "name": row.panelist,
-                        "score": row.panelistscore,
+                        "name": row["panelist"],
+                        "score": row["panelistscore"],
                     }
                 )
 
@@ -147,7 +147,7 @@ def retrieve_shows_all_women_panel(
         HAVING COUNT(s.showid) = 3
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -157,7 +157,7 @@ def retrieve_shows_all_women_panel(
 
     shows = []
     for row in result:
-        show_id = row.showid
+        show_id = row["showid"]
         show_details = retrieve_show_details(
             show_id, database_connection, use_decimal_scores=use_decimal_scores
         )

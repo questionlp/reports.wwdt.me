@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
+# pylint: disable=R1731
 """Configuration Loading and Parsing for Wait Wait Reports."""
 import json
 from pathlib import Path

@@ -43,17 +43,17 @@ def retrieve_panelists(
             AND p.panelist <> '<Multiple>'
             ORDER BY p.panelist ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
 
     panelists = {}
     for row in result:
-        panelists[row.panelistslug] = {
-            "id": row.panelistid,
-            "name": row.panelist,
-            "slug": row.panelistslug,
+        panelists[row["panelistslug"]] = {
+            "id": row["panelistid"],
+            "name": row["panelist"],
+            "slug": row["panelistslug"],
         }
 
     return panelists
@@ -98,7 +98,7 @@ def retrieve_panelist_appearances(
                 AND s.repeatshowid IS NULL
                 ORDER BY s.showdate ASC;
                 """
-        cursor = database_connection.cursor(named_tuple=True)
+        cursor = database_connection.cursor(dictionary=False)
         cursor.execute(query, (panelist_info["slug"],))
         result = cursor.fetchall()
         cursor.close()
@@ -149,18 +149,18 @@ def retrieve_show_scores(
             AND pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore DESC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
 
     if result:
         for show in result:
-            show_date = show.showdate.isoformat()
+            show_date = show["showdate"].isoformat()
             if show_date not in shows:
                 shows[show_date] = {}
 
-            shows[show_date][show.panelistslug] = show.score
+            shows[show_date][show["panelistslug"]] = show["score"]
 
     return shows
 

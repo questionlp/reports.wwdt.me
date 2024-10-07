@@ -23,7 +23,7 @@ def retrieve_panelists(
         WHERE p.panelist <> '<Multiple>'
         ORDER BY p.panelistslug ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -35,9 +35,9 @@ def retrieve_panelists(
     for row in result:
         _panelists.append(
             {
-                "id": row.panelistid,
-                "slug": row.panelistslug,
-                "name": row.panelist,
+                "id": row["panelistid"],
+                "slug": row["panelistslug"],
+                "name": row["panelist"],
             }
         )
 
@@ -57,7 +57,7 @@ def retrieve_panelists_id_key(
         WHERE p.panelist <> '<Multiple>'
         ORDER BY p.panelistslug ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -67,9 +67,9 @@ def retrieve_panelists_id_key(
 
     _panelists = {}
     for row in result:
-        _panelists[row.panelistid] = {
-            "name": row.panelist,
-            "slug": row.panelistslug,
+        _panelists[row["panelistid"]] = {
+            "name": row["panelist"],
+            "slug": row["panelistslug"],
         }
 
     return _panelists

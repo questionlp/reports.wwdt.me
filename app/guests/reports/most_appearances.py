@@ -21,7 +21,7 @@ def retrieve_guest_most_appearances_all(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT g.guestid, g.guest, g.guestslug, "
         "count(gm.showid) AS appearances "
@@ -43,11 +43,11 @@ def retrieve_guest_most_appearances_all(
 
     _guests = {}
     for row in result:
-        _guests[row.guestid] = {
-            "id": row.guestid,
-            "name": row.guest,
-            "slug": row.guestslug,
-            "all_shows": row.appearances,
+        _guests[row["guestid"]] = {
+            "id": row["guestid"],
+            "name": row["guest"],
+            "slug": row["guestslug"],
+            "all_shows": row["appearances"],
         }
 
     return _guests
@@ -64,7 +64,7 @@ def retrieve_guest_most_appearances_regular(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT g.guestid, g.guest, g.guestslug, "
         "count(gm.showid) AS appearances "
@@ -85,11 +85,11 @@ def retrieve_guest_most_appearances_regular(
 
     _guests = {}
     for row in result:
-        _guests[row.guestid] = {
-            "id": row.guestid,
-            "name": row.guest,
-            "slug": row.guestslug,
-            "regular_shows": row.appearances,
+        _guests[row["guestid"]] = {
+            "id": row["guestid"],
+            "name": row["guest"],
+            "slug": row["guestslug"],
+            "regular_shows": row["appearances"],
         }
 
     return _guests

@@ -56,7 +56,7 @@ def retrieve_common_shows(
             HAVING COUNT(pm.showid) = 2
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -70,7 +70,7 @@ def retrieve_common_shows(
     if not result:
         return None
 
-    return [row.showid for row in result]
+    return [row["showid"] for row in result]
 
 
 def retrieve_panelists_scores(
@@ -115,7 +115,7 @@ def retrieve_panelists_scores(
                 WHERE s.showid = %s
                 AND p.panelistslug IN (%s, %s);
                 """
-        cursor = database_connection.cursor(named_tuple=True)
+        cursor = database_connection.cursor(dictionary=True)
         cursor.execute(
             query,
             (
@@ -130,17 +130,17 @@ def retrieve_panelists_scores(
             return None
 
         for row in result:
-            show_date = row.showdate.isoformat()
+            show_date = row["showdate"].isoformat()
             if show_date not in show_scores:
                 show_scores[show_date] = {}
 
             panelist_info = {
-                "slug": row.panelistslug,
-                "name": row.panelist,
-                "score": row.score,
-                "rank": row.showpnlrank,
+                "slug": row["panelistslug"],
+                "name": row["panelist"],
+                "score": row["score"],
+                "rank": row["showpnlrank"],
             }
 
-            show_scores[show_date][row.panelistslug] = panelist_info
+            show_scores[show_date][row["panelistslug"]] = panelist_info
 
     return show_scores

@@ -23,7 +23,7 @@ def retrieve_show_guests(
         JOIN ww_guests g on g.guestid = gm.guestid
         WHERE gm.showid = %s;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -35,9 +35,9 @@ def retrieve_show_guests(
     for row in result:
         guests.append(
             {
-                "id": row.guestid,
-                "name": row.guest,
-                "slug": row.guestslug,
+                "id": row["guestid"],
+                "name": row["guest"],
+                "slug": row["guestslug"],
             }
         )
 
@@ -58,7 +58,7 @@ def retrieve_show_panelists(
         WHERE pm.showid = %s
         ORDER BY pm.showpnlmapid ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -70,9 +70,9 @@ def retrieve_show_panelists(
     for row in result:
         panelists.append(
             {
-                "id": row.panelistid,
-                "name": row.panelist,
-                "slug": row.panelistslug,
+                "id": row["panelistid"],
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
             }
         )
 
@@ -103,7 +103,7 @@ def retrieve_all_shows(
         AND s.showdate < NOW()
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -117,22 +117,22 @@ def retrieve_all_shows(
         shows.append(
             {
                 "count": show_count,
-                "id": row.showid,
-                "date": row.showdate,
-                "best_of": bool(row.bestof),
-                "repeat": bool(row.repeatshowid),
+                "id": row["showid"],
+                "date": row["showdate"],
+                "best_of": bool(row["bestof"]),
+                "repeat": bool(row["repeatshowid"]),
                 "location": {
-                    "venue": row.venue,
-                    "city": row.city,
-                    "state": row.state,
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
                 },
-                "host": row.host,
-                "scorekeeper": row.scorekeeper,
+                "host": row["host"],
+                "scorekeeper": row["scorekeeper"],
                 "guests": retrieve_show_guests(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 ),
                 "panelists": retrieve_show_panelists(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 ),
             }
         )
@@ -167,7 +167,7 @@ def retrieve_all_original_shows(
         AND s.showdate < NOW()
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -179,7 +179,7 @@ def retrieve_all_original_shows(
     show_count = 1
     for row in result:
         guest = retrieve_show_guests(
-            show_id=row.showid, database_connection=database_connection
+            show_id=row["showid"], database_connection=database_connection
         )
 
         show_guest = guest[0] if guest else None
@@ -187,17 +187,17 @@ def retrieve_all_original_shows(
         shows.append(
             {
                 "count": show_count,
-                "id": row.showid,
-                "date": row.showdate,
+                "id": row["showid"],
+                "date": row["showdate"],
                 "location": {
-                    "venue": row.venue,
-                    "city": row.city,
-                    "state": row.state,
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
                 },
-                "host": row.host,
-                "scorekeeper": row.scorekeeper,
+                "host": row["host"],
+                "scorekeeper": row["scorekeeper"],
                 "panelists": retrieve_show_panelists(
-                    show_id=row.showid, database_connection=database_connection
+                    show_id=row["showid"], database_connection=database_connection
                 ),
                 "guest": show_guest,
             }

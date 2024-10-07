@@ -28,7 +28,7 @@ def retrieve_show_details(
         database_connection.reconnect()
 
     # Retrieve host and scorekeeper
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT s.showdate, h.host, sk.scorekeeper
         FROM ww_shows s
@@ -45,9 +45,9 @@ def retrieve_show_details(
         return None
 
     show_details = {
-        "date": result.showdate.isoformat(),
-        "host": result.host,
-        "scorekeeper": result.scorekeeper,
+        "date": result["showdate"].isoformat(),
+        "host": result["host"],
+        "scorekeeper": result["scorekeeper"],
     }
 
     # Retrieve guest details
@@ -68,9 +68,9 @@ def retrieve_show_details(
         for row in result:
             guests.append(
                 {
-                    "name": row.guest,
-                    "score": row.guestscore,
-                    "exception": bool(row.exception),
+                    "name": row["guest"],
+                    "score": row["guestscore"],
+                    "exception": bool(row["exception"]),
                 }
             )
 
@@ -90,9 +90,9 @@ def retrieve_show_details(
         show_details["location"] = None
     else:
         show_details["location"] = {
-            "city": result.city,
-            "state": result.state,
-            "venue": result.venue,
+            "city": result["city"],
+            "state": result["state"],
+            "venue": result["venue"],
         }
 
     # Retrieve panelists and their respective show rank and score
@@ -124,16 +124,16 @@ def retrieve_show_details(
             if use_decimal_scores:
                 panelists.append(
                     {
-                        "name": row.panelist,
-                        "score": row.panelistscore,
-                        "score_decimal": row.panelistscore_decimal,
+                        "name": row["panelist"],
+                        "score": row["panelistscore"],
+                        "score_decimal": row["panelistscore_decimal"],
                     }
                 )
             else:
                 panelists.append(
                     {
-                        "name": row.panelist,
-                        "score": row.panelistscore,
+                        "name": row["panelist"],
+                        "score": row["panelistscore"],
                     }
                 )
 
@@ -176,7 +176,7 @@ def retrieve_shows_all_high_scoring(
             HAVING SUM(pm.panelistscore) >= 50
             ORDER BY SUM(pm.panelistscore) DESC, s.showdate DESC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -186,16 +186,16 @@ def retrieve_shows_all_high_scoring(
 
     shows = []
     for row in result:
-        show_id = row.showid
+        show_id = row["showid"]
         show_details = retrieve_show_details(
             show_id, database_connection, use_decimal_scores=use_decimal_scores
         )
 
         if show_details:
             if use_decimal_scores:
-                show_details["total_score"] = Decimal(row.total)
+                show_details["total_score"] = Decimal(row["total"])
             else:
-                show_details["total_score"] = row.total
+                show_details["total_score"] = row["total"]
 
             if show_details:
                 shows.append(show_details)
@@ -243,7 +243,7 @@ def retrieve_shows_all_low_scoring(
             HAVING SUM(pm.panelistscore) < 30
             ORDER BY SUM(pm.panelistscore) ASC, s.showdate DESC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -253,16 +253,16 @@ def retrieve_shows_all_low_scoring(
 
     shows = []
     for row in result:
-        show_id = row.showid
+        show_id = row["showid"]
         show_details = retrieve_show_details(
             show_id, database_connection, use_decimal_scores=use_decimal_scores
         )
 
         if show_details:
             if use_decimal_scores:
-                show_details["total_score"] = Decimal(row.total)
+                show_details["total_score"] = Decimal(row["total"])
             else:
-                show_details["total_score"] = row.total
+                show_details["total_score"] = row["total"]
 
             if show_details:
                 shows.append(show_details)
@@ -312,7 +312,7 @@ def retrieve_shows_panelist_score_sum_match(
             pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore DESC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -322,29 +322,29 @@ def retrieve_shows_panelist_score_sum_match(
 
     shows = {}
     for row in result:
-        show_date = row.showdate.isoformat()
+        show_date = row["showdate"].isoformat()
         if show_date not in shows:
             shows[show_date] = []
 
         if use_decimal_scores:
             shows[show_date].append(
                 {
-                    "panelist_id": row.panelistid,
-                    "panelist": row.panelist,
-                    "panelist_slug": row.panelistslug,
-                    "score": row.panelistscore,
-                    "score_decimal": row.panelistscore_decimal,
-                    "rank": row.showpnlrank,
+                    "panelist_id": row["panelistid"],
+                    "panelist": row["panelist"],
+                    "panelist_slug": row["panelistslug"],
+                    "score": row["panelistscore"],
+                    "score_decimal": row["panelistscore_decimal"],
+                    "rank": row["showpnlrank"],
                 }
             )
         else:
             shows[show_date].append(
                 {
-                    "panelist_id": row.panelistid,
-                    "panelist": row.panelist,
-                    "panelist_slug": row.panelistslug,
-                    "score": row.panelistscore,
-                    "rank": row.showpnlrank,
+                    "panelist_id": row["panelistid"],
+                    "panelist": row["panelist"],
+                    "panelist_slug": row["panelistslug"],
+                    "score": row["panelistscore"],
+                    "rank": row["showpnlrank"],
                 }
             )
 
@@ -407,7 +407,7 @@ def retrieve_shows_panelist_perfect_scores(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
 
@@ -419,20 +419,20 @@ def retrieve_shows_panelist_perfect_scores(
         if use_decimal_scores:
             shows.append(
                 {
-                    "date": row.showdate,
-                    "panelist": row.panelist,
-                    "panelist_slug": row.panelistslug,
-                    "score": row.panelistscore,
-                    "score_decimal": row.panelistscore_decimal,
+                    "date": row["showdate"],
+                    "panelist": row["panelist"],
+                    "panelist_slug": row["panelistslug"],
+                    "score": row["panelistscore"],
+                    "score_decimal": row["panelistscore_decimal"],
                 }
             )
         else:
             shows.append(
                 {
-                    "date": row.showdate,
-                    "panelist": row.panelist,
-                    "panelist_slug": row.panelistslug,
-                    "score": row.panelistscore,
+                    "date": row["showdate"],
+                    "panelist": row["panelist"],
+                    "panelist_slug": row["panelistslug"],
+                    "score": row["panelistscore"],
                 }
             )
 

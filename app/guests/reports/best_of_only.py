@@ -18,7 +18,7 @@ def retrieve_guest_appearances(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, "
         "gm.guestscore, gm.exception "
@@ -39,12 +39,12 @@ def retrieve_guest_appearances(
     for row in result:
         shows.append(
             {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "best_of": bool(row.bestof),
-                "repeat_show": bool(row.repeatshowid),
-                "score": row.guestscore,
-                "exception": bool(row.exception),
+                "id": row["showid"],
+                "date": row["showdate"].isoformat(),
+                "best_of": bool(row["bestof"]),
+                "repeat_show": bool(row["repeatshowid"]),
+                "score": row["guestscore"],
+                "exception": bool(row["exception"]),
             }
         )
 
@@ -58,7 +58,7 @@ def retrieve_best_of_only_guests(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
         "FROM ww_showguestmap gm "
@@ -83,11 +83,11 @@ def retrieve_best_of_only_guests(
     for row in result:
         guests.append(
             {
-                "id": row.guestid,
-                "name": row.guest,
-                "slug": row.guestslug,
+                "id": row["guestid"],
+                "name": row["guest"],
+                "slug": row["guestslug"],
                 "appearances": retrieve_guest_appearances(
-                    guest_id=row.guestid, database_connection=database_connection
+                    guest_id=row["guestid"], database_connection=database_connection
                 ),
             }
         )
