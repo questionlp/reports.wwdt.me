@@ -5,6 +5,7 @@
 ### Application Changes
 
 - Replace all references of `named_tuple=` in database cursors to `dictionary=` due to cursors using `NamedTuple` being marked for deprecation in future versions of MySQL Connector/Python
+- Fix "Total Score" column for Panelist "First Appearance Wins" report where non-decimal scores were not populating
 
 ### Component Changes
 
