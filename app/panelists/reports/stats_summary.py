@@ -70,7 +70,7 @@ def retrieve_appearances_by_panelist(
             AND pm.panelistscore IS NOT NULL )
             AS with_scores;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -86,9 +86,9 @@ def retrieve_appearances_by_panelist(
         return None
 
     return {
-        "regular": result.regular,
-        "all": result.all_shows,
-        "with_scores": result.with_scores,
+        "regular": result["regular"],
+        "all": result["all_shows"],
+        "with_scores": result["with_scores"],
     }
 
 
@@ -125,7 +125,7 @@ def retrieve_scores_by_panelist(
             AND p.panelistslug = %s
             AND pm.panelistscore IS NOT NULL;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     result = cursor.fetchall()
     cursor.close()
@@ -133,7 +133,7 @@ def retrieve_scores_by_panelist(
     if not result:
         return None
 
-    return [row.score for row in result]
+    return [row["score"] for row in result]
 
 
 def retrieve_all_panelists_stats(

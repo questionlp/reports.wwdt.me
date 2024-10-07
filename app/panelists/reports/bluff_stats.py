@@ -20,7 +20,7 @@ def empty_years_bluff(
         database_connection.reconnect()
 
     # Retrieve available show years
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
@@ -34,7 +34,7 @@ def empty_years_bluff(
         return None
 
     return {
-        row.year: {
+        row["year"]: {
             "chosen": 0,
             "correct": 0,
             "appearances": 0,
@@ -72,7 +72,7 @@ def retrieve_panelist_bluff_counts(
         AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
         ) AS correct;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -87,8 +87,8 @@ def retrieve_panelist_bluff_counts(
         counts["chosen"] = 0
         counts["correct"] = 0
     else:
-        counts["chosen"] = result.chosen
-        counts["correct"] = result.correct
+        counts["chosen"] = result["chosen"]
+        counts["correct"] = result["correct"]
 
     query = """
         SELECT COUNT(s.showdate) as appearances
@@ -101,12 +101,12 @@ def retrieve_panelist_bluff_counts(
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
     cursor.close()
 
-    counts["appearances"] = result.appearances if result else None
+    counts["appearances"] = result["appearances"] if result else None
 
     query = """
         SELECT COUNT(s.showdate) as appearances
@@ -120,12 +120,12 @@ def retrieve_panelist_bluff_counts(
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
     cursor.close()
 
-    counts["unique_best_of"] = result.appearances if result else None
+    counts["unique_best_of"] = result["appearances"] if result else None
 
     return counts
 
@@ -167,7 +167,7 @@ def retrieve_panelist_bluffs_by_year(
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     chosen_results = cursor.fetchall()
 
@@ -180,7 +180,7 @@ def retrieve_panelist_bluffs_by_year(
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     correct_results = cursor.fetchall()
 
@@ -197,7 +197,7 @@ def retrieve_panelist_bluffs_by_year(
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     appearance_results = cursor.fetchall()
 
@@ -215,24 +215,24 @@ def retrieve_panelist_bluffs_by_year(
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     unique_bluff_appearance_results = cursor.fetchall()
     cursor.close()
 
     stats = empty_years_bluff(database_connection=database_connection)
     for row in chosen_results:
-        stats[row.year]["chosen"] = row.chosen
+        stats[row["year"]]["chosen"] = row["chosen"]
 
     for row in correct_results:
-        stats[row.year]["correct"] = row.correct
+        stats[row["year"]]["correct"] = row["correct"]
 
     if appearance_results:
         for row in appearance_results:
-            stats[row.year]["appearances"] = row.appearances
+            stats[row["year"]]["appearances"] = row["appearances"]
 
     if unique_bluff_appearance_results:
         for row in unique_bluff_appearance_results:
-            stats[row.year]["unique_bluff_appearances"] = row.appearances
+            stats[row["year"]]["unique_bluff_appearances"] = row["appearances"]
 
     return stats

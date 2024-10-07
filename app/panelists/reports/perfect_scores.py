@@ -54,7 +54,7 @@ def retrieve_perfect_score_counts(
             GROUP BY p.panelistid
             ORDER BY COUNT(p.panelistid) DESC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     results_eq_20 = cursor.fetchall()
     cursor.close()
@@ -82,7 +82,7 @@ def retrieve_perfect_score_counts(
             GROUP BY p.panelistid
             ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     results_ge_20 = cursor.fetchall()
     cursor.close()
@@ -92,14 +92,14 @@ def retrieve_perfect_score_counts(
 
     panelists = {}
     for row in results_ge_20:
-        panelists[row.panelistid] = {
-            "name": _panelists[row.panelistid]["name"],
-            "slug": _panelists[row.panelistid]["slug"],
-            "more_perfect": row.score_count,
+        panelists[row["panelistid"]] = {
+            "name": _panelists[row["panelistid"]]["name"],
+            "slug": _panelists[row["panelistid"]]["slug"],
+            "more_perfect": row["score_count"],
             "perfect": None,
         }
 
     for row in results_eq_20:
-        panelists[row.panelistid]["perfect"] = row.score_count
+        panelists[row["panelistid"]]["perfect"] = row["score_count"]
 
     return panelists

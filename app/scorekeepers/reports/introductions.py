@@ -15,7 +15,7 @@ def retrieve_scorekeepers_with_introductions(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT sk.scorekeeperid, sk.scorekeeper,
         sk.scorekeeperslug
@@ -35,9 +35,9 @@ def retrieve_scorekeepers_with_introductions(
     for row in result:
         scorekeepers.append(
             {
-                "id": row.scorekeeperid,
-                "name": row.scorekeeper,
-                "slug": row.scorekeeperslug,
+                "id": row["scorekeeperid"],
+                "name": row["scorekeeper"],
+                "slug": row["scorekeeperslug"],
             }
         )
 
@@ -56,7 +56,7 @@ def retrieve_all_scorekeeper_introductions(
     )
     all_introductions = {}
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     for scorekeeper in scorekeepers:
         scorekeeper_intros = []
         query = """
@@ -76,11 +76,11 @@ def retrieve_all_scorekeeper_introductions(
             for row in result:
                 scorekeeper_intros.append(
                     {
-                        "id": row.showid,
-                        "date": row.showdate.isoformat(),
-                        "best_of": bool(row.bestof),
-                        "repeat_show": bool(row.repeatshowid),
-                        "introduction": row.description,
+                        "id": row["showid"],
+                        "date": row["showdate"].isoformat(),
+                        "best_of": bool(row["bestof"]),
+                        "repeat_show": bool(row["repeatshowid"]),
+                        "introduction": row["description"],
                     }
                 )
 

@@ -122,15 +122,15 @@ def retrieve_not_my_job_stats(
             ORDER BY s.showdate ASC
             LIMIT 1;
             """
-        cursor = database_connection.cursor(named_tuple=True)
+        cursor = database_connection.cursor(dictionary=True)
         cursor.execute(query, (guest_id,))
         result = cursor.fetchone()
         cursor.close()
 
         if result:
-            if result.guestscore >= 2 or bool(result.exception):
+            if result["guestscore"] >= 2 or bool(result["exception"]):
                 best_of_only_guest_wins += 1
-            elif result.guestscore < 2 and not bool(result.exception):
+            elif result["guestscore"] < 2 and not bool(result["exception"]):
                 best_of_only_guest_losses += 1
 
     ret_val = {

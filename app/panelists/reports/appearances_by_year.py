@@ -27,7 +27,7 @@ def retrieve_panelist_appearance_counts(
         GROUP BY p.panelist, YEAR(s.showdate)
         ORDER BY p.panelist ASC, YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -38,8 +38,8 @@ def retrieve_panelist_appearance_counts(
     _appearances = {}
     total_appearances = 0
     for row in result:
-        _appearances[row.year] = row.count
-        total_appearances += row.count
+        _appearances[row["year"]] = row["count"]
+        total_appearances += row["count"]
 
     _appearances["total"] = total_appearances
     return _appearances
@@ -60,7 +60,7 @@ def retrieve_all_appearance_counts(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -70,11 +70,11 @@ def retrieve_all_appearance_counts(
 
     _panelists = []
     for row in result:
-        panelist_id = row.panelistid
+        panelist_id = row["panelistid"]
         _panelists.append(
             {
-                "name": row.panelist,
-                "slug": row.panelistslug,
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
                 "appearances": retrieve_panelist_appearance_counts(
                     panelist_id=panelist_id, database_connection=database_connection
                 ),
@@ -91,7 +91,7 @@ def retrieve_all_years(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s
         ORDER BY YEAR(s.showdate) ASC;
@@ -103,4 +103,4 @@ def retrieve_all_years(
     if not result:
         return None
 
-    return [row.year for row in result]
+    return [row["year"] for row in result]

@@ -24,7 +24,7 @@ def retrieve_show_years(
         FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -32,7 +32,7 @@ def retrieve_show_years(
     if not result:
         return None
 
-    return [row.year for row in result]
+    return [row["year"] for row in result]
 
 
 def retrieve_show_info(
@@ -51,7 +51,7 @@ def retrieve_show_info(
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate = %s;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_date,))
     result = cursor.fetchone()
     cursor.close()
@@ -60,10 +60,10 @@ def retrieve_show_info(
         return None
 
     return {
-        "id": result.showid,
-        "best_of": bool(result.bestof),
-        "host": result.host,
-        "scorekeeper": result.scorekeeper,
+        "id": result["showid"],
+        "best_of": bool(result["bestof"]),
+        "host": result["host"],
+        "scorekeeper": result["scorekeeper"],
     }
 
 
@@ -82,7 +82,7 @@ def retrieve_show_guests(
         AND g.guestid <> 76
         ORDER BY gm.showguestmapid ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -90,7 +90,7 @@ def retrieve_show_guests(
     if not result:
         return None
 
-    return [row.guest for row in result]
+    return [row["guest"] for row in result]
 
 
 def retrieve_panelists_first_shows(
@@ -110,7 +110,7 @@ def retrieve_panelists_first_shows(
         GROUP BY p.panelistid
         ORDER BY MIN(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -121,19 +121,19 @@ def retrieve_panelists_first_shows(
     panelists = {}
     for row in result:
         show_info = retrieve_show_info(
-            show_date=row.first, database_connection=database_connection
+            show_date=row["first"], database_connection=database_connection
         )
         appearance_info = retrieve_appearances_by_panelist(
-            panelist_slug=row.panelistslug, database_connection=database_connection
+            panelist_slug=row["panelistslug"], database_connection=database_connection
         )
 
-        panelists[row.panelistslug] = {
-            "id": row.panelistid,
-            "panelist_name": row.panelist,
-            "panelist_slug": row.panelistslug,
-            "show": row.first.isoformat(),
+        panelists[row["panelistslug"]] = {
+            "id": row["panelistid"],
+            "panelist_name": row["panelist"],
+            "panelist_slug": row["panelistslug"],
+            "show": row["first"].isoformat(),
             "show_id": show_info["id"],
-            "year": row.year,
+            "year": row["year"],
             "best_of": show_info["best_of"],
             "regular_appearances": appearance_info["regular"],
             "host": show_info["host"],

@@ -31,7 +31,7 @@ def retrieve_shows_guest_host(
         WHERE hm.guest = 1
         ORDER BY s.showdate ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
 
@@ -40,22 +40,22 @@ def retrieve_shows_guest_host(
 
     shows = []
     for row in result:
-        show_id = row.showid
+        show_id = row["showid"]
         shows.append(
             {
-                "date": row.showdate.isoformat(),
-                "best_of": bool(row.bestof),
-                "repeat": bool(row.repeatshowid),
+                "date": row["showdate"].isoformat(),
+                "best_of": bool(row["bestof"]),
+                "repeat": bool(row["repeatshowid"]),
                 "location": {
-                    "venue": row.venue,
-                    "city": row.city,
-                    "state": row.state,
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
                 },
-                "host": row.host,
-                "host_slug": row.hostslug,
-                "scorekeeper": row.scorekeeper,
-                "scorekeeper_slug": row.scorekeeperslug,
-                "scorekeeper_guest": bool(row.scorekeeper_guest),
+                "host": row["host"],
+                "host_slug": row["hostslug"],
+                "scorekeeper": row["scorekeeper"],
+                "scorekeeper_slug": row["scorekeeperslug"],
+                "scorekeeper_guest": bool(row["scorekeeper_guest"]),
                 "panelists": show_details.retrieve_show_panelists(
                     show_id, database_connection
                 ),

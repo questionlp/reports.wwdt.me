@@ -43,7 +43,7 @@ def retrieve_rankings_by_panelist(
         s.bestof = 0 and s.repeatshowid IS NULL
         ) AS third;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
@@ -61,16 +61,16 @@ def retrieve_rankings_by_panelist(
         return None
 
     rankings = {
-        "first": result.first,
-        "first_tied": result.first_tied,
-        "second": result.second,
-        "second_tied": result.second_tied,
-        "third": result.third,
-        "count": result.first
-        + result.first_tied
-        + result.second
-        + result.second_tied
-        + result.third,
+        "first": result["first"],
+        "first_tied": result["first_tied"],
+        "second": result["second"],
+        "second_tied": result["second_tied"],
+        "third": result["third"],
+        "count": result["first"]
+        + result["first_tied"]
+        + result["second"]
+        + result["second_tied"]
+        + result["third"],
     }
 
     if rankings["count"]:
