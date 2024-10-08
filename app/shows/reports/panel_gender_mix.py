@@ -22,7 +22,7 @@ def retrieve_show_years(
         SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s
         ORDER BY YEAR(s.showdate) ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -30,7 +30,7 @@ def retrieve_show_years(
     if not result:
         return None
 
-    return [row.year for row in result]
+    return [row["year"] for row in result]
 
 
 def retrieve_panel_gender_count_by_year(

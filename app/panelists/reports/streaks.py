@@ -24,7 +24,7 @@ def retrieve_panelists(
         WHERE p.panelistid <> 17
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -36,9 +36,9 @@ def retrieve_panelists(
     for row in result:
         panelists.append(
             {
-                "id": row.panelistid,
-                "name": row.panelist,
-                "slug": row.panelistslug,
+                "id": row["panelistid"],
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
             }
         )
 
@@ -80,7 +80,7 @@ def retrieve_panelist_ranks(
             AND pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -92,9 +92,9 @@ def retrieve_panelist_ranks(
     for row in result:
         ranks.append(
             {
-                "show_id": row.showid,
-                "show_date": row.showdate.isoformat(),
-                "rank": row.showpnlrank,
+                "show_id": row["showid"],
+                "show_date": row["showdate"].isoformat(),
+                "rank": row["showpnlrank"],
             }
         )
 

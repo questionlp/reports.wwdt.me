@@ -1,6 +1,6 @@
 Flask==3.0.3
 gunicorn==23.0.0
 Markdown==3.5.2
-mysql-connector-python==8.2.0
-numpy==1.26.4
-pytz==2024.1
+mysql-connector-python==8.4.0
+numpy==2.1.0
+pytz==2024.2

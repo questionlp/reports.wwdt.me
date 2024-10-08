@@ -48,7 +48,7 @@ def retrieve_all_lightning_round_start(
             AND pm.panelistlrndstart IS NOT NULL
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -58,15 +58,15 @@ def retrieve_all_lightning_round_start(
 
     show_lightning_round_starts = {}
     for row in result:
-        show_id = row.showid
+        show_id = row["showid"]
         if show_id not in show_lightning_round_starts:
             show_lightning_round_starts[show_id] = {
                 "id": show_id,
-                "date": row.showdate.isoformat(),
+                "date": row["showdate"].isoformat(),
                 "scores": [],
             }
 
-        show_lightning_round_starts[show_id]["scores"].append(row.start)
+        show_lightning_round_starts[show_id]["scores"].append(row["start"])
 
     return show_lightning_round_starts
 
@@ -116,7 +116,7 @@ def retrieve_scoring_info_by_show_id(
             WHERE s.showid = %s
             LIMIT 1;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -127,21 +127,21 @@ def retrieve_scoring_info_by_show_id(
     if use_decimal_scores:
         return {
             "id": show_id,
-            "date": result.showdate.isoformat(),
-            "start": result.start,
-            "start_decimal": result.start_decimal,
-            "correct": result.correct,
-            "correct_decimal": result.correct_decimal,
-            "score": result.score,
-            "score_decimal": result.score_decimal,
+            "date": result["showdate"].isoformat(),
+            "start": result["start"],
+            "start_decimal": result["start_decimal"],
+            "correct": result["correct"],
+            "correct_decimal": result["correct_decimal"],
+            "score": result["score"],
+            "score_decimal": result["score_decimal"],
         }
     else:
         return {
             "id": show_id,
-            "date": result.showdate.isoformat(),
-            "start": result.start,
-            "correct": result.correct,
-            "score": result.score,
+            "date": result["showdate"].isoformat(),
+            "start": result["start"],
+            "correct": result["correct"],
+            "score": result["score"],
         }
 
 
@@ -161,7 +161,7 @@ def retrieve_panelists_by_show_id(
         WHERE s.showid = %s
         ORDER BY pm.showpnlmapid ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -173,9 +173,9 @@ def retrieve_panelists_by_show_id(
     for row in result:
         panelists.append(
             {
-                "id": row.panelistid,
-                "name": row.panelist,
-                "slug": row.panelistslug,
+                "id": row["panelistid"],
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
             }
         )
 
@@ -227,7 +227,7 @@ def shows_with_lightning_round_start_zero(
             AND pm.panelistlrndstart = 0
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -240,33 +240,33 @@ def shows_with_lightning_round_start_zero(
         if use_decimal_scores:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "start_decimal": row.start_decimal,
-                        "correct": row.correct,
-                        "correct_decimal": row.correct_decimal,
-                        "score": row.score,
-                        "score_decimal": row.score_decimal,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "start_decimal": row["start_decimal"],
+                        "correct": row["correct"],
+                        "correct_decimal": row["correct_decimal"],
+                        "score": row["score"],
+                        "score_decimal": row["score_decimal"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
         else:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "correct": row.correct,
-                        "score": row.score,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "correct": row["correct"],
+                        "score": row["score"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
@@ -319,7 +319,7 @@ def shows_lightning_round_start_zero(
             AND pm.panelistlrndstart = 0
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -332,33 +332,33 @@ def shows_lightning_round_start_zero(
         if use_decimal_scores:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "start_decimal": row.start_decimal,
-                        "correct": row.correct,
-                        "correct_decimal": row.correct_decimal,
-                        "score": row.score,
-                        "score_decimal": row.score_decimal,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "start_decimal": row["start_decimal"],
+                        "correct": row["correct"],
+                        "correct_decimal": row["correct_decimal"],
+                        "score": row["score"],
+                        "score_decimal": row["score_decimal"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
         else:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "correct": row.correct,
-                        "score": row.score,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "correct": row["correct"],
+                        "score": row["score"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
@@ -410,7 +410,7 @@ def shows_lightning_round_zero_correct(
             AND pm.panelistlrndcorrect = 0
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -423,33 +423,33 @@ def shows_lightning_round_zero_correct(
         if use_decimal_scores:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "start_decimal": row.start_decimal,
-                        "correct": row.correct,
-                        "correct_decimal": row.correct_decimal,
-                        "score": row.score,
-                        "score_decimal": row.score_decimal,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "start_decimal": row["start_decimal"],
+                        "correct": row["correct"],
+                        "correct_decimal": row["correct_decimal"],
+                        "score": row["score"],
+                        "score_decimal": row["score_decimal"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
         else:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
                     "panelist": {
-                        "id": row.panelistid,
-                        "name": row.panelist,
-                        "start": row.start,
-                        "correct": row.correct,
-                        "score": row.score,
-                        "rank": row.show_rank,
+                        "id": row["panelistid"],
+                        "name": row["panelist"],
+                        "start": row["start"],
+                        "correct": row["correct"],
+                        "score": row["score"],
+                        "rank": row["show_rank"],
                     },
                 }
             )
@@ -529,7 +529,7 @@ def shows_ending_with_three_way_tie(
             HAVING COUNT(pm.showpnlrank) = 3
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -542,23 +542,23 @@ def shows_ending_with_three_way_tie(
         if use_decimal_scores:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
-                    "score": row.score,
-                    "score_decimal": row.score_decimal,
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
+                    "score": row["score"],
+                    "score_decimal": row["score_decimal"],
                     "panelists": retrieve_panelists_by_show_id(
-                        show_id=row.showid, database_connection=database_connection
+                        show_id=row["showid"], database_connection=database_connection
                     ),
                 }
             )
         else:
             shows.append(
                 {
-                    "id": row.showid,
-                    "date": row.showdate.isoformat(),
-                    "score": row.score,
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
+                    "score": row["score"],
                     "panelists": retrieve_panelists_by_show_id(
-                        show_id=row.showid, database_connection=database_connection
+                        show_id=row["showid"], database_connection=database_connection
                     ),
                 }
             )

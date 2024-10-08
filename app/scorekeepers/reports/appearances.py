@@ -15,7 +15,7 @@ def retrieve_all_scorekeepers(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         FROM ww_scorekeepers sk
@@ -33,8 +33,8 @@ def retrieve_all_scorekeepers(
     for row in result:
         scorekeepers.append(
             {
-                "name": row.scorekeeper,
-                "slug": row.scorekeeperslug,
+                "name": row["scorekeeper"],
+                "slug": row["scorekeeperslug"],
             }
         )
 
@@ -48,7 +48,7 @@ def retrieve_appearances_by_scorekeeper(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT (
         SELECT COUNT(skm.showid) FROM ww_showskmap skm
@@ -78,8 +78,8 @@ def retrieve_appearances_by_scorekeeper(
         }
 
     return {
-        "regular": result.regular,
-        "all": result.allshows,
+        "regular": result["regular"],
+        "all": result["allshows"],
     }
 
 
@@ -90,7 +90,7 @@ def retrieve_first_most_recent_appearances(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
         FROM ww_showskmap skm
@@ -106,8 +106,8 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    first = result.min.isoformat() if result.min else None
-    most_recent = result.max.isoformat() if result.max else None
+    first = result["min"].isoformat() if result["min"] else None
+    most_recent = result["max"].isoformat() if result["max"] else None
 
     query = """
         SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
@@ -128,8 +128,8 @@ def retrieve_first_most_recent_appearances(
             "most_recent_all": None,
         }
 
-    first_all = result_all.min.isoformat() if result_all.min else None
-    most_recent_all = result_all.max.isoformat() if result_all.max else None
+    first_all = result_all["min"].isoformat() if result_all["min"] else None
+    most_recent_all = result_all["max"].isoformat() if result_all["max"] else None
 
     return {
         "first": first,

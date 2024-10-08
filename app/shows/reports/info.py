@@ -24,7 +24,7 @@ def retrieve_show_descriptions(
         JOIN ww_shows s ON s.showid = sd.showid
         ORDER BY s.showdate;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -36,9 +36,9 @@ def retrieve_show_descriptions(
     for show in result:
         shows.append(
             {
-                "id": show.showid,
-                "date": show.showdate,
-                "description": show.showdescription,
+                "id": show["showid"],
+                "date": show["showdate"],
+                "description": show["showdescription"],
             }
         )
 
@@ -59,7 +59,7 @@ def retrieve_show_notes(
         JOIN ww_shows s ON s.showid = sn.showid
         ORDER BY s.showdate;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -71,9 +71,9 @@ def retrieve_show_notes(
     for show in result:
         shows.append(
             {
-                "id": show.showid,
-                "date": show.showdate,
-                "notes": show.shownotes,
+                "id": show["showid"],
+                "date": show["showdate"],
+                "notes": show["shownotes"],
             }
         )
 

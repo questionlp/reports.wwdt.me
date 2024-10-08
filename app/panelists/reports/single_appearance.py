@@ -35,7 +35,7 @@ def retrieve_single_appearances(
         HAVING COUNT(p.panelistid) = 1
         ORDER BY p.panelistid;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
@@ -45,7 +45,7 @@ def retrieve_single_appearances(
 
     list_panelists = []
     for row in results:
-        list_panelists.append(row.panelistid)
+        list_panelists.append(row["panelistid"])
 
     if use_decimal_scores:
         query = f"""
@@ -69,7 +69,7 @@ def retrieve_single_appearances(
             ORDER BY p.panelist ASC;
             """
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -81,11 +81,11 @@ def retrieve_single_appearances(
     for row in result:
         panelists.append(
             {
-                "name": row.panelist,
-                "slug": row.panelistslug,
-                "appearance": row.showdate.isoformat(),
-                "score": row.score,
-                "rank": row.showpnlrank,
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
+                "appearance": row["showdate"].isoformat(),
+                "score": row["score"],
+                "rank": row["showpnlrank"],
             }
         )
 

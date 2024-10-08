@@ -19,7 +19,7 @@ def empty_years_average(
         database_connection.reconnect()
 
     # Retrieve available show years
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
@@ -32,7 +32,7 @@ def empty_years_average(
     if not result:
         return None
 
-    return {row.year: 0 for row in result}
+    return {row["year"]: 0 for row in result}
 
 
 def retrieve_panelist_yearly_average(
@@ -51,7 +51,7 @@ def retrieve_panelist_yearly_average(
         database_connection.reconnect()
 
     # Retrieve available panelists
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT panelist AS name, panelistslug AS slug
         FROM ww_panelists
@@ -66,8 +66,8 @@ def retrieve_panelist_yearly_average(
         return None
 
     panelist = {
-        "name": result.name,
-        "slug": result.slug,
+        "name": result["name"],
+        "slug": result["slug"],
     }
 
     if use_decimal_scores:
@@ -98,7 +98,7 @@ def retrieve_panelist_yearly_average(
             GROUP BY YEAR(s.showdate)
             ORDER BY YEAR(s.showdate) ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist["slug"],))
     result = cursor.fetchall()
     cursor.close()
@@ -108,11 +108,13 @@ def retrieve_panelist_yearly_average(
         panelist["averages"] = averages
 
     for row in result:
-        if row.total and row.count:
+        if row["total"] and row["count"]:
             if use_decimal_scores:
-                averages[row.year] = round(Decimal(row.total) / Decimal(row.count), 5)
+                averages[row["year"]] = round(
+                    Decimal(row["total"]) / Decimal(row["count"]), 5
+                )
             else:
-                averages[row.year] = round(int(row.total) / int(row.count), 5)
+                averages[row["year"]] = round(int(row["total"]) / int(row["count"]), 5)
 
     panelist["averages"] = averages
     return panelist
@@ -133,7 +135,7 @@ def retrieve_all_panelists_yearly_average(
         database_connection.reconnect()
 
     # Retrieve available panelists
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT panelist AS name, panelistslug AS slug
         FROM ww_panelists
@@ -152,7 +154,7 @@ def retrieve_all_panelists_yearly_average(
     for panelist in result:
         panelists.append(
             retrieve_panelist_yearly_average(
-                panelist.slug,
+                panelist["slug"],
                 database_connection=database_connection,
                 use_decimal_scores=use_decimal_scores,
             )
