@@ -79,7 +79,7 @@ def retrieve_scores_by_year_gender(
             AND YEAR(s.showdate) = %s
             ORDER BY s.showdate ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_gender, year))
     result = cursor.fetchall()
     cursor.close()
@@ -87,7 +87,7 @@ def retrieve_scores_by_year_gender(
     if not result:
         return None
 
-    return [row.score for row in result]
+    return [row["score"] for row in result]
 
 
 def retrieve_stats_by_year_gender(

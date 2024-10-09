@@ -17,7 +17,7 @@ def retrieve_scoring_exceptions(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT g.guestid, g.guest, s.showid, s.showdate, "
         "gm.guestscore, gm.exception, sn.shownotes "
@@ -41,11 +41,11 @@ def retrieve_scoring_exceptions(
     for row in result:
         _exceptions.append(
             {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "score": row.guestscore,
-                "exception": bool(row.exception),
-                "notes": row.shownotes,
+                "id": row["showid"],
+                "date": row["showdate"].isoformat(),
+                "score": row["guestscore"],
+                "exception": bool(row["exception"]),
+                "notes": row["shownotes"],
             }
         )
 
@@ -59,7 +59,7 @@ def retrieve_guest_scores(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT g.guestid, g.guest, s.showid, s.showdate, "
         "gm.guestscore, gm.exception, sn.shownotes "
@@ -83,11 +83,11 @@ def retrieve_guest_scores(
     for row in result:
         _scores.append(
             {
-                "id": row.showid,
-                "date": row.showdate.isoformat(),
-                "score": row.guestscore,
-                "exception": bool(row.exception),
-                "notes": row.shownotes,
+                "id": row["showid"],
+                "date": row["showdate"].isoformat(),
+                "score": row["guestscore"],
+                "exception": bool(row["exception"]),
+                "notes": row["shownotes"],
             }
         )
 
@@ -101,7 +101,7 @@ def retrieve_all_scoring_exceptions(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
         "FROM ww_showguestmap gm "
@@ -123,11 +123,11 @@ def retrieve_all_scoring_exceptions(
     for row in result:
         _exceptions.append(
             {
-                "id": row.guestid,
-                "name": row.guest,
-                "slug": row.guestslug,
+                "id": row["guestid"],
+                "name": row["guest"],
+                "slug": row["guestslug"],
                 "exceptions": retrieve_scoring_exceptions(
-                    guest_id=row.guestid, database_connection=database_connection
+                    guest_id=row["guestid"], database_connection=database_connection
                 ),
             }
         )
@@ -146,7 +146,7 @@ def retrieve_all_three_pointers(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "(SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate, "
         " gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper, "
@@ -192,15 +192,15 @@ def retrieve_all_three_pointers(
     for row in result:
         three_pointers.append(
             {
-                "id": row.guestid,
-                "name": row.guest,
-                "slug": row.guestslug,
-                "show_date": row.showdate.isoformat(),
-                "show_scorekeeper": row.scorekeeper,
-                "show_scorekeeper_slug": row.scorekeeperslug,
-                "score": row.guestscore,
-                "exception": bool(row.exception),
-                "show_notes": row.shownotes,
+                "id": row["guestid"],
+                "name": row["guest"],
+                "slug": row["guestslug"],
+                "show_date": row["showdate"].isoformat(),
+                "show_scorekeeper": row["scorekeeper"],
+                "show_scorekeeper_slug": row["scorekeeperslug"],
+                "score": row["guestscore"],
+                "exception": bool(row["exception"]),
+                "show_notes": row["shownotes"],
             }
         )
 

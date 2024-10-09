@@ -17,7 +17,7 @@ def retrieve_hosts(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT h.hostid, h.host, h.hostslug "
         "FROM ww_hosts h "
@@ -35,8 +35,8 @@ def retrieve_hosts(
     for row in result:
         _hosts.append(
             {
-                "name": row.host,
-                "slug": row.hostslug,
+                "name": row["host"],
+                "slug": row["hostslug"],
             }
         )
 
@@ -50,7 +50,7 @@ def retrieve_appearances_by_host(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT ( "
         "SELECT COUNT(hm.showid) FROM ww_showhostmap hm "
@@ -80,8 +80,8 @@ def retrieve_appearances_by_host(
         }
 
     return {
-        "regular": result.regular,
-        "all": result.allshows,
+        "regular": result["regular"],
+        "all": result["allshows"],
     }
 
 
@@ -92,7 +92,7 @@ def retrieve_first_most_recent_appearances(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
         "FROM ww_showhostmap hm "
@@ -109,10 +109,10 @@ def retrieve_first_most_recent_appearances(
     if not result:
         return None
 
-    first = result.min.isoformat() if result.min else None
-    most_recent = result.max.isoformat() if result.max else None
+    first = result["min"].isoformat() if result["min"] else None
+    most_recent = result["max"].isoformat() if result["max"] else None
 
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     query = (
         "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
         "FROM ww_showhostmap hm "
@@ -132,8 +132,8 @@ def retrieve_first_most_recent_appearances(
             "most_recent_all": None,
         }
 
-    first_all = result_all.min.isoformat() if result_all.min else None
-    most_recent_all = result_all.max.isoformat() if result_all.max else None
+    first_all = result_all["min"].isoformat() if result_all["min"] else None
+    most_recent_all = result_all["max"].isoformat() if result_all["max"] else None
 
     return {
         "first": first,

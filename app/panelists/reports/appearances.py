@@ -49,7 +49,7 @@ def retrieve_first_most_recent_appearances(
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -58,8 +58,10 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        panelist_appearances[row.panelistslug]["first"] = row.min.isoformat()
-        panelist_appearances[row.panelistslug]["most_recent"] = row.max.isoformat()
+        panelist_appearances[row["panelistslug"]]["first"] = row["min"].isoformat()
+        panelist_appearances[row["panelistslug"]]["most_recent"] = row[
+            "max"
+        ].isoformat()
 
     query = """
         SELECT p.panelist, p.panelistslug, COUNT(pm.panelistid) AS count
@@ -71,7 +73,7 @@ def retrieve_first_most_recent_appearances(
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -80,7 +82,7 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        panelist_appearances[row.panelistslug]["count"] = row.count
+        panelist_appearances[row["panelistslug"]]["count"] = row["count"]
 
     query = """
         SELECT p.panelist, p.panelistslug, COUNT(pm.panelistid) AS count
@@ -91,7 +93,7 @@ def retrieve_first_most_recent_appearances(
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -100,7 +102,7 @@ def retrieve_first_most_recent_appearances(
         return None
 
     for row in result:
-        panelist_appearances[row.panelistslug]["count_all"] = row.count
+        panelist_appearances[row["panelistslug"]]["count_all"] = row["count"]
 
     query = """
         SELECT p.panelist, p.panelistslug,
@@ -112,7 +114,7 @@ def retrieve_first_most_recent_appearances(
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
         """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -121,7 +123,9 @@ def retrieve_first_most_recent_appearances(
         return panelist_appearances
 
     for row in result:
-        panelist_appearances[row.panelistslug]["first_all"] = row.min.isoformat()
-        panelist_appearances[row.panelistslug]["most_recent_all"] = row.max.isoformat()
+        panelist_appearances[row["panelistslug"]]["first_all"] = row["min"].isoformat()
+        panelist_appearances[row["panelistslug"]]["most_recent_all"] = row[
+            "max"
+        ].isoformat()
 
     return panelist_appearances

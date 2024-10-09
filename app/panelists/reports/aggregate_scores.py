@@ -43,7 +43,7 @@ def retrieve_all_scores(
             AND pm.panelistscore IS NOT NULL
             ORDER BY pm.panelistscore ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -51,7 +51,7 @@ def retrieve_all_scores(
     if not result:
         return None
 
-    return [row.score for row in result]
+    return [row["score"] for row in result]
 
 
 def retrieve_score_spread(
@@ -90,7 +90,7 @@ def retrieve_score_spread(
             GROUP BY pm.panelistscore
             ORDER BY pm.panelistscore ASC;
             """
-    cursor = database_connection.cursor(named_tuple=True)
+    cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -102,8 +102,8 @@ def retrieve_score_spread(
     for row in result:
         scores.append(
             {
-                "score": row.score,
-                "count": row.count,
+                "score": row["score"],
+                "count": row["count"],
             }
         )
 
