@@ -1,6 +1,78 @@
 {% extends "base.html" %}
 {% block title %}Not My Job Three Pointers | Guests{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Not My Job Three Pointers</li>
+    </ol>
+</nav>
+
+<h2>Not My Job Three Pointers</h2>
+<p>
+    This report provides a list of all of the Not My Job guests who answered
+    all three Not My Job questions correctly or were awarded all three points
+    via a scoring exception.
+</p>
+
+<!-- Start Report Section -->
+<div class="table-responsive py-3">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="name guest">
+        <col class="date">
+        <col class="name scorekeeper">
+        <col class="score">
+        <col class="boolean">
+        <col class="notes">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Guest</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Score</th>
+            <th scope="col">Scoring Exception</th>
+            <th scope="col">Show Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for guest in three_pointers %}
+        <tr>
+            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+            <td><a href="{{ stats_url }}/shows/{{ guest.show_date|replace('-', '/') }}">{{ guest.show_date }}</a></td>
+            <td>{{ guest.show_scorekeeper }}</td>
+            <td>{{ guest.score }}</td>
+            <td>{{ guest.exception }}</td>
+        {% if guest.exception and guest.show_notes %}
+            <td class="notes">{{ guest.show_notes|markdown|safe }}</td>
+        {% else %}
+            <td class="no-data">-</td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot class="table-light">
+        <tr>
+            <th scope="col">Guest</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Score</th>
+            <th scope="col">Scoring Exception</th>
+            <th scope="col">Show Notes</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Not My Job Three Pointers | Guests{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -69,3 +141,4 @@
 </table>
 <!-- End Report Section -->
 {% endblock content %}
+#}

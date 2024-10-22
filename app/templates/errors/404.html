@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Not Found{% endblock %}
 
+{% block content %}
+
+<h2>Oops...</h2>
+
+<p>We couldn't find what you were looking for.</p>
+
+<p>Head back to the <a href="{{ url_for('main.index') }}"> main page</a>.</p>
+
+{% endblock %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Not Found{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -41,3 +55,4 @@
 </section>
 
 {% endblock content %}
+#}

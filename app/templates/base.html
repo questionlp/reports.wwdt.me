@@ -1,4 +1,30 @@
 <!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <title>{% block title %}{% endblock %} | Wait Wait Don't Tell Me! Reports</title>
+    {% include "core/head.html" with context %}
+</head>
+
+<body class="d-flex flex-column h-100">
+    {% include "core/nav.html" %}
+
+    <main id="main-content">
+        <div class="container-fluid p-3">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% include "core/footer.html" %}
+
+    {% include "core/init_js.html" %}
+</body>
+
+</html>
+
+
+{#
+<!DOCTYPE html>
 <html lang="en">
 <head>
     {% block head %}
@@ -75,3 +101,4 @@
 </footer>
 </body>
 </html>
+#}

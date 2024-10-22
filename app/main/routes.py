@@ -14,7 +14,7 @@ blueprint = Blueprint("main", __name__)
 @blueprint.route("/")
 def index() -> str:
     """View: Site Index Page."""
-    return render_template("pages/_index.html")
+    return render_template("pages/index.html")
 
 
 @blueprint.route("/robots.txt")

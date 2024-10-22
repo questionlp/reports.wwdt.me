@@ -1,6 +1,70 @@
 {% extends "base.html" %}
 {% block title %}Most Appearances | Guests{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Most Appearances</li>
+    </ol>
+</nav>
+
+<h2>Most Appearances</h2>
+<p>
+    This report provides a list of Not My Job guests and the number of
+    appearances that they have made across all shows and regular shows. The
+    list is ordered based on the number of appearances for all shows in
+    descending order.
+</p>
+
+<!-- Start Report Section -->
+<div class="table-responsive py-3">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="name guest long">
+        <col class="count">
+        <col class="count">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col" rowspan="2">Guest</th>
+            <th colspan="2">Shows</th>
+        </tr>
+        <tr>
+            <th scope="col">All</th>
+            <th scope="col">Regular</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for guest in guests %}
+        <tr>
+            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+            <td>{{ guest.all_shows }}</a></td>
+            <td>{{ guest.regular_shows }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot class="table-light">
+        <tr>
+            <th scope="col" rowspan="2">Guest</th>
+            <th scope="col">All</th>
+            <th scope="col">Regular</th>
+        </tr>
+        <tr>
+            <th colspan="2">Shows</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<!-- End Report Section -->
+
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Most Appearances | Guests{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -60,3 +124,4 @@
 </table>
 <!-- End Report Section -->
 {% endblock content %}
+#}

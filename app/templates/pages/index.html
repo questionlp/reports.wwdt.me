@@ -1,6 +1,34 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 
+{% block content %}
+<h2 id="welcome">Welcome!</h2>
+
+<p>
+    This site hosts reports generated based on data recorded in the
+    <a href="{{ stats_url }}">Wait Wait Don't Tell Me! Stats Page</a> database.
+</p>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group page-list">
+            <li class="list-group-item"><a href="{{ url_for('guests.index') }}">Guest</a></li>
+            <li class="list-group-item"><a href="{{ url_for('hosts.index') }}">Host</a></li>
+            <li class="list-group-item"><a href="{{ url_for('locations.index') }}">Location</a></li>
+            <li class="list-group-item"><a href="{{ url_for('panelists.index') }}">Panelist</a></li>
+            <li class="list-group-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeeper</a></li>
+            <li class="list-group-item"><a href="{{ url_for('shows.index') }}">Show</a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{#
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
 {% block synopsis %}
 <section id="summary">
 <p>
@@ -56,3 +84,4 @@
 </div>
 
 {% endblock content %}
+#}

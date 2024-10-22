@@ -1,6 +1,91 @@
 {% extends "base.html" %}
 {% block title %}Best Of Only Not My Job Guests | Guests{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Best Of Only Not My Job Guests</li>
+    </ol>
+</nav>
+
+<h2>Best Of Only Not My Job Guests</h2>
+<p>
+    This report provides a list of Not My Job guests that have only appeared
+    on Best Of shows and not on any regular show. These guests would have made
+    their appearances on second live tapings when Wait Wait Don't Tell Me!
+    travel to other cities.
+</p>
+
+<!-- Start Report Section -->
+<div class="table-responsive py-3">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="name guest">
+        <col class="date">
+        <col class="boolean">
+        <col class="score">
+        <col class="boolean">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Guest</th>
+            <th scope="col">Show Date</th>
+            <th scope="col">Repeat Show</th>
+            <th scope="col">Score</th>
+            <th scope="col">Scoring Exception</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for guest in guests %}
+        {% if guest.appearances|length == 1 %}
+        <tr>
+            <td>
+                <a href="{{ stats_url }}/guests/{{ guest.slug }}">
+                    {{ guest.name }}
+                </a>
+            <td>
+                <a href="{{ stats_url }}/shows/{{ guest.appearances[0].date|replace('-', '/') }}">
+                    {{ guest.appearances[0].date }}
+                </a>
+            </td>
+            <td>{{ guest.appearances[0].repeat_show }}</td>
+            <td>{{ guest.appearances[0].score }}</td>
+            <td>{{ guest.appearances[0].exception }}</td>
+        </tr>
+        {% else %}
+            {% for count in range(0, guest.appearances|length) %}
+        <tr>
+                {% if count == 0 %}
+            <td rowspan="{{ guest.appearances|length }}">
+                <a href="{{ stats_url }}/guests/{{ guest.slug }}">
+                    {{ guest.name }}
+                </a>
+            </td>
+                {% endif %}
+            <td>
+                <a href="{{ stats_url }}/shows/{{ guest.appearances[count].date|replace('-', '/') }}">
+                    {{ guest.appearances[count].date }}
+                </a>
+            </td>
+            <td>{{ guest.appearances[count].repeat_show }}</td>
+            <td>{{ guest.appearances[count].score }}</td>
+            <td>{{ guest.appearances[count].exception }}</td>
+        </tr>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Best Of Only Not My Job Guests | Guests{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -82,3 +167,4 @@
 </table>
 <!-- End Report Section -->
 {% endblock %}
+#}

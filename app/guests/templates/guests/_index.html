@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% block title %}Guests{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Guests</li>
+    </ol>
+</nav>
+
+<h2>Guests</h2>
+
+{% include "guests/_reports.html" %}
+
+{% endblock content %}
+
+
+{#
+{% extends "base.html" %}
+{% block title %}Guests{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -17,3 +35,4 @@
 {% block content %}
 {% include "guests/_reports.html" %}
 {% endblock content %}
+#}
