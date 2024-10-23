@@ -1,6 +1,102 @@
 {% extends "base.html" %}
 {% block title %}Aggregate Scores | Panelists{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Aggregate Scores</li>
+    </ol>
+</nav>
+
+<h2>Aggregate Scores</h2>
+<p>
+    This report provides information on general statistics for the aggregate
+    of panelist total scores and a break down of the number of times a total
+    score has occurred.
+</p>
+
+<!-- Start Aggregate Score Statistics Section -->
+<div class="table-responsive w-50 py-3">
+<h3>Aggregate Score Statistics</h3>
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="label">
+        <col class="stats float">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Statistic</th>
+            <th scope="col">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Count</td>
+            <td>{{ stats.count }}</td>
+        </tr>
+        <tr>
+            <td>Minimum</td>
+            <td>{{ "{:f}".format(stats.minimum.normalize()) if use_decimal_scores else stats.minimum }}</td>
+        </tr>
+        <tr>
+            <td>Maximum</td>
+            <td>{{ "{:f}".format(stats.maximum.normalize()) if use_decimal_scores else stats.maximum }}</td>
+        </tr>
+        <tr>
+            <td>Mean</td>
+            <td>{{ "{:f}".format(stats.mean.normalize()) if use_decimal_scores else stats.mean }}</td>
+        </tr>
+        <tr>
+            <td>Median</td>
+            <td>{{ "{:f}".format(stats.median.normalize()) if use_decimal_scores else stats.median }}</td>
+        </tr>
+        <tr>
+            <td>Standard Deviation</td>
+            <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else
+                stats.standard_deviation }}</td>
+        </tr>
+        <tr>
+            <td>Sum</td>
+            <td>{{ "{:f}".format(stats.sum.normalize()) if use_decimal_scores else stats.sum }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<!-- End Aggregate Score Statistics Section -->
+
+<!-- Start Score Spread Section -->
+<div class="table-responsive w-50 py-3">
+<h3>Aggregate Score Spread</h3>
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="label">
+        <col class="stats float">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Score</th>
+            <th scope="col">Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in aggregate %}
+        <tr>
+            <td>{{ "{:f}".format(score.score.normalize()) if use_decimal_scores else score.score }}</td>
+            <td>{{ score.count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Aggregate Scores | Panelists{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -90,3 +186,4 @@
 </table>
 <!-- End Report Section -->
 {% endblock content %}
+#}

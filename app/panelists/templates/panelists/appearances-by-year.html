@@ -1,6 +1,82 @@
 {% extends "base.html" %}
 {% block title %}Appearances by Year | Panelists{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Appearances by Year</li>
+    </ol>
+</nav>
+
+<h2>Appearances by Year</h2>
+<p>
+    This report breaks down the number of times a panelist has appeared on a
+    show for a given year. The counts excludes Best Of and Repeat shows.
+</p>
+
+{% if panelists and show_years %}
+<!-- Start Report Section -->
+<div class="w-100 overflow-y-scroll py-3">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="name panelist">
+        {% for col in range((show_years|length + 1)) %}
+            <col class="count">
+        {% endfor %}
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in show_years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in panelists %}
+        <tr>
+            <td class="name panelist">
+                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
+                    {{ panelist.name }}
+                </a>
+            </td>
+            {% for year in show_years %}
+                {% if year in panelist.appearances %}
+            <td class="centered middle year" title="{{ panelist.name }}: {{ year }}">{{ panelist.appearances[year] }}</td>
+                {% else %}
+            <td class="no-data">-</td>
+                {% endif %}
+            {% endfor %}
+            <td class="centered middle count">{{ panelist.appearances.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot class="table-light">
+        <tr>
+            <th scope="col">Panelist</th>
+            {% for year in show_years %}
+            <th scope="col">{{ year }}</th>
+            {% endfor %}
+            <th scope="col">Total</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<!-- End Report Section -->
+{% else %}
+<p>No data available.</p>
+{% endif %}
+
+
+
+{% endblock content%}
+
+{#
+{% extends "base.html" %}
+{% block title %}Appearances by Year | Panelists{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -73,3 +149,4 @@
 <p>No data available.</p>
 {% endif %}
 {% endblock content %}
+#}

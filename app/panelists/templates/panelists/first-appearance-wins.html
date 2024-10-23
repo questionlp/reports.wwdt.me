@@ -1,6 +1,78 @@
 {% extends "base.html" %}
 {% block title %}First Appearance Wins | Panelists{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">First Appearance Wins</li>
+    </ol>
+</nav>
+
+<h2>First Appearance Wins</h2>
+<p>
+    This report provides a list of panelists that have won outright or were
+    tied for first place on their first appearance on the show.
+</p>
+<p>
+    Please note that the information in this report does not include
+    information for panelists that had that won on their first appearance
+    prior to January 2000. This is due to the lack of scoring information for
+    those shows.
+</p>
+
+<!-- Start Report Section -->
+<div class="table-responsive py-3">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="name panelist">
+        <col class="date">
+        <col class="score">
+        <col class="score">
+        <col class="score">
+        <col class="rank">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th>Panelist</th>
+            <th>Show Date</th>
+            <th>Start</th>
+            <th>Correct</th>
+            <th>Total Score</th>
+            <th>Rank</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for panelist in panelists %}
+        {% set panelist_info = panelists[panelist] %}
+        <tr>
+            <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelist_info.name }}</a></td>
+            <td><a href="{{ stats_url }}/shows/{{ panelist_info.show_date|replace('-', '/') }}">{{ panelist_info.show_date }}</a></td>
+            {% if panelist_info.start %}
+            <td>{{ panelist_info.start }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            {% if panelist_info.correct %}
+            <td>{{ panelist_info.correct }}</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            <td>{{ "{:f}".format(panelist_info.score_decimal.normalize()) if use_decimal_scores else panelist_info.score }}</td>
+            <td>{{ rank_map[panelist_info.rank] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}First Appearance Wins | Panelists{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -69,3 +141,4 @@
 </table>
 <!-- End Report Section -->
 {% endblock content %}
+#}

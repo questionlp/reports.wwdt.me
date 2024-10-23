@@ -11709,6 +11709,10 @@ main .info .report-list .description {
   line-height: initial;
   margin-bottom: 1.4rem;
 }
+main .info .report-list p {
+  line-height: initial;
+  margin-bottom: 1.2rem;
+}
 main .info .dms-coordinates,
 main .info .score-exception,
 main .info .help-notes {
@@ -11917,7 +11921,7 @@ main .report.table th {
   vertical-align: middle;
 }
 main .report.table col.state {
-  width: 4rem;
+  width: 6rem;
 }
 main .report.table col.boolean,
 main .report.table col.count,
@@ -11934,7 +11938,9 @@ main .report.table col.stats.float {
 main .report.table col.rank {
   width: 9rem;
 }
-main .report.table col.city,
+main .report.table col.city {
+  width: 12rem;
+}
 main .report.table col.count.long,
 main .report.table col.score.long {
   width: 10rem;
@@ -11949,9 +11955,11 @@ main .report.table col.name.panelist,
 main .report.table col.name.guest {
   width: 16rem;
 }
-main .report.table col.name.guest.long,
-main .report.table col.name.venue {
+main .report.table col.name.guest.long {
   width: 20rem;
+}
+main .report.table col.name.venue {
+  width: 32rem;
 }
 main .report.table col.notes {
   min-width: 28rem;
@@ -12020,6 +12028,19 @@ main .report.table #average-scores-by-year-all td.name.panelist {
 main .report.table #average-scores-by-year-all col.stats.float,
 main .report.table #average-scores-by-year-all td.stats.float {
   min-width: 4.5rem;
+}
+main .card.report-form .card-header {
+  font-weight: 600;
+}
+main .card.report-form input, main .card.report-form select {
+  font-size: unset;
+}
+main .card.report-form label, main .card.report-form input.btn-submit {
+  font-weight: 500;
+}
+main .card.report-form input.btn-submit {
+  background-color: #0043ce;
+  color: #ffffff;
 }
 main .static-page h2, main .static-page .h2 {
   margin-bottom: 1.6rem;

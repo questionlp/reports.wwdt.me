@@ -1,6 +1,45 @@
 {% extends "base.html" %}
 {% block title %}Locations{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Locations</li>
+    </ol>
+</nav>
+
+<h2>Locations</h2>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group report-list">
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('locations.average_scores') }}">Average Score by Location</a>
+                </h3>
+        
+                <div class="description">
+                    <p>
+                        This report provides a list of show locations and the corresponding
+                        average panelist score and average total score, in descending order.
+                    </p>
+        
+                    <p>
+                        One exception from the scoring is that the 25th Anniversary Special, that
+                        aired on October 27, 2018, which is excluded due to the unique Lightning
+                        Fill-in-the-Blank format.
+                    </p>
+                </div>
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Locations{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -17,3 +56,4 @@
 {% block content %}
 {% include "locations/_reports.html" %}
 {% endblock content %}
+#}

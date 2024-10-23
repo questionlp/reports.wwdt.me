@@ -1,6 +1,111 @@
 {% extends "base.html" %}
 {% block title %}Debut by Year | Panelists{% endblock %}
 
+{% block content %}
+<span id="top" class="invisible"></span>
+
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Debut by Year</li>
+    </ol>
+</nav>
+
+<h2>Debut by Year</h2>
+<p>
+    This report provides a break down of when panelists made their debut on
+    the show, grouped by year.
+</p>
+
+{% if years and debuts %}
+<ul id="year-list">
+    {% for year in years %}
+    <li><a href="#y{{ year }}">{{ year }}</a></li>
+    {% endfor %}
+</ul>
+
+{% for year in years %}
+<span id="y{{ year }}" class="invisible"></span>
+<div class="pt-1 pb-5">
+<h3>{{ year }}</h3>
+    
+    {% if debuts[year] %}
+<!-- Start Report Section -->
+<div class="table-responsive">
+    <p>
+        <strong>Panelist debuts:</strong> {{ debuts[year]|length }}
+    </p>
+
+<table class="table table-bordered table-hover caption-top report">
+    <colgroup>
+        <col class="date">
+        <col class="boolean">
+        <col class="name panelist">
+        <col class="count">
+        <col class="name host">
+        <col class="name scorekeeper">
+        <col class="name guest">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Show</th>
+            <th scope="col">Best Of</th>
+            <th scope="col">Panelist</th>
+            <th scope="col"># of Regular Appearances</th>
+            <th scope="col">Host</th>
+            <th scope="col">Scorekeeper</th>
+            <th scope="col">Guest</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for debut in debuts[year] %}
+        <tr>
+            <td><a href="{{ stats_url }}/shows/{{ debut.show|replace('-', '/') }}">{{ debut.show }}</a></td>
+            {% if debut.best_of %}
+            <td>Best Of</td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+            <td><a href="{{ stats_url }}/panelists/{{ debut.panelist_slug }}">{{ debut.panelist_name }}</a></td>
+            <td>{{ debut.regular_appearances }}</td>
+            <td>{{ debut.host }}</td>
+            <td>{{ debut.scorekeeper }}</td>
+            {% if debut.guests %}
+            <td class="guest-names">
+                <ul class="no-bullets">
+                {% for guest in debut.guests %}
+                <li>{{ guest }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            {% else %}
+            <td class="no-data">-</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<div class="top-link">
+    <a href="#top">&uarr; Top</a>
+</div>
+    {% else %}
+<p>
+    No panelists made their debut in {{ year }}.
+</p>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Debut by Year | Panelists{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -102,3 +207,4 @@
 {% endif %}
 <!-- End Report Section -->
 {% endblock content %}
+#}

@@ -1,27 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Statistics by Gender | Panelists{% endblock %}
 
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Statistics by Gender</li>
+    </ol>
+</nav>
 
-{% block synopsis %}
 <h2>Statistics by Gender</h2>
 <p>
     This report provides a break down of panelist statistics grouped by
     the gender that each panelist has identified themselves as.
 </p>
 
-{% endblock synopsis %}
-
-{% block content %}
 <!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
+<div class="table-responsive py-3">
+<table class="table table-bordered table-hover report">
     <colgroup>
         <col class="date year">
         {# Men #}
@@ -41,7 +37,7 @@
         <col class="count">
         <col class="stats int">
     </colgroup>
-    <thead>
+    <thead class="table-light">
         <tr>
             <th scope="col" rowspan="2">Year</th>
             <th colspan="7">Men</th>
@@ -97,5 +93,7 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 <!-- End Report Section -->
+
 {% endblock content %}

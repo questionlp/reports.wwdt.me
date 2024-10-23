@@ -1,6 +1,101 @@
 {% extends "base.html" %}
 {% block title %}Average Scores by Year | Panelists{% endblock %}
 
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Average Scores by Year</li>
+    </ol>
+</nav>
+
+<h2>Average Scores by Year</h2>
+<p>
+    This report breaks down the average scores for a given panelist, broken out
+    by year. The averages excludes scores from Best Of and Repeat shows; in
+    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+    show are also excluded, due to the unique scoring used.
+</p>
+
+<!-- Start Report Section -->
+<div class="card report-form">
+    <div class="card-header">
+        Select a panelist to view average scores by year
+    </div>
+    <div class="card-body">
+        <form method="post" class="row ps-1">
+            <div class="row">
+                <div class="col-auto">
+                    <label for="panelist" class="col-form-label">Panelist</label>
+                </div>
+                <div class="col-auto">
+                    <select id="panelist" name="panelist" class="form-select" aria-label="Panelist selection">
+                        <option value="">-- Please choose a panelist --</option>
+                        {% for panelist in all_panelists %}
+                        {% if request.form.panelist == all_panelists[panelist].slug %}
+                        <option value="{{ all_panelists[panelist].slug }}" selected>{{ all_panelists[panelist].name }}</option>
+                        {% else %}
+                        <option value="{{ all_panelists[panelist].slug }}">{{ all_panelists[panelist].name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-submit" value="Submit">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if request.method == "POST" %}
+<div class="row pt-3">
+    <div class="col-md-5">
+{% if not average_scores %}
+<p class="result-message">
+    No panelist was selection or data for the selected panelist could not be found.
+</p>
+{% else %}
+
+<h3>{{ panelist_info.name }}</h3>
+<div class="table-responsive">
+<table class="table table-bordered table-hover report">
+    <colgroup>
+        <col class="date year">
+        <col class="stats float">
+    </colgroup>
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Average</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for year in average_scores.averages %}
+        <tr>
+            <td>{{ year }}</td>
+            {% if average_scores.averages[year] %}
+            <td>{{ "{:f}".format(average_scores.averages[year].normalize()) if use_decimal_scores else average_scores.averages[year] }}</td>
+            {% else %}
+            <td class="no-data stats float">-</td>
+            {% endif %}
+        </tr>
+    {% endfor%}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% endif %}
+    </div>
+</div>
+<!-- End Report Section -->
+
+{% endblock content %}
+
+{#
+{% extends "base.html" %}
+{% block title %}Average Scores by Year | Panelists{% endblock %}
+
 {% block breadcrumb %}
 <div id="breadcrumb">
     <ul>
@@ -80,3 +175,4 @@
 {% endif %}
 <!-- End Report Section -->
 {% endblock content %}
+#}
