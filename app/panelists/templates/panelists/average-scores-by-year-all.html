@@ -9,65 +9,73 @@
     </ol>
 </nav>
 
-<h2>Average Scores by Year: All</h2>
-<p>
-    This report breaks down the average scores for all panelists, broken out
-    by year. The averages excludes scores from Best Of and Repeat shows; in
-    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
-    show are also excluded, due to the unique scoring used.
-</p>
+<div id="intro" class="mb-5">
+    <h2>Average Scores by Year: All</h2>
+    <p>
+        This report breaks down the average scores for all panelists, broken out
+        by year. The averages excludes scores from Best Of and Repeat shows; in
+        addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+        show are also excluded, due to the unique scoring used.
+    </p>
+</div>
 
 {% if average_scores and years %}
 <!-- Start Report Section -->
-<div class="w-100 overflow-y-scroll py-3">
-<table class="table table-bordered table-hover report">
-    <colgroup>
-        <col class="name panelist">
-        {% for col in range((years|length + 1)) %}
-            <col class="stats float">
-        {% endfor %}
-    </colgroup>
-    <thead class="table-light">
-        <tr>
-            <th scope="col">Panelist</th>
-            {% for year in years %}
-            <th scope="col">{{ year }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in average_scores %}
-        <tr>
-            <td class="name panelist">
-                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                    {{ panelist.name }}
-                </a>
-            </td>
-            {% for year in years %}
-                {% if year in panelist.averages and panelist.averages[year] > 0%}
-            <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">
-                {{ "{:f}".format(panelist.averages[year].normalize()) if use_decimal_scores else panelist.averages[year] }}
-            </td>
-                {% else %}
-            <td class="no-data stats float">-</td>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot class="table-light">
-        <tr>
-            <th scope="col">Panelist</th>
-            {% for year in years %}
-            <th scope="col">{{ year }}</th>
-            {% endfor %}
-        </tr>
-    </tfoot>
-</table>
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle report">
+                <colgroup>
+                    <col class="name panelist">
+                    {% for col in range((years|length + 1)) %}
+                    <col class="stats float">
+                    {% endfor %}
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        {% for year in years %}
+                        <th scope="col">{{ year }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in average_scores %}
+                    <tr>
+                        <td class="name panelist">
+                            <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
+                                {{ panelist.name }}
+                            </a>
+                        </td>
+                        {% for year in years %}
+                            {% if year in panelist.averages and panelist.averages[year] > 0%}
+                        <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">
+                            {{ "{:f}".format(panelist.averages[year].normalize()) if use_decimal_scores else panelist.averages[year] }}
+                        </td>
+                            {% else %}
+                        <td class="no-data stats float">-</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        {% for year in years %}
+                        <th scope="col">{{ year }}</th>
+                        {% endfor %}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 <!-- End Report Section -->
 {% else %}
-<p>No data available.</p>
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> No data available.
+</div>
 {% endif %}
 
 {% endblock content %}

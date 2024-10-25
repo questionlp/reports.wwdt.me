@@ -2,8 +2,6 @@
 {% block title %}Debut by Year | Panelists{% endblock %}
 
 {% block content %}
-<span id="top" class="invisible"></span>
-
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
@@ -11,11 +9,13 @@
     </ol>
 </nav>
 
-<h2>Debut by Year</h2>
-<p>
-    This report provides a break down of when panelists made their debut on
-    the show, grouped by year.
-</p>
+<div id="intro" class="mb-5">
+    <h2>Debut by Year</h2>
+    <p>
+        This report provides a break down of when panelists made their debut on
+        the show, grouped by year.
+    </p>
+</div>
 
 {% if years and debuts %}
 <ul id="year-list">
@@ -88,7 +88,7 @@
 </div>
 
 <div class="top-link">
-    <a href="#top">&uarr; Top</a>
+    <a href="#main-content">&uarr; Top</a>
 </div>
     {% else %}
 <p>

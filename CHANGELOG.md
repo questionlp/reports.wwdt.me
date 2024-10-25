@@ -1,5 +1,26 @@
 # Changes
 
+## 3.0.0-alpha
+
+### Application Changes
+
+- Frontend code refactor due to switching from Pure CSS to Bootstrap
+  - Replacing Pure CSS frontend toolkit with Bootstrap
+  - Refactor the frontend structure to use Bootstrap frontend components and conventions
+  - Include the required IBM Plex web fonts with the application to remove use of Google Fonts
+- User interface changes
+  - Switch the design to match that of the [Wait Wait Stats Page](https://stats.wwdt.me) and the [Wait Wait Graphs Site](https://graphs.wwdt.me)
+  - Make use of Bootstrap's responsive design functionality for a more consistent experience across mobile and desktop
+  - Remove "Home" from all navigational breadcrumbs
+  - Clean up the home page to only provide a table of contents and only display report descriptions on the index page for each section
+- Link to the corresponding location page on the Wait Wait Stats Page for each listed location in the "Locations: Average Scores" report
+
+### Component Changes
+
+- Replace Pure CSS 3.0.0 with Bootstrap 5.3.3
+  - Existing Pure CSS files will be preserved to prevent cached versions of the application from breaking
+  - Files related to Pure CSS will be removed in a future release
+
 ## 2.14.0
 
 ### Application Changes

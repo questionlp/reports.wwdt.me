@@ -829,10 +829,10 @@
   --bs-dark-bg-subtle: #a8a8a8;
   --bs-primary-border-subtle: rgb(180.6, 207.8, 255);
   --bs-secondary-border-subtle: rgb(197.4, 197.4, 197.4);
-  --bs-success-border-subtle: rgb(167.4, 217.4, 181.8);
-  --bs-info-border-subtle: rgb(159.8, 211.4, 245.8);
-  --bs-warning-border-subtle: rgb(255, 205.4, 170.2);
-  --bs-danger-border-subtle: rgb(240.2, 165, 169);
+  --bs-success-border-subtle: #24a148;
+  --bs-info-border-subtle: #a6c8ff;
+  --bs-warning-border-subtle: #ff832b;
+  --bs-danger-border-subtle: #da1e28;
   --bs-light-border-subtle: #e0e0e0;
   --bs-dark-border-subtle: #8d8d8d;
   --bs-white-rgb: 255, 255, 255;

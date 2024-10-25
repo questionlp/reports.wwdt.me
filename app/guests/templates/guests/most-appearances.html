@@ -9,55 +9,66 @@
     </ol>
 </nav>
 
-<h2>Most Appearances</h2>
-<p>
-    This report provides a list of Not My Job guests and the number of
-    appearances that they have made across all shows and regular shows. The
-    list is ordered based on the number of appearances for all shows in
-    descending order.
-</p>
+<div id="intro" class="mb-5">
+    <h2>Most Appearances</h2>
+    <p>
+        This report provides a list of Not My Job guests and the number of
+        appearances that they have made across all shows and regular shows. The
+        list is ordered based on the number of appearances for all shows in
+        descending order.
+    </p>
+</div>
 
+{% if guests %}
 <!-- Start Report Section -->
-<div class="table-responsive py-3">
-<table class="table table-bordered table-hover report">
-    <colgroup>
-        <col class="name guest long">
-        <col class="count">
-        <col class="count">
-    </colgroup>
-    <thead class="table-light">
-        <tr>
-            <th scope="col" rowspan="2">Guest</th>
-            <th colspan="2">Shows</th>
-        </tr>
-        <tr>
-            <th scope="col">All</th>
-            <th scope="col">Regular</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for guest in guests %}
-        <tr>
-            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
-            <td>{{ guest.all_shows }}</a></td>
-            <td>{{ guest.regular_shows }}</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot class="table-light">
-        <tr>
-            <th scope="col" rowspan="2">Guest</th>
-            <th scope="col">All</th>
-            <th scope="col">Regular</th>
-        </tr>
-        <tr>
-            <th colspan="2">Shows</th>
-        </tr>
-    </tfoot>
-</table>
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name guest long">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" rowspan="2">Guest</th>
+                        <th colspan="2">Shows</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">All</th>
+                        <th scope="col">Regular</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for guest in guests %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+                        <td>{{ guest.all_shows }}</a></td>
+                        <td>{{ guest.regular_shows }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <th scope="col" rowspan="2">Guest</th>
+                        <th scope="col">All</th>
+                        <th scope="col">Regular</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Shows</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 <!-- End Report Section -->
-
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for Not My Job guests with most appearances is not available.
+</div>
+{% endif %}
 
 {% endblock content %}
 

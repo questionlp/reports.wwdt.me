@@ -30,7 +30,7 @@ def retrieve_average_scores_by_location(
     # due to non-standard number of panelist scores and score totals
     if use_decimal_scores:
         query = """
-            SELECT l.locationid, l.venue, l.city, l.state,
+            SELECT l.locationid, l.locationslug, l.venue, l.city, l.state,
             AVG(pm.panelistscore_decimal) AS average_score,
             SUM(pm.panelistscore_decimal) / (COUNT(s.showid) / 3) AS average_total,
             COUNT(s.showid) / 3 AS show_count
@@ -47,7 +47,7 @@ def retrieve_average_scores_by_location(
             """
     else:
         query = """
-            SELECT l.locationid, l.venue, l.city, l.state,
+            SELECT l.locationid, l.locationslug, l.venue, l.city, l.state,
             AVG(pm.panelistscore) AS average_score,
             SUM(pm.panelistscore) / (COUNT(s.showid) / 3) AS average_total,
             COUNT(s.showid) / 3 AS show_count
@@ -76,6 +76,7 @@ def retrieve_average_scores_by_location(
             _average_scores.append(
                 {
                     "id": row["locationid"],
+                    "slug": row["locationslug"],
                     "venue": row["venue"],
                     "city": row["city"],
                     "state": row["state"],
@@ -88,6 +89,7 @@ def retrieve_average_scores_by_location(
             _average_scores.append(
                 {
                     "id": row["locationid"],
+                    "slug": row["locationslug"],
                     "venue": row["venue"],
                     "city": row["city"],
                     "state": row["state"],

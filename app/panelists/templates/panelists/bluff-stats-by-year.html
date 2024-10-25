@@ -9,15 +9,17 @@
     </ol>
 </nav>
 
-<h2>Bluff the Listener Statistics by Year</h2>
-<p>
-    This report allows you to lookup the Bluff the Listener statistics for a
-    panelist, including how many times their story was chosen and how many times
-    they had the correct story, aggregated by year.
-</p>
+<div id="intro" class="mb-5">
+    <h2>Bluff the Listener Statistics by Year</h2>
+    <p>
+        This report allows you to lookup the Bluff the Listener statistics for a
+        panelist, including how many times their story was chosen and how many times
+        they had the correct story, aggregated by year.
+    </p>
+</div>
 
 <!-- Start Report Section -->
-<div class="card report-form">
+<div class="card report-form mb-5">
     <div class="card-header">
         Select a panelist to view Bluff the Listener statistics
     </div>
@@ -48,73 +50,71 @@
 </div>
 
 {% if request.method == "POST" %}
-<div class="row pt-3">
-    <div class="col-md-8">
-{% if not request.form.panelist %}
-<p class="result-message">
-    No panelists were selected.
-</p>
-{% elif not bluff_stats %}
-<p class="result-message">
-    No Bluff the Listener statistics available for <b>{{ panelists[request.form.panelist] }}</b>.
-</p>
-{% else %}
+{% if request.form.panelist and bluff_stats %}
 <!-- Start Stats Table -->
-<h3>{{ panelists[request.form.panelist] }}</h3>
-<div class="table-responsive">
-<table class="table table-bordered table-hover report">
-    <colgroup>
-        <col class="date">
-        <col class="count">
-        <col class="count">
-        <col class="count long">
-        <col class="count long">
-    </colgroup>
-    <thead class="table-light">
-        <tr>
-            <th scope="col">Year</th>
-            <th scope="col">Chosen</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Regular Bluff Segments</th>
-            <th scope="col">Unique Best Of Bluff Segments</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for year in bluff_stats %}
-        <tr>
-            <td>{{ year }}</td>
-            {% if bluff_stats[year].chosen %}
-            <td>{{ bluff_stats[year].chosen }}</td>
-            {% else %}
-            <td class="no-data count float">-</td>
-            {% endif %}
-            {% if bluff_stats[year].correct %}
-            <td>{{ bluff_stats[year].correct }}</td>
-            {% else %}
-            <td class="no-data count float">-</td>
-            {% endif %}
-            {% if bluff_stats[year].appearances %}
-            <td>{{ bluff_stats[year].appearances }}</td>
-            {% else%}
-            <td class="no-data count float">-</td>
-            {% endif %}
-            {% if bluff_stats[year].unique_bluff_appearances %}
-            <td>{{ bluff_stats[year].unique_bluff_appearances }}</td>
-            {% else %}
-            <td class="no-data count float">-</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
-<!-- End Stats Table -->
-{% endif %}
-{% endif %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <h3 class="mt-0">{{ panelists[request.form.panelist] }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count long">
+                    <col class="count long">
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Regular Bluff Segments</th>
+                        <th scope="col">Unique Best Of Bluff Segments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year in bluff_stats %}
+                    <tr>
+                        <td>{{ year }}</td>
+                        {% if bluff_stats[year].chosen %}
+                        <td>{{ bluff_stats[year].chosen }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if bluff_stats[year].correct %}
+                        <td>{{ bluff_stats[year].correct }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if bluff_stats[year].appearances %}
+                        <td>{{ bluff_stats[year].appearances }}</td>
+                        {% else%}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if bluff_stats[year].unique_bluff_appearances %}
+                        <td>{{ bluff_stats[year].unique_bluff_appearances }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<!-- Start Report Section -->
-
+<!-- End Stats Table -->
+{% elif not request.form.panelist %}
+<div class="alert alert-info my-4" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> No panelist was selected.
+</div>
+{% else %}
+<div class="alert alert-info my-4" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> No data is not available for {{ panelists[request.form.panelist] }}.
+</div>
+{% endif %}
+{% endif %}
 
 {% endblock content %}
 
