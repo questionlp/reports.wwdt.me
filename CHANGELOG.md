@@ -11,7 +11,7 @@
 
 - Upgrade black from 24.8.0 to 24.10.0
 - Upgrade ruff from 0.6.9 to 0.7.0
-- Increase minimum pytest version from 8.0 to 8.3 in ``pyproject.toml``
+- Increase minimum pytest version from 8.0 to 8.3 in `pyproject.toml`
 
 ## 2.14.0
 
