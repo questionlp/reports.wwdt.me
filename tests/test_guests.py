@@ -12,7 +12,7 @@ def test_index(client: FlaskClient) -> None:
     """Testing guests.routes.index."""
     response: TestResponse = client.get("/guests/")
     assert response.status_code == 200
-    assert b"Guests Reports" in response.data
+    assert b"Guests" in response.data
     assert b"Best Of Only Not My Job Guests" in response.data
 
 

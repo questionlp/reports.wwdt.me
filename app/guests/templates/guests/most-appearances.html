@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Most Appearances | Guests{% endblock %}
+{% set page_title="Most Appearances" %}
+{% block title %}{{ page_title }} | Guests{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Most Appearances</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
 
 <div id="intro" class="mb-5">
-    <h2>Most Appearances</h2>
+    <h2>{{ page_title }}</h2>
     <p>
         This report provides a list of Not My Job guests and the number of
         appearances that they have made across all shows and regular shows. The
@@ -66,7 +67,7 @@
 <!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for Not My Job guests with most appearances is not available.
+    <i class="bi bi-info-circle pe-1"></i> Data for "{{ page_title }}" is currently unavailable.
 </div>
 {% endif %}
 

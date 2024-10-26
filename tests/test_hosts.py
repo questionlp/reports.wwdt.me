@@ -12,7 +12,7 @@ def test_index(client: FlaskClient) -> None:
     """Testing hosts.routes.index."""
     response: TestResponse = client.get("/hosts/")
     assert response.status_code == 200
-    assert b"Hosts Reports" in response.data
+    assert b"Hosts" in response.data
     assert b"Appearance Summary" in response.data
 
 

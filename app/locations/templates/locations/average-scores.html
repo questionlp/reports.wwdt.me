@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Average Scores | Locations{% endblock %}
+{% set page_title = "Average Score by Location" %}
+{% block title %}{{ page_title }} | Locations{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Average Scores</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
 
 <div id="intro" class="mb-5">
-    <h2>Average Score by Location</h2>
+    <h2>{{ page_title }}</h2>
     <p>
         This report provides a list of show locations and the corresponding
         average panelist score and average total score, in descending order.
@@ -22,7 +23,7 @@
     </p>
 </div>
 
-{% if location %}
+{% if locations %}
 <!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
@@ -83,7 +84,7 @@
 <!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for location average scores is not available.
+    <i class="bi bi-info-circle pe-1"></i> Data for "{{ page_title }}" is currently unavailable.
 </div>
 {% endif %}
 

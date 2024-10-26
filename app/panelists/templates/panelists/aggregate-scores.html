@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Aggregate Scores | Panelists{% endblock %}
+{% set page_title = "Aggregate Scores" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Aggregate Scores</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
 
 <div id="intro" class="mb-5">
-    <h2>Aggregate Scores</h2>
+    <h2>{{ page_title }}</h2>
     <p>
         This report provides information on general statistics for the aggregate
         of panelist total scores and a break down of the number of times a total
@@ -72,8 +73,8 @@
 </div>
 <!-- End Aggregate Score Statistics Section -->
 {% else %}
-<div class="alert alert-info mt-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for panelist aggregate scoring statistics is not data available.
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for "Aggregate Score Statistics" is currently unavailable.
 </div>
 {% endif %}
 
@@ -112,8 +113,8 @@
 </div>
 <!-- End Report Section -->
 {% else %}
-<div class="alert alert-info mt-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for panelist aggregate scoring spread is not data available.
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for "Aggregate Score Spread" is currently unavailable.
 </div>
 {% endif %}
 

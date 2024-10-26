@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Scoring Exceptions | Guests{% endblock %}
+{% set page_title = "Not My Job Scoring Exceptions" %}
+{% block title %}{{ page_title }} | Guests{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Scoring Exceptions</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
 
 <div id="intro" class="mb-5">
-    <h2>Not My Job Scoring Exceptions</h2>
+    <h2>{{ page_title }}</h2>
     <p>
         This report provides a list of Not My Job guests that have a scoring exception
         that allowed them to win the prize for the listener contestant, even though they
@@ -101,7 +102,7 @@
 <!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for Not My Job guest scoring exceptions is not available.
+    <i class="bi bi-info-circle pe-1"></i> Data for "{{ page_title }}" is currently unavailable.
 </div>
 {% endif %}
 
