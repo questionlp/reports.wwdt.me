@@ -9,7 +9,7 @@ This document provides instructions on how to serve the application through [Gun
 Clone a copy of this repository to a location of your choosing by running:
 
 ```bash
-git clone https://github.com/questionlp/reports.wwdt.me_v2.git
+git clone --recurse-submodules https://github.com/questionlp/reports.wwdt.me_v2.git
 ```
 
 Within the new local copy of the repository, create a new virtual environment and install the required packages by running the following commands:
@@ -30,6 +30,22 @@ gunicorn reports:app --reload
 ```
 
 Once started, open a browser and browse to <http://127.0.0.1:8000/>. This should bring up the Reports web application.
+
+## Building and Updating Bootstrap Theme
+
+The Reports Site uses the Bootstrap frontend toolkit and a customized theme set that is referenced by the `scss` submodule. There should already be the necessary compiled CSS files stored under `app/static/css` as `app.css` and `app.min.css`.
+
+In order to compile new versions of the CSS files, you will need to have Node.js installed, an LTS version is preferred. To install the necessary dependencies, run:
+
+```bash
+npm install
+```
+
+Once all of the dependencies are installed, you can compile a new version of the `app.css` and `app.min.css` files by running:
+
+```bash
+npm run compile-all; npm run compile-all-mini
+```
 
 ## MySQL sql_mode Flags
 

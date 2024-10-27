@@ -1,103 +1,115 @@
 {% extends "base.html" %}
-{% block title %}Statistics by Gender | Panelists{% endblock %}
+{% set page_title = "Losing Streaks" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Statistics by Gender</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a break down of the longest losing streak for each
+        panelist. "All Losses" includes shows in which a panelist did not finish
+        in first place or tied for first.
+    </p>
+</div>
 
-<h2>Losing Streaks</h2>
-<p>
-    This report provides a break down of the longest losing streak for each
-    panelist. "All Losses" includes shows in which a panelist did not finish
-    in first place or tied for first.
-</p>
-
+{% if losing_streaks %}
 <!-- Start Report Section -->
-<div class="table-responsive py-3">
-<table class="table table-bordered table-hover report">
-    <colgroup>
-        <col class="name panelist">
-        <col class="count">
-        <col class="count">
-        <col class="date long">
-        <col class="count">
-        <col class="count">
-        <col class="date">
-    </colgroup>
-    <thead class="table-light">
-        <tr>
-            <th scope="col" rowspan="2">Panelist</th>
-            <th colspan="3">All Losses</th>
-            <th colspan="3">Third Place Losses</th>
-        </tr>
-        <tr>
-            <th scope="col">Total</th>
-            <th scope="col">#</th>
-            <th scope="col">Shows</th>
-            <th scope="col">Total</th>
-            <th scope="col">#</th>
-            <th scope="col">Shows</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in losing_streaks %}
-        <tr>
-            <td>
-                <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                    {{ panelist.name }}
-                </a>
-            </td>
-            <td>{{ panelist.total_losses }}</td>
-            <td>{{ panelist.longest_streak }}</td>
-            {% if not panelist.longest_streak_dates %}
-            <td class="no-data">-</td>
-            {% else %}
-            <td class="show-dates">
-                <ul class="no-bullets">
-                {% for show in panelist.longest_streak_dates %}
-                <li>{{ show.show_date }} ({{ rank_map[show.show_rank] }})</li>
-                {% endfor %}
-                </ul>
-            </td>
-            {% endif %}
-            <td>{{ panelist.total_third_losses }}</td>
-            <td>{{ panelist.longest_third_streak }}</td>
-            {% if not panelist.longest_third_streak_dates %}
-            <td class="no-data">-</td>
-            {% else %}
-            <td class="show-dates">
-                <ul class="no-bullets">
-                {% for show in panelist.longest_third_streak_dates %}
-                <li>{{ show.show_date }}</li>
-                {% endfor %}
-                </ul>
-            </td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot class="table-light">
-        <tr>
-            <th scope="col" rowspan="2">Panelist</th>
-            <th scope="col">Total</th>
-            <th scope="col">#</th>
-            <th scope="col">Shows</th>
-            <th scope="col">Total</th>
-            <th scope="col">#</th>
-            <th scope="col">Shows</th>
-        </tr>
-        <tr>
-            <th colspan="3">All Loses</th>
-            <th colspan="3">Third Place Losses</th>
-        </tr>
-    </tfoot>
-</table>
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="count">
+                    <col class="count">
+                    <col class="date long">
+                    <col class="count">
+                    <col class="count">
+                    <col class="date">
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th colspan="3">All Losses</th>
+                        <th colspan="3">Third Place Losses</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Total</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Shows</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Shows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in losing_streaks %}
+                    <tr>
+                        <td>
+                            <a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
+                                {{ panelist.name }}
+                            </a>
+                        </td>
+                        <td>{{ panelist.total_losses }}</td>
+                        <td>{{ panelist.longest_streak }}</td>
+                        {% if not panelist.longest_streak_dates %}
+                        <td class="no-data">-</td>
+                        {% else %}
+                        <td class="show-dates">
+                            <ul class="no-bullets">
+                            {% for show in panelist.longest_streak_dates %}
+                            <li>{{ show.show_date }} ({{ rank_map[show.show_rank] }})</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        {% endif %}
+                        <td>{{ panelist.total_third_losses }}</td>
+                        <td>{{ panelist.longest_third_streak }}</td>
+                        {% if not panelist.longest_third_streak_dates %}
+                        <td class="no-data">-</td>
+                        {% else %}
+                        <td class="show-dates">
+                            <ul class="no-bullets">
+                            {% for show in panelist.longest_third_streak_dates %}
+                            <li>{{ show.show_date }}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Shows</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Shows</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">All Loses</th>
+                        <th colspan="3">Third Place Losses</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 <!-- End Report Section -->
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
 
 {% endblock content %}
 

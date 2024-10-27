@@ -1,92 +1,105 @@
 {% extends "base.html" %}
-{% block title %}First and Most Recent Appearances | Panelists{% endblock %}
+{% set page_title = "First and Most Recent Appearances" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-        <li class="breadcrumb-item active" aria-current="page">First and Most Recent Appearances</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
 
-<h2>First and Most Recent Appearances</h2>
-<p>
-    This report provides a list of panelists and their first appearance and
-    most recent appearance on the show, for both regular shows and all shows,
-    including Best Ofs and repeats.
-</p>
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of panelists and their first appearance and
+        most recent appearance on the show, for both regular shows and all shows,
+        including Best Ofs and repeats.
+    </p>
+</div>
 
+{% if panelists_appearances %}
 <!-- Start Report Section -->
-<div class="table-responsive py-3">
-<table class="table table-bordered table-hover report">
-    <colgroup>
-        <col class="name panelist">
-        <col class="date">
-        <col class="date">
-        <col class="count">
-        <col class="date">
-        <col class="date">
-        <col class="count">
-    </colgroup>
-    <thead class="table-light">
-        <tr>
-            <th scope="col" rowspan="2">Panelist</th>
-            <th colspan="3">Regular Shows</th>
-            <th colspan="3">All Shows</th>
-        </tr>
-        <tr>
-            <!-- Regular Shows -->
-            <th scope="col">First</th>
-            <th scope="col">Most Recent</th>
-            <th scope="col">Count</th>
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="date">
+                    <col class="date">
+                    <col class="count">
+                    <col class="date">
+                    <col class="date">
+                    <col class="count">
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th colspan="3">Regular Shows</th>
+                        <th colspan="3">All Shows</th>
+                    </tr>
+                    <tr>
+                        <!-- Regular Shows -->
+                        <th scope="col">First</th>
+                        <th scope="col">Most Recent</th>
+                        <th scope="col">Count</th>
 
-            <!-- All Shows -->
-            <th scope="col">First</th>
-            <th scope="col">Most Recent</th>
-            <th scope="col">Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in panelists_appearances %}
-        {% set panelist_info =  panelists_appearances[panelist] %}
-        <tr>
-            <td><a href="{{ stats_url }}/panelists/{{ panelist_info.slug }}">{{ panelist_info.name }}</a></td>
-            {% if panelist_info.first %}
-            <td><a href="{{ stats_url }}/shows/{{ panelist_info.first|replace('-', '/') }}">{{ panelist_info.first }}</a></td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if panelist_info.most_recent %}
-            <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent|replace('-', '/') }}">{{ panelist_info.most_recent }}</a></td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if panelist_info.count %}
-            <td>{{ panelist_info.count }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if panelist_info.first_all %}
-            <td><a href="{{ stats_url }}/shows/{{ panelist_info.first_all|replace('-', '/') }}">{{ panelist_info.first_all }}</a></td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if panelist_info.most_recent_all %}
-            <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent_all|replace('-', '/') }}">{{ panelist_info.most_recent_all }}</a></td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if panelist_info.count_all %}
-            <td>{{ panelist_info.count_all }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                        <!-- All Shows -->
+                        <th scope="col">First</th>
+                        <th scope="col">Most Recent</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists_appearances %}
+                    {% set panelist_info =  panelists_appearances[panelist] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist_info.slug }}">{{ panelist_info.name }}</a></td>
+                        {% if panelist_info.first %}
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.first|replace('-', '/') }}">{{ panelist_info.first }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.most_recent %}
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent|replace('-', '/') }}">{{ panelist_info.most_recent }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.count %}
+                        <td>{{ panelist_info.count }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.first_all %}
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.first_all|replace('-', '/') }}">{{ panelist_info.first_all }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.most_recent_all %}
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.most_recent_all|replace('-', '/') }}">{{ panelist_info.most_recent_all }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.count_all %}
+                        <td>{{ panelist_info.count_all }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <!-- End Report Section -->
+{% else%}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
 
 {% endblock content %}
 

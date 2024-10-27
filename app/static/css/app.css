@@ -11913,8 +11913,18 @@ main .details .recordings .appearance-list.list-col-2,
 main .details .recordings .recording-list.list-col-2 {
   column-count: 2;
 }
+main ul.name-list-pvp {
+  list-style: none;
+  padding-left: 0;
+}
+main ul.name-list-pvp li {
+  margin-bottom: 0.6rem;
+}
 main .report.table > :not(caption) > * > * {
   padding: 0.6rem 0.8rem;
+}
+main .report.table thead th, main .report.table tfoot th {
+  background-color: #f4f4f4;
 }
 main .report.table th {
   text-align: center;
@@ -12000,8 +12010,13 @@ main .report.table td.score-tied {
   text-align: center;
 }
 main .report.table td.score-higher {
-  background-color: rgba(245, 80, 0, 0.85);
+  background-color: #a7f0ba;
+  color: #000000;
   font-weight: 600;
+}
+main .report.table td.score-tied {
+  background-color: #edf5ff;
+  color: #000000;
 }
 main .report.table td.score-lower {
   background-color: inherit;
@@ -12097,6 +12112,13 @@ footer .copyright {
 [data-bs-theme=dark] main .name-list {
   column-rule: 1px dotted rgba(255, 255, 255, 0.6);
 }
+[data-bs-theme=dark] main .report.table thead th, [data-bs-theme=dark] main .report.table tfoot th {
+  background-color: #393939;
+  color: #ffffff;
+}
+[data-bs-theme=dark] main .report.table thead.table-light, [data-bs-theme=dark] main .report.table tfoot.table-light {
+  border: inherit;
+}
 
 @media only screen and (max-width: 1201px) {
   header .navbar button#bd-theme {
@@ -12114,6 +12136,11 @@ footer .copyright {
   }
   .details .appearances .appearance-list.panelist {
     column-count: 2;
+  }
+}
+@media only screen and (max-width: 1199px) {
+  main ul.name-list-pvp {
+    column-count: 4;
   }
 }
 @media only screen and (max-width: 801px) {
@@ -12135,6 +12162,9 @@ footer .copyright {
   }
   main .info .name-list {
     column-count: 2;
+  }
+  main ul.name-list-pvp {
+    column-count: 3;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -12193,6 +12223,11 @@ footer .copyright {
   }
   main .info .name-list {
     column-count: 1;
+  }
+}
+@media only screen and (max-width: 569px) {
+  main ul.name-list-pvp {
+    column-count: 2;
   }
 }
 @media print {
