@@ -13,8 +13,9 @@ def test_index(client: FlaskClient) -> None:
     """Testing panelists.routes.index."""
     response: TestResponse = client.get("/panelists/")
     assert response.status_code == 200
-    assert b"Panelists Reports" in response.data
+    assert b"Panelists" in response.data
     assert b"Aggregate Scores" in response.data
+    assert b"Debut by Year" in response.data
 
 
 def test_aggregate_scores(client: FlaskClient) -> None:
@@ -30,7 +31,7 @@ def test_average_scores_by_year(client) -> None:
     response: TestResponse = client.get("/panelists/average-scores-by-year")
     assert response.status_code == 200
     assert b"Average Scores by Year" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Select a Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -76,7 +77,7 @@ def test_bluff_stats_by_year(client: FlaskClient) -> None:
     response: TestResponse = client.get("/panelists/bluff-stats-by-year")
     assert response.status_code == 200
     assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Panelist:" in response.data
+    assert b"Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
@@ -87,7 +88,7 @@ def test_bluff_stats_by_year_post(client: FlaskClient, panelist_slug: str) -> No
     )
     assert response.status_code == 200
     assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Panelist:" in response.data
+    assert b"Panelist" in response.data
     assert b"Unique Best Of" in response.data
 
 
@@ -138,7 +139,7 @@ def test_panelist_pvp(client) -> None:
     response: TestResponse = client.get("/panelists/panelist-pvp")
     assert response.status_code == 200
     assert b"Panelist vs Panelist" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Select a Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -167,7 +168,8 @@ def test_panelist_pvp_scoring(client: FlaskClient) -> None:
     response: TestResponse = client.get("/panelists/panelist-vs-panelist-scoring")
     assert response.status_code == 200
     assert b"Panelist vs Panelist Scoring" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Panelist 1" in response.data
+    assert b"Panelist 2" in response.data
 
 
 @pytest.mark.parametrize("panelist_1, panelist_2", [("adam-felber", "faith-salie")])

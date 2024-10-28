@@ -13,7 +13,7 @@ def test_index(client: FlaskClient) -> None:
     """Testing shows.routes.index."""
     response: TestResponse = client.get("/shows/")
     assert response.status_code == 200
-    assert b"Shows Reports" in response.data
+    assert b"Shows" in response.data
     assert b"All Shows" in response.data
     assert b"Original Shows" in response.data
 
@@ -192,7 +192,10 @@ def test_search_multiple_panelists(client: FlaskClient) -> None:
     response: TestResponse = client.get("/shows/search-multiple-panelists")
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Include Best Ofs" in response.data
+    assert b"Panelist 1" in response.data
+    assert b"Panelist 2" in response.data
+    assert b"Panelist 3" in response.data
 
 
 @pytest.mark.parametrize("panelist_1", ["faith-salie"])
@@ -208,6 +211,7 @@ def test_search_multiple_panelists_post_1(client: FlaskClient, panelist_1: str) 
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
+    assert b"Include Best Ofs" in response.data
     assert b"Best Of/Repeat" in response.data
     assert b"Location" in response.data
 

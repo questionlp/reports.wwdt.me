@@ -26,7 +26,6 @@
 </div>
 
 {% if panelists %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -38,7 +37,7 @@
                     <col class="count long">
                     <col class="count long">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Chosen</th>
@@ -50,8 +49,7 @@
                 <tbody>
                     {% for panelist in panelists %}
                     <tr>
-                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                            {{ panelist.name }}</a></td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
                         <td>{{ panelist.chosen }}</td>
                         <td>{{ panelist.correct }}</td>
                         <td>{{ panelist.appearances }}</td>
@@ -59,7 +57,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot class="table-light">
+                <tfoot>
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Chosen</th>
@@ -72,7 +70,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
@@ -80,77 +77,3 @@
 {% endif %}
 
 {% endblock content%}
-
-{#
-{% extends "base.html" %}
-{% block title %}Bluff the Listener Statistics | Panelists{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Bluff the Listener Statistics</h2>
-<p>
-    This report provides a break down of the number of times each panelist has
-    had their Bluff the Listener story chosen, had the correct story, and
-    the number of appearances on both regular shows that had a Bluff the
-    Listener segment and Best Of shows with unique Bluff the Listener segments.
-</p>
-<p>
-    Please note that the data for Bluff the Listener is not complete as audio
-    from shows aired in 1998 and 1999 are not publicly available. Thus,
-    panelists that do not appear on this list do not have any Bluff the
-    Listener information entered from those shows.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name panelist">
-        <col class="count">
-        <col class="count">
-        <col class="count long">
-        <col class="count long">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">Chosen</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Regular Bluff Segments</th>
-            <th scope="col">Unique Best Of Segments</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in panelists %}
-        <tr>
-            <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                {{ panelist.name }}</a></td>
-            <td>{{ panelist.chosen }}</td>
-            <td>{{ panelist.correct }}</td>
-            <td>{{ panelist.appearances }}</td>
-            <td>{{ panelist.unique_best_of }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">Chosen</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Regular Shows</th>
-            <th scope="col">Unique Best Of</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

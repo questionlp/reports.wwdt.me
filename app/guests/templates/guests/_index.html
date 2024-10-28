@@ -17,7 +17,7 @@
                 <h3 class="title">
                     <a href="{{ url_for('guests.best_of_only') }}">Best Of Only Not My Job Guests</a>
                 </h3>
-        
+
                 <div class="description">
                     This report provides a list of Not My Job guests that have only appeared
                     on Best Of shows and not on any regular show. These guests would have made
@@ -25,12 +25,12 @@
                     travel to other cities.
                 </div>
             </li>
-        
+
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('guests.most_appearances') }}">Most Appearances</a>
                 </h3>
-        
+
                 <div class="description">
                     This report provides a list of Not My Job guests and the number of
                     appearances that they have made across all shows and regular shows. The
@@ -38,12 +38,12 @@
                     descending order.
                 </div>
             </li>
-        
+
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('guests.scoring_exceptions') }}">Not My Job Scoring Exceptions</a>
                 </h3>
-        
+
                 <div class="description">
                     This report provides a list of Not My Job guests that have a scoring exception
                     that allowed them to win the prize for the listener contestant, even though they
@@ -51,12 +51,12 @@
                     was awarded all 3 points no matter their actual score.
                 </div>
             </li>
-        
+
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('guests.three_pointers') }}">Not My Job Three Pointers</a>
                 </h3>
-        
+
                 <div class="description">
                     This report provides a list of all of the Not My Job guests who answered
                     all three Not My Job questions correctly or were awarded all three points
@@ -68,26 +68,3 @@
 </div>
 
 {% endblock content %}
-
-
-{#
-{% extends "base.html" %}
-{% block title %}Guests{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Guests</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Guests Reports</h2>
-{% endblock synopsis %}
-
-{% block content %}
-{% include "guests/_reports.html" %}
-{% endblock content %}
-#}

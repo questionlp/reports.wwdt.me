@@ -24,7 +24,6 @@
 </div>
 
 {% if locations %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -37,7 +36,7 @@
                     <col class="stats float">
                     <col class="dates">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Venue</th>
                         <th scope="col">City</th>
@@ -81,7 +80,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
@@ -89,85 +87,3 @@
 {% endif %}
 
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Average Score by Location | Locations{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('locations.index') }}">Locations</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Average Score by Location</h2>
-<p>
-    This report provides a list of show locations and the corresponding
-    average panelist score and average total score, in descending order.
-</p>
-<p>
-    One exception from the scoring is that the 25th Anniversary Special, that
-    aired on October 27, 2018, which is excluded due to the unique Lightning
-    Fill-in-the-Blank format.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name venue">
-        <col class="name city">
-        <col class="name state">
-        <col class="stats float">
-        <col class="stats float">
-        <col class="dates">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Venue</th>
-            <th scope="col">City</th>
-            <th scope="col">State</th>
-            <th scope="col">Average Score</th>
-            <th scope="col">Average Total</th>
-            <th scope="col">Shows</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for location in locations %}
-        <tr>
-            {% if location.venue %}
-            <td>{{ location.venue }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if location.city %}
-            <td>{{ location.city }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if location.state %}
-            <td>{{ location.state }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if use_decimal_scores %}
-            <td>{{ "{:f}".format(location.average_score.normalize()) }}</td>
-            <td>{{ "{:f}".format(location.average_total.normalize()) }}</td>
-            <td>{{ location.show_count }}</td>
-            {% else %}
-            <td>{{ location.average_score }}</td>
-            <td>{{ location.average_total }}</td>
-            <td>{{ location.show_count }}</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

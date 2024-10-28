@@ -1,95 +1,90 @@
 {% extends "base.html" %}
-{% block title %}Highest Score Equals the Sum of Other Scores | Shows{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Highest Score Equals the Sum of Other Scores</h2>
-<p>
-    This report provides a list of shows in which the highest panelist 
-    total score matches the sum of the two other panelists' scores.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Highest Score Equals the Sum of Other Scores" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="date">
-        <col class="name panelist">
-        <col class="score">
-        <col class="rank">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Panelist</th>
-            <th scope="col">Score</th>
-            <th scope="col">Rank</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for show in shows %}
-        <tr>
-            <td rowspan="3"><a href="{{ stats_url }}/shows/{{ show|replace('-', '/') }}">{{ show }}</a></td>
-            <td>
-                {{ shows[show][0]["panelist"] }}
-            </td>
-            <td>
-                {{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) if use_decimal_scores else shows[show][0]["score"] }}
-            </td>
-            <td>
-                {{ rank_map[shows[show][0]["rank"]] }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ shows[show][1]["panelist"] }}
-            </td>
-            <td>
-                {% if use_decimal_scores %}
-                {{ "{:f}".format(shows[show][1]["score_decimal"].normalize()) }}
-                {% else %}
-                {{ shows[show][1]["score"] }}
-                {% endif %}
-            </td>
-            <td>
-                {{ rank_map[shows[show][1]["rank"]] }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ shows[show][2]["panelist"] }}
-            </td>
-            <td>
-                {% if use_decimal_scores %}
-                {{ "{:f}".format(shows[show][2]["score_decimal"].normalize()) }}
-                {% else %}
-                {{ shows[show][2]["score"] }}
-                {% endif %}
-            </td>
-            <td>
-                {{ rank_map[shows[show][2]["rank"]] }}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Panelist</th>
-            <th scope="col">Score</th>
-            <th scope="col">Rank</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of shows in which the highest panelist
+        total score matches the sum of the two other panelists' scores.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="name panelist">
+                    <col class="score">
+                    <col class="rank">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td rowspan="3"><a href="{{ stats_url }}/shows/{{ show | replace('-', '/') }}">{{ show }}</a></td>
+                        <td>{{ shows[show][0]["panelist"] }}</td>
+                        <td>{{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) if use_decimal_scores else shows[show][0]["score"] }}</td>
+                        <td>{{ rank_map[shows[show][0]["rank"]] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ shows[show][1]["panelist"] }}</td>
+                        <td>
+                            {% if use_decimal_scores %}
+                            {{ "{:f}".format(shows[show][1]["score_decimal"].normalize()) }}
+                            {% else %}
+                            {{ shows[show][1]["score"] }}
+                            {% endif %}
+                        </td>
+                        <td>{{ rank_map[shows[show][1]["rank"]] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ shows[show][2]["panelist"] }}</td>
+                        <td>
+                            {% if use_decimal_scores %}
+                            {{ "{:f}".format(shows[show][2]["score_decimal"].normalize()) }}
+                            {% else %}
+                            {{ shows[show][2]["score"] }}
+                            {% endif %}
+                        </td>
+                        <td>{{ rank_map[shows[show][2]["rank"]] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
 
 {% endblock content %}

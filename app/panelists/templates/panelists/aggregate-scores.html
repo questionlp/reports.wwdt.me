@@ -20,7 +20,6 @@
 </div>
 
 {% if stats %}
-<!-- Start Aggregate Score Statistics Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -30,7 +29,7 @@
                     <col class="label">
                     <col class="stats float">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Statistic</th>
                         <th scope="col">Value</th>
@@ -59,8 +58,7 @@
                     </tr>
                     <tr>
                         <td>Standard Deviation</td>
-                        <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else
-                            stats.standard_deviation }}</td>
+                        <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else stats.standard_deviation }}</td>
                     </tr>
                     <tr>
                         <td>Sum</td>
@@ -71,7 +69,6 @@
         </div>
     </div>
 </div>
-<!-- End Aggregate Score Statistics Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>Aggregate Score Statistics</b> is currently unavailable.
@@ -83,7 +80,6 @@
 {% endif %}
 
 {% if aggregate %}
-<!-- Start Score Spread Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -93,7 +89,7 @@
                     <col class="label">
                     <col class="stats float">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Score</th>
                         <th scope="col">Count</th>
@@ -111,7 +107,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>Aggregate Score Spread</b> is currently unavailable.
@@ -119,98 +114,3 @@
 {% endif %}
 
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Aggregate Scores | Panelists{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Aggregate Scores</h2>
-<p>
-    This report provides information on general statistics for the aggregate
-    of panelist total scores and a break down of the number of times a total
-    score has occurred.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<h3 id="panelist">Aggregate Score Statistics</h3>
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="label">
-        <col class="stats float">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Statistic</th>
-            <th scope="col">Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Count</td>
-            <td>{{ stats.count }}</td>
-        </tr>
-        <tr>
-            <td>Minimum</td>
-            <td>{{ "{:f}".format(stats.minimum.normalize()) if use_decimal_scores else stats.minimum }}</td>
-        </tr>
-        <tr>
-            <td>Maximum</td>
-            <td>{{ "{:f}".format(stats.maximum.normalize()) if use_decimal_scores else stats.maximum }}</td>
-        </tr>
-        <tr>
-            <td>Mean</td>
-            <td>{{ "{:f}".format(stats.mean.normalize()) if use_decimal_scores else stats.mean }}</td>
-        </tr>
-        <tr>
-            <td>Median</td>
-            <td>{{ "{:f}".format(stats.median.normalize()) if use_decimal_scores else stats.median }}</td>
-        </tr>
-        <tr>
-            <td>Standard Deviation</td>
-            <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else stats.standard_deviation }}</td>
-        </tr>
-        <tr>
-            <td>Sum</td>
-            <td>{{ "{:f}".format(stats.sum.normalize()) if use_decimal_scores else stats.sum }}</td>
-        </tr>
-    </tbody>
-</table>
-<!-- End Aggregate Score Statistics Section -->
-
-<!-- Start Score Spread Section -->
-<h3 id="panelist">Aggregate Score Spread</h3>
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="label">
-        <col class="stats float">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Score</th>
-            <th scope="col">Count</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for score in aggregate %}
-        <tr>
-            <td>{{ "{:f}".format(score.score.normalize()) if use_decimal_scores else score.score }}</td>
-            <td>{{ score.count }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

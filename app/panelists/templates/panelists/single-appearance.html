@@ -19,7 +19,6 @@
 </div>
 
 {% if panelists_appearance %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -29,7 +28,7 @@
                     <col class="date">
                     <col class="score long">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Show Date</th>
@@ -39,10 +38,8 @@
                 <tbody>
                     {% for panelist in panelists_appearance %}
                     <tr>
-                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                                {{ panelist.name }}</a></td>
-                        <td><a href="{{ stats_url }}/shows/{{ panelist.appearance|replace('-', '/') }}">
-                                {{ panelist.appearance }}</a></td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ panelist.appearance | replace('-', '/') }}">{{ panelist.appearance }}</a></td>
                         {% if use_decimal_scores %}
                         {% if panelist.score and panelist.rank %}
                         <td>{{ "{:f}".format(panelist.score.normalize()) }} ({{ rank_map[panelist.rank] }})</td>
@@ -63,7 +60,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot class="table-light">
+                <tfoot>
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Show Date</th>
@@ -74,7 +71,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
@@ -82,66 +78,3 @@
 {% endif %}
 
 {% endblock content%}
-
-{#
-{% block synopsis %}
-<h2>Single Appearance</h2>
-<p>
-    This report provides a list of panelists that have made only one
-    appearance on the show, excluding any Best Of and Repeat shows.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name panelist">
-        <col class="date">
-        <col class="score long">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">Show Date</th>
-            <th scope="col">Score</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in panelists_appearance %}
-        <tr>
-            <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">
-                {{ panelist.name }}</a></td>
-            <td><a href="{{ stats_url }}/shows/{{ panelist.appearance|replace('-', '/') }}">
-                {{ panelist.appearance }}</a></td>
-            {% if use_decimal_scores %}
-                {% if panelist.score and panelist.rank %}
-            <td>{{ "{:f}".format(panelist.score.normalize()) }} ({{ rank_map[panelist.rank] }})</td>
-                {% elif panelist.score %}
-            <td>{{ "{:f}".format(panelist.score.normalize()) }}</td>
-                {% else %}
-            <td class="no-data">-</td>
-                {% endif %}
-            {% else %}
-                {% if panelist.score and panelist.rank %}
-            <td>{{ panelist.score }} ({{ rank_map[panelist.rank] }})</td>
-                {% elif panelist.score %}
-            <td>{{ panelist.score }}</td>
-                {% else %}
-            <td class="no-data">-</td>
-                {% endif %}
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">Show Date</th>
-            <th scope="col">Score</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

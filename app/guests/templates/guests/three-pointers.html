@@ -20,7 +20,6 @@
 </div>
 
 {% if three_pointers %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -33,7 +32,7 @@
                     <col class="boolean">
                     <col class="notes">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col">Guest</th>
                         <th scope="col">Show Date</th>
@@ -47,19 +46,19 @@
                 {% for guest in three_pointers %}
                     <tr>
                         <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
-                        <td><a href="{{ stats_url }}/shows/{{ guest.show_date|replace('-', '/') }}">{{ guest.show_date }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ guest.show_date | replace('-', '/') }}">{{ guest.show_date }}</a></td>
                         <td>{{ guest.show_scorekeeper }}</td>
                         <td>{{ guest.score }}</td>
                         <td>{{ guest.exception }}</td>
                     {% if guest.exception and guest.show_notes %}
-                        <td class="notes">{{ guest.show_notes|markdown|safe }}</td>
+                        <td class="notes">{{ guest.show_notes | markdown | safe }}</td>
                     {% else %}
                         <td class="no-data">-</td>
                     {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
-                <tfoot class="table-light">
+                <tfoot>
                     <tr>
                         <th scope="col">Guest</th>
                         <th scope="col">Show Date</th>
@@ -73,7 +72,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
@@ -81,77 +79,3 @@
 {% endif %}
 
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Not My Job Three Pointers | Guests{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('guests.index') }}">Guests</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Not My Job Three Pointers</h2>
-<p>
-    This report provides a list of all of the Not My Job guests who answered
-    all three Not My Job questions correctly or were awarded all three points
-    via a scoring exception.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name guest">
-        <col class="date">
-        <col class="name scorekeeper">
-        <col class="score">
-        <col class="boolean">
-        <col class="notes">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Guest</th>
-            <th scope="col">Show Date</th>
-            <th scope="col">Scorekeeper</th>
-            <th scope="col">Score</th>
-            <th scope="col">Scoring Exception</th>
-            <th scope="col">Show Notes</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for guest in three_pointers %}
-        <tr>
-            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
-            <td><a href="{{ stats_url }}/shows/{{ guest.show_date|replace('-', '/') }}">{{ guest.show_date }}</a></td>
-            <td>{{ guest.show_scorekeeper }}</td>
-            <td>{{ guest.score }}</td>
-            <td>{{ guest.exception }}</td>
-        {% if guest.exception and guest.show_notes %}
-            <td class="notes">{{ guest.show_notes|markdown|safe }}</td>
-        {% else %}
-            <td class="no-data">-</td>
-        {% endif %}
-        </tr>
-    {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Guest</th>
-            <th scope="col">Show Date</th>
-            <th scope="col">Scorekeeper</th>
-            <th scope="col">Score</th>
-            <th scope="col">Scoring Exception</th>
-            <th scope="col">Show Notes</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

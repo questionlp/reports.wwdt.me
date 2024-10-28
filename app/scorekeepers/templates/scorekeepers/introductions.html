@@ -1,68 +1,84 @@
 {% extends "base.html" %}
-{% block title %}Introductions | Scorekeepers{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Introductions</h2>
-<p>
-    This report provides a list of introductions that Bill Kurtis and other
-    scorekeepers have used at the start of each show.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Introductions" %}
+{% block title %}{{ page_title }} | Scorekeepers{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
-<h3>Scorekeepers</h3>
-<ul>
-{% for scorekeeper in scorekeepers %}
-    <li><a href="#{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a></li>
-{% endfor %}
-</ul>
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
 
-{% for scorekeeper in scorekeepers %}
-<h3 id="{{ scorekeeper.slug }}">{{ scorekeeper.name }}</h3>
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="date">
-        <col class="boolean">
-        <col class="boolean">
-        <col class="introduction">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Best Of</th>
-            <th scope="col">Repeat</th>
-            <th scope="col">Introduction</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for show in introductions[scorekeeper.id] %}
-        <tr>
-            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
-            <td>{{ show.best_of }}</td>
-            <td>{{ show.repeat_show }}</td>
-            <td>{{ show.introduction }}</td>
-        </tr>
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of introductions that Bill Kurtis and other
+        scorekeepers have used at the start of each show.
+    </p>
+</div>
+
+{% if scorekeepers %}
+<div class="row mt-5">
+    <div class="col-12 col-xl-auto mt-1">
+        <h3 class="mt-0">Scorekeepers</h3>
+        <ul class="name-list-pvp mb-5">
+            {% for scorekeeper in scorekeepers %}
+            <li>
+                <a href="#{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-12 col-xl-auto mt-1">
+        {% for scorekeeper in scorekeepers %}
+        <div class="table-responsive pb-5" id="{{ scorekeeper.slug }}">
+            <h3 class="mt-0">{{ scorekeeper.name }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="boolean">
+                    <col class="boolean">
+                    <col class="introduction">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                        <th scope="col">Introduction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in introductions[scorekeeper.id] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        <td>{{ show.best_of }}</td>
+                        <td>{{ show.repeat_show }}</td>
+                        <td>{{ show.introduction }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                        <th scope="col">Introduction</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="top-link">
+                <a href="#main-content">&uarr; Top</a>
+            </div>
+        </div>
         {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Best Of</th>
-            <th scope="col">Repeat</th>
-            <th scope="col">Introduction</th>
-        </tr>
-    </tfoot>
-</table>
-{% endfor %}
-<!-- End Report Section -->
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
 {% endblock content %}

@@ -17,7 +17,7 @@
                 <h3 class="title">
                     <a href="{{ url_for('hosts.appearance_summary') }}">Appearance Summary</a>
                 </h3>
-        
+
                 <div class="description">
                     This report provides a list of show hosts along with the number of
                     appearances, their first and most recent appearance, for both
@@ -28,27 +28,4 @@
     </div>
 </div>
 
-
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Hosts{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Hosts</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Hosts Reports</h2>
-{% endblock synopsis %}
-
-{% block content %}
-{% include "hosts/_reports.html" %}
-{% endblock content %}
-#}

@@ -21,7 +21,6 @@
 </div>
 
 {% if guests %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -31,7 +30,7 @@
                     <col class="count">
                     <col class="count">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col" rowspan="2">Guest</th>
                         <th colspan="2">Shows</th>
@@ -50,7 +49,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot class="table-light">
+                <tfoot>
                     <tr>
                         <th scope="col" rowspan="2">Guest</th>
                         <th scope="col">All</th>
@@ -64,7 +63,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
@@ -72,68 +70,3 @@
 {% endif %}
 
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Most Appearances | Guests{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('guests.index') }}">Guests</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Most Appearances</h2>
-<p>
-    This report provides a list of Not My Job guests and the number of
-    appearances that they have made across all shows and regular shows. The
-    list is ordered based on the number of appearances for all shows in
-    descending order.
-</p>
-{% endblock synopsis %}
-
-{% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name guest long">
-        <col class="count">
-        <col class="count">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col" rowspan="2">Guest</th>
-            <td colspan="2">Shows</td>
-        </tr>
-        <tr>
-            <th scope="col">All</th>
-            <th scope="col">Regular</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for guest in guests %}
-        <tr>
-            <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
-            <td>{{ guest.all_shows }}</a></td>
-            <td>{{ guest.regular_shows }}</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col" rowspan="2">Guest</th>
-            <th scope="col">All</th>
-            <th scope="col">Regular</th>
-        </tr>
-        <tr>
-            <td colspan="2">Shows</td>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
-{% endblock content %}
-#}

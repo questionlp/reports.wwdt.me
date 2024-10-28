@@ -1,19 +1,42 @@
 {% extends "base.html" %}
 {% block title %}Scorekeepers{% endblock %}
 
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Scorekeepers</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Scorekeepers Reports</h2>
-{% endblock synopsis %}
-
 {% block content %}
-{% include "scorekeepers/_reports.html" %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Scorekeepers</li>
+    </ol>
+</nav>
+
+<h2>Scorekeepers</h2>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group report-list">
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.appearance_summary') }}">Appearance Summary</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a list of scorekeepers along with the number of
+                    appearances, their first and most recent appearance, for both regular and
+                    for all shows (including Best Of and repeat shows).
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.introductions') }}">Introductions</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a list of introductions that Bill Kurtis and other
+                    scorekeepers have used at the start of each show.
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% endblock content %}

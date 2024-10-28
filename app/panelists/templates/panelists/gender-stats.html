@@ -19,14 +19,13 @@
 </div>
 
 {% if gender_stats %}
-<!-- Start Report Section -->
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="date year">
-                    {# Men #}
+                    <!-- Men -->
                     <col class="stats int">
                     <col class="stats int">
                     <col class="stats float">
@@ -34,7 +33,7 @@
                     <col class="stats float">
                     <col class="count">
                     <col class="stats int">
-                    {# Women #}
+                    <!-- Women -->
                     <col class="stats int">
                     <col class="stats int">
                     <col class="stats float">
@@ -43,14 +42,14 @@
                     <col class="count">
                     <col class="stats int">
                 </colgroup>
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th scope="col" rowspan="2">Year</th>
                         <th colspan="7">Men</th>
                         <th colspan="7">Women</th>
                     </tr>
                     <tr>
-                        {# Men #}
+                        <!-- Men -->
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
                         <th scope="col">Mean</th>
@@ -58,7 +57,7 @@
                         <th scope="col">Std Dev</th>
                         <th scope="col">Count</th>
                         <th scope="col">Sum</th>
-                        {# Women #}
+                        <!-- Women -->
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
                         <th scope="col">Mean</th>
@@ -102,7 +101,6 @@
         </div>
     </div>
 </div>
-<!-- End Report Section -->
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.

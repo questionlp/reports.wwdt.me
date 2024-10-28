@@ -11923,7 +11923,8 @@ main ul.name-list-pvp li {
 main .report.table > :not(caption) > * > * {
   padding: 0.6rem 0.8rem;
 }
-main .report.table thead th, main .report.table tfoot th {
+main .report.table thead th,
+main .report.table tfoot th {
   background-color: #f4f4f4;
 }
 main .report.table th {
@@ -12044,13 +12045,19 @@ main .report.table #average-scores-by-year-all col.stats.float,
 main .report.table #average-scores-by-year-all td.stats.float {
   min-width: 4.5rem;
 }
+main .report.table .header-info {
+  border-bottom: 1px dotted #0e6027;
+  cursor: help;
+}
 main .card.report-form .card-header {
   font-weight: 600;
 }
-main .card.report-form input, main .card.report-form select {
+main .card.report-form input,
+main .card.report-form select {
   font-size: unset;
 }
-main .card.report-form label, main .card.report-form input.btn-submit {
+main .card.report-form label,
+main .card.report-form input.btn-submit {
   font-weight: 500;
 }
 main .card.report-form input.btn-submit {
@@ -12112,12 +12119,13 @@ footer .copyright {
 [data-bs-theme=dark] main .name-list {
   column-rule: 1px dotted rgba(255, 255, 255, 0.6);
 }
-[data-bs-theme=dark] main .report.table thead th, [data-bs-theme=dark] main .report.table tfoot th {
+[data-bs-theme=dark] main .report.table thead th,
+[data-bs-theme=dark] main .report.table tfoot th {
   background-color: #393939;
   color: #ffffff;
 }
-[data-bs-theme=dark] main .report.table thead.table-light, [data-bs-theme=dark] main .report.table tfoot.table-light {
-  border: inherit;
+[data-bs-theme=dark] main .report.table .header-info {
+  border-bottom: 1px dotted #a7f0ba;
 }
 
 @media only screen and (max-width: 1201px) {

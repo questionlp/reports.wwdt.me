@@ -1,86 +1,94 @@
 {% extends "base.html" %}
-{% block title %}Not My Job Guests vs Bluff the Listener Win Ratios | Shows{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Not My Job Guests vs Bluff the Listener Win Ratios</h2>
-<p>
-    This report compares the rates in which a Not My Job guest wins compared
-    to how often a listener contestant chooses the correct Bluff the Listener
-    story.
-</p>
-<p>
-    For Not My Job guests, a win is considered when a guest answers 2 or more
-    questions correct or when a
-    <a href="{{ url_for('guests.scoring_exceptions') }}">scorekeeper grants an
-    exception</a>. The report
-    also takes into account <a href="{{ url_for('guests.best_of_only') }}">Not
-    My Job guests that were only included in Best Of shows</a>.
-</p>
-<p>
-    As with Not My Job guests who have only been included in Best Of shows,
-    certain Best Of shows also include unique Bluff the Listener segments.
-    Both usually come from shows where Wait Wait... Don't Tell Me! travels and
-    records a second show. In those cases, the Bluff the Listener segments
-    usually include a different theme and a different true story from the
-    first show.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Not My Job Guests vs Bluff the Listener Win Ratios" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
 
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="count">
-        <col class="count">
-        <col class="count">
-        <col class="stats float">
-        <col>
-        <col class="count">
-        <col class="count">
-        <col class="count">
-        <col class="stats float">
-    </colgroup>
-    <thead>
-        <tr>
-            <th colspan="4">Not My Job Guests</th>
-            <th rowspan="2">vs</th>
-            <th colspan="4">Bluff the Listener</th>
-        </tr>
-        <tr>
-            <th>Wins</th>
-            <th>Losses</th>
-            <th>Total</th>
-            <th>Win %</th>
-            <th>Correct</th>
-            <th>Incorrect</th>
-            <th>Total</th>
-            <th>Correct %</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ guest_stats.wins }}</td>
-            <td>{{ guest_stats.losses }}</td>
-            <td>{{ guest_stats.total }}</td>
-            <td>{{ guest_stats.win_ratio }}</td>
-            <td class="no-data">&nbsp;</td>
-            <td>{{ bluff_stats.correct }}</td>
-            <td>{{ bluff_stats.incorrect }}</td>
-            <td>{{ bluff_stats.total }}</td>
-            <td>{{ bluff_stats.correct_ratio }}</td>
-        </tr>
-    </tbody>
-</table>
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report compares the rates in which a Not My Job guest wins compared
+        to how often a listener contestant chooses the correct Bluff the Listener
+        story.
+    </p>
+    <p>
+        For Not My Job guests, a win is considered when a guest answers 2 or more
+        questions correct or when a
+        <a href="{{ url_for('guests.scoring_exceptions') }}">scorekeeper grants an
+        exception</a>. The report also takes into account
+        <a href="{{ url_for('guests.best_of_only') }}">Not My Job guests that were
+        only included in Best Of shows</a>.
+    </p>
+    <p>
+        As with Not My Job guests who have only been included in Best Of shows,
+        certain Best Of shows also include unique Bluff the Listener segments.
+        Both usually come from shows where Wait Wait... Don't Tell Me! travels and
+        records a second show. In those cases, the Bluff the Listener segments
+        usually include a different theme and a different true story from the
+        first show.
+    </p>
+</div>
 
-<!-- End Report Section -->
+{% if guest_stats and bluff_stats %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="stats float">
+                    <col>
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="stats float">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="4">Not My Job Guests</th>
+                        <th rowspan="2">vs</th>
+                        <th colspan="4">Bluff the Listener</th>
+                    </tr>
+                    <tr>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Total</th>
+                        <th>Win %</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Total</th>
+                        <th>Correct %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ guest_stats.wins }}</td>
+                        <td>{{ guest_stats.losses }}</td>
+                        <td>{{ guest_stats.total }}</td>
+                        <td>{{ guest_stats.win_ratio }}</td>
+                        <td class="no-data">&nbsp;</td>
+                        <td>{{ bluff_stats.correct }}</td>
+                        <td>{{ bluff_stats.incorrect }}</td>
+                        <td>{{ bluff_stats.total }}</td>
+                        <td>{{ bluff_stats.correct_ratio }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
 {% endblock content %}
