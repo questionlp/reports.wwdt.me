@@ -1,6 +1,6 @@
 # Changes
 
-## 3.0.0-alpha
+## 3.0.0-beta
 
 ### Application Changes
 
