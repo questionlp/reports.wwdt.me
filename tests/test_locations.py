@@ -13,13 +13,13 @@ def test_index(client: FlaskClient) -> None:
     response: TestResponse = client.get("/locations/")
     assert response.status_code == 200
     assert b"Locations" in response.data
-    assert b"Average Score by Location" in response.data
+    assert b"Average Scores by Location" in response.data
 
 
-def test_average_scores(client: FlaskClient) -> None:
-    """Testing locations.routes.average_scores."""
-    response: TestResponse = client.get("/locations/average-scores")
+def test_average_scores_by_location(client: FlaskClient) -> None:
+    """Testing locations.routes.average_scores_by_location."""
+    response: TestResponse = client.get("/locations/average-scores-by-location")
     assert response.status_code == 200
-    assert b"Average Score by Location" in response.data
+    assert b"Average Scores by Location" in response.data
     assert b"Venue" in response.data
     assert b"Average Total" in response.data

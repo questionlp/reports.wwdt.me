@@ -19,24 +19,31 @@ def index() -> Response:
 
 
 @blueprint.route("/guest/best_of_only")
-def best_of_only() -> Response:
-    """View: Guests Best Of Only Report Redirect."""
-    return redirect_url(url_for("guests.best_of_only"), status_code=301)
+@blueprint.route("/guests/best-of-only")
+def best_of_only_not_my_job_guests() -> Response:
+    """View: Best Of Only Not My Job Guests Report Redirect."""
+    return redirect_url(
+        url_for("guests.best_of_only_not_my_job_guests"), status_code=301
+    )
 
 
 @blueprint.route("/guest/most_appearances")
 def most_appearances() -> Response:
-    """View: Guests Most Appearances Report."""
+    """View: Most Appearances Report."""
     return redirect_url(url_for("guests.most_appearances"), status_code=301)
 
 
 @blueprint.route("/guest/scoring_exceptions")
-def scoring_exceptions() -> Response:
-    """View: Guests Scoring Exceptions Report."""
-    return redirect_url(url_for("guests.scoring_exceptions"), status_code=301)
+@blueprint.route("/guests/scoring-exceptions")
+def not_my_job_scoring_exceptions() -> Response:
+    """View: Not My Job Scoring Exceptions Report."""
+    return redirect_url(
+        url_for("guests.not_my_job_scoring_exceptions"), status_code=301
+    )
 
 
 @blueprint.route("/guest/three_pointers")
-def three_pointers() -> Response:
-    """View: Guests Three Pointers Report."""
-    return redirect_url(url_for("guests.three_pointers"), status_code=301)
+@blueprint.route("/guests/three-pointers")
+def not_my_job_three_pointers() -> Response:
+    """View: Not My Job Three Pointers Report."""
+    return redirect_url(url_for("guests.not_my_job_three_pointers"), status_code=301)

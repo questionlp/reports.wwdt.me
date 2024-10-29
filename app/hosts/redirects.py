@@ -14,11 +14,11 @@ blueprint = Blueprint("hosts_redirects", __name__)
 @blueprint.route("/host")
 @blueprint.route("/hosts")
 def index() -> Response:
-    """View: Hosts Index Redirect."""
+    """View: Index Redirect."""
     return redirect_url(url_for("hosts.index"), status_code=301)
 
 
 @blueprint.route("/host/appearance_summary")
-def best_of_only() -> Response:
-    """View: Hosts Appearance Summary Report Redirect."""
+def appearance_summary() -> Response:
+    """View: Appearance Summary Report Redirect."""
     return redirect_url(url_for("hosts.appearance_summary"), status_code=301)

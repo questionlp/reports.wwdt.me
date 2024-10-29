@@ -37,7 +37,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.high_scoring') }}">High Scoring Shows</a>
+                    <a href="{{ url_for('shows.high_scoring_shows') }}">High Scoring Shows</a>
                 </h3>
 
                 <div class="description">
@@ -122,7 +122,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.low_scoring') }}">Low Scoring Shows</a>
+                    <a href="{{ url_for('shows.low_scoring_shows') }}">Low Scoring Shows</a>
                 </h3>
 
                 <div class="description">
@@ -140,7 +140,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.not_my_job_vs_bluffs') }}">Not My Job Guests vs Bluff
+                    <a href="{{ url_for('shows.not_my_job_guests_vs_bluff_the_listener_win_ratios') }}">Not My Job Guests vs Bluff
                         the Listener Win Ratios</a>
                 </h3>
 
@@ -153,9 +153,9 @@
                     <p>
                         For Not My Job guests, a win is considered when a guest answers 2 or more
                         questions correct or when a
-                        <a href="{{ url_for('guests.scoring_exceptions') }}">scorekeeper grants an
+                        <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper grants an
                             exception</a>. The report also takes into account
-                        <a href="{{ url_for('guests.best_of_only') }}">Not My Job guests that were only
+                        <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job guests that were only
                             included in Best Of shows</a>.
                     </p>
                 </div>
@@ -186,7 +186,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.search_multiple_panelists') }}">Search
+                    <a href="{{ url_for('shows.search_shows_by_multiple_panelists') }}">Search
                         Shows by Multiple Panelists</a>
                 </h3>
 
@@ -204,7 +204,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.counts_by_year') }}">Show Counts by Year</a>
+                    <a href="{{ url_for('shows.show_counts_by_year') }}">Show Counts by Year</a>
                 </h3>
 
                 <div class="description">
@@ -221,7 +221,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.descriptions') }}">Show Descriptions</a>
+                    <a href="{{ url_for('shows.show_descriptions') }}">Show Descriptions</a>
                 </h3>
 
                 <div class="description">
@@ -231,7 +231,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.notes') }}">Show Notes</a>
+                    <a href="{{ url_for('shows.show_notes') }}">Show Notes</a>
                 </h3>
 
                 <div class="description">
@@ -241,7 +241,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.guest_host') }}">Shows with a Guest Host</a>
+                    <a href="{{ url_for('shows.shows_with_guest_host') }}">Shows with a Guest Host</a>
                 </h3>
 
                 <div class="description">
@@ -252,7 +252,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.guest_scorekeeper') }}">Shows with a Guest
+                    <a href="{{ url_for('shows.shows_with_guest_scorekeeper') }}">Shows with a Guest
                         Scorekeeper</a>
                 </h3>
 
@@ -264,7 +264,7 @@
 
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.perfect_panelist_scores') }}">Shows with
+                    <a href="{{ url_for('shows.shows_with_perfect_panelist_scores') }}">Shows with
                         Perfect Panelist Scores</a>
                 </h3>
 

@@ -17,11 +17,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.bluff_stats") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.bluff_the_listener_statistics") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.debut_by_year") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.debuts_by_year") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -33,27 +33,23 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.gender_stats") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
     <loc>{{ site_url }}{{ url_for("panelists.losing_streaks") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.panelist_pvp") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.panelist_pvp_all") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist_all") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.panelist_pvp_scoring") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist_scoring") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.perfect_scores") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.perfect_score_counts") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -65,7 +61,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.stats_summary") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.statistics_by_gender") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.statistics_summary") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>

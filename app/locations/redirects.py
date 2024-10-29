@@ -14,11 +14,14 @@ blueprint = Blueprint("locations_redirects", __name__)
 @blueprint.route("/location")
 @blueprint.route("/locations")
 def index() -> Response:
-    """View: Locations Index Redirect."""
+    """View: Index Redirect."""
     return redirect_url(url_for("locations.index"), status_code=301)
 
 
 @blueprint.route("/location/average_scores")
-def average_scores() -> Response:
-    """View: Locations Average Scores Report Redirect."""
-    return redirect_url(url_for("locations.average_scores"), status_code=301)
+@blueprint.route("/locations/average-scores")
+def average_scores_by_location() -> Response:
+    """View: Average Score by Location Report Redirect."""
+    return redirect_url(
+        url_for("locations.average_scores_by_location"), status_code=301
+    )
