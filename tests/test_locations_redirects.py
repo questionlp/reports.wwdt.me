@@ -20,7 +20,11 @@ def test_index(client: FlaskClient) -> None:
 
 
 def test_average_scores(client: FlaskClient) -> None:
-    """Testing locations.redirects.average_scores."""
+    """Testing locations.redirects.average_scores_by_location."""
     response: TestResponse = client.get("/location/average_scores")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/locations/average-scores")
     assert response.status_code == 301
     assert response.location

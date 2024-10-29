@@ -1,120 +1,129 @@
 {% extends "base.html" %}
-{% block title %}Rankings Summary | Panelists{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Rankings Summary</h2>
-<p>
-    This report provides statistics for the ranking of each panelist after
-    each show.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Rankings Summary" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="name panelist">
-        <col class="rank">
-        <col class="rank">
-        <col class="rank">
-        <col class="rank">
-        <col class="rank">
-        <col class="count">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">First</th>
-            <th scope="col">First Tied</th>
-            <th scope="col">Second</th>
-            <th scope="col">Second Tied</th>
-            <th scope="col">Third</th>
-            <th scope="col">Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for panelist in panelists_rankings %}
-        <tr>
-            <td><a href="{{ stats_url }}/panelists/{{ panelist }}">
-                {{ panelists[panelist] }}</a></td>
-            {% if panelists_rankings[panelist] %}
-            <td>
-                {{ panelists_rankings[panelist]["first"] }}
-                {% if panelists_rankings[panelist]["percent_first"] %}
-                <br>
-                ({{ panelists_rankings[panelist]["percent_first"] }} %)
-                {% else %}
-                <br>
-                (0.0 %)
-                {% endif %}
-            </td>
-            <td>
-                {{ panelists_rankings[panelist]["first_tied"] }}
-                {% if panelists_rankings[panelist]["percent_first_tied"] %}
-                <br>
-                ({{ panelists_rankings[panelist]["percent_first_tied"] }} %)
-                {% else %}
-                <br>
-                (0.0 %)
-                {% endif %}
-            </td>
-            <td>
-                {{ panelists_rankings[panelist]["second"] }}
-                {% if panelists_rankings[panelist]["percent_second"] %}
-                <br>
-                ({{ panelists_rankings[panelist]["percent_second"] }} %)
-                {% else %}
-                <br>
-                (0.0 %)
-                {% endif %}
-            </td>
-            <td>
-                {{ panelists_rankings[panelist]["second_tied"] }}
-                {% if panelists_rankings[panelist]["percent_second_tied"] %}
-                <br>
-                ({{ panelists_rankings[panelist]["percent_second_tied"] }} %)
-                {% else %}
-                <br>
-                (0.0 %)
-                {% endif %}
-            </td>
-            <td>
-                {{ panelists_rankings[panelist]["third"] }}
-                {% if panelists_rankings[panelist]["percent_third"] %}
-                <br>
-                ({{ panelists_rankings[panelist]["percent_third"] }} %)
-                {% else %}
-                <br>
-                (0.0 %)
-                {% endif %}
-            </td>
-            <td>{{ panelists_rankings[panelist]["count"] }}</td>
-            {% else %}
-            <td class="no-data" colspan="6">-</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">Panelist</th>
-            <th scope="col">First</th>
-            <th scope="col">First Tied</th>
-            <th scope="col">Second</th>
-            <th scope="col">Second Tied</th>
-            <th scope="col">Third</th>
-            <th scope="col">Count</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides statistics for the ranking of each panelist after
+        each show.
+    </p>
+</div>
+
+{% if panelists_rankings %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="rank">
+                    <col class="rank">
+                    <col class="rank">
+                    <col class="rank">
+                    <col class="rank">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">First</th>
+                        <th scope="col">First Tied</th>
+                        <th scope="col">Second</th>
+                        <th scope="col">Second Tied</th>
+                        <th scope="col">Third</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists_rankings %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelists[panelist] }}</a></td>
+                        {% if panelists_rankings[panelist] %}
+                        <td>
+                            {{ panelists_rankings[panelist]["first"] }}
+                            {% if panelists_rankings[panelist]["percent_first"] %}
+                            <br>
+                            ({{ panelists_rankings[panelist]["percent_first"] }} %)
+                            {% else %}
+                            <br>
+                            (0.0 %)
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ panelists_rankings[panelist]["first_tied"] }}
+                            {% if panelists_rankings[panelist]["percent_first_tied"] %}
+                            <br>
+                            ({{ panelists_rankings[panelist]["percent_first_tied"] }} %)
+                            {% else %}
+                            <br>
+                            (0.0 %)
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ panelists_rankings[panelist]["second"] }}
+                            {% if panelists_rankings[panelist]["percent_second"] %}
+                            <br>
+                            ({{ panelists_rankings[panelist]["percent_second"] }} %)
+                            {% else %}
+                            <br>
+                            (0.0 %)
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ panelists_rankings[panelist]["second_tied"] }}
+                            {% if panelists_rankings[panelist]["percent_second_tied"] %}
+                            <br>
+                            ({{ panelists_rankings[panelist]["percent_second_tied"] }} %)
+                            {% else %}
+                            <br>
+                            (0.0 %)
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ panelists_rankings[panelist]["third"] }}
+                            {% if panelists_rankings[panelist]["percent_third"] %}
+                            <br>
+                            ({{ panelists_rankings[panelist]["percent_third"] }} %)
+                            {% else %}
+                            <br>
+                            (0.0 %)
+                            {% endif %}
+                        </td>
+                        <td>{{ panelists_rankings[panelist]["count"] }}</td>
+                        {% else %}
+                        <td class="no-data" colspan="6">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">First</th>
+                        <th scope="col">First Tied</th>
+                        <th scope="col">Second</th>
+                        <th scope="col">Second Tied</th>
+                        <th scope="col">Third</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
 {% endblock content %}

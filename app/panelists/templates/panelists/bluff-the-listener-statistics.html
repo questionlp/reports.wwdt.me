@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% set page_title = "Bluff the Listener Statistics" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a break down of the number of times each panelist has
+        had their Bluff the Listener story chosen, had the correct story, and
+        the number of appearances on both regular shows that had a Bluff the
+        Listener segment and Best Of shows with unique Bluff the Listener segments.
+    </p>
+    <p>
+        Please note that Bluff the Listener data for shows aired in 1999 have not been
+        captured in their entirety. Bluff the Listener data for those shows will be
+        added over time.
+    </p>
+</div>
+
+{% if panelists %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count long">
+                    <col class="count long">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Regular Bluff Segments</th>
+                        <th scope="col">Unique Best Of Segments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
+                        <td>{{ panelist.chosen }}</td>
+                        <td>{{ panelist.correct }}</td>
+                        <td>{{ panelist.appearances }}</td>
+                        <td>{{ panelist.unique_best_of }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">Unique Best Of</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content%}

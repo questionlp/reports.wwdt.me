@@ -43,7 +43,7 @@ blueprint = Blueprint("shows", __name__, template_folder="templates")
 
 @blueprint.route("/")
 def index() -> str:
-    """View: Shows Index."""
+    """View: Index."""
     return render_template("shows/_index.html")
 
 
@@ -80,48 +80,8 @@ def all_women_panel() -> str:
     return render_template("shows/all-women-panel.html", shows=_shows)
 
 
-@blueprint.route("/counts-by-year")
-def counts_by_year() -> str:
-    """View: Show Counts by Year Report."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _counts = retrieve_show_counts_by_year(database_connection=_database_connection)
-    _database_connection.close()
-
-    return render_template("shows/counts-by-year.html", show_counts=_counts)
-
-
-@blueprint.route("/descriptions")
-def descriptions() -> str:
-    """View: Show Descriptions."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _descriptions = retrieve_show_descriptions(database_connection=_database_connection)
-    _database_connection.close()
-
-    return render_template("shows/descriptions.html", descriptions=_descriptions)
-
-
-@blueprint.route("/guest-host")
-def guest_host() -> str:
-    """View: Shows with a Guest Host Report."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_guest_host(database_connection=_database_connection)
-    _database_connection.close()
-
-    return render_template("shows/guest-host.html", shows=_shows)
-
-
-@blueprint.route("/guest-scorekeeper")
-def guest_scorekeeper() -> str:
-    """View: Shows with a Guest Scorekeeper Report."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_guest_scorekeeper(database_connection=_database_connection)
-    _database_connection.close()
-
-    return render_template("shows/guest-scorekeeper.html", shows=_shows)
-
-
-@blueprint.route("/high-scoring")
-def high_scoring() -> str:
+@blueprint.route("/high-scoring-shows")
+def high_scoring_shows() -> str:
     """View: High Scoring Shows Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_high_scoring(
@@ -130,7 +90,7 @@ def high_scoring() -> str:
     )
     _database_connection.close()
 
-    return render_template("shows/high-scoring.html", shows=_shows)
+    return render_template("shows/high-scoring-shows.html", shows=_shows)
 
 
 @blueprint.route("/highest-score-equals-sum-other-scores")
@@ -221,8 +181,8 @@ def lightning_round_zero_correct() -> str:
     return render_template("shows/lightning-round-zero-correct.html", shows=_shows)
 
 
-@blueprint.route("/low-scoring")
-def low_scoring() -> str:
+@blueprint.route("/low-scoring-shows")
+def low_scoring_shows() -> str:
     """View: Low Scoring Shows Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_low_scoring(
@@ -231,11 +191,11 @@ def low_scoring() -> str:
     )
     _database_connection.close()
 
-    return render_template("shows/low-scoring.html", shows=_shows)
+    return render_template("shows/low-scoring-shows.html", shows=_shows)
 
 
-@blueprint.route("/not-my-job-vs-bluffs")
-def not_my_job_vs_bluffs() -> str:
+@blueprint.route("/not-my-job-guests-vs-bluff-the-listener-win-ratios")
+def not_my_job_guests_vs_bluff_the_listener_win_ratios() -> str:
     """View: Not My Job Guests vs Bluff the Listener Win Ratios Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _guest_stats = retrieve_not_my_job_stats(database_connection=_database_connection)
@@ -243,20 +203,10 @@ def not_my_job_vs_bluffs() -> str:
     _database_connection.close()
 
     return render_template(
-        "shows/guests-vs-bluffs.html",
+        "shows/not-my-job-guests-vs-bluff-the-listener-win-ratios.html",
         guest_stats=_guest_stats,
         bluff_stats=_bluff_stats,
     )
-
-
-@blueprint.route("/notes")
-def notes() -> str:
-    """View: Show Notes."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _notes = retrieve_show_notes(database_connection=_database_connection)
-    _database_connection.close()
-
-    return render_template("shows/notes.html", notes=_notes)
 
 
 @blueprint.route("/original-shows")
@@ -283,7 +233,7 @@ def original_shows() -> str:
 
 @blueprint.route("/panel-gender-mix")
 def panel_gender_mix() -> str:
-    """View: Shows Panel Gender Mix Report."""
+    """View: Panel Gender Mix Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _mix = panel_gender_mix_breakdown(database_connection=_database_connection)
     _database_connection.close()
@@ -291,21 +241,8 @@ def panel_gender_mix() -> str:
     return render_template("shows/panel-gender-mix.html", panel_gender_mix=_mix)
 
 
-@blueprint.route("/perfect-panelist-scores")
-def perfect_panelist_scores() -> str:
-    """View: Shows with Perfect Panelist Scores Report."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _shows = retrieve_shows_panelist_perfect_scores(
-        database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
-    )
-    _database_connection.close()
-
-    return render_template("shows/perfect-panelist-scores.html", shows=_shows)
-
-
-@blueprint.route("/search-multiple-panelists", methods=["GET", "POST"])
-def search_multiple_panelists() -> str:
+@blueprint.route("/search-shows-by-multiple-panelists", methods=["GET", "POST"])
+def search_shows_by_multiple_panelists() -> str:
     """View: Search Shows by Multiple Panelists Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
@@ -361,23 +298,94 @@ def search_multiple_panelists() -> str:
             _database_connection.close()
             if _shows:
                 return render_template(
-                    "shows/search-multiple-panelists.html",
+                    "shows/search-shows-by-multiple-panelists.html",
                     panelists=_panelists,
                     shows=_shows,
                 )
 
             return render_template(
-                "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
+                "shows/search-shows-by-multiple-panelists.html",
+                panelists=_panelists,
+                shows=None,
             )
 
         # Fallback for no valid panelist(s) selected
         _database_connection.close()
         return render_template(
-            "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
+            "shows/search-shows-by-multiple-panelists.html",
+            panelists=_panelists,
+            shows=None,
         )
 
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "shows/search-multiple-panelists.html", panelists=_panelists, shows=None
+        "shows/search-shows-by-multiple-panelists.html",
+        panelists=_panelists,
+        shows=None,
+    )
+
+
+@blueprint.route("/show-counts-by-year")
+def show_counts_by_year() -> str:
+    """View: Show Counts by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _counts = retrieve_show_counts_by_year(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/show-counts-by-year.html", show_counts=_counts)
+
+
+@blueprint.route("/show-descriptions")
+def show_descriptions() -> str:
+    """View: Show Descriptions."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _descriptions = retrieve_show_descriptions(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/show-descriptions.html", descriptions=_descriptions)
+
+
+@blueprint.route("/show-notes")
+def show_notes() -> str:
+    """View: Show Notes."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _notes = retrieve_show_notes(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/show-notes.html", notes=_notes)
+
+
+@blueprint.route("/shows-with-guest-host")
+def shows_with_guest_host() -> str:
+    """View: Shows with a Guest Host Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_guest_host(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/shows-with-guest-host.html", shows=_shows)
+
+
+@blueprint.route("/shows-with-guest-scorekeeper")
+def shows_with_guest_scorekeeper() -> str:
+    """View: Shows with a Guest Scorekeeper Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_guest_scorekeeper(database_connection=_database_connection)
+    _database_connection.close()
+
+    return render_template("shows/shows-with-guest-scorekeeper.html", shows=_shows)
+
+
+@blueprint.route("/shows-with-perfect-panelist-scores")
+def shows_with_perfect_panelist_scores() -> str:
+    """View: Shows with Perfect Panelist Scores Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_panelist_perfect_scores(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _database_connection.close()
+
+    return render_template(
+        "shows/shows-with-perfect-panelist-scores.html", shows=_shows
     )

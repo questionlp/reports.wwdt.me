@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% set page_title = "Statistics by Gender" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a break down of panelist statistics grouped by
+        the gender that each panelist has identified themselves as.
+    </p>
+</div>
+
+{% if gender_stats %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date year">
+                    <!-- Men -->
+                    <col class="stats int">
+                    <col class="stats int">
+                    <col class="stats float">
+                    <col class="stats int">
+                    <col class="stats float">
+                    <col class="count">
+                    <col class="stats int">
+                    <!-- Women -->
+                    <col class="stats int">
+                    <col class="stats int">
+                    <col class="stats float">
+                    <col class="stats int">
+                    <col class="stats float">
+                    <col class="count">
+                    <col class="stats int">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">Year</th>
+                        <th colspan="7">Men</th>
+                        <th colspan="7">Women</th>
+                    </tr>
+                    <tr>
+                        <!-- Men -->
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Mean</th>
+                        <th scope="col">Median</th>
+                        <th scope="col">Std Dev</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Sum</th>
+                        <!-- Women -->
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Mean</th>
+                        <th scope="col">Median</th>
+                        <th scope="col">Std Dev</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Sum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year in gender_stats %}
+                    <tr>
+                        <td>{{ year }}</td>
+                        {% if gender_stats[year]["M"] %}
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["minimum"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["minimum"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["maximum"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["maximum"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["mean"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["mean"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["median"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["median"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["standard_deviation"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["standard_deviation"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["count"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["count"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["total"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["total"] }}</td>
+                        {% else %}
+                        <td class="no-data" colspan="7">-</td>
+                        {% endif %}
+
+                        {% if gender_stats[year]["F"] %}
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["minimum"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["minimum"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["maximum"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["maximum"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["mean"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["mean"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["median"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["median"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["standard_deviation"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["standard_deviation"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["count"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["count"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["total"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["total"] }}</td>
+                        {% else %}
+                        <td class="no-data" colspan="7">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

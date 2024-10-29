@@ -12,8 +12,9 @@ def test_index(client: FlaskClient) -> None:
     """Testing main.index."""
     response: TestResponse = client.get("/")
     assert response.status_code == 200
-    assert b"Wait Wait... Don't Tell Me! Reports" in response.data
-    assert b"Available Report Categories" in response.data
+    assert b"Wait Wait Reports" in response.data
+    assert b"Welcome!" in response.data
+    assert b"Scorekeepers" in response.data
 
 
 def test_robots_txt(client: FlaskClient) -> None:

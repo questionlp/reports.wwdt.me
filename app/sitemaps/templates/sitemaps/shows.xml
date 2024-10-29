@@ -9,23 +9,7 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.counts_by_year") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("shows.descriptions") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("shows.guest_host") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("shows.guest_scorekeeper") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("shows.high_scoring") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.high_scoring_shows") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -49,15 +33,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.low_scoring") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.low_scoring_shows") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.not_my_job_vs_bluffs") }}</loc>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>{{ site_url }}{{ url_for("shows.notes") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.not_my_job_guests_vs_bluff_the_listener_win_ratios") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -69,11 +49,31 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.perfect_panelist_scores") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.search_shows_by_multiple_panelists") }}</loc>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("shows.search_multiple_panelists") }}</loc>
+    <loc>{{ site_url }}{{ url_for("shows.show_counts_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.show_descriptions") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.show_notes") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.shows_with_guest_host") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.shows_with_guest_scorekeeper") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.shows_with_perfect_panelist_scores") }}</loc>
     <changefreq>daily</changefreq>
   </url>
 </urlset>

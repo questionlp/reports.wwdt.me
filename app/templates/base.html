@@ -1,77 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    {% block head %}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %} | Wait Wait Don't Tell Me! Reports</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/pure.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/grids-responsive-min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    {% if site_url and request.path %}
-    <link rel="canonical" href="{{ site_url }}{{ request.path }}">
-    {% endif %}
-    {% if ga_property_code %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_property_code }}"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ ga_property_code }}');
-    </script>
-    {% endif %}
+<html lang="en" class="h-100">
 
-    {% if umami_analytics %}
-    <!-- Umami Analytics -->
-    {{ umami_analytics|safe }}
-    {% endif %}
-    {% endblock head %}
+<head>
+    <title>{% block title %}{% endblock %} | Wait Wait Don't Tell Me! Reports</title>
+    {% include "core/head.html" with context %}
 </head>
 
-<body>
-<header>
-    <h1 class="title">Wait Wait... Don't Tell Me! Reports</h1>
-    {% block breadcrumb %}{% endblock %}
-</header>
+<body class="d-flex flex-column h-100">
+    {% include "core/nav.html" %}
 
-<main>
-    {% block main %}
-    {% block synopsis %}{% endblock %}
-    {% block content %}{% endblock %}
-    {% endblock main %}
-</main>
+    <main id="main-content">
+        <div class="container-fluid p-3">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
 
-<footer>
-    <div id="timestamp">R: {{ rendered_at(time_zone) }} | V: {{ app_version }}</div>
-    <div id="copyright">
-        Copyright &copy; 2019&ndash;{{ current_year(time_zone) }}
-        {% if mastodon_url and mastodon_user %}
-        <a href="https://linhpham.org/">Linh Pham</a> (<a rel="me" href="{{ mastodon_url }}">{{ mastodon_user }}</a>).
-        {% else %}
-        <a href="https://linhpham.org/">Linh Pham</a>.
-        {% endif %}
-        All rights reserved.
-    </div>
-    {% if patreon_url or github_sponsor_url %}
-    <div id="sponsor">
-        Sponsor this project at:
-        {% if patreon_url and github_sponsor_url %}
-        <a href="{{ github_sponsor_url }}">GitHub</a> and <a href="{{ patreon_url }}">Patreon</a>.
-        {% elif patreon_url %}
-        <a href="{{ patreon_url }}">Patreon</a>.
-        {% elif github_sponsor_url %}
-        <a href="{{ github_sponsor_url }}">GitHub</a>.
-        {% endif %}
-    </div>
-    {% endif %}
-    <div id="source">Source code for this project is available on <a href="{{ repo_url }}">GitHub</a>
-    under <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</div>
-</footer>
+    {% include "core/footer.html" %}
+
+    {% include "core/init_js.html" %}
 </body>
 </html>

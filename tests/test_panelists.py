@@ -13,8 +13,9 @@ def test_index(client: FlaskClient) -> None:
     """Testing panelists.routes.index."""
     response: TestResponse = client.get("/panelists/")
     assert response.status_code == 200
-    assert b"Panelists Reports" in response.data
+    assert b"Panelists" in response.data
     assert b"Aggregate Scores" in response.data
+    assert b"Debuts by Year" in response.data
 
 
 def test_aggregate_scores(client: FlaskClient) -> None:
@@ -30,7 +31,7 @@ def test_average_scores_by_year(client) -> None:
     response: TestResponse = client.get("/panelists/average-scores-by-year")
     assert response.status_code == 200
     assert b"Average Scores by Year" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Select a Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -63,39 +64,44 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     assert b"No data available" not in response.data
 
 
-def test_bluff_stats(client: FlaskClient) -> None:
-    """Testing panelists.routes.bluff_stats."""
-    response: TestResponse = client.get("/panelists/bluff-stats")
+def test_bluff_the_listener_statistics(client: FlaskClient) -> None:
+    """Testing panelists.routes.bluff_the_listener_statistics."""
+    response: TestResponse = client.get("/panelists/bluff-the-listener-statistics")
     assert response.status_code == 200
     assert b"Bluff the Listener Statistics" in response.data
     assert b"Unique Best Of" in response.data
 
 
-def test_bluff_stats_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.bluff_stats_by_year."""
-    response: TestResponse = client.get("/panelists/bluff-stats-by-year")
-    assert response.status_code == 200
-    assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Panelist:" in response.data
-
-
-@pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
-def test_bluff_stats_by_year_post(client: FlaskClient, panelist_slug: str) -> None:
-    """Testing panelists.routes.bluff_stats_by_year (POST)."""
-    response: TestResponse = client.post(
-        "/panelists/bluff-stats-by-year", data={"panelist": panelist_slug}
+def test_bluff_the_listener_statistics_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.bluff_the_listener_statistics_by_year."""
+    response: TestResponse = client.get(
+        "/panelists/bluff-the-listener-statistics-by-year"
     )
     assert response.status_code == 200
     assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Panelist:" in response.data
+    assert b"Panelist" in response.data
+
+
+@pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
+def test_bluff_the_listener_statistics_by_year_post(
+    client: FlaskClient, panelist_slug: str
+) -> None:
+    """Testing panelists.routes.bluff_the_listener_statistics_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/bluff-the-listener-statistics-by-year",
+        data={"panelist": panelist_slug},
+    )
+    assert response.status_code == 200
+    assert b"Bluff the Listener Statistics by Year" in response.data
+    assert b"Panelist" in response.data
     assert b"Unique Best Of" in response.data
 
 
-def test_debut_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.debut_by_year."""
-    response: TestResponse = client.get("/panelists/debut-by-year")
+def test_debuts_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.debuts_by_year."""
+    response: TestResponse = client.get("/panelists/debuts-by-year")
     assert response.status_code == 200
-    assert b"Debut by Year" in response.data
+    assert b"Debuts by Year" in response.data
     assert b"# of Regular Appearances" in response.data
 
 
@@ -116,14 +122,6 @@ def test_first_most_recent_appearances(client: FlaskClient) -> None:
     assert b"All Shows" in response.data
 
 
-def test_gender_stats(client: FlaskClient) -> None:
-    """Testing panelists.routes.gender_stats."""
-    response: TestResponse = client.get("/panelists/gender-stats")
-    assert response.status_code == 200
-    assert b"Statistics by Gender" in response.data
-    assert b"Std Dev" in response.data
-
-
 def test_losing_streaks(client: FlaskClient) -> None:
     """Testing panelists.routes.losing_streaks."""
     response: TestResponse = client.get("/panelists/losing-streaks")
@@ -133,19 +131,19 @@ def test_losing_streaks(client: FlaskClient) -> None:
     assert b"Third Place Losses" in response.data
 
 
-def test_panelist_pvp(client) -> None:
-    """Testing panelists.routes.panelist_pvp (GET)."""
-    response: TestResponse = client.get("/panelists/panelist-pvp")
+def test_panelist_vs_panelist(client) -> None:
+    """Testing panelists.routes.panelist_vs_panelist (GET)."""
+    response: TestResponse = client.get("/panelists/panelist-vs-panelist")
     assert response.status_code == 200
     assert b"Panelist vs Panelist" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Select a Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
-def test_panelist_pvp_post(client: FlaskClient, panelist_slug: str) -> None:
-    """Testing panelists.routes.panelist_pvp (POST)."""
+def test_panelist_vs_panelist_post(client: FlaskClient, panelist_slug: str) -> None:
+    """Testing panelists.routes.panelist_vs_panelist (POST)."""
     response: TestResponse = client.post(
-        "/panelists/panelist-pvp", data={"panelist": panelist_slug}
+        "/panelists/panelist-vs-panelist", data={"panelist": panelist_slug}
     )
     assert response.status_code == 200
     assert b"Panelist vs Panelist" in response.data
@@ -153,28 +151,29 @@ def test_panelist_pvp_post(client: FlaskClient, panelist_slug: str) -> None:
     assert b"Ranked vs" in response.data
 
 
-def test_panelist_pvp_all(client: FlaskClient) -> None:
-    """Testing panelists.routes.panelist_pvp_all."""
-    response: TestResponse = client.get("/panelists/panelist-pvp/all")
+def test_panelist_vs_panelist_all(client: FlaskClient) -> None:
+    """Testing panelists.routes.panelist_vs_panelist_all."""
+    response: TestResponse = client.get("/panelists/panelist-vs-panelist/all")
     assert response.status_code == 200
     assert b"Panelist vs Panelist: All" in response.data
     assert b"Ranked vs" in response.data
     assert b"Total" in response.data
 
 
-def test_panelist_pvp_scoring(client: FlaskClient) -> None:
-    """Testing panelists.routes.panelist_pvp_scoring (GET)."""
+def test_panelist_vs_panelist_scoring(client: FlaskClient) -> None:
+    """Testing panelists.routes.panelist_vs_panelist_scoring (GET)."""
     response: TestResponse = client.get("/panelists/panelist-vs-panelist-scoring")
     assert response.status_code == 200
     assert b"Panelist vs Panelist Scoring" in response.data
-    assert b"Please choose a panelist" in response.data
+    assert b"Panelist 1" in response.data
+    assert b"Panelist 2" in response.data
 
 
 @pytest.mark.parametrize("panelist_1, panelist_2", [("adam-felber", "faith-salie")])
-def test_panelist_pvp_scoring_post(
+def test_panelist_vs_panelist_scoring_post(
     client: FlaskClient, panelist_1: str, panelist_2: str
 ) -> None:
-    """Testing panelists.routes.panelist_pvp_scoring (POST)."""
+    """Testing panelists.routes.panelist_vs_panelist_scoring (POST)."""
     response: TestResponse = client.post(
         "/panelists/panelist-vs-panelist-scoring",
         data={
@@ -190,9 +189,9 @@ def test_panelist_pvp_scoring_post(
     assert b"Rank" in response.data
 
 
-def test_perfect_scores(client: FlaskClient) -> None:
-    """Testing panelists.routes.perfect_scores."""
-    response: TestResponse = client.get("/panelists/perfect-scores")
+def test_perfect_score_counts(client: FlaskClient) -> None:
+    """Testing panelists.routes.perfect_score_counts."""
+    response: TestResponse = client.get("/panelists/perfect-score-counts")
     assert response.status_code == 200
     assert b"Perfect Scores Count"
     assert b"Total Score Count"
@@ -215,9 +214,17 @@ def test_single_appearance(client: FlaskClient) -> None:
     assert b"Show Date" in response.data
 
 
-def test_stats_summary(client: FlaskClient) -> None:
-    """Testing panelists.routes.stats_summary."""
-    response: TestResponse = client.get("/panelists/stats-summary")
+def test_statistics_by_gender(client: FlaskClient) -> None:
+    """Testing panelists.routes.statistics_by_gender."""
+    response: TestResponse = client.get("/panelists/statistics-by-gender")
+    assert response.status_code == 200
+    assert b"Statistics by Gender" in response.data
+    assert b"Std Dev" in response.data
+
+
+def test_statistics_summary(client: FlaskClient) -> None:
+    """Testing panelists.routes.statistics_summary."""
+    response: TestResponse = client.get("/panelists/statistics-summary")
     assert response.status_code == 200
     assert b"Statistics Summary" in response.data
     assert b"Std Dev" in response.data

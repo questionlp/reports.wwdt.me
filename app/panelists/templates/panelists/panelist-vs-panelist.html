@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% set page_title = "Panelist vs Panelist" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report allows you to lookup how well a panelist has faired
+        against another panelist.
+    </p>
+</div>
+
+<div class="card report-form mb-5">
+    <div class="card-header">
+        Select a panelist to view their average scores by year
+    </div>
+    <div class="card-body">
+        <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-auto">
+                <label for="panelist" class="visually-hidden">Panelist</label>
+                <select id="panelist" name="panelist" class="form-select" aria-label="Panelist selection">
+                    <option value="">-- Select a Panelist --</option>
+                    {% for panelist in all_panelists %}
+                    {% if request.form.panelist == all_panelists[panelist].slug %}
+                    <option value="{{ all_panelists[panelist].slug }}" selected>{{ all_panelists[panelist].name }}
+                    </option>
+                    {% else %}
+                    <option value="{{ all_panelists[panelist].slug }}">{{ all_panelists[panelist].name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <input type="submit" class="btn btn-submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if request.method == "POST" %}
+{% if request.form.panelist and results %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <h3 class="mt-0">{{ panelist_info.name }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Ranked vs</th>
+                        <th scope="col">Higher</th>
+                        <th scope="col">Tied</th>
+                        <th scope="col">Lower</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vs_panelist, result in results.items() %}
+                    {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ all_panelists[vs_panelist].slug }}">{{ all_panelists[vs_panelist].name }}</a></td>
+                        <td>{{ result.wins }}</td>
+                        <td>{{ result.draws }}</td>
+                        <td>{{ result.losses }}</td>
+                        <td>{{ result.total }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% elif not request.form.panelist %}
+<div class="alert alert-warning my-5" role="alert">
+    <i class="bi bi-exclamation-triangle pe-1"></i> No panelist was selected.
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ panelist_info.name }}</b> is currently unavailable.
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock content %}

@@ -14,7 +14,7 @@ blueprint = Blueprint("shows_redirects", __name__)
 @blueprint.route("/show")
 @blueprint.route("/shows")
 def index() -> Response:
-    """View: Shows Index Redirect."""
+    """View: Index Redirect."""
     return redirect_url(url_for("shows.index"), status_code=301)
 
 
@@ -44,26 +44,35 @@ def all_women_panel() -> Response:
     return redirect_url(url_for("shows.all_women_panel"), status_code=301)
 
 
+@blueprint.route("/shows/descriptions")
+def show_descriptions() -> Response:
+    """View: Show Descriptions Report Redirect."""
+    return redirect_url(url_for("shows.show_descriptions"), status_code=301)
+
+
 @blueprint.route("/show/guest_host")
 @blueprint.route("/show/guest_hosts")
+@blueprint.route("/shows/guest-host")
 @blueprint.route("/shows/guest-hosts")
-def guest_host() -> Response:
+def shows_with_guest_host() -> Response:
     """View: Shows with a Guest Hosts Report Redirect."""
-    return redirect_url(url_for("shows.guest_host"), status_code=301)
+    return redirect_url(url_for("shows.shows_with_guest_host"), status_code=301)
 
 
 @blueprint.route("/show/guest_scorekeeper")
 @blueprint.route("/show/guest_scorekeepers")
+@blueprint.route("/shows/guest-scorekeeper")
 @blueprint.route("/shows/guest-scorekeepers")
-def guest_scorekeeper() -> Response:
+def shows_with_guest_scorekeeper() -> Response:
     """View: Shows with a Guest Scorekeeper Report Redirect."""
-    return redirect_url(url_for("shows.guest_scorekeeper"), status_code=301)
+    return redirect_url(url_for("shows.shows_with_guest_scorekeeper"), status_code=301)
 
 
 @blueprint.route("/show/high_scoring")
-def high_scoring() -> Response:
+@blueprint.route("/shows/high-scoring")
+def high_scoring_shows() -> Response:
     """View: High Scoring Shows Report Redirect."""
-    return redirect_url(url_for("shows.high_scoring"), status_code=301)
+    return redirect_url(url_for("shows.high_scoring_shows"), status_code=301)
 
 
 @blueprint.route("/show/high_score_equal_sum_other_scores")
@@ -75,7 +84,7 @@ def highest_score_equals_sum_other_scores() -> Response:
 
 
 @blueprint.route("/show/lightning_round_end_three_way_tie")
-def lightning_round_end_three_way_tie() -> Response:
+def lightning_round_ending_three_way_tie() -> Response:
     """View: Lightning Round Ending in a Three-Way Tie Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_ending_three_way_tie"), status_code=301
@@ -83,7 +92,7 @@ def lightning_round_end_three_way_tie() -> Response:
 
 
 @blueprint.route("/show/lightning_round_start_end_three_way_tie")
-def lightning_round_start_end_three_way_tie() -> Response:
+def lightning_round_start_ending_three_way_tie() -> Response:
     """View: Lightning Round Starting and Ending in a Three-Way Tie Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_starting_ending_three_way_tie"), status_code=301
@@ -91,7 +100,7 @@ def lightning_round_start_end_three_way_tie() -> Response:
 
 
 @blueprint.route("/show/lighting_round_start_zero")
-def lightning_round_start_zero_points() -> Response:
+def lightning_round_starting_zero_points() -> Response:
     """View: Lightning Round Starting with Zero Points Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_starting_zero_points"), status_code=301
@@ -105,9 +114,25 @@ def lightning_round_zero_correct():
 
 
 @blueprint.route("/show/low_scoring")
-def low_scoring() -> Response:
+@blueprint.route("/shows/low-scoring")
+def low_scoring_shows() -> Response:
     """View: Low Scoring Shows Report Redirect."""
-    return redirect_url(url_for("shows.low_scoring"), status_code=301)
+    return redirect_url(url_for("shows.low_scoring_shows"), status_code=301)
+
+
+@blueprint.route("/shows/not-my-job-vs-bluffs")
+def not_my_job_guests_vs_bluff_the_listener_win_ratios() -> Response:
+    """View: Not My Job Guests vs Bluff the Listener Win Ratios Report Redirect."""
+    return redirect_url(
+        url_for("shows.not_my_job_guests_vs_bluff_the_listener_win_ratios"),
+        status_code=301,
+    )
+
+
+@blueprint.route("/shows/notes")
+def show_notes() -> Response:
+    """View: Show Notes Report Redirect."""
+    return redirect_url(url_for("shows.show_notes"), status_code=301)
 
 
 @blueprint.route("/show/original_shows")
@@ -136,17 +161,28 @@ def panel_gender_mix() -> Response:
     return redirect_url(url_for("shows.panel_gender_mix"), status_code=301)
 
 
+@blueprint.route("/shows/perfect-panelist-scores")
+def shows_with_perfect_panelist_scores() -> Response:
+    """View: Shows with Perfect Panelist Scores Report Redirect."""
+    return redirect_url(
+        url_for("shows.shows_with_perfect_panelist_scores"), status_code=301
+    )
+
+
 @blueprint.route("/show/search_multiple_panelists", methods=["GET", "POST"])
-def search_multiple_panelists() -> Response:
+@blueprint.route("/shows/search-multiple-panelists", methods=["GET", "POST"])
+def search_shows_by_multiple_panelists() -> Response:
     """View: Search Shows by Multiple Panelists Report Redirect."""
-    return redirect_url(url_for("shows.search_multiple_panelists"), status_code=301)
+    return redirect_url(
+        url_for("shows.search_shows_by_multiple_panelists"), status_code=301
+    )
 
 
 @blueprint.route("/show/counts_by_year")
 @blueprint.route("/show/show_counts_by_year")
+@blueprint.route("/shows/counts-by-year")
 @blueprint.route("/shows/counts_by_year")
 @blueprint.route("/shows/show_counts_by_year")
-@blueprint.route("/shows/show-counts-by-year")
-def counts_by_year() -> Response:
+def show_counts_by_year() -> Response:
     """View: Show Counts by Year Report Redirect."""
-    return redirect_url(url_for("shows.counts_by_year"), status_code=301)
+    return redirect_url(url_for("shows.show_counts_by_year"), status_code=301)

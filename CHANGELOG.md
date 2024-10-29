@@ -1,5 +1,61 @@
 # Changes
 
+## 3.0.0-alpha
+
+### Application Changes
+
+- Frontend code refactor due to switching from Pure CSS to Bootstrap
+  - Replacing Pure CSS frontend toolkit with Bootstrap
+  - Refactor the frontend structure to use Bootstrap frontend components and conventions
+  - Include the required IBM Plex web fonts with the application to remove use of Google Fonts
+- User interface changes
+  - Switch the design to match that of the [Wait Wait Stats Page](https://stats.wwdt.me) and the [Wait Wait Graphs Site](https://graphs.wwdt.me)
+  - Make use of Bootstrap's responsive design functionality for a more consistent experience across mobile and desktop
+  - Remove "Home" from all navigational breadcrumbs
+  - Clean up the home page to only provide a table of contents and only display report descriptions on the index page for each section
+- Link to the corresponding location page on the Wait Wait Stats Page for each listed location in the "Locations: Average Scores" report
+- Updating report method names, report template filenames and URLs for consistency
+  - The following table lists the reports that have been renamed and/or had their URLs changed
+  - Add the necessary redirects and update sitemap generation
+  - Update test scripts to reflect new method names, routes and redirects
+
+| Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
+|----------------------|---------------------|-----------------|----------------|
+| **Guests** | | | |
+| Best Of Not My Job Guests | `/guests/best-of-only` | N/A | `/guests/best-of-only-not-my-job-guests` |
+| Not My Job Scoring Exceptions | `/guests/scoring-exceptions` | N/A | `/guests/not-my-job-scoring-exceptions` |
+| Not My Job Three Pointers | `/guests/three-pointers` | N/A | `/guests/not-my-job-three-pointers` |
+| **Locations** | | | |
+| Average Score by Location | `/locations/average-scores` | Average Scores by Location | `/locations/average-scores-by-location` |
+| **Panelists** | | | |
+| Bluff the Listener Statistics | `/panelists/bluff-stats` | N/A | `/panelists/bluff-the-listener-statistics` |
+| Bluff the Listener Statistics by Year | `/panelists/bluff-stats-by-year` | N/A | `/panelists/bluff-the-listener-statistics-by-year` |
+| Debut by Year | `/panelists/debut-by-year` | Debuts by Year | `/panelists/debuts-by-year` |
+| Panelist vs Panelist | `/panelists/panelist-pvp` | N/A | `/panelists/panelist-vs-panelist` |
+| Panelist vs Panelist: All | `/panelists/panelist-pvp/all` | N/A | `/panelists/panelist-vs-panelist/all` |
+| Perfect Score Counts | `/panelists/perfect-scores` | N/A | `/panelists/perfect-score-counts` |
+| Statistics by Gender | `/panelists/gender-stats` | N/A | `/panelists/statistics-by-gender` |
+| Statistics Summary | `/panelists/stats-summary` | N/A | `/panelists/statistics-summary` |
+| **Scorekeepers** | | | |
+| Introductions | `/scorekeepers/introductions` | Scorekeeper Introductions | `/scorekeepers/scorekeeper-introductions` |
+| **Shows** | | | |
+| High Scoring Shows | `/shows/high-scoring` | N/A | `/shows/high-scoring-shows` |
+| Low Scoring Shows | `/shows/low-scoring` | N/A | `/shows/low-scoring-shows` |
+| Not My Job Guests vs Bluff the Listener Win Ratios | `/shows/not-my-job-vs-bluffs` | N/A | `/shows/not-my-job-guests-vs-bluff-the-listener-win-ratios` |
+| Search Shows by Multiple Panelists | `/shows/search-multiple-panelists` | N/A | `/shows/search-shows-by-multiple-panelists` |
+| Show Counts by Year | `/shows/counts-by-year` | N/A | `/shows/show-counts-by-year` |
+| Show Descriptions | `/shows/descriptions` | N/A | `/shows/show-descriptions` |
+| Show Notes | `/shows/notes` | N/A | `/shows/show-notes` |
+| Shows with a Guest Host | `/shows/guest-host` | N/A | `/shows/shows-with-guest-host` |
+| Shows with a Guest Scorekeeper | `/shows/guest-scorekeeper` | N/A | `/shows/shows-with-guest-scorekeeper` |
+| Shows with Perfect Panelist Scores | `/shows/perfect-panelist-scores` | N/A | `/shows/shows-with-perfect-panelist-scores` |
+
+### Component Changes
+
+- Replace Pure CSS 3.0.0 with Bootstrap 5.3.3
+  - Existing Pure CSS files will be preserved to prevent cached versions of the application from breaking
+  - Files related to Pure CSS will be removed in a future release
+
 ## 2.14.1
 
 ### Component Changes

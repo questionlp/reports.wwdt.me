@@ -1,19 +1,262 @@
 {% extends "base.html" %}
 {% block title %}Panelists{% endblock %}
 
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Panelists</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Panelists Reports</h2>
-{% endblock synopsis %}
-
 {% block content %}
-{% include "panelists/_reports.html" %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Panelists</li>
+    </ol>
+</nav>
+
+<h2>Panelists</h2>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group report-list">
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.aggregate_scores') }}">Aggregate Scores</a>
+                </h3>
+
+                <div class="description">
+                    This report provides information on general statistics for the aggregate
+                    of panelist total scores and a break down of the number of times a total
+                    score has occurred.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.appearances_by_year') }}">Appearances by Year</a>
+                </h3>
+
+                <div class="description">
+                    This report breaks down the number of times a panelist has appeared on a
+                    show for a given year. The counts excludes Best Of and Repeat shows.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.average_scores_by_year') }}">Average Scores by Year</a>
+                </h3>
+
+                <div class="description">
+                    This report breaks down the average scores for a given panelist, broken out
+                    by year. The averages excludes scores from Best Of and Repeat shows; in
+                    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+                    show are also excluded, due to the unique scoring used.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.average_scores_by_year_all') }}">Average Scores by Year: All</a>
+                </h3>
+
+                <div class="description">
+                    This report breaks down the average scores for all panelists, broken out
+                    by year. The averages excludes scores from Best Of and Repeat shows; in
+                    addition to, scores from the <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+                    show are also excluded, due to the unique scoring used.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.bluff_the_listener_statistics') }}">Bluff the Listener Statistics</a>
+                </h3>
+
+                <div class="description">
+                    <p>
+                        This report provides a break down of the number of times each panelist has
+                        had their Bluff the Listener story chosen, had the correct story, and
+                        the number of appearances on both regular shows that had a Bluff the
+                        Listener segment and Best Of shows with unique Bluff the Listener segments.
+                    </p>
+                    <p>
+                        Please note that Bluff the Listener data for shows aired in 1999 have not been
+                        captured in their entirety. Bluff the Listener data for those shows will be
+                        added over time.
+                    </p>
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.bluff_the_listener_statistics_by_year') }}">Bluff the Listener Statistics by Year</a>
+                </h3>
+
+                <div class="description">
+                    This report allows you to lookup the Bluff the Listener statistics for a
+                    panelist, including how many times their story was chosen and how many times
+                    they had the correct story, aggregated by year.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.debuts_by_year') }}">Debuts by Year</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a break down of when panelists made their debut on
+                    the show, grouped by year.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.first_appearance_wins') }}">First Appearance Wins</a>
+                </h3>
+
+                <div class="description">
+                    <p>
+                        This report provides a list of panelists that have won outright or were
+                        tied for first place on their first appearance on the show.
+                    </p>
+                    <p>
+                        Please note that the information in this report does not include
+                        information for panelists that had that won on their first appearance
+                        prior to January 2000. This is due to the lack of scoring information for
+                        those shows.
+                    </p>
+                </div>
+            </li>
+        
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.first_most_recent_appearances') }}">First and Most Recent Appearances</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a list of panelists and their first appearance and
+                    most recent appearance on the show, for both regular shows and all shows,
+                    including Best Ofs and repeats.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.losing_streaks') }}">Losing Streaks</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a break down of the longest losing streak for each
+                    panelist. "All Losses" includes shows in which a panelist did not finish
+                    in first place or tied for first.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.panelist_vs_panelist') }}">Panelist vs Panelist</a>
+                </h3>
+
+                <div class="description">
+                    This report allows you to lookup how well a panelist has faired
+                    against another panelist.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.panelist_vs_panelist_all') }}">Panelist vs Panelist: All</a>
+                </h3>
+
+                <div class="description">
+                    This report compares on how well each all panelists have faired against other
+                    panelists based on their scores and ranking, broken down my panelist.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.panelist_vs_panelist_scoring') }}">Panelist vs Panelist Scoring</a>
+                </h3>
+
+                <div class="description">
+                    <p>
+                        A report that provides a way to lookup how well a panelist has scored against
+                        another panelist on a show-by-show basis.
+                    </p>
+                    <p>
+                        Best Of, repeat and special shows, including the 20th anniversary show that
+                        aired on <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>, will not be
+                        included in the results.
+                    </p>
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.perfect_score_counts') }}">Perfect Score Counts</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a count for how many times a panelist that has
+                    had a total score of 20 points, which Bill Kurtis calls a "perfect score",
+                    or higher. The counts exclude any scores from Best Of and repeat shows.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.rankings_summary') }}">Rankings Summary</a>
+                </h3>
+
+                <div class="description">
+                    This report provides statistics for the ranking of each panelist after
+                    each show.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.single_appearance') }}">Single Appearance</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a list of panelists that have made only one
+                    appearance on the show, excluding any Best Of and Repeat shows.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.statistics_by_gender') }}">Statistics by Gender</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a break down of panelist statistics grouped by
+                    the gender that each panelist has identified themselves as.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.statistics_summary') }}">Statistics Summary</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a break down of scoring statistics for each
+                    panelist.
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.win_streaks') }}">Win Streaks</a>
+                </h3>
+
+                <div class="description">
+                    This report provides a break down of the longest winning streak for each
+                    panelist. "All Wins" includes shows in which a panelist did not finish
+                    in first place or tied for first.
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% endblock content %}

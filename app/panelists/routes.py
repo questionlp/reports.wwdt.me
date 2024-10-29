@@ -59,13 +59,13 @@ blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
 @blueprint.route("/")
 def index() -> str:
-    """View: Panelists Index."""
+    """View: Index."""
     return render_template("panelists/_index.html")
 
 
 @blueprint.route("/aggregate-scores")
 def aggregate_scores() -> str:
-    """View: Panelists Aggregate Scores Report."""
+    """View: Aggregate Scores Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _scores = retrieve_all_scores(
         database_connection=_database_connection,
@@ -87,7 +87,7 @@ def aggregate_scores() -> str:
 
 @blueprint.route("/appearances-by-year")
 def appearances_by_year() -> str:
-    """View: Panelists Appearances by Year Report."""
+    """View: Appearances by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_appearance_counts(
         database_connection=_database_connection
@@ -150,7 +150,7 @@ def average_scores_by_year() -> str:
 
 @blueprint.route("/average-scores-by-year-all")
 def average_scores_by_year_all() -> str:
-    """View: Average Scores by Year All."""
+    """View: Average Scores by Year: All Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     average_scores = retrieve_all_panelists_yearly_average(
         database_connection=_database_connection,
@@ -167,20 +167,22 @@ def average_scores_by_year_all() -> str:
     return render_template("panelists/average-scores-by-year-all.html")
 
 
-@blueprint.route("/bluff-stats")
-def bluff_stats() -> str:
-    """View: Panelists Bluff the Listener Statistics Report."""
+@blueprint.route("/bluff-the-listener-statistics")
+def bluff_the_listener_statistics() -> str:
+    """View: Bluff the Listener Statistics Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_panelist_bluff_stats(
         database_connection=_database_connection
     )
     _database_connection.close()
-    return render_template("panelists/bluff-stats.html", panelists=_panelists)
+    return render_template(
+        "panelists/bluff-the-listener-statistics.html", panelists=_panelists
+    )
 
 
-@blueprint.route("/bluff-stats-by-year", methods=["GET", "POST"])
-def bluff_stats_by_year() -> str:
-    """View: Panelists Bluff the Listener Statistics by Year Report."""
+@blueprint.route("/bluff-the-listener-statistics-by-year", methods=["GET", "POST"])
+def bluff_the_listener_statistics_by_year() -> str:
+    """View: Bluff the Listener Statistics by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -192,7 +194,7 @@ def bluff_stats_by_year() -> str:
         if panelist not in _panelists_dict:
             _database_connection.close()
             return render_template(
-                "panelists/bluff-stats-by-year.html",
+                "panelists/bluff-the-listener-statistics-by-year.html",
                 panelists=_panelists_dict,
                 bluff_stats=None,
             )
@@ -203,14 +205,14 @@ def bluff_stats_by_year() -> str:
         if not _bluff_stats:
             _database_connection.close()
             return render_template(
-                "panelists/bluff-stats-by-year.html",
+                "panelists/bluff-the-listener-statistics-by-year.html",
                 panelists=_panelists_dict,
                 bluff_stats=None,
             )
 
         _database_connection.close()
         return render_template(
-            "panelists/bluff-stats-by-year.html",
+            "panelists/bluff-the-listener-statistics-by-year.html",
             panelists=_panelists_dict,
             bluff_stats=_bluff_stats,
         )
@@ -218,25 +220,27 @@ def bluff_stats_by_year() -> str:
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "panelists/bluff-stats-by-year.html",
+        "panelists/bluff-the-listener-statistics-by-year.html",
         panelists=_panelists_dict,
         bluff_stats=None,
     )
 
 
-@blueprint.route("/debut-by-year")
-def debut_by_year() -> str:
-    """View: Panelists Debut by Year Report."""
+@blueprint.route("/debuts-by-year")
+def debuts_by_year() -> str:
+    """View: Debuts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _years = retrieve_show_years(database_connection=_database_connection)
     _debuts = panelist_debuts_by_year(database_connection=_database_connection)
     _database_connection.close()
-    return render_template("panelists/debut-by-year.html", years=_years, debuts=_debuts)
+    return render_template(
+        "panelists/debuts-by-year.html", years=_years, debuts=_debuts
+    )
 
 
 @blueprint.route("/first-appearance-wins")
 def first_appearance_wins() -> str:
-    """View: Panelists with First Appearance Wins."""
+    """View: First Appearance Wins Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists_first_appearance_wins(
         database_connection=_database_connection,
@@ -250,7 +254,7 @@ def first_appearance_wins() -> str:
 
 @blueprint.route("/first-most-recent-appearances")
 def first_most_recent_appearances() -> str:
-    """View: Panelists First and Most Recent Appearances Report."""
+    """View: First and Most Recent Appearances Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_appearances = retrieve_first_most_recent_appearances(
         database_connection=_database_connection
@@ -262,21 +266,9 @@ def first_most_recent_appearances() -> str:
     )
 
 
-@blueprint.route("/gender-stats")
-def gender_stats() -> str:
-    """View: Panelists Statistics by Gender Report."""
-    _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _stats = retrieve_stats_by_year_gender(
-        database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
-    )
-    _database_connection.close()
-    return render_template("panelists/gender-stats.html", gender_stats=_stats)
-
-
 @blueprint.route("/losing-streaks")
 def losing_streaks() -> str:
-    """View: Panelists Losing Streaks Report."""
+    """View: Losing Streaks Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_losing_streaks(
@@ -286,8 +278,8 @@ def losing_streaks() -> str:
     return render_template("panelists/losing-streaks.html", losing_streaks=_streaks)
 
 
-@blueprint.route("/panelist-pvp", methods=["GET", "POST"])
-def panelist_pvp() -> str:
+@blueprint.route("/panelist-vs-panelist", methods=["GET", "POST"])
+def panelist_vs_panelist() -> str:
     """View: Panelist vs Panelist Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists_list = pvp_retrieve_panelists(database_connection=_database_connection)
@@ -314,7 +306,7 @@ def panelist_pvp() -> str:
             )
             _database_connection.close()
             return render_template(
-                "panelists/panelist-pvp.html",
+                "panelists/panelist-vs-panelist.html",
                 all_panelists=_panelists_list,
                 panelist_info=panelist_info,
                 results=_results[panelist],
@@ -323,19 +315,21 @@ def panelist_pvp() -> str:
         # No valid panelist returned
         _database_connection.close()
         return render_template(
-            "panelists/panelist-pvp.html",
+            "panelists/panelist-vs-panelist.html",
             all_panelists=_panelists_list,
             results=None,
         )
 
     # Fallback for GET request
     _database_connection.close()
-    return render_template("panelists/panelist-pvp.html", all_panelists=_panelists_list)
+    return render_template(
+        "panelists/panelist-vs-panelist.html", all_panelists=_panelists_list
+    )
 
 
-@blueprint.route("/panelist-pvp/all")
-def panelist_pvp_all() -> str:
-    """View: Panelist vs Panelist Report."""
+@blueprint.route("/panelist-vs-panelist/all")
+def panelist_vs_panelist_all() -> str:
+    """View: Panelist vs Panelist: All Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = pvp_retrieve_panelists(database_connection=_database_connection)
     _appearances = pvp_retrieve_appearances(
@@ -350,14 +344,14 @@ def panelist_pvp_all() -> str:
     _database_connection.close()
 
     return render_template(
-        "panelists/panelist-pvp-all.html",
+        "panelists/panelist-vs-panelist-all.html",
         panelists=_panelists,
         results=_results,
     )
 
 
 @blueprint.route("/panelist-vs-panelist-scoring", methods=["GET", "POST"])
-def panelist_pvp_scoring() -> str:
+def panelist_vs_panelist_scoring() -> str:
     """View: Panelist vs Panelist Scoring Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
@@ -401,7 +395,7 @@ def panelist_pvp_scoring() -> str:
                 _database_connection.close()
 
                 return render_template(
-                    "panelists/panelist-pvp-scoring.html",
+                    "panelists/panelist-vs-panelist-scoring.html",
                     panelists=_panelists_dict,
                     valid_selections=True,
                     scores=scores,
@@ -410,7 +404,7 @@ def panelist_pvp_scoring() -> str:
             # Fallback for invalid panelist selections
             _database_connection.close()
             return render_template(
-                "panelists/panelist-pvp-scoring.html",
+                "panelists/panelist-vs-panelist-scoring.html",
                 panelists=_panelists_dict,
                 valid_selections=False,
                 scores=None,
@@ -419,27 +413,27 @@ def panelist_pvp_scoring() -> str:
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "panelists/panelist-pvp-scoring.html",
+        "panelists/panelist-vs-panelist-scoring.html",
         panelists=_panelists_dict,
         scores=None,
     )
 
 
-@blueprint.route("/perfect-scores")
-def perfect_scores() -> str:
-    """View: Perfect Scores Count Report."""
+@blueprint.route("/perfect-score-counts")
+def perfect_score_counts() -> str:
+    """View: Perfect Score Counts Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _counts = retrieve_perfect_score_counts(
         database_connection=_database_connection,
         use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
-    return render_template("panelists/perfect-scores.html", counts=_counts)
+    return render_template("panelists/perfect-score-counts.html", counts=_counts)
 
 
 @blueprint.route("/rankings-summary")
 def rankings_summary() -> str:
-    """View: Panelists Rankings Summary Report."""
+    """View: Rankings Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -454,7 +448,7 @@ def rankings_summary() -> str:
 
 @blueprint.route("/single-appearance")
 def single_appearance() -> str:
-    """View: Panelists Single Appearance Report."""
+    """View: Single Appearance Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_single_appearances(
         database_connection=_database_connection,
@@ -467,9 +461,21 @@ def single_appearance() -> str:
     )
 
 
-@blueprint.route("/stats-summary")
-def stats_summary() -> str:
-    """View: Panelists Statistics Summary Report."""
+@blueprint.route("/statistics-by-gender")
+def statistics_by_gender() -> str:
+    """View: Statistics by Gender Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _stats = retrieve_stats_by_year_gender(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _database_connection.close()
+    return render_template("panelists/statistics-by-gender.html", gender_stats=_stats)
+
+
+@blueprint.route("/statistics-summary")
+def statistics_summary() -> str:
+    """View: Statistics Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
@@ -479,7 +485,7 @@ def stats_summary() -> str:
     )
     _database_connection.close()
     return render_template(
-        "panelists/stats-summary.html",
+        "panelists/statistics-summary.html",
         panelists=_panelists_dict,
         panelists_stats=_stats,
     )
@@ -487,7 +493,7 @@ def stats_summary() -> str:
 
 @blueprint.route("/win-streaks")
 def win_streaks() -> str:
-    """View: Panelists Win Streaks Report."""
+    """View: Win Streaks Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _streaks = calculate_panelist_win_streaks(

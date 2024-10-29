@@ -33,16 +33,31 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     assert response.location
 
 
-def test_bluff_stats(client: FlaskClient) -> None:
-    """Testing panelists.redirects.bluff_stats."""
+def test_bluff_the_listener_statistics(client: FlaskClient) -> None:
+    """Testing panelists.redirects.bluff_the_listener_statistics."""
     response: TestResponse = client.get("/panelist/bluff_stats")
     assert response.status_code == 301
     assert response.location
 
+    response: TestResponse = client.get("/panelists/bluff-stats")
+    assert response.status_code == 301
+    assert response.location
 
-def test_debut_by_year(client: FlaskClient) -> None:
-    """Testing panelists.redirects.debut_by_year."""
+
+def test_bluff_the_listener_statistics_by_year(client: FlaskClient) -> None:
+    """Testing panelists.redirects.bluff_the_listener_statistics_by_year."""
+    response: TestResponse = client.get("/panelists/bluff-stats-by-year")
+    assert response.status_code == 301
+    assert response.location
+
+
+def test_debuts_by_year(client: FlaskClient) -> None:
+    """Testing panelists.redirects.debuts_by_year."""
     response: TestResponse = client.get("/panelist/debut_by_year")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/panelists/debut-by-year")
     assert response.status_code == 301
     assert response.location
 
@@ -54,9 +69,13 @@ def test_first_most_recent_appearances(client: FlaskClient) -> None:
     assert response.location
 
 
-def test_gender_stats(client: FlaskClient) -> None:
-    """Testing panelists.redirects.gender_stats."""
+def test_statistics_by_gender(client: FlaskClient) -> None:
+    """Testing panelists.redirects.statistics_by_gender."""
     response: TestResponse = client.get("/panelist/gender_stats")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/panelists/gender-stats")
     assert response.status_code == 301
     assert response.location
 
@@ -79,8 +98,8 @@ def test_panel_gender_mix(client: FlaskClient) -> None:
     assert response.location
 
 
-def test_pvp(client: FlaskClient) -> None:
-    """Testing panelists.redirects.pvp."""
+def test_panelist_vs_panelist(client: FlaskClient) -> None:
+    """Testing panelists.redirects.panelist_vs_panelist."""
     response: TestResponse = client.get("/panelist/panelist_pvp_report")
     assert response.status_code == 301
     assert response.location
@@ -93,10 +112,28 @@ def test_pvp(client: FlaskClient) -> None:
     assert response.status_code == 301
     assert response.location
 
+    response: TestResponse = client.get("/panelists/panelist-pvp")
+    assert response.status_code == 301
+    assert response.location
+
+
+def test_panelist_vs_panelist_all(client: FlaskClient) -> None:
+    """Testing panelists.redirects.panelist_vs_panelist_all."""
+    response: TestResponse = client.get("/panelists/panelist-pvp/all")
+    assert response.status_code == 301
+    assert response.location
+
 
 def test_panelist_vs_panelist_scoring(client: FlaskClient) -> None:
     """Testing panelists.redirects.panelist_vs_panelist_scoring."""
     response: TestResponse = client.get("/panelist/panelist_vs_panelist_scoring")
+    assert response.status_code == 301
+    assert response.location
+
+
+def test_perfect_score_counts(client: FlaskClient) -> None:
+    """Testing panelists.redirects.perfect_score_counts."""
+    response: TestResponse = client.get("/panelists/perfect-scores")
     assert response.status_code == 301
     assert response.location
 
@@ -115,9 +152,17 @@ def test_single_appearance(client: FlaskClient) -> None:
     assert response.location
 
 
-def test_stats_summary(client: FlaskClient) -> None:
-    """Testing panelists.redirects.stats_summary."""
+def test_statistics_summary(client: FlaskClient) -> None:
+    """Testing panelists.redirects.statistics_summary."""
     response: TestResponse = client.get("/panelist/stats_summary")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/panelist/statistics_summary")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/panelists/stats-summary")
     assert response.status_code == 301
     assert response.location
 

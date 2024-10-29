@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% set page_title = "Show Counts by Year" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a count of the number of regular, Best Of and repeat
+        shows, grouped by year.
+    </p>
+    <p>
+        The counts for the current year will only include shows that have already
+        aired.
+    </p>
+</div>
+
+{% if show_counts %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date year">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">Best Ofs</th>
+                        <th scope="col">Repeats</th>
+                        <th scope="col">Best Of Repeats</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year in show_counts %}
+                    <tr>
+                        <td>{{ year }}</td>
+                        <td>{{ show_counts[year].regular }}</td>
+                        <td>{{ show_counts[year].best_of }}</td>
+                        <td>{{ show_counts[year].repeat }}</td>
+                        <td>{{ show_counts[year].repeat_best_of }}</td>
+                        <td>{{ show_counts[year].total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">Best Ofs</th>
+                        <th scope="col">Repeats</th>
+                        <th scope="col">Best Of Repeats</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}
