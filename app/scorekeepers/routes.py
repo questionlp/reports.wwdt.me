@@ -18,13 +18,13 @@ blueprint = Blueprint("scorekeepers", __name__, template_folder="templates")
 
 @blueprint.route("/")
 def index() -> str:
-    """View: Scorekeepers Index."""
+    """View: Index."""
     return render_template("scorekeepers/_index.html")
 
 
 @blueprint.route("/appearance-summary")
 def appearance_summary() -> str:
-    """View: Scorekeepers Appearance Summary Report."""
+    """View: Appearance Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _summaries = retrieve_appearance_summaries(database_connection=_database_connection)
     _database_connection.close()
@@ -32,9 +32,9 @@ def appearance_summary() -> str:
     return render_template("scorekeepers/appearance-summary.html", summaries=_summaries)
 
 
-@blueprint.route("/introductions")
-def introductions() -> str:
-    """View: Scorekeepers Introductions Report."""
+@blueprint.route("/scorekeeper-introductions")
+def scorekeeper_introductions() -> str:
+    """View: Scorekeeper Introductions Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _scorekeepers = retrieve_scorekeepers_with_introductions(
         database_connection=_database_connection
@@ -45,7 +45,7 @@ def introductions() -> str:
     _database_connection.close()
 
     return render_template(
-        "scorekeepers/introductions.html",
+        "scorekeepers/scorekeeper-introductions.html",
         scorekeepers=_scorekeepers,
         introductions=_introductions,
     )

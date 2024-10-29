@@ -36,6 +36,8 @@
 | Perfect Score Counts | `/panelists/perfect-scores` | N/A | `/panelists/perfect-score-counts` |
 | Statistics by Gender | `/panelists/gender-stats` | N/A | `/panelists/statistics-by-gender` |
 | Statistics Summary | `/panelists/stats-summary` | N/A | `/panelists/statistics-summary` |
+| **Scorekeepers** | | | |
+| Introductions | `/scorekeepers/introductions` | Scorekeeper Introductions | `/scorekeepers/scorekeeper-introductions` |
 | **Shows** | | | |
 | High Scoring Shows | `/shows/high-scoring` | N/A | `/shows/high-scoring-shows` |
 | Low Scoring Shows | `/shows/low-scoring` | N/A | `/shows/low-scoring-shows` |

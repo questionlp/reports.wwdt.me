@@ -26,8 +26,8 @@ def test_appearance_summary(client: FlaskClient) -> None:
     assert response.location
 
 
-def test_introductions(client: FlaskClient) -> None:
-    """Testing scorekeepers.redirects.introductions."""
+def test_scorekeeper_introductions(client: FlaskClient) -> None:
+    """Testing scorekeepers.redirects.scorekeeper_introductions."""
     response: TestResponse = client.get("/scorekeeper/introductions")
     assert response.status_code == 301
     assert response.location
