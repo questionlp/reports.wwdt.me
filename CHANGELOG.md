@@ -13,6 +13,7 @@
   - Make use of Bootstrap's responsive design functionality for a more consistent experience across mobile and desktop
   - Remove "Home" from all navigational breadcrumbs
   - Clean up the home page to only provide a table of contents and only display report descriptions on the index page for each section
+  - Remove shading for table cells that do not contain data
 - Link to the corresponding location page on the Wait Wait Stats Page for each listed location in the "Locations: Average Scores" report
 - Updating report method names, report template filenames and URLs for consistency
   - The following table lists the reports that have been renamed and/or had their URLs changed
