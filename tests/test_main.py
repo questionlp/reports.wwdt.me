@@ -13,7 +13,7 @@ def test_index(client: FlaskClient) -> None:
     response: TestResponse = client.get("/")
     assert response.status_code == 200
     assert b"Wait Wait Reports" in response.data
-    assert b"Welcome!" in response.data
+    assert b"Welcome to the Wait Wait Reports" in response.data
     assert b"Scorekeepers" in response.data
 
 
