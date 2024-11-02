@@ -1,19 +1,35 @@
 {% extends "base.html" %}
 {% block title %}Hosts{% endblock %}
 
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Hosts</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Hosts Reports</h2>
-{% endblock synopsis %}
-
 {% block content %}
-{% include "hosts/_reports.html" %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Hosts</li>
+    </ol>
+</nav>
+
+<h2>Hosts</h2>
+
+<p>
+    The following are the list of available reports based on data collected for
+    show hosts.
+</p>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group report-list">
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('hosts.appearance_summary') }}">Appearance Summary</a>
+                </h3>
+                <div class="description">
+                    This report provides a list of show hosts along with the number of
+                    appearances, their first and most recent appearance, for both
+                    regular and for all shows (including Best Of and Repeat shows).
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% endblock content %}

@@ -1,73 +1,81 @@
 {% extends "base.html" %}
-{% block title %}Lightning Round Starting and Ending in a Three-Way Tie | Shows{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Lightning Round Starting and Ending in a Three-Way Tie</h2>
-<p>
-    This report provides a list of shows in which all three panelists
-    started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
-    three-way tie.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Lightning Round Starting and Ending in a Three-Way Tie" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="date">
-        <col class="name panelist">
-        <col class="score">
-        <col class="score">
-        <col class="score">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Panelists</th>
-            <th scope="col">Starting Score</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Final Score</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for show in shows %}
-        <tr>
-            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
-            <td>
-                <ul class="no-bullets">
-                {% for panelist in show.panelists %}
-                    <li> {{ panelist.name }}</li>
-                {% endfor %}
-                </ul>
-            </td>
-            <td>{{ "{:f}".format(show.start_decimal.normalize()) if use_decimal_scores else show.start }}</td>
-            <td>{{ "{:f}".format(show.correct_decimal.normalize()) if use_decimal_scores else show.correct }}</td>
-            <td>
-            {{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    {% if shows|length >= 10 %}
-    <tfoot>
-        <tr>
-            <th scope="col">Show Date</th>
-            <th scope="col">Panelists</th>
-            <th scope="col">Starting Score</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Final Score</th>
-        </tr>
-    </tfoot>
-    {% endif %}
-</table>
-<!-- End Report Section -->
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of shows in which all three panelists
+        started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
+        three-way tie.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="name panelist">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Starting Score</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Final Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        <td>
+                            <ul class="no-bullets">
+                                {% for panelist in show.panelists %}
+                                <li> {{ panelist.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ "{:f}".format(show.start_decimal.normalize()) if use_decimal_scores else show.start }}</td>
+                        <td>{{ "{:f}".format(show.correct_decimal.normalize()) if use_decimal_scores else show.correct }}</td>
+                        <td>{{ "{:f}".format(show.score_decimal.normalize()) if use_decimal_scores else show.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length >= 10 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Starting Score</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Final Score</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
 {% endblock content %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% set page_title = "Panelist vs Panelist: All" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report compares on how well each all panelists have faired against
+        other panelists based on their scores and ranking, broken down my panelist.
+    </p>
+</div>
+
+{% if panelists and results %}
+<div class="row mt-5">
+    <div class="col-12 col-xl-auto mt-1">
+        <h3 class="mt-0">Panelists</h3>
+        <ul class="name-list-pvp mb-5">
+            {% for panelist in panelists %}
+            <li>
+                <a href="#pvp-{{ panelists[panelist].slug }}">{{ panelists[panelist].name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-12 col-xl-auto mt-1">
+        {% for panelist, vs_panelists in results.items() %}
+        <div class="table-responsive pb-5" id="pvp-{{ panelists[panelist].slug }}">
+            <h3 class="mt-0">{{ panelists[panelist].name }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Ranked vs</th>
+                        <th scope="col">Higher</th>
+                        <th scope="col">Tied</th>
+                        <th scope="col">Lower</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vs_panelist, result in vs_panelists.items() %}
+                    {% if (result.wins, result.draws, result.losses) != (0, 0, 0) %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelists[vs_panelist].slug }}">{{ panelists[vs_panelist].name }}</a></td>
+                        <td>{{ result.wins }}</td>
+                        <td>{{ result.draws }}</td>
+                        <td>{{ result.losses }}</td>
+                        <td>{{ result.total }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="top-link">
+                <a href="#main-content">&uarr; Top</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

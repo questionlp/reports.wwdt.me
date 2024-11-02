@@ -1,0 +1,30 @@
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#002d9c">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="apple-touch-icon" type="image/png" href="{{ url_for('static', filename='favicon-2x.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+
+    <!-- Import Combined Bootstrap CSS and Icons, and IBM Plex Fonts -->
+    {% if use_minified_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.min.css') }}">
+    {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-icons/bootstrap-icons.min.css') }}">
+
+    {% if ga_property_code %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_property_code }}"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ ga_property_code }}');
+    </script>
+    {% endif %}
+
+    {%- if umami %}
+        {% include "core/umami.html" %}
+    {% endif %}

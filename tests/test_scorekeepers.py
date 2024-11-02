@@ -12,7 +12,7 @@ def test_index(client: FlaskClient) -> None:
     """Testing scorekeepers.routes.index."""
     response: TestResponse = client.get("/scorekeepers/")
     assert response.status_code == 200
-    assert b"Scorekeepers Reports" in response.data
+    assert b"Scorekeepers" in response.data
     assert b"Appearance Summary" in response.data
 
 
@@ -24,9 +24,9 @@ def test_appearance_summary(client: FlaskClient) -> None:
     assert b"" in response.data
 
 
-def test_introductions(client: FlaskClient) -> None:
-    """Testing scorekeepers.routes.introductions."""
-    response: TestResponse = client.get("/scorekeepers/introductions")
+def test_scorekeeper_introductions(client: FlaskClient) -> None:
+    """Testing scorekeepers.routes.scorekeeper_introductions."""
+    response: TestResponse = client.get("/scorekeepers/scorekeeper-introductions")
     assert response.status_code == 200
     assert b"" in response.data
     assert b"" in response.data

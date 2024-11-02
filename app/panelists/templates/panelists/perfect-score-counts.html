@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% set page_title = "Perfect Score Counts" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a count for how many times a panelist that has
+        had a total score of 20 points, which Bill Kurtis calls a "perfect score",
+        or higher. The counts exclude any scores from Best Of and Repeat shows.
+    </p>
+</div>
+
+{% if counts %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist block-end">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th scope="col" colspan="2">Total Score Count</th>
+                    <tr>
+                        <th scope="col"> &ge; 20</th>
+                        <th scope="col"> = 20</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in counts %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ counts[panelist].slug }}">{{ counts[panelist].name }}</a></td>
+                        <td>{{ counts[panelist].more_perfect }}</td>
+                        {% if counts[panelist].perfect %}
+                        <td>{{ counts[panelist].perfect }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -20,8 +20,12 @@ def test_index(client: FlaskClient) -> None:
 
 
 def test_best_of_only(client: FlaskClient) -> None:
-    """Testing guests.redirects.best_of_only."""
+    """Testing guests.redirects.best_of_only_not_my_job_guests."""
     response: TestResponse = client.get("/guest/best_of_only")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/guests/best-of-only")
     assert response.status_code == 301
     assert response.location
 
@@ -34,14 +38,22 @@ def test_most_appearances(client: FlaskClient) -> None:
 
 
 def test_scoring_exceptions(client: FlaskClient) -> None:
-    """Testing guests.redirects.scoring_exceptions."""
+    """Testing guests.redirects.not_my_job_scoring_exceptions."""
     response: TestResponse = client.get("/guest/scoring_exceptions")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/guests/scoring-exceptions")
     assert response.status_code == 301
     assert response.location
 
 
 def test_three_pointers(client: FlaskClient) -> None:
-    """Testing guests.redirects.three_pointers."""
+    """Testing guests.redirects.not_my_job_three_pointers."""
     response: TestResponse = client.get("/guest/three_pointers")
+    assert response.status_code == 301
+    assert response.location
+
+    response: TestResponse = client.get("/guests/three-pointers")
     assert response.status_code == 301
     assert response.location

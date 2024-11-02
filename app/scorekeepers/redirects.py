@@ -25,6 +25,9 @@ def appearance_summary() -> Response:
 
 
 @blueprint.route("/scorekeeper/introductions")
-def introductions() -> Response:
+@blueprint.route("/scorekeepers/introductions")
+def scorekeeper_introductions() -> Response:
     """View: Scorekeepers Introductions Report Redirect."""
-    return redirect_url(url_for("scorekeepers.introductions"), status_code=301)
+    return redirect_url(
+        url_for("scorekeepers.scorekeeper_introductions"), status_code=301
+    )

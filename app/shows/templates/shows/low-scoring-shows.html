@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% set page_title = "Low Scoring Shows" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of shows in which the total score for all
+        three panelists is less than 30, listed in ascending order.
+    </p>
+    <p>
+        One exception from the scoring is the 25th Anniversary Special that
+        aired on <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
+        which is excluded due to the unique Lightning Fill-in-the-Blank format.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="score">
+                    <col class="date">
+                    <col class="name venue">
+                    <col class="name host">
+                    <col class="name scorekeeper">
+                    <col class="name panelist">
+                    <col class="name guest">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Total Score</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td>
+                            {% if use_decimal_scores %}
+                            {{ "{:f}".format(show.total_score.normalize()) }}
+                            {% else %}
+                            {{ show.total_score }}
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.location.venue and show.location.city and show.location.city %}
+                        <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+                        {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+                        <td>{{ show.location.venue }}</td>
+                        {% elif show.location.city %}
+                        <td>{{ show.location.city }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.host %}
+                        <td>{{ show.host }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.scorekeeper %}
+                        <td>{{ show.scorekeeper }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.panelists %}
+                        <td>
+                            <ul class="no-bullets">
+                                {% for panelist in show.panelists %}
+                                <li>{{ panelist.name }}:
+                                    {{ "{:f}".format(panelist.score_decimal.normalize()) if use_decimal_scores else panelist.score }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.guests %}
+                        <td>
+                            <ul class="no-bullets">
+                                {% for guest in show.guests %}
+                                <li>{{ guest.name }}: {{ guest.score }}
+                                    {% if guest.exception %} *{% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Total Score</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

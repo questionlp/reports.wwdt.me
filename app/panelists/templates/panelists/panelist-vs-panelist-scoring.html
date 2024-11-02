@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% set page_title = "Panelist vs Panelist Scoring" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report allows you to lookup how well a panelist has scored
+        against another panelist, broken down by show.
+    </p>
+    <p>
+        Best Of, Repeat and Special shows, including the 20th Anniversary Special
+        that aired on <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
+        will not be included in the results.
+    </p>
+</div>
+
+<div class="card report-form mb-5">
+    <div class="card-header">
+        Select two panelists to compare scores
+    </div>
+    <div class="card-body">
+        <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-6">
+                <label for="panelist-1" class="visually-hidden">Panelist 1</label>
+                <select id="panelist-1" name="panelist_1" class="form-select" aria-label="Panelist 1 selection">
+                    <option value="">-- Select Panelist 1 --</option>
+                    {% for slug, name in panelists.items() %}
+                    {% if request.form.panelist_1 == slug %}
+                    <option value="{{ slug }}" selected>{{ name }}</option>
+                    {% else %}
+                    <option value="{{ slug }}">{{ name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="panelist-2" class="visually-hidden">Panelist 2</label>
+                <select id="panelist-2" name="panelist_2" class="form-select" aria-label="Panelist 2 selection">
+                    <option value="">-- Select Panelist 2 --</option>
+                    {% for slug, name in panelists.items() %}
+                    {% if request.form.panelist_2 == slug %}
+                    <option value="{{ slug }}" selected>{{ name }}</option>
+                    {% else %}
+                    <option value="{{ slug }}">{{ name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if request.method == "POST" %}
+{% if not request.form.panelist_1 and not request.form.panelist_2 %}
+<div class="alert alert-warning my-5" role="alert">
+    <i class="bi bi-exclamation-triangle pe-1"></i> No panelists were selected.
+</div>
+{% elif not valid_selections %}
+<div class="alert alert-warning my-5" role="alert">
+    <i class="bi bi-exclamation-triangle pe-1"></i> Two different panelists need to be selected.
+</div>
+{% elif not scores %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> No results available for <b>{{ panelists[request.form.panelist_1] }}</b> and
+    <b>{{ panelists[request.form.panelist_2] }}</b>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="score">
+                    <col class="rank">
+                    <col class="score">
+                    <col class="rank">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">Date</th>
+                        <th scope="col" colspan="2">{{ panelists[request.form.panelist_1] }}</th>
+                        <th scope="col" colspan="2">{{ panelists[request.form.panelist_2] }}</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in scores %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show | replace('-', '/') }}">{{ show }}</a></td>
+                        {% if use_decimal_scores %}
+                            {% set panelist_1_score = scores[show][request.form.panelist_1].score %}
+                            {% set panelist_2_score = scores[show][request.form.panelist_2].score %}
+                            {% set panelist_1_score_text = "{:f}".format(scores[show][request.form.panelist_1].score.normalize()) %}
+                            {% set panelist_2_score_text = "{:f}".format(scores[show][request.form.panelist_2].score.normalize()) %}
+                        {% else %}
+                            {% set panelist_1_score = scores[show][request.form.panelist_1].score %}
+                            {% set panelist_2_score = scores[show][request.form.panelist_2].score %}
+                            {% set panelist_1_score_text = scores[show][request.form.panelist_1].score %}
+                            {% set panelist_2_score_text = scores[show][request.form.panelist_2].score %}
+                        {% endif %}
+                        {% set panelist_1_rank = scores[show][request.form.panelist_1].rank %}
+                        {% set panelist_2_rank = scores[show][request.form.panelist_2].rank %}
+                        {% if panelist_1_score > panelist_2_score %}
+                        <td class="score-higher">{{ panelist_1_score_text }}</td>
+                        <td class="rank-higher">{{ rank_map[panelist_1_rank] }}</td>
+                        <td class="score-lower">{{ panelist_2_score_text }}</td>
+                        <td class="rank-lower">{{ rank_map[panelist_2_rank] }}</td>
+                        {% elif panelist_1_score < panelist_2_score %} <td class="score-lower">{{ panelist_1_score_text }}</td>
+                        <td class="rank-lower">{{ rank_map[panelist_1_rank] }}</td>
+                        <td class="score-higher">{{ panelist_2_score_text }}</td>
+                        <td class="rank-higher">{{ rank_map[panelist_2_rank] }}</td>
+                        {% else %}
+                        <td class="score-tied">{{ panelist_1_score_text }}</td>
+                        <td class="rank-tied">{{ rank_map[panelist_1_rank] }}</td>
+                        <td class="score-tied">{{ panelist_2_score_text }}</td>
+                        <td class="rank-tied">{{ rank_map[panelist_2_rank] }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if scores | length > 10 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col" colspan="2">{{ panelists[request.form.panelist_1] }}</th>
+                        <th scope="col" colspan="2">{{ panelists[request.form.panelist_2] }}</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+            <p>
+                Records returned: {{ scores | length }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock content %}

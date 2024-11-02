@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2 id="welcome">Welcome to the Wait Wait Reports Site!</h2>
+
+<p>
+    This site contains realtime reports for various statistics based on the data
+    recorded in the database used by the <a href="{{ stats_url }}">Wait Wait Stats Page</a>.
+</p>
+
+<p>
+    Reports on this site are divided into the following sections:
+</p>
+
+<div class="info">
+    <div class="container-fluid py-3">
+        <ul class="list-group page-list">
+            <li class="list-group-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+            <li class="list-group-item"><a href="{{ url_for('hosts.index') }}">Hosts</a></li>
+            <li class="list-group-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
+            <li class="list-group-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+            <li class="list-group-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+            <li class="list-group-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

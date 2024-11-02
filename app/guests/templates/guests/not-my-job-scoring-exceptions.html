@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% set page_title = "Not My Job Scoring Exceptions" %}
+{% block title %}{{ page_title }} | Guests{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of Not My Job guests that have a scoring exception
+        that allowed them to win the prize for the listener contestant, even though they
+        didn't score 2 or more points. An exception is also noted if the guest was
+        awarded all 3 points no matter their actual score.
+    </p>
+</div>
+
+{% if exceptions %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name guest">
+                    <col class="date">
+                    <col class="score">
+                    <col class="notes">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Show Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for guest in exceptions %}
+                    {% if guest.exceptions | length == 1 %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ guest.exceptions[0].date | replace('-', '/') }}">{{ guest.exceptions[0].date }}</a></td>
+                        <td>{{ guest.exceptions[0].score }}</td>
+                        {% if guest.exceptions[0].notes %}
+                        <td class="notes">{{ guest.exceptions[0].notes | markdown | safe }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                        {% for count in range(0, guest.exceptions | length) %}
+                    <tr>
+                        {% if count == 0 %}
+                        <td rowspan="{{ guest.exceptions | length }}"><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+                        {% endif %}
+                        <td><a href="{{ stats_url }}/shows/{{ guest.exceptions[count].date | replace('-', '/') }}">{{ guest.exceptions[count].date }}</a></td>
+                        <td>{{ guest.exceptions[count].score }}</td>
+                        {% if guest.exceptions[count].notes %}
+                        <td class="notes">{{ guest.exceptions[count].notes | markdown | safe }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Show Notes</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -14,7 +14,7 @@ blueprint = Blueprint("panelists_redirects", __name__)
 @blueprint.route("/panelist")
 @blueprint.route("/panelists")
 def index() -> Response:
-    """View: Panelists Index Redirect."""
+    """View: Index Redirect."""
     return redirect_url(url_for("panelists.index"), status_code=301)
 
 
@@ -26,39 +26,52 @@ def aggregate_scores() -> Response:
 
 @blueprint.route("/panelist/appearances_by_year")
 def appearances_by_year() -> Response:
-    """View: Panelists Appearances By Year Report Redirect."""
+    """View: Appearances By Year Report Redirect."""
     return redirect_url(url_for("panelists.appearances_by_year"), status_code=301)
 
 
 @blueprint.route("/panelist/bluff_stats")
-def bluff_stats() -> Response:
+@blueprint.route("/panelists/bluff-stats")
+def bluff_the_listener_statistics() -> Response:
     """View: Panelists Bluff the Listener Statistics Report Redirect."""
-    return redirect_url(url_for("panelists.bluff_stats"), status_code=301)
+    return redirect_url(
+        url_for("panelists.bluff_the_listener_statistics"), status_code=301
+    )
+
+
+@blueprint.route("/panelists/bluff-stats-by-year")
+def bluff_the_listener_statistics_by_year() -> Response:
+    """View: Panelists Bluff the Listener Statistics by Year Report Redirect."""
+    return redirect_url(
+        url_for("panelists.bluff_the_listener_statistics_by_year"), status_code=301
+    )
 
 
 @blueprint.route("/panelist/debut_by_year")
-def debut_by_year() -> Response:
-    """View: Panelists Debut by Year Report Redirect."""
-    return redirect_url(url_for("panelists.debut_by_year"), status_code=301)
+@blueprint.route("/panelists/debut-by-year")
+def debuts_by_year() -> Response:
+    """View: Debuts by Year Report Redirect."""
+    return redirect_url(url_for("panelists.debuts_by_year"), status_code=301)
 
 
 @blueprint.route("/panelist/first_most_recent_appearances")
 def first_most_recent_appearances() -> Response:
-    """View: Panelists First and Most Recent Appearances Report Redirect."""
+    """View: First and Most Recent Appearances Report Redirect."""
     return redirect_url(
         url_for("panelists.first_most_recent_appearances"), status_code=301
     )
 
 
 @blueprint.route("/panelist/gender_stats")
-def gender_stats() -> Response:
-    """View: Panelists Statistics by Gender Report Redirect."""
-    return redirect_url(url_for("panelists.gender_stats"), status_code=301)
+@blueprint.route("/panelists/gender-stats")
+def statistics_by_gender() -> Response:
+    """View: Statistics by Gender Report Redirect."""
+    return redirect_url(url_for("panelists.statistics_by_gender"), status_code=301)
 
 
 @blueprint.route("/panelist/losing_streaks")
 def losing_streaks() -> Response:
-    """View: Panelists Losing Streaks Report Redirect."""
+    """View: Losing Streaks Report Redirect."""
     return redirect_url(url_for("panelists.losing_streaks"), status_code=301)
 
 
@@ -72,33 +85,50 @@ def panel_gender_mix() -> Response:
 @blueprint.route("/panelist/panelist_pvp_report")
 @blueprint.route("/panelist/panelist_vs_panelist")
 @blueprint.route("/panelist/pvp")
-def pvp() -> Response:
+@blueprint.route("/panelists/panelist-pvp")
+def panelist_vs_panelist() -> Response:
     """View: Panelist vs Panelist Report Redirect."""
-    return redirect_url(url_for("panelists.panelist_pvp"), status_code=301)
+    return redirect_url(url_for("panelists.panelist_vs_panelist"), status_code=301)
+
+
+@blueprint.route("/panelists/panelist-pvp/all")
+def panelist_vs_panelist_all() -> Response:
+    """View: Panelist vs Panelist: All Report Redirect."""
+    return redirect_url(url_for("panelists.panelist_vs_panelist_all"), status_code=301)
 
 
 @blueprint.route("/panelist/panelist_vs_panelist_scoring")
 def panelist_vs_panelist_scoring() -> Response:
     """View: Panelist vs Panelist Scoring Report Redirect."""
-    return redirect_url(url_for("panelists.panelist_pvp_scoring"), status_code=301)
+    return redirect_url(
+        url_for("panelists.panelist_vs_panelist_scoring"), status_code=301
+    )
+
+
+@blueprint.route("/panelists/perfect-scores")
+def perfect_score_counts() -> Response:
+    """View: Perfect Score Counts Report Redirect."""
+    return redirect_url(url_for("panelists.perfect_score_counts"), status_code=301)
 
 
 @blueprint.route("/panelist/rankings_summary")
 def rankings_summary() -> Response:
-    """View: Panelists Rankings Summary Report Redirect."""
+    """View: Rankings Summary Report Redirect."""
     return redirect_url(url_for("panelists.rankings_summary"), status_code=301)
 
 
 @blueprint.route("/panelist/single_appearance")
 def single_appearance() -> Response:
-    """View: Panelists Single Appearance Report Redirect."""
+    """View: Single Appearance Report Redirect."""
     return redirect_url(url_for("panelists.single_appearance"), status_code=301)
 
 
 @blueprint.route("/panelist/stats_summary")
-def stats_summary() -> Response:
-    """View: Panelists Statistics Summary Report Redirect."""
-    return redirect_url(url_for("panelists.stats_summary"), status_code=301)
+@blueprint.route("/panelist/statistics_summary")
+@blueprint.route("/panelists/stats-summary")
+def statistics_summary() -> Response:
+    """View: Statistics Summary Report Redirect."""
+    return redirect_url(url_for("panelists.statistics_summary"), status_code=301)
 
 
 @blueprint.route("/panelist/win_streaks")

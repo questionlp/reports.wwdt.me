@@ -14,13 +14,13 @@ blueprint = Blueprint("hosts", __name__, template_folder="templates")
 
 @blueprint.route("/")
 def index() -> str:
-    """View: Hosts Index."""
+    """View: Index."""
     return render_template("hosts/_index.html")
 
 
 @blueprint.route("/appearance-summary")
 def appearance_summary() -> str:
-    """View: Hosts Appearance Summary Report."""
+    """View: Appearance Summary Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     summary = retrieve_appearance_summaries(database_connection=_database_connection)
     _database_connection.close()

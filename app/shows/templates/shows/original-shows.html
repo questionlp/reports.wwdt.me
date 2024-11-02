@@ -1,100 +1,117 @@
 {% extends "base.html" %}
+{% set page_title = "Original Shows" %}
 {% block title %}Original Shows | Shows{% endblock %}
 
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This reports provides a list of original shows that have been broadcasted,
+        which excludes Best Of and Repeat shows.
+    </p>
+</div>
+
+{% if shows %}
+<!-- Start Report Section -->
+<div class="mb-3">
+    <span class="pe-2"><b>Sort Order:</b></span>
+    {% if ascending %}
+        <b>Ascending</b>
+        <div class="vr mx-2"></div>
+        <a href="{{ url_for('shows.original_shows', sort='desc') }}">Descending</a>
+    {% else %}
+        <a href="{{ url_for('shows.original_shows') }}">Ascending</a>
+        <div class="vr mx-2"></div>
+        <b>Descending</b>
+    {% endif %}
     </ul>
 </div>
-{% endblock breadcrumb %}
 
-{% block synopsis %}
-<h2>Original Shows</h2>
-<p>
-    This reports provides a list of original shows that have been broadcasted,
-    which excludes Best Of and repeat shows.
-</p>
-{% endblock synopsis %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="count">
+                    <col class="date">
+                    <col class="name venue">
+                    <col class="name host">
+                    <col class="name scorekeeper">
+                    <col class="name panelist">
+                    <col class="name guest">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td>{{ show.count }}</td>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.location.venue and show.location.city and show.location.city %}
+                        <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+                        {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+                        <td>{{ show.location.venue }}</td>
+                        {% elif show.location.city %}
+                        <td>{{ show.location.city }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        <td>{{ show.host }}</td>
+                        <td>{{ show.scorekeeper }}</td>
+                        {% if show.panelists %}
+                        <td class="panelist-names">
+                            <ul class="no-bullets">
+                                {% for panelist in show.panelists %}
+                                <li>{{ panelist.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.guest %}
+                        <td class="guest-names">{{ show.guest.name }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
 
-{% block content %}
-<!-- Start Report Section -->
-<p>
-    <b>Sort Order </b>
-    {% if ascending %}
-    [ Ascending | <a href="{{ url_for('shows.original_shows', ascending=False) }}">Descending</a> ]
-    {% else %}
-    [ <a href="{{ url_for('shows.original_shows') }}">Ascending</a> | Descending ]
-    {% endif %}
-</p>
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="count">
-        <col class="date">
-        <col class="name venue">
-        <col class="name host">
-        <col class="name scorekeeper">
-        <col class="name panelist">
-        <col class="name guest">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Location</th>
-            <th scope="col">Host</th>
-            <th scope="col">Scorekeeper</th>
-            <th scope="col">Panelists</th>
-            <th scope="col">Guest</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for show in shows %}
-        <tr>
-            <td>{{ show.count }}</td>
-            <td><a href="{{ stats_url }}/shows/{{ show.date|replace('-', '/') }}">{{ show.date }}</a></td>
-            {% if show.location.venue and show.location.city and show.location.city %}
-            <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
-            {% elif show.location.venue and (not show.location.city or not show.location.state) %}
-            <td>{{ show.location.venue }}</td>
-            {% elif show.location.city %}
-            <td>{{ show.location.city }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            <td>{{ show.host }}</td>
-            <td>{{ show.scorekeeper }}</td>
-            {% if show.panelists %}
-            <td class="panelist-names">
-                <ul class="no-bullets">
-                {% for panelist in show.panelists %}
-                <li>{{ panelist.name }}</li>
-                {% endfor %}
-                </ul>
-            </td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-            {% if show.guest %}
-            <td class="guest-names">{{ show.guest.name }}</td>
-            {% else %}
-            <td class="no-data">-</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Location</th>
-            <th scope="col">Host</th>
-            <th scope="col">Scorekeeper</th>
-            <th scope="col">Panelists</th>
-            <th scope="col">Guest</th>
-        </tr>
-    </tfoot>
-</table>
-<!-- End Report Section -->
 {% endblock content %}

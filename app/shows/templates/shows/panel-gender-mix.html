@@ -1,73 +1,79 @@
 {% extends "base.html" %}
-{% block title %}Panel Gender Mix | Shows{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="{{ url_for('shows.index') }}">Shows</a></li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Panel Gender Mix</h2>
-<p>
-    This report provides a break down of the gender mix of panels for all
-    broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
-    and the 25th Anniversary special.
-</p>
-{% endblock synopsis %}
+{% set page_title = "Panel Gender Mix" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
-<!-- Start Report Section -->
-<table class="pure-table pure-table-bordered">
-    <colgroup>
-        <col class="date year">
-        <col class="count mix">
-        <col class="count mix">
-        <col class="count mix">
-        <col class="count mix">
-        <col class="count">
-    </colgroup>
-    <thead>
-        <tr>
-            <th scope="col">Year</th>
-            <th scope="col">
-                <span class="hover tooltip"
-                 title="Panel Mix: Zero Women, 3 Men">0 W / 3 M
-                </span>
-            </th>
-            <th scope="col">
-                <span class="hover tooltip"
-                 title="Panel Mix: 1 Woman, 2 Men">1 W / 2 M
-                </span>
-            </th>
-            <th scope="col">
-                <span class="hover tooltip"
-                 title="Panel Mix: 2 Women, 1 Man">2 W / 1 M
-                <span>
-            </th>
-            <th scope="col">
-                <span class="hover tooltip"
-                 title="Panel Mix: 3 Women, Zero Men">3 W / 0 M
-                </span>
-            </th>
-            <th scope="col">Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for year in panel_gender_mix %}
-        <tr>
-            <td>{{ year }}</td>
-            <td>{{ panel_gender_mix[year]["0F"] }}</td>
-            <td>{{ panel_gender_mix[year]["1F"] }}</td>
-            <td>{{ panel_gender_mix[year]["2F"] }}</td>
-            <td>{{ panel_gender_mix[year]["3F"] }}</td>
-            <td>{{ panel_gender_mix[year].total }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<!-- End Report Section -->
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a break down of the gender mix of panels for all
+        broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
+        and the 25th Anniversary Special.
+    </p>
+</div>
+
+{% if panel_gender_mix %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date year">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count mix">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">
+                            <span class="header-info" data-bs-toggle="tooltip"
+                            data-bs-original-title="Panel Mix: Zero Women, 3 Men">0 W / 3 M</span>
+                        </th>
+                        <th scope="col">
+                            <span class="header-info" data-bs-toggle="tooltip"
+                            data-bs-original-title="Panel Mix: 1 Woman, 2 Men">1 W / 2 M</span>
+                        </th>
+                        <th scope="col">
+                            <span class="header-info" data-bs-toggle="tooltip"
+                            data-bs-original-title="Panel Mix: 2 Women, 1 Man">2 W / 1 M<span>
+                        </th>
+                        <th scope="col">
+                            <span class="header-info" data-bs-toggle="tooltip"
+                            data-bs-original-title="Panel Mix: 3 Women, Zero Men">3 W / 0 M</span>
+                        </th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year in panel_gender_mix %}
+                    <tr>
+                        <td>{{ year }}</td>
+                        <td>{{ panel_gender_mix[year]["0F"] }}</td>
+                        <td>{{ panel_gender_mix[year]["1F"] }}</td>
+                        <td>{{ panel_gender_mix[year]["2F"] }}</td>
+                        <td>{{ panel_gender_mix[year]["3F"] }}</td>
+                        <td>{{ panel_gender_mix[year].total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
 {% endblock content %}
