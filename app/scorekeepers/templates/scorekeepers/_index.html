@@ -10,6 +10,11 @@
 
 <h2>Scorekeepers</h2>
 
+<p>
+    The following are the list of available reports based on data collected for
+    scorekeepers.
+</p>
+
 <div class="info">
     <div class="container-fluid py-3">
         <ul class="list-group report-list">
@@ -17,19 +22,16 @@
                 <h3 class="title">
                     <a href="{{ url_for('scorekeepers.appearance_summary') }}">Appearance Summary</a>
                 </h3>
-
                 <div class="description">
                     This report provides a list of scorekeepers along with the number of
                     appearances, their first and most recent appearance, for both regular and
                     for all shows (including Best Of and Repeat shows).
                 </div>
             </li>
-
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('scorekeepers.scorekeeper_introductions') }}">Scorekeeper Introductions</a>
                 </h3>
-
                 <div class="description">
                     This report provides a list of introductions that Bill Kurtis and other
                     scorekeepers have used at the start of each show.

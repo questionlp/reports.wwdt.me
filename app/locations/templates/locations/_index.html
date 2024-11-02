@@ -10,6 +10,11 @@
 
 <h2>Locations</h2>
 
+<p>
+    The following are the list of available reports based on data collected for
+    show locations.
+</p>
+
 <div class="info">
     <div class="container-fluid py-3">
         <ul class="list-group report-list">
@@ -17,7 +22,6 @@
                 <h3 class="title">
                     <a href="{{ url_for('locations.average_scores_by_location') }}">Average Scores by Location</a>
                 </h3>
-
                 <div class="description">
                     <p>
                         This report provides a list of show locations and the corresponding
@@ -35,25 +39,3 @@
 </div>
 
 {% endblock content %}
-
-{#
-{% extends "base.html" %}
-{% block title %}Locations{% endblock %}
-
-{% block breadcrumb %}
-<div id="breadcrumb">
-    <ul>
-        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-        <li>Locations</li>
-    </ul>
-</div>
-{% endblock breadcrumb %}
-
-{% block synopsis %}
-<h2>Locations Reports</h2>
-{% endblock synopsis %}
-
-{% block content %}
-{% include "locations/_reports.html" %}
-{% endblock content %}
-#}
