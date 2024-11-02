@@ -1,6 +1,6 @@
 # Changes
 
-## 3.0.0-beta
+## 3.0.0
 
 ### Application Changes
 
@@ -14,21 +14,31 @@
   - Remove "Home" from all navigational breadcrumbs
   - Clean up the home page to only provide a table of contents and only display report descriptions on the index page for each section
   - Remove shading for table cells that do not contain data
+  - Add tooltips to certain columns in Panelist Bluff the Listener and Show Panel Gender Mix reports to provide additional information
 - Link to the corresponding location page on the Wait Wait Stats Page for each listed location in the "Locations: Average Scores" report
 - Updating report method names, report template filenames and URLs for consistency
   - The following table lists the reports that have been renamed and/or had their URLs changed
   - Add the necessary redirects and update sitemap generation
   - Update test scripts to reflect new method names, routes and redirects
 
+#### Guests
+
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
 |----------------------|---------------------|-----------------|----------------|
-| **Guests** | | | |
 | Best Of Not My Job Guests | `/guests/best-of-only` | N/A | `/guests/best-of-only-not-my-job-guests` |
 | Not My Job Scoring Exceptions | `/guests/scoring-exceptions` | N/A | `/guests/not-my-job-scoring-exceptions` |
 | Not My Job Three Pointers | `/guests/three-pointers` | N/A | `/guests/not-my-job-three-pointers` |
-| **Locations** | | | |
+
+#### Locations
+
+| Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
+|----------------------|---------------------|-----------------|----------------|
 | Average Score by Location | `/locations/average-scores` | Average Scores by Location | `/locations/average-scores-by-location` |
-| **Panelists** | | | |
+
+#### Panelists
+
+| Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
+|----------------------|---------------------|-----------------|----------------|
 | Bluff the Listener Statistics | `/panelists/bluff-stats` | N/A | `/panelists/bluff-the-listener-statistics` |
 | Bluff the Listener Statistics by Year | `/panelists/bluff-stats-by-year` | N/A | `/panelists/bluff-the-listener-statistics-by-year` |
 | Debut by Year | `/panelists/debut-by-year` | Debuts by Year | `/panelists/debuts-by-year` |
@@ -37,9 +47,17 @@
 | Perfect Score Counts | `/panelists/perfect-scores` | N/A | `/panelists/perfect-score-counts` |
 | Statistics by Gender | `/panelists/gender-stats` | N/A | `/panelists/statistics-by-gender` |
 | Statistics Summary | `/panelists/stats-summary` | N/A | `/panelists/statistics-summary` |
-| **Scorekeepers** | | | |
+
+#### Scorekeepers
+
+| Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
+|----------------------|---------------------|-----------------|----------------|
 | Introductions | `/scorekeepers/introductions` | Scorekeeper Introductions | `/scorekeepers/scorekeeper-introductions` |
-| **Shows** | | | |
+
+#### Shows
+
+| Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
+|----------------------|---------------------|-----------------|----------------|
 | High Scoring Shows | `/shows/high-scoring` | N/A | `/shows/high-scoring-shows` |
 | Low Scoring Shows | `/shows/low-scoring` | N/A | `/shows/low-scoring-shows` |
 | Not My Job Guests vs Bluff the Listener Win Ratios | `/shows/not-my-job-vs-bluffs` | N/A | `/shows/not-my-job-guests-vs-bluff-the-listener-win-ratios` |
