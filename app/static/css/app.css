@@ -11519,10 +11519,12 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/*
 :root {
-  --bs-body-font-size: clamp(15px, calc(15px + 0.390625vw), 18px);
+    // Adapted from: https://matthewjamestaylor.com/responsive-font-size
+    --bs-body-font-size: clamp(15px, calc(15px + 0.390625vw), 18px);
 }
-
+*/
 body .tooltip {
   font-size: 0.9em;
 }
