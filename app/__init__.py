@@ -25,7 +25,6 @@ from .scorekeepers.routes import blueprint as scorekeepers_bp
 from .shows.redirects import blueprint as shows_redirects_bp
 from .shows.routes import blueprint as shows_bp
 from .sitemaps.routes import blueprint as sitemaps_bp
-from .utility import format_umami_analytics
 from .version import APP_VERSION
 
 
@@ -58,10 +57,7 @@ def create_app():
     app.jinja_env.globals["ga_property_code"] = _config["settings"].get(
         "ga_property_code", ""
     )
-    umami = _config["settings"].get("umami_analytics", None)
-    app.jinja_env.globals["umami_analytics"] = format_umami_analytics(
-        umami_analytics=umami
-    )
+    app.jinja_env.globals["umami"] = _config["settings"]["umami"]
     app.jinja_env.globals["api_url"] = _config["settings"].get("api_url", "")
     app.jinja_env.globals["blog_url"] = _config["settings"].get("blog_url", "")
     app.jinja_env.globals["graphs_url"] = _config["settings"].get("graphs_url", "")

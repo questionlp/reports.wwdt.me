@@ -1,5 +1,12 @@
 # Changes
 
+## 3.0.3
+
+### Application Changes
+
+- Fix issue where Umami Analytics configuration was not read in properly, thus causing the snippet to be added to the rendered page when enabled
+- Removed `utility.format_umami_analytics()` as it is no longer in use
+
 ## 3.0.2
 
 ### Application Changes
