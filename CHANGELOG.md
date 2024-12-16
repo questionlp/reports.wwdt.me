@@ -1,5 +1,11 @@
 # Changes
 
+## 3.0.4-post.1
+
+### Component Changes
+
+- Upgrade nanoid from 3.3.7 to 3.3.8 to fix a security vulnerability for a package required to compile, minify and copy generated CSS files
+
 ## 3.0.4
 
 ### Application Changes
