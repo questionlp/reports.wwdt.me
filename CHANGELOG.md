@@ -1,5 +1,12 @@
 # Changes
 
+## 3.0.5
+
+### Component Changes
+
+- Upgrade Flask from 3.0.3 to 3.1.0
+- Upgrade Markdown from 3.5.2 to 3.7.0
+
 ## 3.0.4-post.1
 
 ### Component Changes
