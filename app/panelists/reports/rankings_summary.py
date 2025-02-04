@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Rankings Summary Report Functions."""
+
 from typing import Any
 
 from mysql.connector.connection import MySQLConnection

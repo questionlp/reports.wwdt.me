@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 # pylint: disable=C0301
 """WWDTM Show Panel Gender Mix Report Functions."""
+
 from typing import Any
 
 from mysql.connector.connection import MySQLConnection

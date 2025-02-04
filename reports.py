@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Application Bootstrap Script for Wait Wait Reports."""
+
 from app import create_app
 
 app = create_app()

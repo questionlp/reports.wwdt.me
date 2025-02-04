@@ -4,7 +4,8 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 # pylint: disable=C0301
-"""WWDTM Lightning Round Report Functions."""
+"""WWDTM Lightning Fill-in-the-Blank Segment Report Functions."""
+
 from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -186,7 +187,7 @@ def shows_with_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[dict]:
-    """Return shows in which panelists start the Lightning Fill-in-the-Blank round with zero points."""
+    """Return shows in which panelists start the Lightning round with zero points."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -278,7 +279,7 @@ def shows_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[dict]:
-    """Return list of shows in which a panelist starts the Lightning Fill-in-the-Blank round with zero points."""
+    """Return list of shows in which a panelist starts the Lightning round with zero points."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -369,7 +370,7 @@ def shows_lightning_round_zero_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
 ) -> list[dict]:
-    """Return list of shows in which a panelist answers zero Lightning Fill-in-the-Blank round questions correct."""
+    """Return list of shows in which a panelist answers zero Lightning round questions correct."""
     if (
         use_decimal_scores
         and not current_app.config["app_settings"]["has_decimal_scores_column"]
@@ -451,6 +452,87 @@ def shows_lightning_round_zero_correct(
                         "score": row["score"],
                         "rank": row["show_rank"],
                     },
+                }
+            )
+
+    return shows
+
+
+def shows_lightning_round_answering_same_number_correct(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    use_decimal_scores: bool = False,
+) -> list[dict]:
+    """Return list of shows in which all panelists answers the same number of Lightning questions correct."""
+    if (
+        use_decimal_scores
+        and not current_app.config["app_settings"]["has_decimal_scores_column"]
+    ):
+        return None
+
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    if use_decimal_scores:
+        query = """
+            SELECT s.showid, s.showdate,
+            pm.panelistlrndcorrect AS correct,
+            pm.panelistlrndcorrect_decimal AS correct_decimal,
+            COUNT(pm.panelistlrndcorrect_decimal) AS count
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndcorrect IS NOT NULL
+            AND pm.panelistlrndcorrect_decimal IS NOT NULL
+            GROUP BY s.showid, pm.panelistlrndcorrect,
+            pm.panelistlrndcorrect_decimal
+            HAVING COUNT(pm.panelistlrndcorrect_decimal) = 3
+            ORDER BY s.showdate ASC;
+            """
+    else:
+        query = """
+            SELECT s.showid, s.showdate,
+            pm.panelistlrndcorrect AS correct,
+            COUNT(pm.panelistlrndcorrect) AS count
+            FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND pm.panelistlrndcorrect IS NOT NULL
+            GROUP BY s.showid, pm.panelistlrndcorrect
+            HAVING COUNT(pm.panelistlrndcorrect) = 3
+            ORDER BY s.showdate ASC;
+            """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+
+    if not result:
+        return None
+
+    shows = []
+    for row in result:
+        panelists = retrieve_panelists_by_show_id(
+            show_id=row["showid"], database_connection=database_connection
+        )
+        if use_decimal_scores:
+            shows.append(
+                {
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
+                    "panelists": panelists,
+                    "correct": row["correct"],
+                    "correct_decimal": row["correct_decimal"],
+                }
+            )
+        else:
+            shows.append(
+                {
+                    "id": row["showid"],
+                    "date": row["showdate"].isoformat(),
+                    "panelists": panelists,
+                    "correct": row["correct"],
                 }
             )
 

@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Shows Routes for Wait Wait Reports."""
+
 import mysql.connector
 from flask import Blueprint, current_app, render_template, request
 
@@ -14,6 +15,7 @@ from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_
 from .reports.info import retrieve_show_descriptions, retrieve_show_notes
 from .reports.lightning_round import (
     shows_ending_with_three_way_tie,
+    shows_lightning_round_answering_same_number_correct,
     shows_lightning_round_start_zero,
     shows_lightning_round_zero_correct,
     shows_starting_ending_three_way_tie,
@@ -105,6 +107,21 @@ def highest_score_equals_sum_other_scores() -> str:
 
     return render_template(
         "shows/highest-score-equals-sum-other-scores.html", shows=_shows
+    )
+
+
+@blueprint.route("/lightning-round-answering-same-number-correct")
+def lightning_round_answering_same_number_correct() -> str:
+    """View: Lightning Round Panelists Answering the Same Number of Questions Correct."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = shows_lightning_round_answering_same_number_correct(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _database_connection.close()
+
+    return render_template(
+        "shows/lightning-round-answering-same-number-correct.html", shows=_shows
     )
 
 

@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Main Routes for Wait Wait Reports."""
+
 from pathlib import Path
 
 from flask import Blueprint, Response, render_template, send_file

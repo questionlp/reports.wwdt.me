@@ -5,7 +5,6 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Shared Dictionaries for Wait Wait Reports."""
 
-
 RANK_MAP: dict[str, str] = {
     "1": "First",
     "1t": "First Tied",

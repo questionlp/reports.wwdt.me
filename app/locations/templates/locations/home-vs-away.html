@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% set page_title = "Show Locations: Home vs Away" %}
+{% block title %}{{ page_title }} | Locations{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a count of shows recorded at home (any venue or studio
+        located in Chicago, Illinois) and away, broken down by year.
+    </p>
+</div>
+
+{% if show_counts %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date year">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Home</th>
+                        <th scope="col">Away</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for count in show_counts %}
+                    <tr>
+                        <td>{{ count["year"] }}</td>
+                        <td>{{ count["home"] }}</td>
+                        <td>{{ count["away"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Home</th>
+                        <th scope="col">Away</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

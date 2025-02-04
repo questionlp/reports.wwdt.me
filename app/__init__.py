@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Core Application for Wait Wait Reports."""
+
 from flask import Flask
 
 from app import config, utility

@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Testing Guests Redirects Module and Blueprint Views."""
+
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 

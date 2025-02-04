@@ -48,7 +48,7 @@
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('shows.highest_score_equals_sum_other_scores') }}">Highest
-                        Score Equals Sum of Other Scores</a>
+                        Score Equals the Sum of Other Scores</a>
                 </h3>
                 <div class="description">
                     This report provides a list of shows in which the highest panelist
@@ -63,6 +63,17 @@
                 <div class="description">
                     This report provides a list of shows in which all three panelists
                     finished the Lightning Fill-in-the Blank segment in a three-way tie.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_answering_same_number_correct') }}">Lightning
+                        Round All Panelists Answering the Same Number of Questions Correct</a>
+                </h3>
+                <div class="description">
+                    This report provides a list of shows in which all three panelists
+                    answered the same number of Lightning Fill-in-the-Blank questions
+                    correct.
                 </div>
             </li>
             <li class="list-group-item">

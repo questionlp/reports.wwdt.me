@@ -1,5 +1,22 @@
 # Changes
 
+## 3.1.0 (pre-release)
+
+### Application Changes
+
+- Adding new reports
+  - Locations
+    - Show Locations: Home vs Away
+  - Shows
+    - Lightning Round All Panelists Answering the Same Number of Questions Correct
+
+### Development Changes
+
+- Upgrade pytest from 8.3.3 to 8.3.4
+- Upgrade ruff from 0.7.4 to 0.9.4
+- Remove black from required development packages as part of migrating entirely to Ruff
+- Ran `ruff format` to format Python code files using the Ruff 2025 Style Guide
+
 ## 3.0.5
 
 ### Component Changes

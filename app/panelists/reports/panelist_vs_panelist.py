@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist vs Panelist Report Functions."""
+
 from typing import Any
 
 from flask import current_app
