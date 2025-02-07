@@ -4,10 +4,12 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Locations Routes for Wait Wait Reports."""
+
 import mysql.connector
 from flask import Blueprint, current_app, render_template
 
 from .reports.average_scores import retrieve_average_scores_by_location
+from .reports.home_vs_away import retrieve_location_home_vs_away
 
 blueprint = Blueprint("locations", __name__, template_folder="templates")
 
@@ -30,3 +32,13 @@ def average_scores_by_location() -> str:
     return render_template(
         "locations/average-scores-by-location.html", locations=_locations
     )
+
+
+@blueprint.route("/home-vs-away")
+def home_vs_away() -> str:
+    """View: Show Locations: Home vs Away."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_counts = retrieve_location_home_vs_away(
+        database_connection=_database_connection
+    )
+    return render_template("locations/home-vs-away.html", show_counts=_show_counts)

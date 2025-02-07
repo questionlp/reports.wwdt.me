@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist First Appearance Wins."""
+
 from decimal import Decimal
 
 from flask import current_app

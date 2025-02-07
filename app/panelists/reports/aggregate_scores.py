@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Aggregate Scores Report Functions."""
+
 from decimal import Decimal
 from typing import Any
 

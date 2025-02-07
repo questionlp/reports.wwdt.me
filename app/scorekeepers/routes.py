@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Scorekeepers Routes for Wait Wait Reports."""
+
 import mysql.connector
 from flask import Blueprint, current_app, render_template
 

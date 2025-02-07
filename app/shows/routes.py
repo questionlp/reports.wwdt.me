@@ -4,16 +4,19 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Shows Routes for Wait Wait Reports."""
+
 import mysql.connector
 from flask import Blueprint, current_app, render_template, request
 
 from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.guest_host import retrieve_shows_guest_host
+from .reports.guest_host_scorekeeper import retrieve_shows_guest_host_scorekeeper
 from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
 from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_stats
 from .reports.info import retrieve_show_descriptions, retrieve_show_notes
 from .reports.lightning_round import (
     shows_ending_with_three_way_tie,
+    shows_lightning_round_answering_same_number_correct,
     shows_lightning_round_start_zero,
     shows_lightning_round_zero_correct,
     shows_starting_ending_three_way_tie,
@@ -105,6 +108,21 @@ def highest_score_equals_sum_other_scores() -> str:
 
     return render_template(
         "shows/highest-score-equals-sum-other-scores.html", shows=_shows
+    )
+
+
+@blueprint.route("/lightning-round-answering-same-number-correct")
+def lightning_round_answering_same_number_correct() -> str:
+    """View: Lightning Round Panelists Answering the Same Number of Questions Correct."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = shows_lightning_round_answering_same_number_correct(
+        database_connection=_database_connection,
+        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+    )
+    _database_connection.close()
+
+    return render_template(
+        "shows/lightning-round-answering-same-number-correct.html", shows=_shows
     )
 
 
@@ -364,6 +382,18 @@ def shows_with_guest_host() -> str:
     _database_connection.close()
 
     return render_template("shows/shows-with-guest-host.html", shows=_shows)
+
+
+@blueprint.route("/shows-with-guest-host-scorekeeper")
+def shows_with_guest_host_scorekeeper() -> str:
+    """View: Shows with a Guest Host Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_guest_host_scorekeeper(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    return render_template("shows/shows-with-guest-host-scorekeeper.html", shows=_shows)
 
 
 @blueprint.route("/shows-with-guest-scorekeeper")

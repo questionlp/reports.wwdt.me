@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 # pylint: disable=C0301
 """WWDTM Show Scoring Reports Functions."""
+
 from decimal import Decimal
 
 from flask import current_app

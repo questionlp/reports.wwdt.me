@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Testing Shows Module and Blueprint Views."""
+
 import pytest
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
@@ -51,6 +52,20 @@ def test_highest_score_equals_sum_other_scores(client: FlaskClient) -> None:
     assert b"Highest Score Equals the Sum of Other Scores" in response.data
     assert b"Panelist" in response.data
     assert b"Rank" in response.data
+
+
+def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> None:
+    """Testing shows.routes.lightning_round_answering_same_number_correct."""
+    response: TestResponse = client.get(
+        "/shows/lightning-round-answering-same-number-correct"
+    )
+    assert response.status_code == 200
+    assert (
+        b"Lightning Round All Panelists Answering the Same Number of Questions Correct"
+        in response.data
+    )
+    assert b"Panelists" in response.data
+    assert b"Correct Answers" in response.data
 
 
 def test_lightning_round_ending_three_way_tie(client: FlaskClient) -> None:
@@ -314,6 +329,15 @@ def test_shows_with_guest_host(client: FlaskClient) -> None:
     response: TestResponse = client.get("/shows/shows-with-guest-host")
     assert response.status_code == 200
     assert b"Shows with a Guest Host" in response.data
+    assert b"Panelists" in response.data
+    assert b"Guest(s)" in response.data
+
+
+def test_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
+    """Testing shows.routes.shows_with_guest_host_scorekeeper."""
+    response: TestResponse = client.get("/shows/shows-with-guest-host-scorekeeper")
+    assert response.status_code == 200
+    assert b"Shows with a Guest Host and a Guest Scorekeeper" in response.data
     assert b"Panelists" in response.data
     assert b"Guest(s)" in response.data
 

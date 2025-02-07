@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Sitemap Routes for Wait Wait Reports."""
+
 from flask import Blueprint, Response, render_template
 
 blueprint = Blueprint("sitemaps", __name__, template_folder="templates")

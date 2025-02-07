@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% set page_title = "Shows with a Guest Host and a Guest Scorekeeper" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of all shows, including Best Of and Repeat
+        shows, that have both a guest host and a guest scorekeeper.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="boolean">
+                    <col class="name host">
+                    <col class="name scorekeeper">
+                    <col class="name venue">
+                    <col class="name panelist">
+                    <col class="name guest">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Best Of/Repeat</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.best_of and show.repeat %}
+                        <td>Best Of / Repeat</td>
+                        {% elif show.best_of and not show.repeat %}
+                        <td>Best Of</td>
+                        {% elif show.repeat and not show.best_of %}
+                        <td>Repeat</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.host_guest %}
+                        <td><b>{{ show.host }}</b></td>
+                        {% else %}
+                        <td>{{ show.host }}</td>
+                        {% endif %}
+                        {% if show.scorekeeper_guest %}
+                        <td><b>{{ show.scorekeeper }}</b></td>
+                        {% else %}
+                        <td>{{ show.scorekeeper }}</td>
+                        {% endif %}
+                        {% if show.location.venue and show.location.city and show.location.city %}
+                        <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+                        {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+                        <td>{{ show.location.venue }}</td>
+                        {% elif show.location.city %}
+                        <td>{{ show.location.city }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.panelists %}
+                        <td>
+                            <ul class="no-bullets">
+                                {% for panelist in show.panelists %}
+                                <li>{{ panelist.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.guests %}
+                        <td>
+                            <ul class="no-bullets">
+                                {% for guest in show.guests %}
+                                <li>{{ guest.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length >= 10 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Best Of/Repeat</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

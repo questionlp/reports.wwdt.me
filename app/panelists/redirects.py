@@ -4,6 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 """Panelists Redirect Routes for Wait Wait Reports."""
+
 from flask import Blueprint, Response, url_for
 
 from app.utility import redirect_url
