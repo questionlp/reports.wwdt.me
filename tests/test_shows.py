@@ -54,6 +54,20 @@ def test_highest_score_equals_sum_other_scores(client: FlaskClient) -> None:
     assert b"Rank" in response.data
 
 
+def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> None:
+    """Testing shows.routes.lightning_round_answering_same_number_correct."""
+    response: TestResponse = client.get(
+        "/shows/lightning-round-answering-same-number-correct"
+    )
+    assert response.status_code == 200
+    assert (
+        b"Lightning Round All Panelists Answering the Same Number of Questions Correct"
+        in response.data
+    )
+    assert b"Panelists" in response.data
+    assert b"Correct Answers" in response.data
+
+
 def test_lightning_round_ending_three_way_tie(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_ending_three_way_tie."""
     response: TestResponse = client.get("/shows/lightning-round-ending-three-way-tie")

@@ -17,6 +17,16 @@ def test_index(client: FlaskClient) -> None:
     assert b"Average Scores by Location" in response.data
 
 
+def test_home_vs_away(client: FlaskClient) -> None:
+    """Testing locations.routes.home_vs_away."""
+    response: TestResponse = client.get("/locations/home-vs-away")
+    assert response.status_code == 200
+    assert b"Home vs Away" in response.data
+    assert b"Year" in response.data
+    assert b"Home" in response.data
+    assert b"Away" in response.data
+
+
 def test_average_scores_by_location(client: FlaskClient) -> None:
     """Testing locations.routes.average_scores_by_location."""
     response: TestResponse = client.get("/locations/average-scores-by-location")
