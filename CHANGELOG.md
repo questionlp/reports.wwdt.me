@@ -1,6 +1,6 @@
 # Changes
 
-## 3.1.0 (pre-release)
+## 3.1.0
 
 ### Application Changes
 
@@ -9,6 +9,7 @@
     - Show Locations: Home vs Away
   - Shows
     - Lightning Round All Panelists Answering the Same Number of Questions Correct
+    - Shows with a Guest Host and a Guest Scorekeeper
 
 ### Development Changes
 

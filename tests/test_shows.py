@@ -319,6 +319,15 @@ def test_shows_with_guest_host(client: FlaskClient) -> None:
     assert b"Guest(s)" in response.data
 
 
+def test_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
+    """Testing shows.routes.shows_with_guest_host_scorekeeper."""
+    response: TestResponse = client.get("/shows/shows-with-guest-host-scorekeeper")
+    assert response.status_code == 200
+    assert b"Shows with a Guest Host and a Guest Scorekeeper" in response.data
+    assert b"Panelists" in response.data
+    assert b"Guest(s)" in response.data
+
+
 def test_shows_with_guest_scorekeeper(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_guest_scorekeeper."""
     response: TestResponse = client.get("/shows/shows-with-guest-scorekeeper")

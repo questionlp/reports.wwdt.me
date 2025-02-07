@@ -10,6 +10,7 @@ from flask import Blueprint, current_app, render_template, request
 
 from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.guest_host import retrieve_shows_guest_host
+from .reports.guest_host_scorekeeper import retrieve_shows_guest_host_scorekeeper
 from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
 from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_stats
 from .reports.info import retrieve_show_descriptions, retrieve_show_notes
@@ -381,6 +382,18 @@ def shows_with_guest_host() -> str:
     _database_connection.close()
 
     return render_template("shows/shows-with-guest-host.html", shows=_shows)
+
+
+@blueprint.route("/shows-with-guest-host-scorekeeper")
+def shows_with_guest_host_scorekeeper() -> str:
+    """View: Shows with a Guest Host Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_guest_host_scorekeeper(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    return render_template("shows/shows-with-guest-host-scorekeeper.html", shows=_shows)
 
 
 @blueprint.route("/shows-with-guest-scorekeeper")
