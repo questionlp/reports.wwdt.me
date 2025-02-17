@@ -4,4 +4,16 @@
     <loc>{{ site_url }}{{ url_for("hosts.appearance_summary") }}</loc>
     <changefreq>daily</changefreq>
   </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("hosts.appearances_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("hosts.appearances_by_year_grid") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("hosts.debuts_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
 </urlset>

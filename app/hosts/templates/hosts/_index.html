@@ -28,8 +28,37 @@
                     regular and for all shows (including Best Of and Repeat shows).
                 </div>
             </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('hosts.appearances_by_year' )}}">Appearances by Year</a>
+                </h3>
+                <div class="description">
+                    This report breaks down the number of times a host has appeared on a
+                    show for a given year.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('hosts.appearances_by_year_grid' )}}">Appearances by Year: Grid</a>
+                </h3>
+                <div class="description">
+                    This report breaks down the number of times a host has appeared on a
+                    show for a given year as a grid.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('hosts.debuts_by_year') }}">Debuts by Year</a>
+                </h3>
+                <div class="description">
+                    This report provides a break down of when hosts made their debut on
+                    the show, grouped by year.
+                </div>
+            </li>
         </ul>
     </div>
+
+
 </div>
 
 {% endblock content %}

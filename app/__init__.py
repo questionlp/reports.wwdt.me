@@ -76,6 +76,12 @@ def create_app():
     app.jinja_env.globals["use_decimal_scores"] = _config["settings"][
         "use_decimal_scores"
     ]
+    app.jinja_env.globals["block_ai_scrapers"] = bool(
+        _config["settings"].get("block_ai_scrapers", False)
+    )
+    app.jinja_env.globals["use_minified_css"] = bool(
+        _config["settings"].get("use_minified_css", False)
+    )
 
     # Register Jinja template filters
     app.jinja_env.filters["pretty_jsonify"] = utility.pretty_jsonify

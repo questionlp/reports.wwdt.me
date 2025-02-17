@@ -237,3 +237,99 @@ def retrieve_panelist_bluffs_by_year(
             stats[row["year"]]["unique_bluff_appearances"] = row["appearances"]
 
     return stats
+
+
+def retrieve_most_chosen_by_year(
+    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+) -> list[dict[str, str | int]]:
+    """Retrieve panelists with the most chosen Bluff for a given year.
+
+    Includes Bluff the Listener segments from regular shows and Best Of
+    shows with unique Bluff the Listener segments.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelist, p.panelistslug,
+        COUNT(blm.chosenbluffpnlid) AS count
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
+        WHERE YEAR(s.showdate) = %s
+        AND (
+            (s.bestof = 0 AND s.repeatshowid IS NULL)
+            OR
+            (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
+            s.repeatshowid IS NULL)
+            )
+        GROUP BY p.panelist, p.panelistslug
+        ORDER BY COUNT(blm.chosenbluffpnlid) DESC, p.panelist ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_year,))
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    _counts = []
+    for row in results:
+        _counts.append(
+            {
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
+                "count": row["count"],
+            }
+        )
+
+    return _counts
+
+
+def retrieve_most_correct_by_year(
+    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+) -> list[dict[str, str | int]]:
+    """Retrieve panelists with the most correct Bluff for a given year.
+
+    Includes Bluff the Listener segments from regular shows and Best Of
+    shows with unique Bluff the Listener segments.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelist, p.panelistslug,
+        COUNT(blm.correctbluffpnlid) AS count
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        WHERE YEAR(s.showdate) = %s
+        AND (
+            (s.bestof = 0 AND s.repeatshowid IS NULL)
+            OR
+            (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
+            s.repeatshowid IS NULL)
+            )
+        GROUP BY p.panelist, p.panelistslug
+        ORDER BY COUNT(blm.correctbluffpnlid) DESC, p.panelist ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_year,))
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    _counts = []
+    for row in results:
+        _counts.append(
+            {
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
+                "count": row["count"],
+            }
+        )
+
+    return _counts

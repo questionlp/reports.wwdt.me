@@ -24,3 +24,29 @@ def test_appearance_summary(client: FlaskClient) -> None:
     assert b"Appearance Summary" in response.data
     assert b"Regular Shows" in response.data
     assert b"All Shows" in response.data
+
+
+def test_appearances_by_year(client: FlaskClient) -> None:
+    """Testing hosts.routes.appearances_by_year."""
+    response: TestResponse = client.get("/hosts/appearances-by-year")
+    assert response.status_code == 200
+    assert b"Appearances by Year" in response.data
+    assert b"Regular Shows" in response.data
+    assert b"All Shows" in response.data
+
+
+def test_appearances_by_year_grid(client: FlaskClient) -> None:
+    """Testing hosts.routes.appearances_by_year_grid."""
+    response: TestResponse = client.get("/hosts/appearances-by-year/grid")
+    assert response.status_code == 200
+    assert b"Appearances by Year: Grid" in response.data
+    assert b"Total" in response.data
+
+
+def test_debuts_by_year(client: FlaskClient) -> None:
+    """Testing hosts.routes.appearances_by_year_grid."""
+    response: TestResponse = client.get("/hosts/debuts-by-year")
+    assert response.status_code == 200
+    assert b"Debuts by Year" in response.data
+    assert b"Host debuts" in response.data
+    assert b"# of Regular Appearances" in response.data

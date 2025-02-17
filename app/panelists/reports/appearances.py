@@ -130,3 +130,33 @@ def retrieve_first_most_recent_appearances(
         ].isoformat()
 
     return panelist_appearances
+
+
+def retrieve_panelists_by_show_id(
+    show_id: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict[str, str | int]]:
+    """Retrieve a list of panelists for a given show ID."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelist, p.panelistslug
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE pm.showid = %s
+        ORDER BY pm.showpnlmapid ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_id,))
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    _panelists = []
+    for row in results:
+        _panelists.append({"name": row["panelist"], "slug": row["panelistslug"]})
+
+    return _panelists

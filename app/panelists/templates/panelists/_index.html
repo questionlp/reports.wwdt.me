@@ -34,7 +34,16 @@
                 </h3>
                 <div class="description">
                     This report breaks down the number of times a panelist has appeared on a
-                    show for a given year. The counts excludes Best Of and Repeat shows.
+                    show for a given year.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.appearances_by_year_grid') }}">Appearances by Year: Grid</a>
+                </h3>
+                <div class="description">
+                    This report breaks down the number of times a panelist has appeared on a
+                    show for a given year.
                 </div>
             </li>
             <li class="list-group-item">
@@ -63,6 +72,17 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('panelists.bluff_the_listener_panelist_statistics_by_year') }}">Bluff the Listener Panelist
+                        Statistics by Year</a>
+                </h3>
+                <div class="description">
+                    This report allows you to lookup the Bluff the Listener statistics for a
+                    panelist, including how many times their story was chosen and how many times
+                    they had the correct story, aggregated by year.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('panelists.bluff_the_listener_statistics') }}">Bluff the Listener Statistics</a>
                 </h3>
                 <div class="description">
@@ -72,21 +92,6 @@
                         the number of appearances on both regular shows that had a Bluff the
                         Listener segment and Best Of shows with unique Bluff the Listener segments.
                     </p>
-                    <p>
-                        <b>Note:</b> Bluff the Listener data for shows aired in 1999 have not been
-                        captured in their entirety. Bluff the Listener data for those shows will be
-                        added over time.
-                    </p>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('panelists.bluff_the_listener_statistics_by_year') }}">Bluff the Listener Statistics by Year</a>
-                </h3>
-                <div class="description">
-                    This report allows you to lookup the Bluff the Listener statistics for a
-                    panelist, including how many times their story was chosen and how many times
-                    they had the correct story, aggregated by year.
                 </div>
             </li>
             <li class="list-group-item">
@@ -106,11 +111,6 @@
                     <p>
                         This report provides a list of panelists that have won outright or were
                         tied for first place on their first appearance on the show.
-                    </p>
-                    <p>
-                        <b>Note:</b> This report does not include information for panelists who
-                        made their first appearance in 1999. This is due to the current lack of
-                        scoring information for those shows.
                     </p>
                 </div>
             </li>
@@ -132,6 +132,36 @@
                     This report provides a break down of the longest losing streak for each
                     panelist. "All Losses" includes shows in which a panelist did not finish
                     in first place or tied for first.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.most_chosen_bluff_the_listener_by_year') }}">Most Chosen Bluff the Listener Story by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report allows you to lookup a list of panelists who have had
+                        the most chosen Bluff the Listener story for a given year.
+                    </p>
+                    <p>
+                        Counts include Bluff the Listener segments from regular shows and
+                        from Best Of shows with unique Bluff segments.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.most_correct_bluff_the_listener_by_year') }}">Most Correct Bluff the Listener Story by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report allows you to lookup a list of panelists who have had
+                        the most correct Bluff the Listener story for a given year.
+                    </p>
+                    <p>
+                        Counts include Bluff the Listener segments from regular shows and
+                        from Best Of shows with unique Bluff segments.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">

@@ -14,17 +14,17 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_hosts(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str]]:
-    """Retrieves a dictionary for all available hosts from the database."""
+    """Retrieves a list of all available hosts from the database."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT h.hostid, h.host, h.hostslug "
-        "FROM ww_hosts h "
-        "WHERE h.host <> '(TBD)' "
-        "ORDER BY h.hostslug ASC;"
-    )
+    query = """
+        SELECT h.hostid, h.host, h.hostslug
+        FROM ww_hosts h
+        WHERE h.host <> '(TBD)'
+        ORDER BY h.hostslug ASC;
+        """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -44,6 +44,41 @@ def retrieve_hosts(
     return _hosts
 
 
+def retrieve_hosts_dict(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> dict[int, dict[str, str]]:
+    """Retrieve a dictionary of all available hosts from the database.
+
+    Host ID is used for the dictionary key and the corresponding
+    value is dictionary with host slug string and host name.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    cursor = database_connection.cursor(dictionary=True)
+    query = """
+        SELECT h.hostid, h.host, h.hostslug
+        FROM ww_hosts h
+        WHERE h.host <> '(TBD)'
+        ORDER BY h.hostid ASC;
+        """
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    _hosts = {}
+    for row in results:
+        _hosts[row["hostid"]] = {
+            "name": row["host"],
+            "slug": row["hostslug"],
+        }
+
+    return _hosts
+
+
 def retrieve_appearances_by_host(
     host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, int]:
@@ -52,18 +87,18 @@ def retrieve_appearances_by_host(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT ( "
-        "SELECT COUNT(hm.showid) FROM ww_showhostmap hm "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND "
-        "h.hostslug = %s ) AS regular, ( "
-        "SELECT COUNT(hm.showid) FROM ww_showhostmap hm "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "WHERE h.hostslug = %s ) AS allshows;"
-    )
+    query = """
+        SELECT (
+        SELECT COUNT(hm.showid) FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL AND
+        h.hostslug = %s ) AS regular, (
+        SELECT COUNT(hm.showid) FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE h.hostslug = %s ) AS allshows;
+        """
     cursor.execute(
         query,
         (
@@ -94,15 +129,15 @@ def retrieve_first_most_recent_appearances(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
-        "FROM ww_showhostmap hm "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "WHERE h.hostslug = %s "
-        "AND s.bestof = 0 "
-        "AND s.repeatshowid IS null;"
-    )
+    query = """
+        SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE h.hostslug = %s
+        AND s.bestof = 0
+        AND s.repeatshowid IS null;
+        """
     cursor.execute(query, (host_slug,))
     result = cursor.fetchone()
     cursor.close()
@@ -114,13 +149,13 @@ def retrieve_first_most_recent_appearances(
     most_recent = result["max"].isoformat() if result["max"] else None
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max "
-        "FROM ww_showhostmap hm "
-        "JOIN ww_shows s ON s.showid = hm.showid "
-        "JOIN ww_hosts h ON h.hostid = hm.hostid "
-        "WHERE h.hostslug = %s;"
-    )
+    query = """
+        SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE h.hostslug = %s;
+        """
     cursor.execute(query, (host_slug,))
     result_all = cursor.fetchone()
     cursor.close()

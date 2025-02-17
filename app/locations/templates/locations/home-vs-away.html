@@ -14,7 +14,8 @@
     <h2>{{ page_title }}</h2>
     <p>
         This report provides a count of shows recorded at home (any venue or studio
-        located in Chicago, Illinois) and away, broken down by year.
+        located in Chicago, Illinois), away and home/remote studios, broken down by
+        year.
     </p>
 </div>
 
@@ -25,14 +26,16 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="date year">
-                    <col class="count">
-                    <col class="count">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Year</th>
                         <th scope="col">Home</th>
                         <th scope="col">Away</th>
+                        <th scope="col">Home/Remote Studios</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +44,7 @@
                         <td>{{ count["year"] }}</td>
                         <td>{{ count["home"] }}</td>
                         <td>{{ count["away"] }}</td>
+                        <td>{{ count["studios"] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -49,6 +53,7 @@
                         <th scope="col">Year</th>
                         <th scope="col">Home</th>
                         <th scope="col">Away</th>
+                        <th scope="col">Home/Remote Studios</th>
                     </tr>
                 </tfoot>
             </table>

@@ -1,5 +1,28 @@
 # Changes
 
+## 3.2.0
+
+### Application Changes
+
+- Adding or updating new reports
+  - Hosts
+    - Adding "Appearances by Year"
+    - Adding "Appearances by Year: Grid"
+    - Adding "Debuts by Year"
+  - Panelists
+    - Adding "Most Chosen Bluff the Listener Story by Year"
+    - Adding "Most Correct Bluff the Listener Story by Year"
+    - Rename and relocate the "Appearances by Year" report to "Appearances by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
+    - Rename and relocate the "Bluff the Listener Statistics by Year" report to "Bluff the Listener Panelist Statistics by Year"
+    - Update the "Appearances by Year: Grid" report to include both regular and all appearances to match the hosts and scorekeepers reports of the same name
+  - Scorekeepers
+    - Adding "Appearances by Year"
+    - Adding "Appearances by Year: Grid"
+    - Adding "Debuts by Year"
+- Add missing configuration handling for the following settings:
+  - `block_ai_scrapers`
+  - `use_minified_css`
+
 ## 3.1.0
 
 ### Application Changes

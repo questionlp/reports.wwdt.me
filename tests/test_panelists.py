@@ -61,6 +61,16 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     response: TestResponse = client.get("/panelists/appearances-by-year")
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
+    assert b"Regular Shows" in response.data
+    assert b"All Shows" in response.data
+    assert b"No data available" not in response.data
+
+
+def test_appearances_by_year_grid(client: FlaskClient) -> None:
+    """Testing panelists.routes.appearances_by_year_grid."""
+    response: TestResponse = client.get("/panelists/appearances-by-year/grid")
+    assert response.status_code == 200
+    assert b"Appearances by Year: Grid" in response.data
     assert b"Total" in response.data
     assert b"No data available" not in response.data
 
@@ -73,27 +83,27 @@ def test_bluff_the_listener_statistics(client: FlaskClient) -> None:
     assert b"Unique Best Of" in response.data
 
 
-def test_bluff_the_listener_statistics_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.bluff_the_listener_statistics_by_year."""
+def test_bluff_the_listener_panelist_statistics_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.bluff_the_listener_panelist_statistics_by_year."""
     response: TestResponse = client.get(
-        "/panelists/bluff-the-listener-statistics-by-year"
+        "/panelists/bluff-the-listener-panelist-statistics-by-year"
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Statistics by Year" in response.data
+    assert b"Bluff the Listener Panelist Statistics by Year" in response.data
     assert b"Panelist" in response.data
 
 
 @pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
-def test_bluff_the_listener_statistics_by_year_post(
+def test_bluff_the_listener_panelist_statistics_by_year_post(
     client: FlaskClient, panelist_slug: str
 ) -> None:
-    """Testing panelists.routes.bluff_the_listener_statistics_by_year (POST)."""
+    """Testing panelists.routes.bluff_the_listener_panelist_statistics_by_year (POST)."""
     response: TestResponse = client.post(
-        "/panelists/bluff-the-listener-statistics-by-year",
+        "/panelists/bluff-the-listener-panelist-statistics-by-year",
         data={"panelist": panelist_slug},
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Statistics by Year" in response.data
+    assert b"Bluff the Listener Panelist Statistics by Year" in response.data
     assert b"Panelist" in response.data
     assert b"Unique Best Of" in response.data
 
@@ -130,6 +140,31 @@ def test_losing_streaks(client: FlaskClient) -> None:
     assert b"Losing Streaks" in response.data
     assert b"All Losses" in response.data
     assert b"Third Place Losses" in response.data
+
+
+def test_most_chosen_bluff_the_listener_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.most_chosen_bluff_the_listener_by_year."""
+    response: TestResponse = client.get(
+        "/panelists/most-chosen-bluff-the-listener-by-year"
+    )
+    assert response.status_code == 200
+    assert b"Most Chosen Bluff the Listener Story by Year" in response.data
+    assert b"Select a Year" in response.data
+
+
+@pytest.mark.parametrize("year", [1998, 2018])
+def test_most_chosen_bluff_the_listener_by_year_post(
+    client: FlaskClient, year: int
+) -> None:
+    """Testing panelists.routes.bluff_the_listener_panelist_statistics_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/most-chosen-bluff-the-listener-by-year",
+        data={"year": year},
+    )
+    assert response.status_code == 200
+    assert b"Most Chosen Bluff the Listener Story by Year" in response.data
+    assert b"Select a Year" in response.data
+    assert b"# of Correct Stories" in response.data
 
 
 def test_panelist_vs_panelist(client) -> None:

@@ -5,6 +5,18 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearances_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearances_by_year_grid") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.debuts_by_year") }}</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("scorekeepers.scorekeeper_introductions") }}</loc>
     <changefreq>daily</changefreq>
   </url>
