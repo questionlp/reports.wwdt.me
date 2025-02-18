@@ -7,13 +7,18 @@
 ### Application Changes
 
 - Adding new or updating existing reports
+  - Guests
+    - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
   - Hosts
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"
     - New Report: "Debuts by Year"
   - Panelists
-    - Rename and relocate the "Appearances by Year" report to "Appearances by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
-    - Rename and relocate the "Bluff the Listener Statistics by Year" report to "Bluff the Listener Panelist Statistics by Year"
+    - Update: "Appearances by Year" report renamed and relocated to "Appearances by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
+    - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
+    - Update: "Appearances by Year: Grid" report now includes both regular and all appearances to match the hosts and scorekeepers reports of the same name
+    - New Report: "Appearances by Year"
+    - New Report: "Appearances by Year: Grid"
     - New Report: "Bluff the Listener Statistics by Year"
     - New Report: "Highest Average Correct Answers by Year"
     - New Report: "Highest Average Scores by Year"
@@ -21,7 +26,6 @@
     - New Report: "Most Chosen Correct Bluff the Listener Story by Year"
     - New Report: "Most Correct Bluff the Listener Story by Year"
     - New Report: "Most Wins by Year"
-    - Update the "Appearances by Year: Grid" report to include both regular and all appearances to match the hosts and scorekeepers reports of the same name
   - Scorekeepers
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"

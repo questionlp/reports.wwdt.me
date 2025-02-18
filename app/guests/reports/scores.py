@@ -104,13 +104,13 @@ def retrieve_all_scoring_exceptions(
 
     cursor = database_connection.cursor(dictionary=True)
     query = (
-        "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
+        "SELECT DISTINCT g.guestid, g.guest, g.guestslug, s.showdate "
         "FROM ww_showguestmap gm "
         "JOIN ww_shows s ON s.showid = gm.showid "
         "JOIN ww_guests g ON g.guestid = gm.guestid "
         "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
         "AND gm.exception = 1 "
-        "ORDER BY g.guest ASC;"
+        "ORDER BY s.showdate ASC;"
     )
     cursor.execute(query)
     result = cursor.fetchall()
