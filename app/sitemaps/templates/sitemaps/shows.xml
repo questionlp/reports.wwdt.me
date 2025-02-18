@@ -2,78 +2,78 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site_url }}{{ url_for("shows.all_shows") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.all_women_panel") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.high_scoring_shows") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.highest_score_equals_sum_other_scores") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.lightning_round_ending_three_way_tie") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.lightning_round_starting_ending_three_way_tie") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.lightning_round_starting_zero_points") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.lightning_round_zero_correct") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.low_scoring_shows") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.not_my_job_guests_vs_bluff_the_listener_win_ratios") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.original_shows") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.panel_gender_mix") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.search_shows_by_multiple_panelists") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.show_counts_by_year") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.show_descriptions") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.show_notes") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.shows_with_guest_host") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.shows_with_guest_scorekeeper") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.shows_with_perfect_panelist_scores") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

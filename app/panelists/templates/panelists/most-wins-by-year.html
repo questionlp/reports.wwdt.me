@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Most Chosen Bluff the Listener Stories by Year" %}
+{% set page_title = "Most Wins by Year" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -13,19 +13,17 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to lookup a list of panelists who have had
-        the most chosen Bluff the Listener stories for a given year.
+        This report provides a list of the panelists with the most wins for a
+        given year.
     </p>
     <p>
-        Counts include Bluff the Listener segments from regular shows and
-        from Best Of shows with unique Bluff segments.
+        Scoring information excludes Best Of and repeat shows.
     </p>
 </div>
 
 <div class="card report-form mb-5">
     <div class="card-header">
-        Select a year to view a list of panelists with the most number of
-        chosen Bluff stories.
+        Select a year to view panelist win statistics.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
@@ -50,28 +48,36 @@
 </div>
 
 {% if request.method == "POST" %}
-{% if year and bluff_stats %}
+{% if year and win_stats %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <h3 class="mt-0">{{ year }}</h3>
             <table class="table table-bordered table-hover report">
                 <colgroup>
-                    <col class="panelist">
+                    <col class="name panelist">
+                    <col class="count long">
                     <col class="count long">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Panelist</th>
-                        <th scope="col"># of Chosen Stories</th>
+                        <th scope="col">Outright Wins</th>
+                        <th scope="col">Outright Wins Plus Tied for First</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for panelist in bluff_stats %}
+
+                    {% for panelist in win_stats %}
                     <tr>
-                        <td>{{ panelist.name }}</td>
-                        {% if panelist.count %}
-                        <td>{{ panelist.count }}</td>
+                        <td><a href="{{ stats_url }}/panelists/{{ win_stats[panelist].slug }}">{{ win_stats[panelist].name }}</td>
+                        {% if win_stats[panelist].wins is not none %}
+                        <td>{{ win_stats[panelist].wins }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if win_stats[panelist].wins_ties is not none %}
+                        <td>{{ win_stats[panelist].wins_ties }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}

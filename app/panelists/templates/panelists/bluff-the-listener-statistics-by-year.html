@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Most Chosen Bluff the Listener Stories by Year" %}
+{% set page_title = "Bluff the Listener Statistics by Year" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -13,8 +13,11 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to lookup a list of panelists who have had
-        the most chosen Bluff the Listener stories for a given year.
+        This report provides a break down of the number of times each panelist
+        has had their Bluff the Listener story chosen, had the correct story,
+        and the number of appearances on both regular shows that had a Bluff
+        the Listener segment and Best Of shows with unique Bluff the Listener
+        segments for a given year.
     </p>
     <p>
         Counts include Bluff the Listener segments from regular shows and
@@ -24,8 +27,7 @@
 
 <div class="card report-form mb-5">
     <div class="card-header">
-        Select a year to view a list of panelists with the most number of
-        chosen Bluff stories.
+        Select a year to view panelist Bluff the Listener statistics.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
@@ -57,21 +59,48 @@
             <h3 class="mt-0">{{ year }}</h3>
             <table class="table table-bordered table-hover report">
                 <colgroup>
-                    <col class="panelist">
+                    <col class="name panelist">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count long">
                     <col class="count long">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Panelist</th>
-                        <th scope="col"># of Chosen Stories</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">Regular Bluff Segments</th>
+                        <th scope="col">
+                            <span class="header-info" data-bs-toggle="tooltip"
+                                data-bs-original-title="Bluff the Listener segments that are only unique to Best Of shows">
+                                Unique Best Of Bluff Segments
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
+                    
                     {% for panelist in bluff_stats %}
                     <tr>
-                        <td>{{ panelist.name }}</td>
-                        {% if panelist.count %}
-                        <td>{{ panelist.count }}</td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</td>
+                        {% if panelist.chosen is not none %}
+                        <td>{{ panelist.chosen }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if panelist.correct is not none %}
+                        <td>{{ panelist.correct }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if panelist.appearances is not none %}
+                        <td>{{ panelist.appearances }}</td>
+                        {% else%}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if panelist.unique_best_of is not none %}
+                        <td>{{ panelist.unique_best_of }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}

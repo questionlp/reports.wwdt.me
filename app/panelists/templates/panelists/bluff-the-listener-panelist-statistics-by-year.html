@@ -77,23 +77,23 @@
                     {% for year in bluff_stats %}
                     <tr>
                         <td>{{ year }}</td>
-                        {% if bluff_stats[year].chosen %}
+                        {% if bluff_stats[year].chosen is not none %}
                         <td>{{ bluff_stats[year].chosen }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].correct %}
+                        {% if bluff_stats[year].correct is not none %}
                         <td>{{ bluff_stats[year].correct }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].appearances %}
+                        {% if bluff_stats[year].appearances is not none %}
                         <td>{{ bluff_stats[year].appearances }}</td>
                         {% else%}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].unique_bluff_appearances %}
-                        <td>{{ bluff_stats[year].unique_bluff_appearances }}</td>
+                        {% if bluff_stats[year].unique_best_of is not none %}
+                        <td>{{ bluff_stats[year].unique_best_of }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}

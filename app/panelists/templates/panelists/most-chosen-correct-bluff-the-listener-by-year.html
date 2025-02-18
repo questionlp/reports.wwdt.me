@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Most Chosen Bluff the Listener Stories by Year" %}
+{% set page_title = "Most Chosen Correct Bluff the Listener Stories by Year" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -14,7 +14,8 @@
     <h2>{{ page_title }}</h2>
     <p>
         This report allows you to lookup a list of panelists who have had
-        the most chosen Bluff the Listener stories for a given year.
+        the most chosen Bluff the Listener stories, that were correct, for
+        a given year.
     </p>
     <p>
         Counts include Bluff the Listener segments from regular shows and
@@ -25,7 +26,7 @@
 <div class="card report-form mb-5">
     <div class="card-header">
         Select a year to view a list of panelists with the most number of
-        chosen Bluff stories.
+        chosen correct Bluff stories.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
@@ -63,7 +64,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Panelist</th>
-                        <th scope="col"># of Chosen Stories</th>
+                        <th scope="col"># of Chosen Correct Stories</th>
                     </tr>
                 </thead>
                 <tbody>

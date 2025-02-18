@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Most Chosen Bluff the Listener Stories by Year" %}
+{% set page_title = "Highest Average Correct Answers by Year" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -13,19 +13,17 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to lookup a list of panelists who have had
-        the most chosen Bluff the Listener stories for a given year.
+        This report provides a list of the panelists with the highest average
+        correct answers for a given year.
     </p>
     <p>
-        Counts include Bluff the Listener segments from regular shows and
-        from Best Of shows with unique Bluff segments.
+        Scoring information excludes Best Of and repeat shows.
     </p>
 </div>
 
 <div class="card report-form mb-5">
     <div class="card-header">
-        Select a year to view a list of panelists with the most number of
-        chosen Bluff stories.
+        Select a year to view panelist average correct answers.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
@@ -43,6 +41,16 @@
                 </select>
             </div>
             <div class="col-auto">
+                <div class="form-check">
+                    <label for="exclude_single">Exclude Single Appearances</label>
+                    {% if request.form.exclude_single %}
+                    <input class="form-check-input" type="checkbox" id="exclude_single" name="exclude_single" checked>
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" id="exclude_single" name="exclude_single">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-auto">
                 <input type="submit" class="btn btn-submit" value="Submit">
             </div>
         </form>
@@ -50,28 +58,36 @@
 </div>
 
 {% if request.method == "POST" %}
-{% if year and bluff_stats %}
+{% if year and score_stats %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <h3 class="mt-0">{{ year }}</h3>
             <table class="table table-bordered table-hover report">
                 <colgroup>
-                    <col class="panelist">
+                    <col class="name panelist">
+                    <col class="count long">
                     <col class="count long">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Panelist</th>
-                        <th scope="col"># of Chosen Stories</th>
+                        <th scope="col">Average Correct Answers</th>
+                        <th scope="col"># of Appearances</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for panelist in bluff_stats %}
+
+                    {% for panelist in score_stats %}
                     <tr>
-                        <td>{{ panelist.name }}</td>
-                        {% if panelist.count %}
-                        <td>{{ panelist.count }}</td>
+                        <td><a href="{{ stats_url }}/panelists/{{ score_stats[panelist].slug }}">{{ score_stats[panelist].name }}</td>
+                        {% if score_stats[panelist].average_correct is not none %}
+                        <td>{{ score_stats[panelist].average_correct }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                        {% if score_stats[panelist].appearances is not none %}
+                        <td>{{ score_stats[panelist].appearances }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
@@ -82,7 +98,7 @@
         </div>
     </div>
 </div>
-{% elif not request.form.panelist %}
+{% elif not request.form.year %}
 <div class="alert alert-warning my-5" role="alert">
     <i class="bi bi-exclamation-triangle pe-1"></i> No year was selected.
 </div>

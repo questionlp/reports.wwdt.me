@@ -2,78 +2,110 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.aggregate_scores") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.appearances_by_year") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.appearances_by_year_grid") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.average_scores_by_year") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.average_scores_by_year_all") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.bluff_the_listener_statistics") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.bluff_the_listener_statistics_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.bluff_the_listener_panelist_statistics_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.debuts_by_year") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.first_appearance_wins") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.first_most_recent_appearances") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.highest_average_correct_answers_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.highest_average_scores_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.losing_streaks") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.most_chosen_bluff_the_listener_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.most_chosen_correct_bluff_the_listener_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.most_correct_bluff_the_listener_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.most_wins_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist_all") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.panelist_vs_panelist_scoring") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.perfect_score_counts") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.rankings_summary") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.single_appearance") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.statistics_by_gender") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.statistics_summary") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.win_streaks") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

@@ -10,7 +10,7 @@ from typing import Any
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
-from .common import retrieve_panelists
+from .common import retrieve_panelists, retrieve_panelists_by_year
 
 
 def empty_years_bluff(
@@ -131,6 +131,112 @@ def retrieve_panelist_bluff_counts(
     return counts
 
 
+def retrieve_panelist_bluff_counts_by_year(
+    show_year: int,
+    panelist_id: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> dict[str, Any]:
+    """Retrieves a dictionary containing Bluff the Listener counts for a panelist for a given year.
+
+    Returned is the number of times a panelist's Bluff story was chosen and the
+    number of times a panelist had the correct story.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT (
+        SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
+        LEFT JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
+        LEFT JOIN ww_shows s ON s.showid = blm.showid
+        WHERE blm.chosenbluffpnlid = %s
+        AND YEAR(s.showdate) = %s
+        AND s.repeatshowid IS NULL
+        AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
+        ) AS chosen, (
+        SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
+        LEFT JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        LEFT JOIN ww_shows s ON s.showid = blm.showid
+        WHERE blm.correctbluffpnlid = %s
+        AND YEAR(s.showdate) = %s
+        AND s.repeatshowid IS NULL
+        AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
+        ) AS correct;
+        """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(
+        query,
+        (
+            panelist_id,
+            show_year,
+            panelist_id,
+            show_year,
+        ),
+    )
+    result = cursor.fetchone()
+
+    counts = {}
+    if not result:
+        counts["chosen"] = 0
+        counts["correct"] = 0
+    else:
+        counts["chosen"] = result["chosen"]
+        counts["correct"] = result["correct"]
+
+    query = """
+        SELECT COUNT(s.showdate) as appearances
+        FROM ww_showpnlmap pm
+        LEFT JOIN ww_shows s ON s.showid = pm.showid
+        LEFT JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        WHERE pm.panelistid = %s
+        AND YEAR(s.showdate) = %s
+        AND s.repeatshowid IS NULL AND s.bestof = 0
+        AND (blm.chosenbluffpnlid IS NOT NULL
+        AND blm.correctbluffpnlid IS NOT NULL)
+        ORDER BY s.showdate ASC;
+        """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(
+        query,
+        (
+            panelist_id,
+            show_year,
+        ),
+    )
+    result = cursor.fetchone()
+    cursor.close()
+
+    counts["appearances"] = result["appearances"] if result else None
+
+    query = """
+        SELECT COUNT(s.showdate) as appearances
+        FROM ww_showpnlmap pm
+        LEFT JOIN ww_shows s ON s.showid = pm.showid
+        LEFT JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        WHERE pm.panelistid = %s
+        AND YEAR(s.showdate) = %s
+        AND s.repeatshowid IS NULL
+        AND s.bestof = 1 AND s.bestofuniquebluff = 1
+        AND (blm.chosenbluffpnlid IS NOT NULL
+        AND blm.correctbluffpnlid IS NOT NULL)
+        ORDER BY s.showdate ASC;
+        """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(
+        query,
+        (
+            panelist_id,
+            show_year,
+        ),
+    )
+    result = cursor.fetchone()
+    cursor.close()
+
+    counts["unique_best_of"] = result["appearances"] if result else None
+
+    return counts
+
+
 def retrieve_all_panelist_bluff_stats(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
@@ -145,7 +251,33 @@ def retrieve_all_panelist_bluff_stats(
         counts = retrieve_panelist_bluff_counts(
             panelist_id=panelist["id"], database_connection=database_connection
         )
-        if counts and (counts["correct"] or counts["chosen"]):
+        if counts:  # and (counts["correct"] or counts["chosen"]):
+            panelist.update(counts)
+            stats.append(panelist)
+
+    return stats
+
+
+def retrieve_all_panelist_bluff_stats_by_year(
+    show_year: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict[str, Any]]:
+    """Retrieves a list of Bluff the Listener statistics for all panelists for a given year."""
+    _panelists = retrieve_panelists_by_year(
+        show_year=show_year, database_connection=database_connection
+    )
+
+    if not _panelists:
+        return None
+
+    stats = []
+    for panelist in _panelists:
+        counts = retrieve_panelist_bluff_counts_by_year(
+            show_year=show_year,
+            panelist_id=panelist["id"],
+            database_connection=database_connection,
+        )
+        if counts:  # and (counts["correct"] or counts["chosen"]):
             panelist.update(counts)
             stats.append(panelist)
 
@@ -162,8 +294,8 @@ def retrieve_panelist_bluffs_by_year(
     query = """
         SELECT YEAR(s.showdate) AS year, count(blm.chosenbluffpnlid) AS chosen
         FROM ww_showbluffmap blm
-        JOIN ww_shows s ON s.showid = blm.showid
-        JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
+        LEFT JOIN ww_shows s ON s.showid = blm.showid
+        LEFT JOIN ww_panelists p ON p.panelistid = blm.chosenbluffpnlid
         WHERE p.panelistslug = %s
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
@@ -175,8 +307,8 @@ def retrieve_panelist_bluffs_by_year(
     query = """
         SELECT YEAR(s.showdate) AS year, count(blm.correctbluffpnlid) AS correct
         FROM ww_showbluffmap blm
-        JOIN ww_shows s ON s.showid = blm.showid
-        JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        LEFT JOIN ww_shows s ON s.showid = blm.showid
+        LEFT JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
         WHERE p.panelistslug = %s
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
@@ -188,9 +320,9 @@ def retrieve_panelist_bluffs_by_year(
     query = """
         SELECT YEAR(s.showdate) AS year, COUNT(s.showdate) AS appearances
         FROM ww_showpnlmap pm
-        JOIN ww_showbluffmap blm ON blm.showid = pm.showid
-        JOIN ww_shows s ON s.showid = pm.showid
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        LEFT JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        LEFT JOIN ww_shows s ON s.showid = pm.showid
+        LEFT JOIN ww_panelists p ON p.panelistid = pm.panelistid
         WHERE p.panelistslug = %s
         AND s.repeatshowid IS NULL AND s.bestof = 0
         AND (blm.chosenbluffpnlid IS NOT NULL
@@ -205,9 +337,9 @@ def retrieve_panelist_bluffs_by_year(
     query = """
         SELECT YEAR(s.showdate) AS year, COUNT(s.showdate) AS appearances
         FROM ww_showpnlmap pm
-        JOIN ww_showbluffmap blm ON blm.showid = pm.showid
-        JOIN ww_shows s ON s.showid = pm.showid
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        LEFT JOIN ww_showbluffmap blm ON blm.showid = pm.showid
+        LEFT JOIN ww_shows s ON s.showid = pm.showid
+        LEFT JOIN ww_panelists p ON p.panelistid = pm.panelistid
         WHERE p.panelistslug = %s
         AND s.repeatshowid IS NULL
         AND s.bestof = 1 AND s.bestofuniquebluff = 1
@@ -242,7 +374,7 @@ def retrieve_panelist_bluffs_by_year(
 def retrieve_most_chosen_by_year(
     show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int]]:
-    """Retrieve panelists with the most chosen Bluff for a given year.
+    """Retrieve panelists with the most chosen Bluff stories for a given year.
 
     Includes Bluff the Listener segments from regular shows and Best Of
     shows with unique Bluff the Listener segments.
@@ -290,7 +422,7 @@ def retrieve_most_chosen_by_year(
 def retrieve_most_correct_by_year(
     show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int]]:
-    """Retrieve panelists with the most correct Bluff for a given year.
+    """Retrieve panelists with the most correct Bluff stories for a given year.
 
     Includes Bluff the Listener segments from regular shows and Best Of
     shows with unique Bluff the Listener segments.
@@ -305,6 +437,55 @@ def retrieve_most_correct_by_year(
         JOIN ww_shows s ON s.showid = blm.showid
         JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
         WHERE YEAR(s.showdate) = %s
+        AND (
+            (s.bestof = 0 AND s.repeatshowid IS NULL)
+            OR
+            (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
+            s.repeatshowid IS NULL)
+            )
+        GROUP BY p.panelist, p.panelistslug
+        ORDER BY COUNT(blm.correctbluffpnlid) DESC, p.panelist ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_year,))
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    _counts = []
+    for row in results:
+        _counts.append(
+            {
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
+                "count": row["count"],
+            }
+        )
+
+    return _counts
+
+
+def retrieve_most_chosen_correct_by_year(
+    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+) -> list[dict[str, str | int]]:
+    """Retrieve panelists with the most chosen correct Bluff stories for a given year.
+
+    Includes Bluff the Listener segments from regular shows and Best Of
+    shows with unique Bluff the Listener segments.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelist, p.panelistslug,
+        COUNT(blm.correctbluffpnlid) AS count
+        FROM ww_showbluffmap blm
+        JOIN ww_shows s ON s.showid = blm.showid
+        JOIN ww_panelists p ON p.panelistid = blm.correctbluffpnlid
+        WHERE YEAR(s.showdate) = %s
+        AND blm.chosenbluffpnlid = blm.correctbluffpnlid
         AND (
             (s.bestof = 0 AND s.repeatshowid IS NULL)
             OR
