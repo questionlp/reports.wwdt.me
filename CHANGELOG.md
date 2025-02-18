@@ -1,5 +1,7 @@
 # Changes
 
+**Note:** Starting with version 3.3, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
+
 ## 3.2.0
 
 ### Application Changes
