@@ -13,7 +13,11 @@ from app.panelists.reports.debut_by_year import retrieve_show_years
 from .reports.appearances_by_year import retrieve_appearances_by_year
 from .reports.best_of_only import retrieve_best_of_only_guests
 from .reports.most_appearances import guest_multiple_appearances
-from .reports.scores import retrieve_all_scoring_exceptions, retrieve_all_three_pointers
+from .reports.scores import (
+    retrieve_all_missing_scores,
+    retrieve_all_scoring_exceptions,
+    retrieve_all_three_pointers,
+)
 from .reports.wins_by_year import retrieve_wins_by_year
 
 blueprint = Blueprint("guests", __name__, template_folder="templates")
@@ -90,6 +94,17 @@ def most_appearances() -> str:
     _guests = guest_multiple_appearances(database_connection=_database_connection)
     _database_connection.close()
     return render_template("guests/most-appearances.html", guests=_guests)
+
+
+@blueprint.route("/not-my-job-guests-missing-scores")
+def not_my_job_guests_missing_scores() -> str:
+    """View: Not My Job Guests with Missing Scores Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _guests = retrieve_all_missing_scores(database_connection=_database_connection)
+    _database_connection.close()
+    return render_template(
+        "guests/not-my-job-guests-missing-scores.html", guests=_guests
+    )
 
 
 @blueprint.route("/not-my-job-scoring-exceptions")

@@ -15,6 +15,7 @@
     - Fix: Filter out entries with guest slug of `none`
     - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
     - New Report: "Appearances by Year"
+    - New Report: "Not My Job Guests with Missing Scores"
     - New Report: "Wins by Year"
   - Hosts
     - New Report: "Appearances by Year"

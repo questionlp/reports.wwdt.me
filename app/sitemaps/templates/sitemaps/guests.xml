@@ -13,6 +13,10 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("guests.not_my_job_guests_missing_scores") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("guests.not_my_job_scoring_exceptions") }}</loc>
     <changefreq>weekly</changefreq>
   </url>

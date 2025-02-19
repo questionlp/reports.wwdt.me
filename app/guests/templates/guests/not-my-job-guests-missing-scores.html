@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% set page_title = "Not My Job Guests with Missing Scores" %}
+{% block title %}{{ page_title }} | Guests{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of Not My Job guests that do not have
+        scores entered for any given reason.
+    </p>
+    <p>
+        The goal for this report is highlight potentially missing data
+        that will need to be tracked down and for this report to eventually
+        return no data.
+    </p>
+</div>
+
+{% if guests %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="boolean">
+                    <col class="date">
+                    <col class="name guest">
+                    <col class="score">
+                    <col class="boolean">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat Of</th>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Scoring Exception</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for guest in guests %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ guest.date | replace('-', '/') }}">{{ guest.date }}</a></td>
+                        {% if guest.best_of %}
+                        <td>{{ guest.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if guest.repeat and guest.original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ guest.original_show_date | replace('-', '/') }}">{{ guest.original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
+                        {% if guest.score is not none %}
+                        <td>{{ guest.score }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if guest.exception %}
+                        <td>{{ guest.exception }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if guests | length >= 10 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat Of</th>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Scoring Exception</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

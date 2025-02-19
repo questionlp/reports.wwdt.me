@@ -56,6 +56,13 @@ def test_most_appearances(client: FlaskClient) -> None:
     assert b"Regular" in response.data
 
 
+def test_not_my_job_guests_missing_scores(client: FlaskClient) -> None:
+    """Testing guests.routes.not_my_job_missing_scores."""
+    response: TestResponse = client.get("/guests/not-my-job-guests-missing-scores")
+    assert response.status_code == 200
+    assert b"Not My Job Guests with Missing Scores" in response.data
+
+
 def test_not_my_job_scoring_exceptions(client: FlaskClient) -> None:
     """Testing guests.routes.not_my_job_scoring_exceptions."""
     response: TestResponse = client.get("/guests/not-my-job-scoring-exceptions")

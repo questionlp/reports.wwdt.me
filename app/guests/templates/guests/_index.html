@@ -61,6 +61,22 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('guests.not_my_job_guests_missing_scores') }}">Not My Job Guests with Missing Scores</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report provides a list of Not My Job guests that do not have
+                        scores entered for any given reason.
+                    </p>
+                    <p>
+                        The goal for this report is highlight potentially missing data
+                        that will need to be tracked down and for this report to eventually
+                        return no data.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">Not My Job Scoring Exceptions</a>
                 </h3>
                 <div class="description">
