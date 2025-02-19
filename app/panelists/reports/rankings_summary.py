@@ -43,7 +43,7 @@ def retrieve_rankings_by_panelist(
         WHERE pm.panelistid = %s AND pm.showpnlrank = '3' AND
         s.bestof = 0 and s.repeatshowid IS NULL
         ) AS third;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,

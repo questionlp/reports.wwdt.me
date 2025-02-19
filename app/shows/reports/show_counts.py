@@ -19,7 +19,7 @@ def retrieve_show_counts_by_year(
     query = """
         SELECT DISTINCT YEAR(showdate) AS 'year' FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -48,7 +48,7 @@ def retrieve_show_counts_by_year(
             (SELECT COUNT(showid) FROM ww_shows
                 WHERE YEAR(showdate) = %s AND showdate <= NOW()
                 AND bestof = 1 AND repeatshowid IS NOT NULL) AS 'repeat_bestof';
-            """
+        """
         cursor = database_connection.cursor(dictionary=True)
         cursor.execute(
             query,

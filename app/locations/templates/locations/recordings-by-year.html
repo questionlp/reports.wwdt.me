@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% set page_title = "Recordings by Year" %}
+{% block title %}{{ page_title }} | Locations{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-3">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a list of locations where shows have recorded
+        for a given year.
+    </p>
+    <p>
+        Guest appearances include appearances on regular shows and
+        unique appearances only on Best Of shows.
+    </p>
+</div>
+
+<div class="card report-form mb-5">
+    <div class="card-header">
+        Select a year to view location recordings.
+    </div>
+    <div class="card-body">
+        <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-auto">
+                <label for="year" class="visually-hidden">Year</label>
+                <select id="year" name="year" class="form-select" aria-label="Year selection">
+                    <option value="">-- Select a Year --</option>
+                    {% for _year in show_years %}
+                    {% if request.form.year and request.form.year | int == _year %}
+                    <option value="{{ _year }}" selected>{{ _year }}</option>
+                    {% else %}
+                    <option value="{{ _year }}">{{ _year }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <input type="submit" class="btn btn-submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if request.method == "POST" %}
+{% if year and recordings %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <h3 class="mt-0">{{ year }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name venue">
+                    <col class="name city">
+                    <col class="name state">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Venue</th>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">All Shows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for location in recordings %}
+                    {% set location_info = recordings[location] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/locations/{{ location_info.slug }}">{{ location_info.venue }}</td>
+                        {% if location_info.city is not none %}
+                        <td>{{ location_info.city }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if location_info.state is not none %}
+                        <td>{{ location_info.state }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if location_info.regular_recordings is not none %}
+                        <td>{{ location_info.regular_recordings }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if location_info.all_recordings is not none %}
+                        <td>{{ location_info.all_recordings }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if recordings | length >= 10 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Venue</th>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">All Shows</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% elif not request.form.year %}
+<div class="alert alert-warning my-5" role="alert">
+    <i class="bi bi-exclamation-triangle pe-1"></i> No year was selected.
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ year }}</b> is currently unavailable.
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock content %}

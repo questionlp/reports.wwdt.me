@@ -10,6 +10,8 @@ from typing import Any
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.shows.reports.show_details import retrieve_show_date_by_id
+
 from .stats_summary import retrieve_appearances_by_panelist
 
 
@@ -24,7 +26,7 @@ def retrieve_show_years(
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -44,14 +46,14 @@ def retrieve_show_info(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showid, s.bestof, h.host, sk.scorekeeper
+        SELECT s.showid, s.bestof, s.repeatshowid, h.host, sk.scorekeeper
         FROM ww_showhostmap hm
         JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_showskmap skm ON skm.showid = hm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate = %s;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_date,))
     result = cursor.fetchone()
@@ -63,6 +65,14 @@ def retrieve_show_info(
     return {
         "id": result["showid"],
         "best_of": bool(result["bestof"]),
+        "repeat": bool(result["repeatshowid"]),
+        "original_show_date": (
+            retrieve_show_date_by_id(
+                show_id=result["repeatshowid"], database_connection=database_connection
+            )
+            if result["repeatshowid"]
+            else None
+        ),
         "host": result["host"],
         "scorekeeper": result["scorekeeper"],
     }
@@ -82,7 +92,7 @@ def retrieve_show_guests(
         WHERE gm.showid = %s
         AND g.guestid <> 76
         ORDER BY gm.showguestmapid ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
@@ -110,7 +120,7 @@ def retrieve_panelists_first_shows(
         WHERE p.panelist <> '<Multiple>'
         GROUP BY p.panelistid
         ORDER BY MIN(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -136,6 +146,8 @@ def retrieve_panelists_first_shows(
             "show_id": show_info["id"],
             "year": row["year"],
             "best_of": show_info["best_of"],
+            "repeat": show_info["repeat"],
+            "original_show_date": show_info["original_show_date"],
             "regular_appearances": appearance_info["regular"],
             "host": show_info["host"],
             "scorekeeper": show_info["scorekeeper"],

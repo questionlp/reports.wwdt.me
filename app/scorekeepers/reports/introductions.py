@@ -8,6 +8,8 @@
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.shows.reports.show_details import retrieve_show_date_by_id
+
 
 def retrieve_scorekeepers_with_introductions(
     database_connection: MySQLConnection | PooledMySQLConnection,
@@ -24,7 +26,7 @@ def retrieve_scorekeepers_with_introductions(
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE skm.description IS NOT NULL
         ORDER BY sk.scorekeeper ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -69,7 +71,7 @@ def retrieve_all_scorekeeper_introductions(
             WHERE sk.scorekeeperid = %s
             AND skm.description IS NOT NULL
             ORDER BY s.showdate ASC;
-            """
+        """
         cursor.execute(query, (scorekeeper["id"],))
         result = cursor.fetchall()
 
@@ -80,7 +82,15 @@ def retrieve_all_scorekeeper_introductions(
                         "id": row["showid"],
                         "date": row["showdate"].isoformat(),
                         "best_of": bool(row["bestof"]),
-                        "repeat_show": bool(row["repeatshowid"]),
+                        "repeat": bool(row["repeatshowid"]),
+                        "original_show_date": (
+                            retrieve_show_date_by_id(
+                                show_id=row["repeatshowid"],
+                                database_connection=database_connection,
+                            )
+                            if row["repeatshowid"]
+                            else None
+                        ),
                         "introduction": row["description"],
                     }
                 )

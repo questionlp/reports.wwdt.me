@@ -28,7 +28,7 @@
                 <colgroup>
                     <col class="name guest">
                     <col class="date">
-                    <col class="boolean">
+                    <col class="date">
                     <col class="score">
                     <col class="boolean">
                 </colgroup>
@@ -36,7 +36,7 @@
                     <tr>
                         <th scope="col">Guest</th>
                         <th scope="col">Show Date</th>
-                        <th scope="col">Repeat Show</th>
+                        <th scope="col">Repeat Of</th>
                         <th scope="col">Score</th>
                         <th scope="col">Scoring Exception</th>
                     </tr>
@@ -47,9 +47,17 @@
                     <tr>
                         <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ guest.appearances[0].date | replace('-', '/') }}">{{ guest.appearances[0].date }}</a></td>
-                        <td>{{ guest.appearances[0].repeat_show }}</td>
+                        {% if guest.appearances[0].repeat and guest.appearances[0].original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ guest.appearances[0].original_show_date | replace('-', '/') }}">{{ guest.appearances[0].original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                         <td>{{ guest.appearances[0].score }}</td>
+                        {% if guest.appearances[0].exception %}
                         <td>{{ guest.appearances[0].exception }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                     </tr>
                     {% else %}
                         {% for count in range(0, guest.appearances | length) %}
@@ -58,9 +66,17 @@
                         <td rowspan="{{ guest.appearances | length }}"><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
                             {% endif %}
                         <td><a href="{{ stats_url }}/shows/{{ guest.appearances[count].date | replace('-', '/') }}">{{ guest.appearances[count].date }}</a></td>
-                        <td>{{ guest.appearances[count].repeat_show }}</td>
+                        {% if guest.appearances[count].repeat and guest.appearances[count].original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ guest.appearances[count].original_show_date | replace('-', '/') }}">{{ guest.appearances[count].original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                         <td>{{ guest.appearances[count].score }}</td>
+                        {% if guest.appearances[count].exception %}
                         <td>{{ guest.appearances[count].exception }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                     </tr>
                         {% endfor %}
                     {% endif %}

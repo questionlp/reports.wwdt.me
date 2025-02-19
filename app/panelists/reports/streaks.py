@@ -24,7 +24,7 @@ def retrieve_panelists(
         FROM ww_panelists p
         WHERE p.panelistid <> 17
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -70,7 +70,7 @@ def retrieve_panelist_ranks(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore_decimal IS NOT NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, pm.showpnlrank
@@ -80,7 +80,7 @@ def retrieve_panelist_ranks(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()

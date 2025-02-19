@@ -22,9 +22,9 @@ def retrieve_show_years(
         database_connection.reconnect()
 
     query = """
-    SELECT DISTINCT YEAR(showdate)
-    FROM ww_shows
-    ORDER BY YEAR(showdate) ASC;
+        SELECT DISTINCT YEAR(showdate)
+        FROM ww_shows
+        ORDER BY YEAR(showdate) ASC;
     """
     cursor = database_connection.cursor()
     cursor.execute(query)
@@ -68,7 +68,7 @@ def retrieve_scores_by_year_gender(
             AND p.panelistgender = %s
             AND YEAR(s.showdate) = %s
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
@@ -79,7 +79,7 @@ def retrieve_scores_by_year_gender(
             AND p.panelistgender = %s
             AND YEAR(s.showdate) = %s
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_gender, year))
     result = cursor.fetchall()

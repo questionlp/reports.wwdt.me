@@ -6,10 +6,13 @@
 """Locations Routes for Wait Wait Reports."""
 
 import mysql.connector
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, request
+
+from app.panelists.reports.debut_by_year import retrieve_show_years
 
 from .reports.average_scores import retrieve_average_scores_by_location
 from .reports.home_vs_away import retrieve_location_home_vs_away
+from .reports.recordings_by_year import retrieve_recording_counts_by_year
 
 blueprint = Blueprint("locations", __name__, template_folder="templates")
 
@@ -42,3 +45,52 @@ def home_vs_away() -> str:
         database_connection=_database_connection
     )
     return render_template("locations/home-vs-away.html", show_counts=_show_counts)
+
+
+@blueprint.route("/recordings-by-year", methods=["GET", "POST"])
+def recordings_by_year() -> str:
+    """View: Recordings by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "locations/recordings-by-year.html",
+                show_years=_show_years,
+                recordings=None,
+            )
+
+        _recordings = retrieve_recording_counts_by_year(
+            year=year,
+            database_connection=_database_connection,
+        )
+        if not _recordings:
+            _database_connection.close()
+            return render_template(
+                "locations/recordings-by-year.html",
+                show_years=_show_years,
+                recordings=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "locations/recordings-by-year.html",
+            show_years=_show_years,
+            year=year,
+            recordings=_recordings,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "locations/recordings-by-year.html", show_years=_show_years, recordings=None
+    )

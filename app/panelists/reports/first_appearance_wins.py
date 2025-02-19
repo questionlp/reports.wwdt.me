@@ -35,7 +35,7 @@ def retrieve_panelists_first_appearance_wins(
         AND s.repeatshowid IS NULL
         AND pm.showpnlrank IN ('1', '1t')
         ORDER BY p.panelistslug;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -61,7 +61,7 @@ def retrieve_panelists_first_appearance_wins(
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 ORDER BY s.showdate ASC
                 LIMIT 1;
-                """
+            """
         else:
             query = """
                 SELECT p.panelist, s.showid, s.showdate, pm.panelistlrndstart,
@@ -73,7 +73,7 @@ def retrieve_panelists_first_appearance_wins(
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 ORDER BY s.showdate ASC
                 LIMIT 1;
-                """
+            """
         cursor.execute(query, (panelist_slug,))
         result = cursor.fetchone()
         cursor.close()

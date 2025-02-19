@@ -44,7 +44,8 @@ def bluff_the_listener_statistics() -> Response:
 def bluff_the_listener_statistics_by_year() -> Response:
     """View: Panelists Bluff the Listener Statistics by Year Report Redirect."""
     return redirect_url(
-        url_for("panelists.bluff_the_listener_statistics_by_year"), status_code=301
+        url_for("panelists.bluff_the_listener_panelist_statistics_by_year"),
+        status_code=301,
     )
 
 

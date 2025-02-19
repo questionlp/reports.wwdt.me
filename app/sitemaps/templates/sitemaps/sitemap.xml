@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site_url }}{{ url_for("sitemaps.guests") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("sitemaps.hosts") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("sitemaps.locations") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("sitemaps.panelists") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("sitemaps.scorekeepers") }}</loc>

@@ -49,7 +49,11 @@
                         <td><a href="{{ stats_url }}/shows/{{ guest.show_date | replace('-', '/') }}">{{ guest.show_date }}</a></td>
                         <td>{{ guest.show_scorekeeper }}</td>
                         <td>{{ guest.score }}</td>
+                        {% if guest.exception %}
                         <td>{{ guest.exception }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                     {% if guest.exception and guest.show_notes %}
                         <td class="notes">{{ guest.show_notes | markdown | safe }}</td>
                     {% else %}

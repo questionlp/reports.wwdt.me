@@ -38,7 +38,7 @@ def retrieve_show_details(
         JOIN ww_showskmap skm ON skm.showid = hm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE hm.showid = %s;
-        """
+    """
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
 
@@ -58,7 +58,7 @@ def retrieve_show_details(
         JOIN ww_guests g ON g.guestid = gm.guestid
         JOIN ww_shows s ON s.showid = gm.showid
         WHERE gm.showid = %s;
-        """
+    """
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
 
@@ -78,12 +78,12 @@ def retrieve_show_details(
         show_details["guests"] = guests
 
     # Retrieve show location details
-    query = (
-        "SELECT l.city, l.state, l.venue "
-        "FROM ww_showlocationmap lm "
-        "JOIN ww_locations l ON l.locationid = lm.locationid "
-        "WHERE lm.showid = %s;"
-    )
+    query = """
+        SELECT l.city, l.state, l.venue
+        FROM ww_showlocationmap lm
+        JOIN ww_locations l ON l.locationid = lm.locationid
+        WHERE lm.showid = %s;
+    """
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
 
@@ -104,7 +104,7 @@ def retrieve_show_details(
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE pm.showid = %s
             ORDER BY pm.panelistscore_decimal DESC, pm.showpnlrank ASC;
-            """
+        """
     else:
         query = """
             SELECT p.panelist, pm.panelistscore
@@ -112,7 +112,7 @@ def retrieve_show_details(
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE pm.showid = %s
             ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
-            """
+        """
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -166,7 +166,7 @@ def retrieve_shows_all_high_scoring(
             GROUP BY s.showid
             HAVING SUM(pm.panelistscore_decimal) >= 50
             ORDER BY SUM(pm.panelistscore_decimal) DESC, s.showdate DESC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, SUM(pm.panelistscore) AS total
@@ -176,7 +176,7 @@ def retrieve_shows_all_high_scoring(
             GROUP BY s.showid
             HAVING SUM(pm.panelistscore) >= 50
             ORDER BY SUM(pm.panelistscore) DESC, s.showdate DESC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -232,7 +232,7 @@ def retrieve_shows_all_low_scoring(
             GROUP BY s.showid
             HAVING SUM(pm.panelistscore_decimal) < 30
             ORDER BY SUM(pm.panelistscore_decimal) ASC, s.showdate DESC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, SUM(pm.panelistscore) AS total
@@ -243,7 +243,7 @@ def retrieve_shows_all_low_scoring(
             GROUP BY s.showid
             HAVING SUM(pm.panelistscore) < 30
             ORDER BY SUM(pm.panelistscore) ASC, s.showdate DESC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -300,7 +300,7 @@ def retrieve_shows_panelist_score_sum_match(
             s.showdate <> '2018-10-27' AND
             pm.panelistscore_decimal IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore_decimal DESC;
-            """
+        """
     else:
         query = """
             SELECT s.showdate, pm.panelistid, p.panelist, p.panelistslug,
@@ -312,7 +312,7 @@ def retrieve_shows_panelist_score_sum_match(
             s.showdate <> '2018-10-27' AND
             pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore DESC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -396,7 +396,7 @@ def retrieve_shows_panelist_perfect_scores(
             WHERE pm.panelistscore_decimal >= 20
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showdate, p.panelist, p.panelistslug,
@@ -407,7 +407,7 @@ def retrieve_shows_panelist_perfect_scores(
             WHERE pm.panelistscore >= 20
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

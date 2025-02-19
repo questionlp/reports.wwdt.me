@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% set page_title = "Debuts by Year" %}
+{% block title %}{{ page_title }} | Scorekeepers{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-3">
+    <h2>{{ page_title }}</h2>
+    <p>
+        This report provides a break down of when scorekeepers made
+        their debut on the show, grouped by year.
+    </p>
+
+    {% if years and debuts %}
+    <ul id="year-list">
+        {% for year in years %}
+        <li><a href="#y{{ year }}">{{ year }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+{% if years and debuts %}
+{% for year in years %}
+<span id="y{{ year }}" class="invisible"></span>
+<div class="pt-4 pb-4">
+    <h3>{{ year }}</h3>
+    
+    {% if debuts[year] %}
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <p>
+                    <strong>Scorekeeper debuts:</strong> {{ debuts[year] | length }}
+                </p>
+                <table class="table table-bordered table-hover report">
+                    <colgroup>
+                        <col class="date">
+                        <col class="boolean">
+                        <col class="name host">
+                        <col class="count">
+                        <col class="name scorekeeper">
+                        <col class="name panelist">
+                        <col class="name guest">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th scope="col">Show</th>
+                            <th scope="col">Best Of</th>
+                            <th scope="col">Scorekeeper</th>
+                            <th scope="col"># of Regular Appearances</th>
+                            <th scope="col">Host</th>
+                            <th scope="col">Panelists</th>
+                            <th scope="col">Guest</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for debut in debuts[year] %}
+                        <tr>
+                            <td><a href="{{ stats_url }}/shows/{{ debut.show | replace('-', '/') }}">{{ debut.show }}</a></td>
+                            {% if debut.best_of %}
+                            <td>Best Of</td>
+                            {% else %}
+                            <td class="no-data">-</td>
+                            {% endif %}
+                            <td><a href="{{ stats_url }}/scorekeepers/{{ debut.scorekeeper_slug }}">{{ debut.scorekeeper_name }}</a></td>
+                            <td>{{ debut.regular_appearances }}</td>
+                            <td>{{ debut.host }}</td>
+                            {% if debut.panelists %}
+                            <td class="panelist-names">
+                                <ul class="no-bullets">
+                                {% for panelist in debut.panelists %}
+                                <li>{{ panelist.name }}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            {% else %}
+                            <td class="no-data">-</td>
+                            {% endif %}
+                            {% if debut.guests %}
+                            <td class="guest-names">
+                                <ul class="no-bullets">
+                                {% for guest in debut.guests %}
+                                <li>{{ guest }}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            {% else %}
+                            <td class="no-data">-</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="top-link">
+                    <a href="#main-content">&uarr; Top</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info my-3" role="alert">
+        <i class="bi bi-info-circle pe-1"></i> No scorekeepers made their debut in {{ year }}.
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

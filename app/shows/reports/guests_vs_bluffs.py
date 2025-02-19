@@ -34,7 +34,7 @@ def retrieve_not_my_job_stats(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND g.guestslug <> 'none'
         AND gm.guestscore IS NOT NULL;
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -55,7 +55,7 @@ def retrieve_not_my_job_stats(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND g.guestslug <> 'none'
         AND (gm.guestscore >= 2 OR gm.exception = 1);
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -76,7 +76,7 @@ def retrieve_not_my_job_stats(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND g.guestslug <> 'none'
         AND (gm.guestscore < 2 AND gm.exception = 0);
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -100,7 +100,7 @@ def retrieve_not_my_job_stats(
         FROM ww_showguestmap gm
         JOIN ww_shows s ON s.showid = gm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL );
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -122,7 +122,7 @@ def retrieve_not_my_job_stats(
             AND gm.guestid = %s
             ORDER BY s.showdate ASC
             LIMIT 1;
-            """
+        """
         cursor = database_connection.cursor(dictionary=True)
         cursor.execute(query, (guest_id,))
         result = cursor.fetchone()
@@ -174,7 +174,7 @@ def retrieve_bluff_stats(
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
             blm.chosenbluffpnlid IS NOT NULL AND blm.correctbluffpnlid IS NOT
             NULL);
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -193,7 +193,7 @@ def retrieve_bluff_stats(
         (s.bestof = 0 AND blm.chosenbluffpnlid = blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
             blm.chosenbluffpnlid = blm.correctbluffpnlid);
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -212,7 +212,7 @@ def retrieve_bluff_stats(
         (s.bestof = 0 AND blm.chosenbluffpnlid <> blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND blm.chosenbluffpnlid
             <> blm.correctbluffpnlid);
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     result = cursor.fetchone()
