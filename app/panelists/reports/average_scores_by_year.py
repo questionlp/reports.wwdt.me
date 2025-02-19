@@ -25,7 +25,7 @@ def empty_years_average(
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -58,7 +58,7 @@ def retrieve_panelist_yearly_average(
         FROM ww_panelists
         WHERE panelistslug = %s
         ORDER BY panelistslug ASC;
-        """
+    """
     cursor.execute(query, (panelist_slug,))
     result = cursor.fetchone()
     cursor.close()
@@ -84,7 +84,7 @@ def retrieve_panelist_yearly_average(
             AND s.showdate <> '2018-10-27'
             GROUP BY YEAR(s.showdate)
             ORDER BY YEAR(s.showdate) ASC;
-            """
+        """
     else:
         query = """
             SELECT YEAR(s.showdate) AS year, SUM(pm.panelistscore) AS total,
@@ -98,7 +98,7 @@ def retrieve_panelist_yearly_average(
             AND s.showdate <> '2018-10-27'
             GROUP BY YEAR(s.showdate)
             ORDER BY YEAR(s.showdate) ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist["slug"],))
     result = cursor.fetchall()
@@ -142,7 +142,7 @@ def retrieve_all_panelists_yearly_average(
         FROM ww_panelists
         WHERE panelistslug <> 'multiple'
         ORDER BY panelistslug ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()

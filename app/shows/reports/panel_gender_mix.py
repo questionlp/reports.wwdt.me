@@ -22,7 +22,7 @@ def retrieve_show_years(
     query = """
         SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -53,7 +53,7 @@ def retrieve_panel_gender_count_by_year(
             AND s.showdate <> '2018-10-27' -- Exclude 25th anniversary special
             GROUP BY s.showdate
             HAVING COUNT(p.panelistgender) = %s;
-            """
+        """
         cursor = database_connection.cursor(dictionary=False)
         cursor.execute(
             query,

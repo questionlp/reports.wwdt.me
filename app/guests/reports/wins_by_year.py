@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""WWDTM Guest Appearances by Year Report Functions."""
+"""WWDTM Guest Wins by Year Report Functions."""
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -11,10 +11,10 @@ from mysql.connector.pooling import PooledMySQLConnection
 from app.shows.reports.show_details import retrieve_show_date_by_id
 
 
-def retrieve_appearances_by_year(
+def retrieve_wins_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int | bool | None]]:
-    """Retrieve Not My Job guest appearances for a given year.
+    """Retrieve Not My Job guest wins for a given year.
 
     Results only include guests that have appeared on regular shows and
     unique guests who have only appeared on Best Of shows.
@@ -22,6 +22,8 @@ def retrieve_appearances_by_year(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
+    # Add exclusion of 1998-05-02 due to a scoring exception was made
+    # but not a win was not granted
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, g.guest,
         g.guestslug, gm.guestscore, gm.exception
@@ -51,6 +53,8 @@ def retrieve_appearances_by_year(
             )
         )
         AND g.guestslug <> 'none'
+        AND (gm.guestscore >= 2 OR gm.exception = 1)
+        AND (s.showdate <> '1998-05-02')
         ORDER BY s.showdate ASC;
     """
     cursor = database_connection.cursor(dictionary=True)

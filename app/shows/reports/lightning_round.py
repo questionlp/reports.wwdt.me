@@ -36,7 +36,7 @@ def retrieve_all_lightning_round_start(
             AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
             AND pm.panelistlrndstart_decimal IS NOT NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
@@ -48,7 +48,7 @@ def retrieve_all_lightning_round_start(
             AND s.showdate <> '2018-10-27' -- Excluding 25th anniversary special
             AND pm.panelistlrndstart IS NOT NULL
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -105,7 +105,7 @@ def retrieve_scoring_info_by_show_id(
             JOIN ww_showpnlmap pm ON pm.showid = s.showid
             WHERE s.showid = %s
             LIMIT 1;
-            """
+        """
     else:
         query = """
             SELECT s.showdate,
@@ -116,7 +116,7 @@ def retrieve_scoring_info_by_show_id(
             JOIN ww_showpnlmap pm ON pm.showid = s.showid
             WHERE s.showid = %s
             LIMIT 1;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
@@ -161,7 +161,7 @@ def retrieve_panelists_by_show_id(
         JOIN ww_shows s ON s.showid = pm.showid
         WHERE s.showid = %s
         ORDER BY pm.showpnlmapid ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
@@ -213,7 +213,7 @@ def shows_with_lightning_round_start_zero(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistlrndstart_decimal = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
@@ -227,7 +227,7 @@ def shows_with_lightning_round_start_zero(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistlrndstart = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -305,7 +305,7 @@ def shows_lightning_round_start_zero(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistlrndstart_decimal = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
@@ -319,7 +319,7 @@ def shows_lightning_round_start_zero(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistlrndstart = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -396,7 +396,7 @@ def shows_lightning_round_zero_correct(
             WHERE s.bestof = 0 AND s.repeatshowid IS null
             AND pm.panelistlrndcorrect_decimal = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate, p.panelistid, p.panelist,
@@ -410,7 +410,7 @@ def shows_lightning_round_zero_correct(
             WHERE s.bestof = 0 AND s.repeatshowid IS null
             AND pm.panelistlrndcorrect = 0
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -488,7 +488,7 @@ def shows_lightning_round_answering_same_number_correct(
             pm.panelistlrndcorrect_decimal
             HAVING COUNT(pm.panelistlrndcorrect_decimal) = 3
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate,
@@ -502,7 +502,7 @@ def shows_lightning_round_answering_same_number_correct(
             GROUP BY s.showid, pm.panelistlrndcorrect
             HAVING COUNT(pm.panelistlrndcorrect) = 3
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -596,7 +596,7 @@ def shows_ending_with_three_way_tie(
             GROUP BY s.showid, pm.panelistscore, pm.panelistscore_decimal
             HAVING COUNT(pm.showpnlrank) = 3
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT s.showid, s.showdate,
@@ -610,7 +610,7 @@ def shows_ending_with_three_way_tie(
             GROUP BY s.showid, pm.panelistscore
             HAVING COUNT(pm.showpnlrank) = 3
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

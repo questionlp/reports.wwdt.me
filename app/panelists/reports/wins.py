@@ -10,7 +10,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_most_outright_wins_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str | int] | None:
     """Retrieve panelists with the most outright wins for a given year.
 
@@ -32,7 +32,7 @@ def retrieve_most_outright_wins_by_year(
         ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
 
     if not results:
@@ -50,7 +50,7 @@ def retrieve_most_outright_wins_by_year(
 
 
 def retrieve_most_outright_wins_plus_ties_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str | int] | None:
     """Retrieve panelists with the most outright wins plus ties for first place for a given year.
 
@@ -72,7 +72,7 @@ def retrieve_most_outright_wins_plus_ties_by_year(
         ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
 
     if not results:
@@ -90,7 +90,7 @@ def retrieve_most_outright_wins_plus_ties_by_year(
 
 
 def retrieve_combined_outright_wins_ties_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str | int] | None:
     """Retrieves a combined dictionary of panelists and counts of wins/ties for a given year.
 
@@ -101,13 +101,13 @@ def retrieve_combined_outright_wins_ties_by_year(
         database_connection.reconnect()
 
     _wins_ties = retrieve_most_outright_wins_plus_ties_by_year(
-        show_year=show_year, database_connection=database_connection
+        year=year, database_connection=database_connection
     )
     if not _wins_ties:
         return None
 
     _outright_wins = retrieve_most_outright_wins_by_year(
-        show_year=show_year, database_connection=database_connection
+        year=year, database_connection=database_connection
     )
     if not _outright_wins:
         return None

@@ -50,7 +50,7 @@ def retrieve_appearances_by_panelist(
             s.repeatshowid IS NULL
             AND pm.panelistscore_decimal IS NOT NULL )
             AS with_scores;
-            """
+        """
     else:
         query = """
             SELECT (
@@ -70,7 +70,7 @@ def retrieve_appearances_by_panelist(
             s.repeatshowid IS NULL
             AND pm.panelistscore IS NOT NULL )
             AS with_scores;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -116,7 +116,7 @@ def retrieve_scores_by_panelist(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND p.panelistslug = %s
             AND pm.panelistscore_decimal IS NOT NULL;
-            """
+        """
     else:
         query = """
             SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
@@ -125,7 +125,7 @@ def retrieve_scores_by_panelist(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND p.panelistslug = %s
             AND pm.panelistscore IS NOT NULL;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     result = cursor.fetchall()

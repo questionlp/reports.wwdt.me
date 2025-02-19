@@ -19,7 +19,7 @@ def retrieve_location_home_vs_away(
     query = """
         SELECT DISTINCT YEAR(showdate) FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     results = cursor.fetchall()
@@ -62,7 +62,7 @@ def retrieve_location_home_vs_away(
                 AND s.repeatshowid IS NULL
                 AND lm.locationid = 148
             ) AS 'studios';
-            """
+        """
         cursor = database_connection.cursor(dictionary=True)
         cursor.execute(
             query,

@@ -35,7 +35,7 @@ def retrieve_single_appearances(
         GROUP BY p.panelistid
         HAVING COUNT(p.panelistid) = 1
         ORDER BY p.panelistid;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     results = cursor.fetchall()
@@ -58,7 +58,7 @@ def retrieve_single_appearances(
             WHERE pm.panelistid IN ({", ".join(str(ids) for ids in list_panelists)})
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY p.panelist ASC;
-            """
+        """
     else:
         query = f"""
             SELECT p.panelist, p.panelistslug, s.showdate,
@@ -68,7 +68,7 @@ def retrieve_single_appearances(
             WHERE pm.panelistid IN ({", ".join(str(ids) for ids in list_panelists)})
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY p.panelist ASC;
-            """
+        """
 
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)

@@ -70,3 +70,25 @@ def test_not_my_job_three_pointers(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Not My Job Three Pointers" in response.data
     assert b"Scoring Exception" in response.data
+
+
+def test_wins_by_year(client: FlaskClient) -> None:
+    """Testing guests.routes.wins_by_year."""
+    response: TestResponse = client.get("/guests/wins-by-year")
+    assert response.status_code == 200
+    assert b"Wins by Year" in response.data
+    assert b"Select a Year" in response.data
+
+
+@pytest.mark.parametrize("year", [1998, 2018])
+def test_wins_by_year_post(client: FlaskClient, year: int) -> None:
+    """Testing guests.routes.wins_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/guests/wins-by-year",
+        data={"year": year},
+    )
+    assert response.status_code == 200
+    assert b"Wins by Year" in response.data
+    assert b"Select a Year" in response.data
+    assert b"Show Date" in response.data
+    assert b"Scoring Exception" in response.data

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Shows with a Guest Scorekeeper" %}
+{% set page_title = "Repeat Shows" %}
 {% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
@@ -13,41 +13,59 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a list of all shows, including Best Of and Repeat
-        shows, that have a guest scorekeeper.
+        This reports provides a list of all repeat shows that have been
+        broadcasted. The list does not include any pledge specials shows or
+        special shows that were not aired in their original form.
     </p>
 </div>
 
 {% if shows %}
+<div class="mb-3">
+    <span class="pe-2"><b>Sort Order:</b></span>
+    {% if ascending %}
+    <b>Ascending</b>
+    <div class="vr mx-2"></div>
+    <a href="{{ url_for('shows.repeat_shows', sort='desc') }}">Descending</a>
+    {% else %}
+    <a href="{{ url_for('shows.repeat_shows') }}">Ascending</a>
+    <div class="vr mx-2"></div>
+    <b>Descending</b>
+    {% endif %}
+    </ul>
+</div>
+
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
                 <colgroup>
+                    <col class="count">
                     <col class="date">
                     <col class="boolean">
                     <col class="date">
+                    <col class="name venue">
                     <col class="name host">
                     <col class="name scorekeeper">
-                    <col class="venue">
                     <col class="name panelist">
                     <col class="name guest">
                 </colgroup>
                 <thead>
                     <tr>
+                        <th scope="col">#</th>
                         <th scope="col">Date</th>
                         <th scope="col">Best Of</th>
                         <th scope="col">Repeat Of</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Host</th>
                         <th scope="col">Scorekeeper</th>
-                        <th scope="col">Location</th>
                         <th scope="col">Panelists</th>
-                        <th scope="col">Guest(s)</th>
+                        <th scope="col">Guest</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for show in shows %}
                     <tr>
+                        <td>{{ show.count }}</td>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
                         {% if show.best_of %}
                         <td>{{ show.best_of }}</td>
@@ -55,16 +73,10 @@
                         <td class="no-data">-</td>
                         {% endif %}
                         {% if show.repeat and show.original_show_date is not none %}
-                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{show.original_show_date }}</a></td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        {% if show.host_guest %}
-                        <td><b>{{ show.host }}</b></td>
-                        {% else %}
-                        <td>{{ show.host }}</td>
-                        {% endif %}
-                        <td>{{ show.scorekeeper }}</td>
                         {% if show.location.venue and show.location.city and show.location.city %}
                         <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
                         {% elif show.location.venue and (not show.location.city or not show.location.state) %}
@@ -74,8 +86,10 @@
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
+                        <td>{{ show.host }}</td>
+                        <td>{{ show.scorekeeper }}</td>
                         {% if show.panelists %}
-                        <td>
+                        <td class="panelist-names">
                             <ul class="no-bullets">
                                 {% for panelist in show.panelists %}
                                 <li>{{ panelist.name }}</li>
@@ -86,7 +100,7 @@
                         <td class="no-data">-</td>
                         {% endif %}
                         {% if show.guests %}
-                        <td>
+                        <td class="guest-names">
                             <ul class="no-bullets">
                                 {% for guest in show.guests %}
                                 <li>{{ guest.name }}</li>
@@ -101,6 +115,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th scope="col">#</th>
                         <th scope="col">Date</th>
                         <th scope="col">Best Of</th>
                         <th scope="col">Repeat Of</th>

@@ -6,10 +6,16 @@
 
 ### Application Changes
 
+- Wrap all report description on Guests, Hosts, Locations, Panelists, Scorekeepers and Shows index pages in `p` tags for consistency
+- Break out the "Best Of/Repeat" column into "Best Of" and "Repeat Of" columns, where the "Repeat Of" column will show the original show date for repeat shows
+- Display the original show date instead of `True` for repeat shows
+- For columns that previously displayed `True` or `False`, replace `False` with a hyphen to reduce visual noise
 - Adding new or updating existing reports
   - Guests
+    - Fix: Filter out entries with guest slug of `none`
     - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
     - New Report: "Appearances by Year"
+    - New Report: "Wins by Year"
   - Hosts
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"
@@ -31,6 +37,13 @@
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"
     - New Report: "Debuts by Year"
+  - Shows
+    - Update: Add "Best Of" and "Repeat Of" columns to the following reports:
+      - "Show Descriptions"
+      - "Show Notes"
+    - New Report: "Best Of Shows"
+    - New Report: "Repeat Best Of Shows"
+    - New Report: "Repeat Shows"
 - Add missing configuration handling for the following settings:
   - `block_ai_scrapers`
   - `use_minified_css`
@@ -39,6 +52,7 @@
 ### Development Changes
 
 - Upgrade ruff from 0.9.4 to 0.9.6
+- Added test case for `errors.not_found`
 
 ## 3.1.0
 

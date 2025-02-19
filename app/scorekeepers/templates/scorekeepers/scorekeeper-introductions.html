@@ -38,14 +38,14 @@
                 <colgroup>
                     <col class="date">
                     <col class="boolean">
-                    <col class="boolean">
+                    <col class="date">
                     <col class="introduction">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Show Date</th>
                         <th scope="col">Best Of</th>
-                        <th scope="col">Repeat</th>
+                        <th scope="col">Repeat Of</th>
                         <th scope="col">Introduction</th>
                     </tr>
                 </thead>
@@ -53,8 +53,16 @@
                     {% for show in introductions[scorekeeper.id] %}
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.best_of %}
                         <td>{{ show.best_of }}</td>
-                        <td>{{ show.repeat_show }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.repeat and show.original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                         <td>{{ show.introduction }}</td>
                     </tr>
                     {% endfor %}
@@ -63,7 +71,7 @@
                     <tr>
                         <th scope="col">Show Date</th>
                         <th scope="col">Best Of</th>
-                        <th scope="col">Repeat</th>
+                        <th scope="col">Repeat Of</th>
                         <th scope="col">Introduction</th>
                     </tr>
                 </tfoot>

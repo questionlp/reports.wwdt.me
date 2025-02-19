@@ -22,9 +22,11 @@
                     <a href="{{ url_for('shows.all_shows') }}">All Shows</a>
                 </h3>
                 <div class="description">
-                    This reports provides a list of all shows that have been broadcasted,
-                    including Best Of and Repeat shows. The list does not include any pledge
-                    specials shows or special shows that were not aired in their original form.
+                    <p>
+                        This reports provides a list of all shows that have been broadcasted,
+                        including Best Of and Repeat shows. The list does not include any pledge
+                        specials shows or special shows that were not aired in their original form.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -32,7 +34,22 @@
                     <a href="{{ url_for('shows.all_women_panel') }}">All Women Panel</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows that have an all women panel.
+                    <p>
+                        This report provides a list of shows that have an all women panel.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.best_of_shows') }}">Best Of Shows</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This reports provides a list of all Best Of shows that have been
+                        broadcasted, including repeat Best Of shows. The list does not include
+                        any pledge specials shows or special shows that were not aired in their
+                        original form.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -40,9 +57,11 @@
                     <a href="{{ url_for('shows.high_scoring_shows') }}">High Scoring Shows</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which the total score for all
-                    three panelists is greater than or equal to 50, listed in descending
-                    order.
+                    <p>
+                        This report provides a list of shows in which the total score for all
+                        three panelists is greater than or equal to 50, listed in descending
+                        order.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -51,8 +70,10 @@
                         Score Equals the Sum of Other Scores</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which the highest panelist
-                    total score matches the sum of the two other panelists' scores.
+                    <p>
+                        This report provides a list of shows in which the highest panelist
+                        total score matches the sum of the two other panelists' scores.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -61,8 +82,10 @@
                         Round Ending in a Three-Way Tie</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    finished the Lightning Fill-in-the Blank segment in a three-way tie.
+                    <p>
+                        This report provides a list of shows in which all three panelists
+                        finished the Lightning Fill-in-the Blank segment in a three-way tie.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -71,9 +94,11 @@
                         Round All Panelists Answering the Same Number of Questions Correct</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    answered the same number of Lightning Fill-in-the-Blank questions
-                    correct.
+                    <p>
+                        This report provides a list of shows in which all three panelists
+                        answered the same number of Lightning Fill-in-the-Blank questions
+                        correct.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -82,9 +107,11 @@
                         Round Starting and Ending in a Three-Way Tie</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
-                    three-way tie.
+                    <p>
+                        This report provides a list of shows in which all three panelists
+                        started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
+                        three-way tie.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -93,8 +120,10 @@
                         Round Starting in a Three-Way Tie</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    started the Lightning Fill-in-the Blank segment in a three-way tie.
+                    <p>
+                        This report provides a list of shows in which all three panelists
+                        started the Lightning Fill-in-the Blank segment in a three-way tie.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -103,8 +132,10 @@
                         Round Starting with Zero Points</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which a panelist started the
-                    Lightning Fill-in-the Blank segment with zero points.
+                    <p>
+                        This report provides a list of shows in which a panelist started the
+                        Lightning Fill-in-the Blank segment with zero points.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -113,8 +144,10 @@
                         Round with Zero Correct Answers</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of shows in which a panelist answered zero
-                    Lightning Fill-in-the Blank questions correct.
+                    <p>
+                        This report provides a list of shows in which a panelist answered zero
+                        Lightning Fill-in-the Blank questions correct.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -159,8 +192,10 @@
                     <a href="{{ url_for('shows.original_shows') }}">Original Shows</a>
                 </h3>
                 <div class="description">
-                    This reports provides a list of original shows that have been broadcasted,
-                    which excludes Best Of and Repeat shows.
+                    <p>
+                        This reports provides a list of original shows that have been broadcasted,
+                        which excludes Best Of and Repeat shows.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -168,9 +203,35 @@
                     <a href="{{ url_for('shows.panel_gender_mix') }}">Panel Gender Mix</a>
                 </h3>
                 <div class="description">
-                    This report provides a break down of the gender mix of panels for all
-                    broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
-                    and the 25th Anniversary Special.
+                    <p>
+                        This report provides a break down of the gender mix of panels for all
+                        broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
+                        and the 25th Anniversary Special.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.repeat_best_of_shows') }}">Repeat Best Of Shows</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This reports provides a list of all repeat Best Of shows that have been
+                        broadcasted. The list does not include any pledge specials shows or
+                        special shows that were not aired in their original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.repeat_shows') }}">Repeat Shows</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This reports provides a list of all repeat shows that have been
+                        broadcasted. The list does not include any pledge specials shows or
+                        special shows that were not aired in their original form.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -209,7 +270,9 @@
                     <a href="{{ url_for('shows.show_descriptions') }}">Show Descriptions</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of show descriptions for all shows.
+                    <p>
+                        This report provides a list of show descriptions for all shows.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -217,7 +280,9 @@
                     <a href="{{ url_for('shows.show_notes') }}">Show Notes</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of show notes for all shows.
+                    <p>
+                        This report provides a list of show notes for all shows.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -225,8 +290,10 @@
                     <a href="{{ url_for('shows.shows_with_guest_host') }}">Shows with a Guest Host</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have a guest host.
+                    <p>
+                        This report provides a list of all shows, including Best Of and Repeat
+                        shows, that have a guest host.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -235,8 +302,10 @@
                         and a Guest Scorekeeper</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have both a guest host and a guest scorekeeper.
+                    <p>
+                        This report provides a list of all shows, including Best Of and Repeat
+                        shows, that have both a guest host and a guest scorekeeper.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -245,8 +314,10 @@
                         Scorekeeper</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have a guest scorekeeper.
+                    <p>
+                        This report provides a list of all shows, including Best Of and Repeat
+                        shows, that have a guest scorekeeper.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">

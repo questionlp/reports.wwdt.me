@@ -49,7 +49,7 @@ def retrieve_first_most_recent_appearances(
         AND p.panelist <> '<Multiple>'
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -73,7 +73,7 @@ def retrieve_first_most_recent_appearances(
         AND p.panelist <> '<Multiple>'
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -93,7 +93,7 @@ def retrieve_first_most_recent_appearances(
         WHERE p.panelist <> '<Multiple>'
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -114,7 +114,7 @@ def retrieve_first_most_recent_appearances(
         WHERE p.panelist <> '<Multiple>'
         GROUP BY p.panelistid
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

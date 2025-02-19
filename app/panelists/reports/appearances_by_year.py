@@ -95,7 +95,7 @@ def retrieve_panelist_appearance_counts(
         AND s.repeatshowid IS NULL
         GROUP BY p.panelist, YEAR(s.showdate)
         ORDER BY p.panelist ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()
@@ -132,7 +132,7 @@ def retrieve_panelist_appearance_counts_all(
         WHERE pm.panelistid = %s
         GROUP BY p.panelist, YEAR(s.showdate)
         ORDER BY p.panelist ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()
@@ -165,7 +165,7 @@ def retrieve_all_appearance_counts(
         JOIN ww_shows s ON s.showid = pm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         ORDER BY p.panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -230,7 +230,7 @@ def retrieve_all_years(
     query = """
         SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()

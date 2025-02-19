@@ -95,7 +95,7 @@ def retrieve_scorekeeper_appearance_counts(
         AND s.repeatshowid IS NULL
         GROUP BY sk.scorekeeper, YEAR(s.showdate)
         ORDER BY sk.scorekeeper ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (scorekeeper_id,))
     results = cursor.fetchall()
@@ -132,7 +132,7 @@ def retrieve_scorekeeper_appearance_counts_all(
         WHERE skm.scorekeeperid = %s
         GROUP BY sk.scorekeeper, YEAR(s.showdate)
         ORDER BY sk.scorekeeper ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (scorekeeper_id,))
     result = cursor.fetchall()
@@ -165,7 +165,7 @@ def retrieve_all_appearance_counts(
         JOIN ww_shows s ON s.showid = skm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         ORDER BY sk.scorekeeper ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

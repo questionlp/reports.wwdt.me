@@ -26,7 +26,7 @@ def empty_years_bluff(
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -72,7 +72,7 @@ def retrieve_panelist_bluff_counts(
         AND s.repeatshowid IS NULL
         AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
         ) AS correct;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -101,7 +101,7 @@ def retrieve_panelist_bluff_counts(
         AND (blm.chosenbluffpnlid IS NOT NULL
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
@@ -120,7 +120,7 @@ def retrieve_panelist_bluff_counts(
         AND (blm.chosenbluffpnlid IS NOT NULL
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchone()
@@ -132,7 +132,7 @@ def retrieve_panelist_bluff_counts(
 
 
 def retrieve_panelist_bluff_counts_by_year(
-    show_year: int,
+    year: int,
     panelist_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
@@ -162,15 +162,15 @@ def retrieve_panelist_bluff_counts_by_year(
         AND s.repeatshowid IS NULL
         AND (s.bestof = 0 OR (s.bestof = 1 AND s.bestofuniquebluff = 1))
         ) AS correct;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
             panelist_id,
-            show_year,
+            year,
             panelist_id,
-            show_year,
+            year,
         ),
     )
     result = cursor.fetchone()
@@ -194,13 +194,13 @@ def retrieve_panelist_bluff_counts_by_year(
         AND (blm.chosenbluffpnlid IS NOT NULL
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
             panelist_id,
-            show_year,
+            year,
         ),
     )
     result = cursor.fetchone()
@@ -220,13 +220,13 @@ def retrieve_panelist_bluff_counts_by_year(
         AND (blm.chosenbluffpnlid IS NOT NULL
         AND blm.correctbluffpnlid IS NOT NULL)
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
         (
             panelist_id,
-            show_year,
+            year,
         ),
     )
     result = cursor.fetchone()
@@ -251,7 +251,7 @@ def retrieve_all_panelist_bluff_stats(
         counts = retrieve_panelist_bluff_counts(
             panelist_id=panelist["id"], database_connection=database_connection
         )
-        if counts:  # and (counts["correct"] or counts["chosen"]):
+        if counts:
             panelist.update(counts)
             stats.append(panelist)
 
@@ -259,12 +259,12 @@ def retrieve_all_panelist_bluff_stats(
 
 
 def retrieve_all_panelist_bluff_stats_by_year(
-    show_year: int,
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of Bluff the Listener statistics for all panelists for a given year."""
     _panelists = retrieve_panelists_by_year(
-        show_year=show_year, database_connection=database_connection
+        year=year, database_connection=database_connection
     )
 
     if not _panelists:
@@ -273,11 +273,11 @@ def retrieve_all_panelist_bluff_stats_by_year(
     stats = []
     for panelist in _panelists:
         counts = retrieve_panelist_bluff_counts_by_year(
-            show_year=show_year,
+            year=year,
             panelist_id=panelist["id"],
             database_connection=database_connection,
         )
-        if counts:  # and (counts["correct"] or counts["chosen"]):
+        if counts:
             panelist.update(counts)
             stats.append(panelist)
 
@@ -299,7 +299,7 @@ def retrieve_panelist_bluffs_by_year(
         WHERE p.panelistslug = %s
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     chosen_results = cursor.fetchall()
@@ -312,7 +312,7 @@ def retrieve_panelist_bluffs_by_year(
         WHERE p.panelistslug = %s
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     correct_results = cursor.fetchall()
@@ -329,7 +329,7 @@ def retrieve_panelist_bluffs_by_year(
         AND blm.correctbluffpnlid IS NOT NULL)
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     appearance_results = cursor.fetchall()
@@ -347,7 +347,7 @@ def retrieve_panelist_bluffs_by_year(
         AND blm.correctbluffpnlid IS NOT NULL)
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug,))
     unique_bluff_appearance_results = cursor.fetchall()
@@ -372,7 +372,7 @@ def retrieve_panelist_bluffs_by_year(
 
 
 def retrieve_most_chosen_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int]]:
     """Retrieve panelists with the most chosen Bluff stories for a given year.
 
@@ -399,7 +399,7 @@ def retrieve_most_chosen_by_year(
         ORDER BY COUNT(blm.chosenbluffpnlid) DESC, p.panelist ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
     cursor.close()
 
@@ -420,7 +420,7 @@ def retrieve_most_chosen_by_year(
 
 
 def retrieve_most_correct_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int]]:
     """Retrieve panelists with the most correct Bluff stories for a given year.
 
@@ -447,7 +447,7 @@ def retrieve_most_correct_by_year(
         ORDER BY COUNT(blm.correctbluffpnlid) DESC, p.panelist ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
     cursor.close()
 
@@ -468,7 +468,7 @@ def retrieve_most_correct_by_year(
 
 
 def retrieve_most_chosen_correct_by_year(
-    show_year: int, database_connection: MySQLConnection | PooledMySQLConnection
+    year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int]]:
     """Retrieve panelists with the most chosen correct Bluff stories for a given year.
 
@@ -496,7 +496,7 @@ def retrieve_most_chosen_correct_by_year(
         ORDER BY COUNT(blm.correctbluffpnlid) DESC, p.panelist ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
     cursor.close()
 

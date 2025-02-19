@@ -35,7 +35,7 @@ def retrieve_all_scores(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore_decimal IS NOT NULL
             ORDER BY pm.panelistscore_decimal ASC;
-            """
+        """
     else:
         query = """
             SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
@@ -43,7 +43,7 @@ def retrieve_all_scores(
             WHERE s.bestof = 0 AND s.repeatshowid IS NULL
             AND pm.panelistscore IS NOT NULL
             ORDER BY pm.panelistscore ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -79,7 +79,7 @@ def retrieve_score_spread(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             GROUP BY pm.panelistscore_decimal
             ORDER BY pm.panelistscore_decimal ASC;
-            """
+        """
     else:
         query = """
             SELECT pm.panelistscore AS score,
@@ -90,7 +90,7 @@ def retrieve_score_spread(
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             GROUP BY pm.panelistscore
             ORDER BY pm.panelistscore ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

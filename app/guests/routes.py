@@ -14,6 +14,7 @@ from .reports.appearances_by_year import retrieve_appearances_by_year
 from .reports.best_of_only import retrieve_best_of_only_guests
 from .reports.most_appearances import guest_multiple_appearances
 from .reports.scores import retrieve_all_scoring_exceptions, retrieve_all_three_pointers
+from .reports.wins_by_year import retrieve_wins_by_year
 
 blueprint = Blueprint("guests", __name__, template_folder="templates")
 
@@ -114,4 +115,53 @@ def not_my_job_three_pointers() -> str:
     _database_connection.close()
     return render_template(
         "guests/not-my-job-three-pointers.html", three_pointers=_three_pointers
+    )
+
+
+@blueprint.route("/wins-by-year", methods=["GET", "POST"])
+def wins_by_year() -> str:
+    """View: Wins by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "guests/wins-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _appearances = retrieve_wins_by_year(
+            year=year,
+            database_connection=_database_connection,
+        )
+        if not _appearances:
+            _database_connection.close()
+            return render_template(
+                "guests/wins-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "guests/wins-by-year.html",
+            show_years=_show_years,
+            year=year,
+            appearances=_appearances,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "guests/wins-by-year.html", show_years=_show_years, appearances=None
     )

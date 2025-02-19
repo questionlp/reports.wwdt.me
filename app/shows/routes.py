@@ -36,9 +36,14 @@ from .reports.search_multiple_panelists import (
     retrieve_panelists,
 )
 from .reports.show_counts import retrieve_show_counts_by_year
+from .reports.show_details import retrieve_all_best_of_shows as details_best_of_shows
 from .reports.show_details import (
     retrieve_all_original_shows as details_all_original_shows,
 )
+from .reports.show_details import (
+    retrieve_all_repeat_best_of_shows as details_repeat_best_of_shows,
+)
+from .reports.show_details import retrieve_all_repeat_shows as details_repeat_shows
 from .reports.show_details import retrieve_all_shows as details_all_shows
 
 blueprint = Blueprint("shows", __name__, template_folder="templates")
@@ -81,6 +86,28 @@ def all_women_panel() -> str:
     _database_connection.close()
 
     return render_template("shows/all-women-panel.html", shows=_shows)
+
+
+@blueprint.route("/best-of-shows")
+def best_of_shows() -> str:
+    """View: All Shows Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = details_best_of_shows(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/best-of-shows.html", shows=_shows, ascending=_ascending
+    )
 
 
 @blueprint.route("/high-scoring-shows")
@@ -257,6 +284,50 @@ def panel_gender_mix() -> str:
     _database_connection.close()
 
     return render_template("shows/panel-gender-mix.html", panel_gender_mix=_mix)
+
+
+@blueprint.route("/repeat-best-of-shows")
+def repeat_best_of_shows() -> str:
+    """View: All Shows Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = details_repeat_best_of_shows(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/repeat-best-of-shows.html", shows=_shows, ascending=_ascending
+    )
+
+
+@blueprint.route("/repeat-shows")
+def repeat_shows() -> str:
+    """View: All Shows Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = details_repeat_shows(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/repeat-shows.html", shows=_shows, ascending=_ascending
+    )
 
 
 @blueprint.route("/search-shows-by-multiple-panelists", methods=["GET", "POST"])

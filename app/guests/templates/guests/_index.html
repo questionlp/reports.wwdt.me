@@ -38,10 +38,12 @@
                     <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Best Of Only Not My Job Guests</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of Not My Job guests that have only appeared
-                    on Best Of shows and not on any regular show. These guests would have made
-                    their appearances on second live tapings when Wait Wait Don't Tell Me!
-                    travel to other cities.
+                    <p>
+                        This report provides a list of Not My Job guests that have only appeared
+                        on Best Of shows and not on any regular show. These guests would have made
+                        their appearances on second live tapings when Wait Wait Don't Tell Me!
+                        travel to other cities.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -49,10 +51,12 @@
                     <a href="{{ url_for('guests.most_appearances') }}">Most Appearances</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of Not My Job guests and the number of
-                    appearances that they have made across all shows and regular shows. The
-                    list is ordered based on the number of appearances for all shows in
-                    descending order.
+                    <p>
+                        This report provides a list of Not My Job guests and the number of
+                        appearances that they have made across all shows and regular shows. The
+                        list is ordered based on the number of appearances for all shows in
+                        descending order.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -60,10 +64,12 @@
                     <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">Not My Job Scoring Exceptions</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of Not My Job guests that have a scoring exception
-                    that allowed them to win the prize for the listener contestant, even though they
-                    didn't score 2 or more points. An exception is also noted if the guest was
-                    awarded a win or all 3 points no matter their actual score.
+                    <p>
+                        This report provides a list of Not My Job guests that have a scoring exception
+                        that allowed them to win the prize for the listener contestant, even though they
+                        didn't score 2 or more points. An exception is also noted if the guest was
+                        awarded a win or all 3 points no matter their actual score.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
@@ -71,9 +77,32 @@
                     <a href="{{ url_for('guests.not_my_job_three_pointers') }}">Not My Job Three Pointers</a>
                 </h3>
                 <div class="description">
-                    This report provides a list of all of the Not My Job guests who answered
-                    all three Not My Job questions correctly or were awarded all three points
-                    via a scoring exception.
+                    <p>
+                        This report provides a list of all of the Not My Job guests who answered
+                        all three Not My Job questions correctly or were awarded all three points
+                        via a scoring exception.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('guests.wins_by_year') }}">Wins by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report provides a list of Not My Job guests who scored a win
+                        by scoring 2 or more points or via a scoring exception for a
+                        given year.
+                    </p>
+                    <p>
+                        Guest appearances include appearances on regular shows and
+                        unique appearances only on Best Of shows.
+                    </p>
+                    <p>
+                        <b>Note:</b> While Susan Stamberg received a scoring exception on
+                        the <a href="{{ stats_url }}/shows/1998/5/2">1998-05-02</a> show, but
+                        Susan was not granted a win by Carl Kasell.
+                    </p>
                 </div>
             </li>
         </ul>

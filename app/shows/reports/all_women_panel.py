@@ -37,7 +37,7 @@ def retrieve_show_details(
         JOIN ww_showguestmap gm ON gm.showid = hm.showid
         JOIN ww_guests g ON g.guestid = gm.guestid
         WHERE hm.showid = %s;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
@@ -83,7 +83,7 @@ def retrieve_show_details(
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE pm.showid = %s
             ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
-            """
+        """
     else:
         query = """
             SELECT p.panelist, pm.panelistscore
@@ -91,7 +91,7 @@ def retrieve_show_details(
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             WHERE pm.showid = %s
             ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
-            """
+        """
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -147,7 +147,7 @@ def retrieve_shows_all_women_panel(
         GROUP BY pm.showid
         HAVING COUNT(s.showid) = 3
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

@@ -11,6 +11,29 @@ from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 
+def retrieve_show_date_by_id(
+    show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
+) -> str | None:
+    """Retrieve a show date for a given show ID."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT showdate FROM ww_shows
+        WHERE showid = %s
+        LIMIT 1;
+    """
+    cursor = database_connection.cursor(dictionary=False)
+    cursor.execute(query, (show_id,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if not result:
+        return None
+
+    return result[0].isoformat()
+
+
 def retrieve_show_guests(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str]]:
@@ -23,17 +46,17 @@ def retrieve_show_guests(
         FROM ww_showguestmap gm
         JOIN ww_guests g on g.guestid = gm.guestid
         WHERE gm.showid = %s;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
-    result = cursor.fetchall()
+    results = cursor.fetchall()
     cursor.close()
 
-    if not result:
+    if not results:
         return None
 
     guests = []
-    for row in result:
+    for row in results:
         guests.append(
             {
                 "id": row["guestid"],
@@ -58,17 +81,17 @@ def retrieve_show_panelists(
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
         WHERE pm.showid = %s
         ORDER BY pm.showpnlmapid ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
-    result = cursor.fetchall()
+    results = cursor.fetchall()
     cursor.close()
 
-    if not result:
+    if not results:
         return None
 
     panelists = []
-    for row in result:
+    for row in results:
         panelists.append(
             {
                 "id": row["panelistid"],
@@ -101,20 +124,20 @@ def retrieve_all_shows(
         JOIN ww_hosts h on h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
-        AND s.showdate < NOW()
+        WHERE s.showdate < NOW()
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
-    result = cursor.fetchall()
+    results = cursor.fetchall()
     cursor.close()
 
-    if not result:
+    if not results:
         return None
 
     shows = []
     show_count = 1
-    for row in result:
+    for row in results:
         shows.append(
             {
                 "count": show_count,
@@ -122,6 +145,86 @@ def retrieve_all_shows(
                 "date": row["showdate"],
                 "best_of": bool(row["bestof"]),
                 "repeat": bool(row["repeatshowid"]),
+                "original_show_date": (
+                    retrieve_show_date_by_id(
+                        show_id=row["repeatshowid"],
+                        database_connection=database_connection,
+                    )
+                    if row["repeatshowid"]
+                    else None
+                ),
+                "location": {
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
+                },
+                "host": row["host"],
+                "scorekeeper": row["scorekeeper"],
+                "guests": retrieve_show_guests(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
+                "panelists": retrieve_show_panelists(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
+            }
+        )
+
+        show_count += 1
+
+    return shows
+
+
+def retrieve_all_best_of_shows(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all Best Of shows and basic information.
+
+    Basic information for each show includes location, host,
+    scorekeeper, panelists and guest.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
+        l.venue, l.city, l.state, h.host, sk.scorekeeper
+        FROM ww_shows s
+        JOIN ww_showlocationmap lm ON lm.showid = s.showid
+        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_showhostmap hm ON hm.showid = s.showid
+        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = s.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE s.showdate < NOW()
+        AND s.bestof = 1
+        ORDER BY s.showdate ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    shows = []
+    show_count = 1
+    for row in results:
+        shows.append(
+            {
+                "count": show_count,
+                "id": row["showid"],
+                "date": row["showdate"],
+                "best_of": bool(row["bestof"]),
+                "repeat": bool(row["repeatshowid"]),
+                "original_show_date": (
+                    retrieve_show_date_by_id(
+                        show_id=row["repeatshowid"],
+                        database_connection=database_connection,
+                    )
+                    if row["repeatshowid"]
+                    else None
+                ),
                 "location": {
                     "venue": row["venue"],
                     "city": row["city"],
@@ -167,18 +270,18 @@ def retrieve_all_original_shows(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND s.showdate < NOW()
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
-    result = cursor.fetchall()
+    results = cursor.fetchall()
     cursor.close()
 
-    if not result:
+    if not results:
         return None
 
     shows = []
     show_count = 1
-    for row in result:
+    for row in results:
         guest = retrieve_show_guests(
             show_id=row["showid"], database_connection=database_connection
         )
@@ -201,6 +304,150 @@ def retrieve_all_original_shows(
                     show_id=row["showid"], database_connection=database_connection
                 ),
                 "guest": show_guest,
+            }
+        )
+
+        show_count += 1
+
+    return shows
+
+
+def retrieve_all_repeat_shows(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all Repeat shows and basic information.
+
+    Basic information for each show includes location, host,
+    scorekeeper, panelists and guest.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
+        l.venue, l.city, l.state, h.host, sk.scorekeeper
+        FROM ww_shows s
+        JOIN ww_showlocationmap lm ON lm.showid = s.showid
+        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_showhostmap hm ON hm.showid = s.showid
+        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = s.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE s.showdate < NOW()
+        AND s.repeatshowid IS NOT NULL
+        ORDER BY s.showdate ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    shows = []
+    show_count = 1
+    for row in results:
+        shows.append(
+            {
+                "count": show_count,
+                "id": row["showid"],
+                "date": row["showdate"],
+                "best_of": bool(row["bestof"]),
+                "repeat": bool(row["repeatshowid"]),
+                "original_show_date": (
+                    retrieve_show_date_by_id(
+                        show_id=row["repeatshowid"],
+                        database_connection=database_connection,
+                    )
+                    if row["repeatshowid"]
+                    else None
+                ),
+                "location": {
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
+                },
+                "host": row["host"],
+                "scorekeeper": row["scorekeeper"],
+                "guests": retrieve_show_guests(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
+                "panelists": retrieve_show_panelists(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
+            }
+        )
+
+        show_count += 1
+
+    return shows
+
+
+def retrieve_all_repeat_best_of_shows(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict[str, Any]]:
+    """Retrieve a list of all Repeat Best Of shows and basic information.
+
+    Basic information for each show includes location, host,
+    scorekeeper, panelists and guest.
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
+        l.venue, l.city, l.state, h.host, sk.scorekeeper
+        FROM ww_shows s
+        JOIN ww_showlocationmap lm ON lm.showid = s.showid
+        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_showhostmap hm ON hm.showid = s.showid
+        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = s.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        WHERE s.showdate < NOW()
+        AND s.bestof = 1 AND s.repeatshowid IS NOT NULL
+        ORDER BY s.showdate ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    shows = []
+    show_count = 1
+    for row in results:
+        shows.append(
+            {
+                "count": show_count,
+                "id": row["showid"],
+                "date": row["showdate"],
+                "best_of": bool(row["bestof"]),
+                "repeat": bool(row["repeatshowid"]),
+                "original_show_date": (
+                    retrieve_show_date_by_id(
+                        show_id=row["repeatshowid"],
+                        database_connection=database_connection,
+                    )
+                    if row["repeatshowid"]
+                    else None
+                ),
+                "location": {
+                    "venue": row["venue"],
+                    "city": row["city"],
+                    "state": row["state"],
+                },
+                "host": row["host"],
+                "scorekeeper": row["scorekeeper"],
+                "guests": retrieve_show_guests(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
+                "panelists": retrieve_show_panelists(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
             }
         )
 

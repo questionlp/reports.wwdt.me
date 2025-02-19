@@ -229,7 +229,7 @@ def bluff_the_listener_statistics_by_year() -> str:
             )
 
         _bluff_stats = retrieve_all_panelist_bluff_stats_by_year(
-            show_year=year, database_connection=_database_connection
+            year=year, database_connection=_database_connection
         )
         if not _bluff_stats:
             _database_connection.close()
@@ -370,7 +370,7 @@ def highest_average_correct_answers_by_year() -> str:
             )
 
         _score_stats = retrieve_highest_average_correct_answers_by_year(
-            show_year=year,
+            year=year,
             database_connection=_database_connection,
             use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
             exclude_single_appearances=_exclude_single,
@@ -426,7 +426,7 @@ def highest_average_scores_by_year() -> str:
             )
 
         _score_stats = retrieve_highest_average_scores_by_year(
-            show_year=year,
+            year=year,
             database_connection=_database_connection,
             use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
             exclude_single_appearances=_exclude_single,
@@ -491,7 +491,7 @@ def most_chosen_bluff_the_listener_by_year() -> str:
             )
 
         _bluff_stats = retrieve_most_chosen_by_year(
-            show_year=year, database_connection=_database_connection
+            year=year, database_connection=_database_connection
         )
         if not _bluff_stats:
             _database_connection.close()
@@ -543,7 +543,7 @@ def most_chosen_correct_bluff_the_listener_by_year() -> str:
             )
 
         _bluff_stats = retrieve_most_chosen_correct_by_year(
-            show_year=year, database_connection=_database_connection
+            year=year, database_connection=_database_connection
         )
         if not _bluff_stats:
             _database_connection.close()
@@ -593,7 +593,7 @@ def most_correct_bluff_the_listener_by_year() -> str:
             )
 
         _bluff_stats = retrieve_most_correct_by_year(
-            show_year=year, database_connection=_database_connection
+            year=year, database_connection=_database_connection
         )
         if not _bluff_stats:
             _database_connection.close()
@@ -643,7 +643,7 @@ def most_wins_by_year() -> str:
             )
 
         _win_stats = retrieve_combined_outright_wins_ties_by_year(
-            show_year=year, database_connection=_database_connection
+            year=year, database_connection=_database_connection
         )
         if not _win_stats:
             _database_connection.close()

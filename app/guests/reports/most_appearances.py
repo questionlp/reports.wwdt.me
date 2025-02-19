@@ -23,17 +23,17 @@ def retrieve_guest_most_appearances_all(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT g.guestid, g.guest, g.guestslug, "
-        "count(gm.showid) AS appearances "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "WHERE g.guest != '[None]' "
-        "GROUP BY g.guestid "
-        "HAVING count(gm.showid) > 1 "
-        "ORDER BY count(gm.showid) DESC;"
-    )
+    query = """
+        SELECT g.guestid, g.guest, g.guestslug,
+        count(gm.showid) AS appearances
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE g.guestslug <> 'none'
+        GROUP BY g.guestid
+        HAVING count(gm.showid) > 1
+        ORDER BY count(gm.showid) DESC;
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -66,16 +66,16 @@ def retrieve_guest_most_appearances_regular(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT g.guestid, g.guest, g.guestslug, "
-        "count(gm.showid) AS appearances "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "WHERE g.guest != '[None]' "
-        "AND s.bestof = 0 AND s.repeatshowid IS null "
-        "GROUP BY g.guestid;"
-    )
+    query = """
+        SELECT g.guestid, g.guest, g.guestslug,
+        count(gm.showid) AS appearances
+        FROM ww_showguestmap gm
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shows s ON s.showid = gm.showid
+        WHERE g.guestslug <> 'none'
+        AND s.bestof = 0 AND s.repeatshowid IS null
+        GROUP BY g.guestid;
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()

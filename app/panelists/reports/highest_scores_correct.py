@@ -10,7 +10,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_highest_average_scores_by_year(
-    show_year: int,
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
     exclude_single_appearances: bool = False,
@@ -87,7 +87,7 @@ def retrieve_highest_average_scores_by_year(
                 COUNT(pm.showid) DESC, p.panelist ASC;
             """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
 
     if not results:
@@ -106,7 +106,7 @@ def retrieve_highest_average_scores_by_year(
 
 
 def retrieve_highest_average_correct_answers_by_year(
-    show_year: int,
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
     use_decimal_scores: bool = False,
     exclude_single_appearances: bool = False,
@@ -181,7 +181,7 @@ def retrieve_highest_average_correct_answers_by_year(
                 ORDER BY AVG(pm.panelistlrndcorrect) DESC, p.panelist ASC;
             """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     results = cursor.fetchall()
 
     if not results:

@@ -34,7 +34,7 @@ def retrieve_panelists(
             WHERE pm.panelistscore_decimal IS NOT NULL
             AND p.panelist <> '<Multiple>'
             ORDER BY p.panelist ASC;
-            """
+        """
     else:
         query = """
             SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
@@ -43,7 +43,7 @@ def retrieve_panelists(
             WHERE pm.panelistscore IS NOT NULL
             AND p.panelist <> '<Multiple>'
             ORDER BY p.panelist ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -87,7 +87,7 @@ def retrieve_panelist_appearances(
                 AND s.bestof = 0
                 AND s.repeatshowid IS NULL
                 ORDER BY s.showdate ASC;
-                """
+            """
         else:
             query = """
                 SELECT s.showdate FROM ww_showpnlmap pm
@@ -98,7 +98,7 @@ def retrieve_panelist_appearances(
                 AND s.bestof = 0
                 AND s.repeatshowid IS NULL
                 ORDER BY s.showdate ASC;
-                """
+            """
         cursor = database_connection.cursor(dictionary=False)
         cursor.execute(query, (panelist_info["slug"],))
         result = cursor.fetchall()
@@ -138,7 +138,7 @@ def retrieve_show_scores(
             AND s.repeatshowid IS NULL
             AND pm.panelistscore_decimal IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore_decimal DESC;
-            """
+        """
     else:
         query = """
             SELECT s.showdate, p.panelistslug, pm.panelistscore AS score
@@ -149,7 +149,7 @@ def retrieve_show_scores(
             AND s.repeatshowid IS NULL
             AND pm.panelistscore IS NOT NULL
             ORDER BY s.showdate ASC, pm.panelistscore DESC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

@@ -24,7 +24,7 @@ def retrieve_hosts(
         FROM ww_hosts h
         WHERE h.host <> '(TBD)'
         ORDER BY h.hostslug ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -61,7 +61,7 @@ def retrieve_hosts_dict(
         FROM ww_hosts h
         WHERE h.host <> '(TBD)'
         ORDER BY h.hostid ASC;
-        """
+    """
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
@@ -98,7 +98,7 @@ def retrieve_appearances_by_host(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE h.hostslug = %s ) AS allshows;
-        """
+    """
     cursor.execute(
         query,
         (
@@ -137,7 +137,7 @@ def retrieve_first_most_recent_appearances(
         WHERE h.hostslug = %s
         AND s.bestof = 0
         AND s.repeatshowid IS null;
-        """
+    """
     cursor.execute(query, (host_slug,))
     result = cursor.fetchone()
     cursor.close()
@@ -155,7 +155,7 @@ def retrieve_first_most_recent_appearances(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE h.hostslug = %s;
-        """
+    """
     cursor.execute(query, (host_slug,))
     result_all = cursor.fetchone()
     cursor.close()

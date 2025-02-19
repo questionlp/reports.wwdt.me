@@ -9,6 +9,10 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("shows.best_of_shows") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("shows.high_scoring_shows") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
@@ -46,6 +50,14 @@
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("shows.panel_gender_mix") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.repeat_best_of_shows") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.repeat_shows") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>

@@ -19,18 +19,18 @@ def retrieve_scoring_exceptions(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT g.guestid, g.guest, s.showid, s.showdate, "
-        "gm.guestscore, gm.exception, sn.shownotes "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shownotes sn on sn.showid = gm.showid "
-        "WHERE g.guestid = %s "
-        "AND s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND gm.exception = 1 "
-        "ORDER BY s.showdate ASC;"
-    )
+    query = """
+        SELECT g.guestid, g.guest, s.showid, s.showdate,
+        gm.guestscore, gm.exception, sn.shownotes
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shownotes sn on sn.showid = gm.showid
+        WHERE g.guestid = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND gm.exception = 1
+        ORDER BY s.showdate ASC;
+    """
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -61,18 +61,18 @@ def retrieve_guest_scores(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT g.guestid, g.guest, s.showid, s.showdate, "
-        "gm.guestscore, gm.exception, sn.shownotes "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "JOIN ww_shownotes sn on sn.showid = gm.showid "
-        "WHERE g.guestid = %s "
-        "AND s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND gm.exception = 1 "
-        "ORDER BY s.showdate ASC;"
-    )
+    query = """
+        SELECT g.guestid, g.guest, s.showid, s.showdate,
+        gm.guestscore, gm.exception, sn.shownotes
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shownotes sn on sn.showid = gm.showid
+        WHERE g.guestid = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND gm.exception = 1
+        ORDER BY s.showdate ASC;
+    """
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -103,15 +103,15 @@ def retrieve_all_scoring_exceptions(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT DISTINCT g.guestid, g.guest, g.guestslug, s.showdate "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        "AND gm.exception = 1 "
-        "ORDER BY s.showdate ASC;"
-    )
+    query = """
+        SELECT DISTINCT g.guestid, g.guest, g.guestslug, s.showdate
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND gm.exception = 1
+        ORDER BY s.showdate ASC;
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -148,40 +148,42 @@ def retrieve_all_three_pointers(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "(SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate, "
-        " gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper, "
-        " sk.scorekeeperslug, sn.shownotes "
-        " FROM ww_showguestmap gm "
-        " JOIN ww_shows s ON s.showid = gm.showid "
-        " JOIN ww_guests g ON g.guestid = gm.guestid "
-        " JOIN ww_shownotes sn ON sn.showid = gm.showid "
-        " JOIN ww_showskmap skm ON skm.showid = gm.showid "
-        " JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        " WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        " AND gm.guestscore = 3 "
-        ") "
-        "UNION "
-        "(SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate, "
-        " gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper, "
-        " sk.scorekeeperslug, sn.shownotes "
-        " FROM ww_showguestmap gm "
-        " JOIN ww_shows s ON s.showid = gm.showid "
-        " JOIN ww_guests g ON g.guestid = gm.guestid "
-        " JOIN ww_shownotes sn ON sn.showid = gm.showid "
-        " JOIN ww_showskmap skm ON skm.showid = gm.showid "
-        " JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid "
-        " WHERE s.bestof = 1 AND s.repeatshowid IS NULL "
-        " AND gm.guestscore = 3 "
-        " AND g.guestid NOT IN ( "
-        " SELECT gm.guestid "
-        " FROM ww_showguestmap gm "
-        " JOIN ww_shows s ON s.showid = gm.showid "
-        " WHERE s.bestof = 0 AND s.repeatshowid IS NULL "
-        " ) "
-        ")"
-        "ORDER BY guest ASC, showdate ASC;"
-    )
+    query = """
+        (
+            SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate,
+            gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper,
+            sk.scorekeeperslug, sn.shownotes
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            JOIN ww_guests g ON g.guestid = gm.guestid
+            JOIN ww_shownotes sn ON sn.showid = gm.showid
+            JOIN ww_showskmap skm ON skm.showid = gm.showid
+            JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND gm.guestscore = 3
+        )
+        UNION
+        (
+            SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate,
+            gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper,
+            sk.scorekeeperslug, sn.shownotes
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            JOIN ww_guests g ON g.guestid = gm.guestid
+            JOIN ww_shownotes sn ON sn.showid = gm.showid
+            JOIN ww_showskmap skm ON skm.showid = gm.showid
+            JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+            WHERE s.bestof = 1 AND s.repeatshowid IS NULL
+            AND gm.guestscore = 3
+            AND g.guestid NOT IN (
+            SELECT gm.guestid
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            )
+        )
+        ORDER BY guest ASC, showdate ASC;
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()

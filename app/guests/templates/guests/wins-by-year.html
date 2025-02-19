@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Appearances by Year" %}
+{% set page_title = "Wins by Year" %}
 {% block title %}{{ page_title }} | Guests{% endblock %}
 
 {% block content %}
@@ -13,18 +13,24 @@
 <div id="intro" class="mb-3">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a list of Not My Job guests appear for a
+        This report provides a list of Not My Job guests who scored a win
+        by scoring 2 or more points or via a scoring exception for a
         given year.
     </p>
     <p>
         Guest appearances include appearances on regular shows and
         unique appearances only on Best Of shows.
     </p>
+    <p>
+        <b>Note:</b> While Susan Stamberg received a scoring exception on
+        the <a href="{{ stats_url }}/shows/1998/5/2">1998-05-02</a> show, but
+        Susan was not granted a win by Carl Kasell.
+    </p>
 </div>
 
 <div class="card report-form mb-5">
     <div class="card-header">
-        Select a year to view Not My Job guest appearances.
+        Select a year to view Not My Job guest wins.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">

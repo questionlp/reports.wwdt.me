@@ -93,7 +93,7 @@ def retrieve_host_appearance_counts(
         AND s.repeatshowid IS NULL
         GROUP BY h.host, YEAR(s.showdate)
         ORDER BY h.host ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (host_id,))
     results = cursor.fetchall()
@@ -130,7 +130,7 @@ def retrieve_host_appearance_counts_all(
         WHERE hm.hostid = %s
         GROUP BY h.host, YEAR(s.showdate)
         ORDER BY h.host ASC, YEAR(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (host_id,))
     result = cursor.fetchall()
@@ -163,7 +163,7 @@ def retrieve_all_appearance_counts(
         JOIN ww_shows s ON s.showid = hm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         ORDER BY h.host ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

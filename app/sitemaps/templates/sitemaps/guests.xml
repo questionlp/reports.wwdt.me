@@ -20,4 +20,8 @@
     <loc>{{ site_url }}{{ url_for("guests.not_my_job_three_pointers") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("guests.wins_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

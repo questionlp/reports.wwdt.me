@@ -11,6 +11,7 @@ from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 from app.panelists.reports.appearances import retrieve_panelists_by_show_id
+from app.shows.reports.show_details import retrieve_show_date_by_id
 
 from .appearances import retrieve_appearances_by_scorekeeper
 
@@ -26,7 +27,7 @@ def retrieve_show_years(
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -46,12 +47,12 @@ def retrieve_show_info(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showid, s.bestof, h.host
+        SELECT s.showid, s.bestof, s.repeatshowid, h.host
         FROM ww_showhostmap hm
         JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_shows s ON s.showid = hm.showid
         WHERE s.showdate = %s;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_date,))
     result = cursor.fetchone()
@@ -63,6 +64,14 @@ def retrieve_show_info(
     return {
         "id": result["showid"],
         "best_of": bool(result["bestof"]),
+        "repeat": bool(result["repeatshowid"]),
+        "original_show_date": (
+            retrieve_show_date_by_id(
+                show_id=result["repeatshowid"], database_connection=database_connection
+            )
+            if result["repeatshowid"]
+            else None
+        ),
         "host": result["host"],
     }
 
@@ -81,7 +90,7 @@ def retrieve_show_guests(
         WHERE gm.showid = %s
         AND g.guestid <> 76
         ORDER BY gm.showguestmapid ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
@@ -110,7 +119,7 @@ def retrieve_scorekeepers_first_shows(
         WHERE sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeperslug, skm.guest
         ORDER BY MIN(s.showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -138,6 +147,8 @@ def retrieve_scorekeepers_first_shows(
             "show_id": show_info["id"],
             "year": row["year"],
             "best_of": show_info["best_of"],
+            "repeat": show_info["repeat"],
+            "original_show_date": show_info["original_show_date"],
             "regular_appearances": appearance_info["regular"],
             "host": show_info["host"],
             "panelists": retrieve_panelists_by_show_id(

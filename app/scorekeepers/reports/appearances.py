@@ -22,7 +22,7 @@ def retrieve_all_scorekeepers(
         FROM ww_scorekeepers sk
         WHERE sk.scorekeeper <> '(TBD)'
         ORDER BY sk.scorekeeperslug ASC;
-        """
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -61,7 +61,7 @@ def retrieve_appearances_by_scorekeeper(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE sk.scorekeeperslug = %s ) AS allshows;
-        """
+    """
     cursor.execute(
         query,
         (
@@ -100,7 +100,7 @@ def retrieve_first_most_recent_appearances(
         WHERE sk.scorekeeperslug = %s
         AND s.bestof = 0
         AND s.repeatshowid IS null;
-        """
+    """
     cursor.execute(query, (scorekeeper_slug,))
     result = cursor.fetchone()
 
@@ -116,7 +116,7 @@ def retrieve_first_most_recent_appearances(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE sk.scorekeeperslug = %s;
-        """
+    """
     cursor.execute(query, (scorekeeper_slug,))
     result_all = cursor.fetchone()
     cursor.close()

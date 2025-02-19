@@ -23,7 +23,7 @@ def retrieve_panelists(
         FROM ww_panelists p
         WHERE p.panelist <> '<Multiple>'
         ORDER BY p.panelistslug ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -46,7 +46,7 @@ def retrieve_panelists(
 
 
 def retrieve_panelists_by_year(
-    show_year: int,
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of all available panelists for a given year from the database."""
@@ -61,9 +61,9 @@ def retrieve_panelists_by_year(
         WHERE YEAR(s.showdate) = %s
         AND p.panelist <> '<Multiple>'
         ORDER BY p.panelistslug ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (show_year,))
+    cursor.execute(query, (year,))
     result = cursor.fetchall()
     cursor.close()
 
@@ -95,7 +95,7 @@ def retrieve_panelists_id_key(
         FROM ww_panelists p
         WHERE p.panelist <> '<Multiple>'
         ORDER BY p.panelistslug ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
