@@ -16,10 +16,7 @@ from app.panelists.reports.appearances_by_year import retrieve_all_years
 def retrieve_appearance_counts_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, dict[str, str | int | None]]:
-    """Retrieve host appearance counts for a given year.
-
-    Appearance counts exclude both Best Of and repeat shows.
-    """
+    """Retrieve host appearance counts for a given year."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 

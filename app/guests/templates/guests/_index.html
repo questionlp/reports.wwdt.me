@@ -20,6 +20,21 @@
         <ul class="list-group report-list">
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('guests.appearances_by_year') }}">Appearances by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report provides a list of Not My Job guests appear for a
+                        given year.
+                    </p>
+                    <p>
+                        Guest appearances include appearances on regular shows and
+                        unique appearances only on Best Of shows.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Best Of Only Not My Job Guests</a>
                 </h3>
                 <div class="description">

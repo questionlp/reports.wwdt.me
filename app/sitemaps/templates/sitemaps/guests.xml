@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>{{ site_url }}{{ url_for("guests.appearances_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("guests.best_of_only_not_my_job_guests") }}</loc>
     <changefreq>weekly</changefreq>
   </url>

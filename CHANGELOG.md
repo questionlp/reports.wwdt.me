@@ -9,6 +9,7 @@
 - Adding new or updating existing reports
   - Guests
     - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
+    - New Report: "Appearances by Year"
   - Hosts
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"

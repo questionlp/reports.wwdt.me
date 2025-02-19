@@ -14,10 +14,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_appearance_counts_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, dict[str, str | int | None]]:
-    """Retrieve panelist appearance counts for a given year.
-
-    Appearance counts exclude both Best Of and repeat shows.
-    """
+    """Retrieve panelist appearance counts for a given year."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
