@@ -21,6 +21,8 @@
     - New Report: "Appearances by Year"
     - New Report: "Appearances by Year: Grid"
     - New Report: "Debuts by Year"
+  - Locations
+    - New Report: "Recordings by Year"
   - Panelists
     - Update: "Appearances by Year" report renamed and relocated to "Appearances by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
     - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
@@ -49,6 +51,7 @@
   - `block_ai_scrapers`
   - `use_minified_css`
 - Update change frequency value from `daily` to `weekly` in the sitemap.xml templates
+- Added reports from version 3.1.0 to the respective sitemap templates
 
 ### Development Changes
 
