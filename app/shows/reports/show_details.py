@@ -103,6 +103,77 @@ def retrieve_show_panelists(
     return panelists
 
 
+def retrieve_show_panelists_details(
+    show_id: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    include_decimal_scores: bool = False,
+) -> list[dict[str, str]]:
+    """Retrieve details for panelists for the requested show ID."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    if include_decimal_scores:
+        query = """
+            SELECT p.panelistid, p.panelist, p.panelistslug,
+            pm.panelistlrndstart, pm.panelistlrndstart_decimal,
+            pm.panelistlrndcorrect, pm.panelistlrndcorrect_decimal,
+            pm.panelistscore, pm.panelistscore_decimal, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE pm.showid = %s
+            ORDER BY pm.showpnlmapid ASC;
+        """
+    else:
+        query = """
+            SELECT p.panelistid, p.panelist, p.panelistslug,
+            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
+            pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE pm.showid = %s
+            ORDER BY pm.showpnlmapid ASC;
+        """
+
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_id,))
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        return None
+
+    panelists = []
+    for row in results:
+        panelists.append(
+            {
+                "id": row["panelistid"],
+                "name": row["panelist"],
+                "slug": row["panelistslug"],
+                "scoring": {
+                    "start": row["panelistlrndstart"],
+                    "start_decimal": (
+                        row["panelistlrndstart_decimal"]
+                        if include_decimal_scores
+                        else None
+                    ),
+                    "correct": row["panelistlrndcorrect"],
+                    "correct_decimal": (
+                        row["panelistlrndcorrect_decimal"]
+                        if include_decimal_scores
+                        else None
+                    ),
+                    "score": row["panelistscore"],
+                    "score_decimal": (
+                        row["panelistscore_decimal"] if include_decimal_scores else None
+                    ),
+                    "rank": row["showpnlrank"],
+                },
+            }
+        )
+
+    return panelists
+
+
 def retrieve_all_shows(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:

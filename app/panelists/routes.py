@@ -55,6 +55,7 @@ from .reports.panelist_vs_panelist_scoring import (
 )
 from .reports.perfect_scores import retrieve_perfect_score_counts
 from .reports.rankings_summary import retrieve_all_panelist_rankings
+from .reports.show_appearances import retrieve_appearance_details
 from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
     retrieve_all_panelists_stats as summary_retrieve_all_stats,
@@ -94,6 +95,60 @@ def aggregate_scores() -> str:
     _database_connection.close()
     return render_template(
         "panelists/aggregate-scores.html", stats=_stats, aggregate=_aggregate
+    )
+
+
+@blueprint.route("/appearances-by-year", methods=["GET", "POST"])
+def appearances_by_year() -> str:
+    """View: Appearances by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _panelist = "panelist" in request.form and request.form["panelist"]
+        _year = "year" in request.form and request.form["year"]
+        try:
+            _year = int(_year)
+        except ValueError:
+            _year = None
+
+        if _panelist in _panelists_dict and _year in _show_years:
+            # Retrieve average scores for the panelist
+            _panelist_info = {"slug": _panelist, "name": _panelists_dict[_panelist]}
+            _appearances = retrieve_appearance_details(
+                panelist_slug=_panelist,
+                year=_year,
+                database_connection=_database_connection,
+                include_decimal_scores=current_app.config["app_settings"][
+                    "use_decimal_scores"
+                ],
+            )
+            _database_connection.close()
+            return render_template(
+                "panelists/appearances-by-year.html",
+                panelists=_panelists,
+                years=_show_years,
+                panelist_info=_panelist_info,
+                appearances=_appearances,
+                rank_map=RANK_MAP,
+            )
+
+        # No valid panelist returned
+        _database_connection.close()
+        return render_template(
+            "panelists/appearances-by-year.html",
+            panelists=_panelists,
+            years=_show_years,
+            average_scores=None,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/appearances-by-year.html", panelists=_panelists, years=_show_years
     )
 
 

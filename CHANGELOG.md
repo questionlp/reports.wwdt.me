@@ -27,6 +27,7 @@
     - Update: "Appearances by Year" report renamed and relocated to "Appearance Counts by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
     - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
     - Update: "Appearance Counts by Year: Grid" report now includes both regular and all appearances to match the hosts and scorekeepers reports of the same name
+    - New Report: "Appearances by Year"
     - New Report: "Appearance Counts by Year"
     - New Report: "Appearance Counts by Year: Grid"
     - New Report: "Bluff the Listener Statistics by Year"
