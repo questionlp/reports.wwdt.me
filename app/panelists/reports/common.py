@@ -112,3 +112,27 @@ def retrieve_panelists_id_key(
         }
 
     return _panelists
+
+
+def retrieve_panelist_info_by_slug(
+    panelist_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
+) -> dict[str, str | int]:
+    """Retrieves panelist information for a given panelist slug string."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT p.panelist, p.panelistslug
+        FROM ww_panelists p
+        WHERE p.panelistslug = %s
+        LIMIT 1;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (panelist_slug,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if not result:
+        return None
+
+    return {"name": result["panelist"], "slug": result["panelistslug"]}

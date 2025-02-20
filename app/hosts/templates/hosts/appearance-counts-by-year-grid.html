@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% set page_title = "Appearances by Year: Grid" %}
-{% block title %}{{ page_title }} | Scorekeepers{% endblock %}
+{% set page_title = "Appearance Counts by Year: Grid" %}
+{% block title %}{{ page_title }} | Hosts{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('hosts.index') }}">Hosts</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
@@ -13,8 +13,8 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report breaks down the number of times a scorekeeper has appeared on
-        a show for a given year as a grid.
+        This report breaks down the number of times a host has appeared on a
+        show for a given year as a grid.
     </p>
     <p>
         The first number listed in each cell are for regular shows, excluding
@@ -23,20 +23,20 @@
     </p>
 </div>
 
-{% if scorekeepers and show_years %}
+{% if hosts and show_years %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
                 <colgroup>
-                    <col class="name scorekeeper">
+                    <col class="name host">
                     {% for col in range((show_years | length + 1)) %}
                         <col class="count">
                     {% endfor %}
                 </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Host</th>
                         {% for year in show_years %}
                         <th scope="col">{{ year }}</th>
                         {% endfor %}
@@ -44,33 +44,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for scorekeeper in scorekeepers %}
+                    {% for host in hosts %}
                     <tr>
-                        <td class="name scorekeeper">
-                            <a href="{{ stats_url }}/scorekeeper/{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a>
+                        <td class="name host">
+                            <a href="{{ stats_url }}/hosts/{{ host.slug }}">{{ host.name }}</a>
                         </td>
                         {% for year in show_years %}
-                            {% if year in scorekeeper.regular_appearances and year in scorekeeper.all_appearances %}
-                        <td class="centered middle year" title="{{ scorekeeper.name }}: {{ year }}">{{ scorekeeper.regular_appearances[year] }}<br>({{ scorekeeper.all_appearances[year] }})</td>
-                            {% elif year in scorekeeper.regular_appearances %}
-                        <td class="centered middle year" title="{{ scorekeeper.name }}: {{ year }}">{{ scorekeeper.regular_appearances[year] }}</td>
-                            {% elif year in scorekeeper.all_appearances %}
-                            <td class="centered middle year" title="{{ scorekeeper.name }}: {{ year }}">0<br>({{ scorekeeper.all_appearances[year] }})</td>
+                            {% if year in host.regular_appearances and year in host.all_appearances %}
+                        <td class="centered middle year" title="{{ host.name }}: {{ year }}">{{ host.regular_appearances[year] }}<br>({{ host.all_appearances[year] }})</td>
+                            {% elif year in host.regular_appearances %}
+                        <td class="centered middle year" title="{{ host.name }}: {{ year }}">{{ host.regular_appearances[year] }}</td>
+                            {% elif year in host.all_appearances %}
+                            <td class="centered middle year" title="{{ host.name }}: {{ year }}">0<br>({{ host.all_appearances[year] }})</td>
                             {% else %}
                         <td class="no-data">-</td>
                             {% endif %}
                         {% endfor %}
-                        {% if scorekeeper.regular_appearances.total and scorekeeper.all_appearances.total %}
-                        <td class="centered middle count">{{ scorekeeper.regular_appearances.total }}<br>({{ scorekeeper.all_appearances.total }})</td>
+                        {% if host.regular_appearances.total and host.all_appearances.total %}
+                        <td class="centered middle count">{{ host.regular_appearances.total }}<br>({{ host.all_appearances.total }})</td>
                         {% else %}
-                        <td class="centered middle count">{{ scorekeeper.regular_appearances.total }}</td>
+                        <td class="centered middle count">{{ host.regular_appearances.total }}</td>
                         {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Host</th>
                         {% for year in show_years %}
                         <th scope="col">{{ year }}</th>
                         {% endfor %}

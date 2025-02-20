@@ -56,21 +56,21 @@ def test_average_scores_by_year_all(client: FlaskClient) -> None:
     assert b"No data available" not in response.data
 
 
-def test_appearances_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.appearances_by_year."""
-    response: TestResponse = client.get("/panelists/appearances-by-year")
+def test_appearance_counts_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.appearance_counts_by_year."""
+    response: TestResponse = client.get("/panelists/appearance-counts-by-year")
     assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
+    assert b"Appearance Counts by Year" in response.data
     assert b"Regular Shows" in response.data
     assert b"All Shows" in response.data
     assert b"No data available" not in response.data
 
 
-def test_appearances_by_year_grid(client: FlaskClient) -> None:
-    """Testing panelists.routes.appearances_by_year_grid."""
-    response: TestResponse = client.get("/panelists/appearances-by-year/grid")
+def test_appearance_counts_by_year_grid(client: FlaskClient) -> None:
+    """Testing panelists.routes.appearance_counts_by_year_grid."""
+    response: TestResponse = client.get("/panelists/appearance-counts-by-year/grid")
     assert response.status_code == 200
-    assert b"Appearances by Year: Grid" in response.data
+    assert b"Appearance Counts by Year: Grid" in response.data
     assert b"Total" in response.data
     assert b"No data available" not in response.data
 
@@ -384,6 +384,30 @@ def test_statistics_summary(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Statistics Summary" in response.data
     assert b"Std Dev" in response.data
+
+
+def test_statistics_summary_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.statistics_summary_by_year."""
+    response: TestResponse = client.get("/panelists/statistics-summary-by-year")
+    assert response.status_code == 200
+    assert b"Statistics Summary by Year" in response.data
+    assert b"Select a Panelist" in response.data
+
+
+@pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
+def test_statistics_summary_by_year_post(
+    client: FlaskClient, panelist_slug: str
+) -> None:
+    """Testing panelists.statistics_summary_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/statistics-summary-by-year",
+        data={"panelist": panelist_slug},
+    )
+    assert response.status_code == 200
+    assert b"Statistics Summary by Year" in response.data
+    assert b"Panelist" in response.data
+    assert b"Appearances" in response.data
+    assert b"With Scores" in response.data
 
 
 def test_win_streaks(client: FlaskClient) -> None:

@@ -5,11 +5,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.appearances_by_year") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.appearance_counts_by_year") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("panelists.appearances_by_year_grid") }}</loc>
+    <loc>{{ site_url }}{{ url_for("panelists.appearance_counts_by_year_grid") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -102,6 +102,10 @@
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("panelists.statistics_summary") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.statistics_summary_by_year") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>

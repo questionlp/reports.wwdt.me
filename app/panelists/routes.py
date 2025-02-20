@@ -18,7 +18,7 @@ from .reports.aggregate_scores import (
 from .reports.appearances import retrieve_first_most_recent_appearances
 from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
-    retrieve_all_appearances_by_year,
+    retrieve_all_appearance_counts_by_year,
     retrieve_all_years,
 )
 from .reports.average_scores_by_year import (
@@ -59,6 +59,7 @@ from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
     retrieve_all_panelists_stats as summary_retrieve_all_stats,
 )
+from .reports.stats_summary_by_year import retrieve_stats_all_years
 from .reports.streaks import (
     calculate_panelist_losing_streaks,
     calculate_panelist_win_streaks,
@@ -96,25 +97,25 @@ def aggregate_scores() -> str:
     )
 
 
-@blueprint.route("/appearances-by-year")
-def appearances_by_year() -> str:
-    """View: Appearances by Year Report."""
+@blueprint.route("/appearance-counts-by-year")
+def appearance_counts_by_year() -> str:
+    """View: Appearance Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _appearances = retrieve_all_appearances_by_year(
+    _appearances = retrieve_all_appearance_counts_by_year(
         database_connection=_database_connection
     )
     _database_connection.close()
 
     return render_template(
-        "panelists/appearances-by-year.html",
+        "panelists/appearance-counts-by-year.html",
         years=list(_appearances.keys()),
         appearances=_appearances,
     )
 
 
-@blueprint.route("/appearances-by-year/grid")
-def appearances_by_year_grid() -> str:
-    """View: Appearances by Year Report."""
+@blueprint.route("/appearance-counts-by-year/grid")
+def appearance_counts_by_year_grid() -> str:
+    """View: Appearance Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_appearance_counts(
         database_connection=_database_connection
@@ -122,7 +123,7 @@ def appearances_by_year_grid() -> str:
     _show_years = retrieve_all_years(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
-        "panelists/appearances-by-year-grid.html",
+        "panelists/appearance-counts-by-year-grid.html",
         panelists=_panelists,
         show_years=_show_years,
     )
@@ -880,6 +881,56 @@ def statistics_summary() -> str:
         "panelists/statistics-summary.html",
         panelists=_panelists_dict,
         panelists_stats=_stats,
+    )
+
+
+@blueprint.route("/statistics-summary-by-year", methods=["GET", "POST"])
+def statistics_summary_by_year() -> str:
+    """View: Statistics Summary by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist = "panelist" in request.form and request.form["panelist"]
+
+        if panelist not in _panelists_dict:
+            _database_connection.close()
+            return render_template(
+                "panelists/statistics-summary-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _stats = retrieve_stats_all_years(
+            panelist_slug=panelist,
+            database_connection=_database_connection,
+            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+        )
+
+        if not _stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/statistics-summary-by-year.html",
+                panelists=_panelists_dict,
+                panelist_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/statistics-summary-by-year.html",
+            panelists=_panelists_dict,
+            panelist_stats=_stats,
+            # use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/statistics-summary-by-year.html",
+        panelists=_panelists_dict,
+        panelist_stats=None,
     )
 
 

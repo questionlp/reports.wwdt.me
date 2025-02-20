@@ -25,20 +25,20 @@ def test_appearance_summary(client: FlaskClient) -> None:
     assert b"" in response.data
 
 
-def test_appearances_by_year(client: FlaskClient) -> None:
-    """Testing scorekeepers.routes.appearances_by_year."""
-    response: TestResponse = client.get("/scorekeepers/appearances-by-year")
+def test_appearance_counts_by_year(client: FlaskClient) -> None:
+    """Testing scorekeepers.routes.appearance_counts_by_year."""
+    response: TestResponse = client.get("/scorekeepers/appearance-counts-by-year")
     assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
+    assert b"Appearance Counts by Year" in response.data
     assert b"Regular Shows" in response.data
     assert b"All Shows" in response.data
 
 
-def test_appearances_by_year_grid(client: FlaskClient) -> None:
-    """Testing scorekeepers.routes.appearances_by_year_grid."""
-    response: TestResponse = client.get("/scorekeepers/appearances-by-year/grid")
+def test_appearance_counts_by_year_grid(client: FlaskClient) -> None:
+    """Testing scorekeepers.routes.appearance_counts_by_year_grid."""
+    response: TestResponse = client.get("/scorekeepers/appearance-counts-by-year/grid")
     assert response.status_code == 200
-    assert b"Appearances by Year: Grid" in response.data
+    assert b"Appearance Counts by Year: Grid" in response.data
     assert b"Total" in response.data
 
 

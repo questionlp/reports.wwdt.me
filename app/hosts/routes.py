@@ -13,7 +13,7 @@ from app.panelists.reports.appearances_by_year import retrieve_all_years
 from .reports.appearances import retrieve_appearance_summaries
 from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
-    retrieve_all_appearances_by_year,
+    retrieve_all_appearance_counts_by_year,
 )
 from .reports.debut_by_year import host_debuts_by_year, retrieve_show_years
 
@@ -35,31 +35,31 @@ def appearance_summary() -> str:
     return render_template("hosts/appearance-summary.html", summary=summary)
 
 
-@blueprint.route("/appearances-by-year")
-def appearances_by_year() -> str:
-    """View: Appearances by Year Report."""
+@blueprint.route("/appearance-counts-by-year")
+def appearance_counts_by_year() -> str:
+    """View: Appearance Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _appearances = retrieve_all_appearances_by_year(
+    _appearances = retrieve_all_appearance_counts_by_year(
         database_connection=_database_connection
     )
     _database_connection.close()
 
     return render_template(
-        "hosts/appearances-by-year.html",
+        "hosts/appearance-counts-by-year.html",
         years=list(_appearances.keys()),
         appearances=_appearances,
     )
 
 
-@blueprint.route("/appearances-by-year/grid")
-def appearances_by_year_grid() -> str:
-    """View: Appearances by Year: Grid Report."""
+@blueprint.route("/appearance-counts-by-year/grid")
+def appearance_counts_by_year_grid() -> str:
+    """View: Appearance Counts by Year: Grid Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _hosts = retrieve_all_appearance_counts(database_connection=_database_connection)
     _show_years = retrieve_all_years(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
-        "hosts/appearances-by-year-grid.html",
+        "hosts/appearance-counts-by-year-grid.html",
         hosts=_hosts,
         show_years=_show_years,
     )

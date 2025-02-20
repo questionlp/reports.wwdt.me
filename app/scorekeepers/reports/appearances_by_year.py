@@ -195,7 +195,7 @@ def retrieve_all_appearance_counts(
     return _scorekeepers
 
 
-def retrieve_all_appearances_by_year(
+def retrieve_all_appearance_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, dict[str, str | int | None]]:
     """Retrieve all appearance counts for all scorekeepers from the database."""

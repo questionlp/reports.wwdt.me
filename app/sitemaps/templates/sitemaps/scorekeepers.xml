@@ -5,11 +5,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("scorekeepers.appearances_by_year") }}</loc>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearance_counts_by_year") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>{{ site_url }}{{ url_for("scorekeepers.appearances_by_year_grid") }}</loc>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearance_counts_by_year_grid") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>

@@ -32,23 +32,23 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('panelists.appearances_by_year') }}">Appearances by Year</a>
+                    <a href="{{ url_for('panelists.appearance_counts_by_year') }}">Appearance Counts by Year</a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report breaks down the number of times a panelist has appeared on a
-                        show for a given year.
+                        This report provides a list of panelists and the number of appearances
+                        they have made each year.
                     </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('panelists.appearances_by_year_grid') }}">Appearances by Year: Grid</a>
+                    <a href="{{ url_for('panelists.appearance_counts_by_year_grid') }}">Appearance Counts by Year: Grid</a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report breaks down the number of times a panelist has appeared on a
-                        show for a given year.
+                        This report provides a list of panelists and the number of appearances
+                        they have made each year as a grid.
                     </p>
                 </div>
             </li>
@@ -350,6 +350,17 @@
                     <p>
                         This report provides a break down of scoring statistics for each
                         panelist.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.statistics_summary_by_year') }}">Statistics Summary by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report provides a yearly break down of scoring statistics for a
+                        given panelist.
                     </p>
                 </div>
             </li>

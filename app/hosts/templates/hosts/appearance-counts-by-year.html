@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% set page_title = "Appearances by Year" %}
-{% block title %}{{ page_title }} | Panelists{% endblock %}
+{% set page_title = "Appearance Counts by Year" %}
+{% block title %}{{ page_title }} | Hosts{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('hosts.index') }}">Hosts</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
     </ol>
 </nav>
@@ -13,17 +13,12 @@
 <div id="intro" class="mb-3">
     <h2>{{ page_title }}</h2>
     <p>
-        This report breaks down the number of times a panelist has appeared for
-        each year.
+        This report provides a list of hosts and the number of appearances
+        they have made each year.
     </p>
     <p>
         Regular shows do not include Best Of and repeat shows, while all
         shows include Best Of and repeat shows.
-    </p>
-    <p>
-        <b>Note:</b> The report formerly titled "Appearances by Year" has been renamed
-        to "<a href="{{ url_for('panelists.appearances_by_year_grid') }}">Appearances
-        by Year: Grid</a>".
     </p>
 
     {% if years and appearances %}
@@ -47,44 +42,35 @@
             <div class="table-responsive">
                 <table class="table table-bordered table-hover report">
                     <colgroup>
-                        <col class="name panelist">
+                        <col class="name host">
                         <col class="count">
                         <col class="count">
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col">Panelist</th>
+                            <th scope="col">Host</th>
                             <th scope="col">Regular Shows</th>
                             <th scope="col">All Shows</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for panelist in appearances[year] %}
-                        {% set panelist_info = appearances[year][panelist] %}
+                        {% for host in appearances[year] %}
+                        {% set host_info = appearances[year][host] %}
                         <tr>
-                            <td><a href="{{ stats_url }}/panelists/{{ appearances[year][panelist]['slug'] }}">{{ appearances[year][panelist]['name'] }}</a></td>
-                            {% if panelist_info.regular_appearances is not none %}
-                            <td>{{ panelist_info.regular_appearances }}</td>
+                            <td><a href="{{ stats_url }}/hosts/{{ host_info.slug }}">{{ host_info.name }}</a></td>
+                            {% if host_info.regular_appearances is not none %}
+                            <td>{{ host_info.regular_appearances }}</td>
                             {% else %}
                             <td class="no-data">-</td>
                             {% endif %}
-                            {% if panelist_info.all_appearances is not none %}
-                            <td>{{ panelist_info.all_appearances }}</td>
+                            {% if host_info.all_appearances is not none %}
+                            <td>{{ host_info.all_appearances }}</td>
                             {% else %}
                             <td class="no-data">-</td>
                             {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
-                    {% if appearances[year] | length >= 10 %}
-                    <tfoot>
-                        <tr>
-                            <th scope="col">Panelist</th>
-                            <th scope="col">Regular Shows</th>
-                            <th scope="col">All Shows</th>
-                        </tr>
-                    </tfoot>
-                    {% endif %}
                 </table>
                 <div class="top-link">
                     <a href="#main-content">&uarr; Top</a>
@@ -94,7 +80,7 @@
     </div>
     {% else %}
     <div class="alert alert-info my-3" role="alert">
-        <i class="bi bi-info-circle pe-1"></i> No panelists made appearances in {{ year }}.
+        <i class="bi bi-info-circle pe-1"></i> No hosts made appearances in {{ year }}.
     </div>
     {% endif %}
 </div>

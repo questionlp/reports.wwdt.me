@@ -37,23 +37,23 @@ def test_average_scores_by_location(client: FlaskClient) -> None:
     assert b"Average Total" in response.data
 
 
-def test_recordings_by_year(client: FlaskClient) -> None:
-    """Testing locations.routes.recordings_by_year."""
-    response: TestResponse = client.get("/locations/recordings-by-year")
+def test_recording_counts_by_year(client: FlaskClient) -> None:
+    """Testing locations.routes.recording_counts_by_year."""
+    response: TestResponse = client.get("/locations/recording-counts-by-year")
     assert response.status_code == 200
-    assert b"Recordings by Year" in response.data
+    assert b"Recording Counts by Year" in response.data
     assert b"Select a Year" in response.data
 
 
 @pytest.mark.parametrize("year", [1998, 2018])
-def test_recordings_by_year_post(client: FlaskClient, year: int) -> None:
-    """Testing locations.routes.recordings_by_year (POST)."""
+def test_recording_counts_by_year_post(client: FlaskClient, year: int) -> None:
+    """Testing locations.routes.recording_counts_by_year (POST)."""
     response: TestResponse = client.post(
-        "/locations/recordings-by-year",
+        "/locations/recording-counts-by-year",
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Recordings by Year" in response.data
+    assert b"Recording Counts by Year" in response.data
     assert b"Select a Year" in response.data
     assert b"Venue" in response.data
     assert b"Regular Shows" in response.data

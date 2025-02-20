@@ -27,8 +27,8 @@ def aggregate_scores() -> Response:
 
 @blueprint.route("/panelist/appearances_by_year")
 def appearances_by_year() -> Response:
-    """View: Appearances By Year Report Redirect."""
-    return redirect_url(url_for("panelists.appearances_by_year"), status_code=301)
+    """View: Appearance Counts By Year Report Redirect."""
+    return redirect_url(url_for("panelists.appearance_counts_by_year"), status_code=301)
 
 
 @blueprint.route("/panelist/bluff_stats")

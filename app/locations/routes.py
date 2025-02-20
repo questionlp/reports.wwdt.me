@@ -47,9 +47,9 @@ def home_vs_away() -> str:
     return render_template("locations/home-vs-away.html", show_counts=_show_counts)
 
 
-@blueprint.route("/recordings-by-year", methods=["GET", "POST"])
-def recordings_by_year() -> str:
-    """View: Recordings by Year Report."""
+@blueprint.route("/recording-counts-by-year", methods=["GET", "POST"])
+def recording_counts_by_year() -> str:
+    """View: Recording Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _show_years = retrieve_show_years(database_connection=_database_connection)
 
@@ -64,7 +64,7 @@ def recordings_by_year() -> str:
         if year not in _show_years:
             _database_connection.close()
             return render_template(
-                "locations/recordings-by-year.html",
+                "locations/recording-counts-by-year.html",
                 show_years=_show_years,
                 recordings=None,
             )
@@ -76,14 +76,14 @@ def recordings_by_year() -> str:
         if not _recordings:
             _database_connection.close()
             return render_template(
-                "locations/recordings-by-year.html",
+                "locations/recording-counts-by-year.html",
                 show_years=_show_years,
                 recordings=None,
             )
 
         _database_connection.close()
         return render_template(
-            "locations/recordings-by-year.html",
+            "locations/recording-counts-by-year.html",
             show_years=_show_years,
             year=year,
             recordings=_recordings,
@@ -92,5 +92,7 @@ def recordings_by_year() -> str:
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "locations/recordings-by-year.html", show_years=_show_years, recordings=None
+        "locations/recording-counts-by-year.html",
+        show_years=_show_years,
+        recordings=None,
     )

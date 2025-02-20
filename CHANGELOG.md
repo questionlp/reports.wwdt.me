@@ -18,17 +18,17 @@
     - New Report: "Not My Job Guests with Missing Scores"
     - New Report: "Wins by Year"
   - Hosts
-    - New Report: "Appearances by Year"
-    - New Report: "Appearances by Year: Grid"
+    - New Report: "Appearance Counts by Year"
+    - New Report: "Appearance Counts by Year: Grid"
     - New Report: "Debuts by Year"
   - Locations
-    - New Report: "Recordings by Year"
+    - New Report: "Recording Counts by Year"
   - Panelists
-    - Update: "Appearances by Year" report renamed and relocated to "Appearances by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
+    - Update: "Appearances by Year" report renamed and relocated to "Appearance Counts by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
     - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
-    - Update: "Appearances by Year: Grid" report now includes both regular and all appearances to match the hosts and scorekeepers reports of the same name
-    - New Report: "Appearances by Year"
-    - New Report: "Appearances by Year: Grid"
+    - Update: "Appearance Counts by Year: Grid" report now includes both regular and all appearances to match the hosts and scorekeepers reports of the same name
+    - New Report: "Appearance Counts by Year"
+    - New Report: "Appearance Counts by Year: Grid"
     - New Report: "Bluff the Listener Statistics by Year"
     - New Report: "Highest Average Correct Answers by Year"
     - New Report: "Highest Average Scores by Year"
@@ -36,9 +36,10 @@
     - New Report: "Most Chosen Correct Bluff the Listener Story by Year"
     - New Report: "Most Correct Bluff the Listener Story by Year"
     - New Report: "Most Wins by Year"
+    - New Report: "Statistics Summary by Year"
   - Scorekeepers
-    - New Report: "Appearances by Year"
-    - New Report: "Appearances by Year: Grid"
+    - New Report: "Appearance Counts by Year"
+    - New Report: "Appearance Counts by Year: Grid"
     - New Report: "Debuts by Year"
   - Shows
     - Update: Add "Best Of" and "Repeat Of" columns to the following reports:
