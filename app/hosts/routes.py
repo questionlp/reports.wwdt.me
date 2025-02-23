@@ -6,16 +6,17 @@
 """Hosts Routes for Wait Wait Reports."""
 
 import mysql.connector
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, request
 
 from app.panelists.reports.appearances_by_year import retrieve_all_years
 
-from .reports.appearances import retrieve_appearance_summaries
+from .reports.appearances import retrieve_appearance_summaries, retrieve_hosts
 from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
     retrieve_all_appearance_counts_by_year,
 )
 from .reports.debut_by_year import host_debuts_by_year, retrieve_show_years
+from .reports.show_appearances import retrieve_appearance_details
 
 blueprint = Blueprint("hosts", __name__, template_folder="templates")
 
@@ -62,6 +63,54 @@ def appearance_counts_by_year_grid() -> str:
         "hosts/appearance-counts-by-year-grid.html",
         hosts=_hosts,
         show_years=_show_years,
+    )
+
+
+@blueprint.route("/appearances-by-year", methods=["GET", "POST"])
+def appearances_by_year() -> str:
+    """View: Appearances by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _hosts = retrieve_hosts(database_connection=_database_connection)
+    _hosts_dict = {host["slug"]: host["name"] for host in _hosts}
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        _host = "host" in request.form and request.form["host"]
+        _year = "year" in request.form and request.form["year"]
+        try:
+            _year = int(_year)
+        except ValueError:
+            _year = None
+
+        if _host in _hosts_dict and _year in _show_years:
+            _host_info = {"slug": _host, "name": _hosts_dict[_host]}
+            _appearances = retrieve_appearance_details(
+                host_slug=_host,
+                year=_year,
+                database_connection=_database_connection,
+            )
+            _database_connection.close()
+            return render_template(
+                "hosts/appearances-by-year.html",
+                hosts=_hosts,
+                years=_show_years,
+                host_info=_host_info,
+                appearances=_appearances,
+            )
+
+        # No valid host returned
+        _database_connection.close()
+        return render_template(
+            "hosts/appearances-by-year.html",
+            hosts=_hosts,
+            years=_show_years,
+            average_scores=None,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "hosts/appearances-by-year.html", hosts=_hosts, years=_show_years
     )
 
 

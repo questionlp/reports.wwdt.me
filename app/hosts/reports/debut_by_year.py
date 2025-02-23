@@ -47,7 +47,8 @@ def retrieve_show_info(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showid, s.bestof, s.repeatshowid, sk.scorekeeper
+        SELECT s.showid, s.bestof, s.repeatshowid, sk.scorekeeper,
+        sk.scorekeeperslug, skm.guest
         FROM ww_showskmap skm
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         JOIN ww_shows s ON s.showid = skm.showid
@@ -72,7 +73,11 @@ def retrieve_show_info(
             if result["repeatshowid"]
             else None
         ),
-        "scorekeeper": result["scorekeeper"],
+        "scorekeeper": {
+            "name": result["scorekeeper"],
+            "slug": result["scorekeeperslug"],
+            "guest": bool(result["guest"]),
+        },
     }
 
 

@@ -47,7 +47,11 @@
                     <tr>
                         <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ guest.show_date | replace('-', '/') }}">{{ guest.show_date }}</a></td>
-                        <td>{{ guest.show_scorekeeper }}</td>
+                        {% if guest.scorekeeper.guest %}
+                        <td><b>{{ guest.scorekeeper.name }}</b></td>
+                        {% else %}
+                        <td>{{ guest.scorekeeper.name }}</td>
+                        {% endif %}
                         <td>{{ guest.score }}</td>
                         {% if guest.exception %}
                         <td>{{ guest.exception }}</td>

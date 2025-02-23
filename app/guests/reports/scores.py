@@ -154,7 +154,7 @@ def retrieve_all_three_pointers(
         (
             SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate,
             gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper,
-            sk.scorekeeperslug, sn.shownotes
+            sk.scorekeeperslug, skm.guest AS scorekeeper_guest, sn.shownotes
             FROM ww_showguestmap gm
             JOIN ww_shows s ON s.showid = gm.showid
             JOIN ww_guests g ON g.guestid = gm.guestid
@@ -168,7 +168,7 @@ def retrieve_all_three_pointers(
         (
             SELECT g.guestid, g.guest, g.guestslug, s.showid, s.showdate,
             gm.guestscore, gm.exception, sk.scorekeeperid, sk.scorekeeper,
-            sk.scorekeeperslug, sn.shownotes
+            sk.scorekeeperslug, skm.guest AS scorekeeper_guest, sn.shownotes
             FROM ww_showguestmap gm
             JOIN ww_shows s ON s.showid = gm.showid
             JOIN ww_guests g ON g.guestid = gm.guestid
@@ -201,8 +201,11 @@ def retrieve_all_three_pointers(
                 "name": row["guest"],
                 "slug": row["guestslug"],
                 "show_date": row["showdate"].isoformat(),
-                "show_scorekeeper": row["scorekeeper"],
-                "show_scorekeeper_slug": row["scorekeeperslug"],
+                "scorekeeper": {
+                    "name": row["scorekeeper"],
+                    "slug": row["scorekeeperslug"],
+                    "guest": bool(row["scorekeeper_guest"]),
+                },
                 "score": row["guestscore"],
                 "exception": bool(row["exception"]),
                 "show_notes": row["shownotes"],

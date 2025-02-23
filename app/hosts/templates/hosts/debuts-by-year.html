@@ -71,7 +71,11 @@
                             {% endif %}
                             <td><a href="{{ stats_url }}/hosts/{{ debut.host_slug }}">{{ debut.host_name }}</a></td>
                             <td>{{ debut.regular_appearances }}</td>
-                            <td>{{ debut.scorekeeper }}</td>
+                            {% if debut.scorekeeper.guest %}
+                            <td><b>{{ debut.scorekeeper.name }}</b></td>
+                            {% else %}
+                            <td>{{ debut.scorekeeper.name }}</td>
+                            {% endif %}
                             {% if debut.panelists %}
                             <td class="panelist-names">
                                 <ul class="no-bullets">

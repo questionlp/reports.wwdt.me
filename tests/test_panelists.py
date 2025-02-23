@@ -27,31 +27,6 @@ def test_aggregate_scores(client: FlaskClient) -> None:
     assert b"Aggregate Score Spread" in response.data
 
 
-def test_appearances_by_year(client: FlaskClient) -> None:
-    """Testing panelists.routes.appearances_by_year."""
-    response: TestResponse = client.get("/panelists/appearances-by-year")
-    assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
-    assert b"Select a Panelist" in response.data
-    assert b"Select a Year" in response.data
-
-
-@pytest.mark.parametrize(
-    "panelist_slug, year", [("faith-salie", 2018), ("paula-poundstone", 2006)]
-)
-def test_appearances_by_year_post(
-    client: FlaskClient, panelist_slug: str, year: int
-) -> None:
-    """Testing panelists.routes.average_scores_by_year (POST)."""
-    response: TestResponse = client.post(
-        "/panelists/appearances-by-year", data={"panelist": panelist_slug, "year": year}
-    )
-    assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
-    assert panelist_slug.encode("utf-8") in response.data
-    assert b"Repeat Of" in response.data
-
-
 def test_average_scores_by_year(client) -> None:
     """Testing panelists.routes.average_scores_by_year (GET)."""
     response: TestResponse = client.get("/panelists/average-scores-by-year")
@@ -98,6 +73,31 @@ def test_appearance_counts_by_year_grid(client: FlaskClient) -> None:
     assert b"Appearance Counts by Year: Grid" in response.data
     assert b"Total" in response.data
     assert b"No data available" not in response.data
+
+
+def test_appearances_by_year(client: FlaskClient) -> None:
+    """Testing panelists.routes.appearances_by_year."""
+    response: TestResponse = client.get("/panelists/appearances-by-year")
+    assert response.status_code == 200
+    assert b"Appearances by Year" in response.data
+    assert b"Select a Panelist" in response.data
+    assert b"Select a Year" in response.data
+
+
+@pytest.mark.parametrize(
+    "panelist_slug, year", [("faith-salie", 2018), ("paula-poundstone", 2006)]
+)
+def test_appearances_by_year_post(
+    client: FlaskClient, panelist_slug: str, year: int
+) -> None:
+    """Testing panelists.routes.average_scores_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/appearances-by-year", data={"panelist": panelist_slug, "year": year}
+    )
+    assert response.status_code == 200
+    assert b"Appearances by Year" in response.data
+    assert panelist_slug.encode("utf-8") in response.data
+    assert b"Repeat Of" in response.data
 
 
 def test_bluff_the_listener_statistics(client: FlaskClient) -> None:

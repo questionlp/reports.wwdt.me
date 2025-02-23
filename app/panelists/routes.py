@@ -116,7 +116,6 @@ def appearances_by_year() -> str:
             _year = None
 
         if _panelist in _panelists_dict and _year in _show_years:
-            # Retrieve average scores for the panelist
             _panelist_info = {"slug": _panelist, "name": _panelists_dict[_panelist]}
             _appearances = retrieve_appearance_details(
                 panelist_slug=_panelist,

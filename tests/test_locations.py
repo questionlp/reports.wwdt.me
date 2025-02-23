@@ -57,3 +57,32 @@ def test_recording_counts_by_year_post(client: FlaskClient, year: int) -> None:
     assert b"Select a Year" in response.data
     assert b"Venue" in response.data
     assert b"Regular Shows" in response.data
+
+
+def test_recordings_by_year(client: FlaskClient) -> None:
+    """Testing locations.routes.recordings_by_year."""
+    response: TestResponse = client.get("/locations/recordings-by-year")
+    assert response.status_code == 200
+    assert b"Recordings by Year" in response.data
+    assert b"Select a Location" in response.data
+    assert b"Select a Year" in response.data
+
+
+@pytest.mark.parametrize(
+    "location_slug, year",
+    [
+        ("studebaker-theater-chicago-il", 2024),
+        ("arlene-schnitzer-concert-hall-portland-or", 2007),
+    ],
+)
+def test_recordings_by_year_post(
+    client: FlaskClient, location_slug: str, year: int
+) -> None:
+    """Testing locations.routes.recordings_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/locations/recordings-by-year", data={"location": location_slug, "year": year}
+    )
+    assert response.status_code == 200
+    assert b"Recordings by Year" in response.data
+    assert location_slug.encode("utf-8") in response.data
+    assert b"Repeat Of" in response.data

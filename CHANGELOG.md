@@ -20,9 +20,11 @@
   - Hosts
     - New Report: "Appearance Counts by Year"
     - New Report: "Appearance Counts by Year: Grid"
+    - New Report: "Appearances by Year"
     - New Report: "Debuts by Year"
   - Locations
     - New Report: "Recording Counts by Year"
+    - New Report: "Recordings by Year"
   - Panelists
     - Update: "Appearances by Year" report renamed and relocated to "Appearance Counts by Year: Grid" to match the naming convention for the corresponding hosts and scorekeepers reports
     - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
@@ -41,6 +43,7 @@
   - Scorekeepers
     - New Report: "Appearance Counts by Year"
     - New Report: "Appearance Counts by Year: Grid"
+    - New Report: "Appearances by Year"
     - New Report: "Debuts by Year"
   - Shows
     - Update: Add "Best Of" and "Repeat Of" columns to the following reports:

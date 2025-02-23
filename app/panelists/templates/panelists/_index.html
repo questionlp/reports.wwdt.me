@@ -32,21 +32,6 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('panelists.appearances_by_year') }}">Appearances by Year</a>
-                </h3>
-                <div class="description">
-                    <p>
-                        This report provides a list of appearances for a given panelist and
-                        a given year.
-                    </p>
-                    <p>
-                        <b>Note:</b> The previous form of this report is now available as
-                        "<a href="{{ url_for('panelists.appearance_counts_by_year_grid') }}">Appearance Counts by Year: Grid</a>".
-                    </p>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
                     <a href="{{ url_for('panelists.appearance_counts_by_year') }}">Appearance Counts by Year</a>
                 </h3>
                 <div class="description">
@@ -64,6 +49,21 @@
                     <p>
                         This report provides a list of panelists and the number of appearances
                         they have made each year as a grid.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.appearances_by_year') }}">Appearances by Year</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        This report provides a list of appearances for a given panelist and
+                        a given year.
+                    </p>
+                    <p>
+                        <b>Note:</b> The previous form of this report is now available as
+                        "<a href="{{ url_for('panelists.appearance_counts_by_year_grid') }}">Appearance Counts by Year: Grid</a>".
                     </p>
                 </div>
             </li>

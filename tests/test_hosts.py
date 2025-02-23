@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Testing Hosts Module and Blueprint Views."""
 
+import pytest
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
@@ -41,6 +42,31 @@ def test_appearance_counts_by_year_grid(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Appearance Counts by Year: Grid" in response.data
     assert b"Total" in response.data
+
+
+def test_appearances_by_year(client: FlaskClient) -> None:
+    """Testing hosts.routes.appearances_by_year."""
+    response: TestResponse = client.get("/hosts/appearances-by-year")
+    assert response.status_code == 200
+    assert b"Appearances by Year" in response.data
+    assert b"Select a Host" in response.data
+    assert b"Select a Year" in response.data
+
+
+@pytest.mark.parametrize(
+    "host_slug, year", [("peter-sagal", 2018), ("luke-burbank", 2006)]
+)
+def test_appearances_by_year_post(
+    client: FlaskClient, host_slug: str, year: int
+) -> None:
+    """Testing hosts.routes.appearances_by_year (POST)."""
+    response: TestResponse = client.post(
+        "/hosts/appearances-by-year", data={"host": host_slug, "year": year}
+    )
+    assert response.status_code == 200
+    assert b"Appearances by Year" in response.data
+    assert host_slug.encode("utf-8") in response.data
+    assert b"Repeat Of" in response.data
 
 
 def test_debuts_by_year(client: FlaskClient) -> None:

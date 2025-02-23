@@ -36,7 +36,6 @@ def appearances_by_year() -> str:
     _show_years = retrieve_show_years(database_connection=_database_connection)
 
     if request.method == "POST":
-        # Parse panelist dropdown selections
         _year = "year" in request.form and request.form["year"]
         try:
             year = int(_year)
@@ -140,7 +139,6 @@ def wins_by_year() -> str:
     _show_years = retrieve_show_years(database_connection=_database_connection)
 
     if request.method == "POST":
-        # Parse panelist dropdown selections
         _year = "year" in request.form and request.form["year"]
         try:
             year = int(_year)
