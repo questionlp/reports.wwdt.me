@@ -148,9 +148,12 @@ def testnot_my_job_guests_vs_bluff_the_listener_win_ratios(client: FlaskClient) 
     assert b"Win %" in response.data
 
 
-def test_original_shows(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_original_shows(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.original_shows."""
-    response: TestResponse = client.get("/shows/original-shows")
+    response: TestResponse = client.get(
+        "/shows/original-shows", query_string={"sort": sort}
+    )
     assert response.status_code == 200
     assert b"Original Shows" in response.data
     assert b"Panelists" in response.data
