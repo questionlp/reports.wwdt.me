@@ -20,71 +20,72 @@
         Regular shows do not include Best Of and repeat shows, while all
         shows include Best Of and repeat shows.
     </p>
-
-    {% if years and appearances %}
-    <ul id="year-list">
-        {% for year in years %}
-        <li><a href="#y{{ year }}">{{ year }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
 </div>
 
 {% if years and appearances %}
-{% for year in years %}
-<span id="y{{ year }}" class="invisible"></span>
-<div class="pt-4 pb-4">
-    <h3>{{ year }}</h3>
-
-    {% if appearances[year] %}
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover report">
-                    <colgroup>
-                        <col class="name scorekeeper">
-                        <col class="count">
-                        <col class="count">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th scope="col">Scorekeeper</th>
-                            <th scope="col">Regular Shows</th>
-                            <th scope="col">All Shows</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for scorekeeper in appearances[year] %}
-                        {% set scorekeeper_info = appearances[year][scorekeeper] %}
-                        <tr>
-                            <td><a href="{{ stats_url }}/scorekeepers/{{ scorekeeper_info.slug }}">{{ scorekeeper_info.name }}</a></td>
-                            {% if scorekeeper_info.regular_appearances is not none %}
-                            <td>{{ scorekeeper_info.regular_appearances }}</td>
-                            {% else %}
-                            <td class="no-data">-</td>
-                            {% endif %}
-                            {% if scorekeeper_info.all_appearances is not none %}
-                            <td>{{ scorekeeper_info.all_appearances }}</td>
-                            {% else %}
-                            <td class="no-data">-</td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div class="top-link">
-                    <a href="#main-content">&uarr; Top</a>
+<div class="accordion" id="accordion">
+    {% for year in years %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            {% if appearances[year] %}
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
+                aria-controls="flush-collapse-{{ year }}">
+                {{ year }}
+            </button>
+            {% else %}
+            <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
+                aria-controls="flush-collapse-{{ year }}">
+                {{ year }}
+            </button>
+            {% endif %}
+        </h2>
+        <div id="flush-collapse-{{ year }}" class="accordion-collapse collapse">
+            <div class="accordion-body">
+                {% if appearances[year] %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover report">
+                        <colgroup>
+                            <col class="name scorekeeper">
+                            <col class="count">
+                            <col class="count">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">Scorekeeper</th>
+                                <th scope="col">Regular Shows</th>
+                                <th scope="col">All Shows</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scorekeeper in appearances[year] %}
+                            {% set scorekeeper_info = appearances[year][scorekeeper] %}
+                            <tr>
+                                <td><a href="{{ stats_url }}/scorekeepers/{{ scorekeeper_info.slug }}">{{ scorekeeper_info.name }}</a></td>
+                                {% if scorekeeper_info.regular_appearances is not none %}
+                                <td>{{ scorekeeper_info.regular_appearances }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if scorekeeper_info.all_appearances is not none %}
+                                <td>{{ scorekeeper_info.all_appearances }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                {% else %}
+                No panelists made appearances in {{ year }}.
+                {% endif %}
             </div>
         </div>
     </div>
-    {% else %}
-    <div class="alert alert-info my-3" role="alert">
-        <i class="bi bi-info-circle pe-1"></i> No scorekeepers made appearances in {{ year }}.
-    </div>
-    {% endif %}
+    {% endfor %}
 </div>
-{% endfor %}
 {% else %}
 <div class="alert alert-info my-5" role="alert">
     <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.

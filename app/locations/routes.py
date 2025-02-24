@@ -57,51 +57,46 @@ def recordings_by_year() -> str:
     """View: Recordings by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _locations = retrieve_locations(database_connection=_database_connection)
+    _locations_dict = {location["slug"]: location["venue"] for location in _locations}
     _show_years = retrieve_show_years(database_connection=_database_connection)
 
     if request.method == "POST":
         _location = "location" in request.form and request.form["location"]
-        _year = "year" in request.form and request.form["year"]
-        try:
-            year = int(_year)
-        except ValueError:
-            year = None
 
-        if year not in _show_years:
+        if _location in _locations_dict:
+            _location_info = retrieve_location(
+                location_slug=_location, database_connection=_database_connection
+            )
+            _recordings = retrieve_recording_details(
+                location_slug=_location,
+                database_connection=_database_connection,
+            )
+            if not _recordings:
+                _database_connection.close()
+                return render_template(
+                    "locations/recordings-by-year.html",
+                    locations=_locations,
+                    location_info=_location_info,
+                    years=_show_years,
+                    recordings=None,
+                )
+
             _database_connection.close()
             return render_template(
                 "locations/recordings-by-year.html",
                 locations=_locations,
                 years=_show_years,
-                recordings=None,
-            )
-
-        _location_info = retrieve_location(
-            location_slug=_location, database_connection=_database_connection
-        )
-        _recordings = retrieve_recording_details(
-            location_slug=_location,
-            year=_year,
-            database_connection=_database_connection,
-        )
-        if not _recordings:
-            _database_connection.close()
-            return render_template(
-                "locations/recordings-by-year.html",
-                locations=_locations,
                 location_info=_location_info,
-                years=_show_years,
-                recordings=None,
+                recordings=_recordings,
             )
 
+        # Location not found
         _database_connection.close()
         return render_template(
             "locations/recordings-by-year.html",
             locations=_locations,
             years=_show_years,
-            location_info=_location_info,
-            year=year,
-            recordings=_recordings,
+            average_scores=None,
         )
 
     # Fallback for GET request

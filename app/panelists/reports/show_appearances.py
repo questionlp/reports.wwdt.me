@@ -16,14 +16,16 @@ from app.shows.reports.show_details import (
     retrieve_show_panelists_details,
 )
 
+from .debut_by_year import retrieve_show_years
 
-def retrieve_appearance_details(
+
+def retrieve_appearance_details_by_year(
     panelist_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
     include_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
-    """Retrieves details for all appearances for a given panelist and year.
+    """Retrieves details for all appearances for a given panelist and given year.
 
     Returned information includes show date, show flags, location,
     host, scorekeeper, panelist scoring information, other panelists,
@@ -150,5 +152,35 @@ def retrieve_appearance_details(
         }
 
         _appearances.append(_show_info)
+
+    return _appearances
+
+
+def retrieve_appearance_details(
+    panelist_slug: str,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+    include_decimal_scores: bool = False,
+) -> list[list[dict[str, Any]]]:
+    """Retrieves details for all appearances for a given panelist and all available years.
+
+    Returned information includes show date, show flags, location,
+    host, scorekeeper, panelist scoring information, other panelists,
+    and Not My Job guest(s).
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    _years = retrieve_show_years(database_connection=database_connection)
+    if not _years:
+        return None
+
+    _appearances = {}
+    for _year in _years:
+        _appearances[_year] = retrieve_appearance_details_by_year(
+            panelist_slug=panelist_slug,
+            year=_year,
+            database_connection=database_connection,
+            include_decimal_scores=include_decimal_scores,
+        )
 
     return _appearances

@@ -81,18 +81,16 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
     assert b"Select a Panelist" in response.data
-    assert b"Select a Year" in response.data
 
 
-@pytest.mark.parametrize(
-    "panelist_slug, year", [("faith-salie", 2018), ("paula-poundstone", 2006)]
-)
+@pytest.mark.parametrize("panelist_slug", ["faith-salie", "paula-poundstone"])
 def test_appearances_by_year_post(
-    client: FlaskClient, panelist_slug: str, year: int
+    client: FlaskClient,
+    panelist_slug: str,
 ) -> None:
     """Testing panelists.routes.average_scores_by_year (POST)."""
     response: TestResponse = client.post(
-        "/panelists/appearances-by-year", data={"panelist": panelist_slug, "year": year}
+        "/panelists/appearances-by-year", data={"panelist": panelist_slug}
     )
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data

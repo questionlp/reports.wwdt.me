@@ -45,7 +45,7 @@
                     <tr>
                         <td class="name panelist"><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
                         {% for year in years %}
-                            {% if year in panelist.averages and panelist.averages[year] > 0%}
+                            {% if year in panelist.averages and panelist.averages[year] > 0 %}
                         <td class="centered middle stats float" title="{{ panelist.name }}: {{ year }}">{{ "{:f}".format(panelist.averages[year].normalize()) if use_decimal_scores else panelist.averages[year] }}</td>
                             {% else %}
                         <td class="no-data stats float">-</td>

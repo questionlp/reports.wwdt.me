@@ -10,6 +10,7 @@ from typing import Any
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.hosts.reports.debut_by_year import retrieve_show_years
 from app.shows.reports.show_details import (
     retrieve_show_date_by_id,
     retrieve_show_guests,
@@ -17,7 +18,7 @@ from app.shows.reports.show_details import (
 )
 
 
-def retrieve_recording_details(
+def retrieve_recording_details_by_year(
     location_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
@@ -97,6 +98,32 @@ def retrieve_recording_details(
         }
 
         _recordings.append(_show_info)
+
+    return _recordings
+
+
+def retrieve_recording_details(
+    location_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
+) -> dict[int, list[dict[str, Any]]]:
+    """Retrieves details for all recordings for a given location and all available years.
+
+    Returned information includes show date, show flags, host,
+    scorekeeper, panelists, and Not My Job guest(s).
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    _years = retrieve_show_years(database_connection=database_connection)
+    if not _years:
+        return None
+
+    _recordings = {}
+    for _year in _years:
+        _recordings[_year] = retrieve_recording_details_by_year(
+            location_slug=location_slug,
+            year=_year,
+            database_connection=database_connection,
+        )
 
     return _recordings
 

@@ -11,6 +11,7 @@
 - Display the original show date instead of `True` for repeat shows
 - For columns that previously displayed `True` or `False`, replace `False` with a hyphen to reduce visual noise
 - Adding new or updating existing reports
+  - Use Bootstrap Accordion component to streamline reports with multiple, large tables
   - Guests
     - Fix: Filter out entries with guest slug of `none`
     - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
@@ -57,6 +58,10 @@
   - `use_minified_css`
 - Update change frequency value from `daily` to `weekly` in the sitemap.xml templates
 - Added reports from version 3.1.0 to the respective sitemap templates
+
+### Component Changes
+
+- Update wwdtm-theme submodule to include accordion component styling and customizations
 
 ### Development Changes
 

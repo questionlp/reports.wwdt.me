@@ -16,8 +16,10 @@ from app.shows.reports.show_details import (
     retrieve_show_panelists_details,
 )
 
+from .debut_by_year import retrieve_show_years
 
-def retrieve_appearance_details(
+
+def retrieve_appearance_details_by_year(
     host_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
@@ -98,5 +100,29 @@ def retrieve_appearance_details(
         }
 
         _appearances.append(_show_info)
+
+    return _appearances
+
+
+def retrieve_appearance_details(
+    host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
+) -> dict[int, list[dict[str, Any]]]:
+    """Retrieves details for all appearances for a given host for all available years.
+
+    Returned information includes show date, show flags, location,
+    scorekeeper, panelists, and Not My Job guest(s).
+    """
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    _years = retrieve_show_years(database_connection=database_connection)
+    if not _years:
+        return None
+
+    _appearances = {}
+    for _year in _years:
+        _appearances[_year] = retrieve_appearance_details_by_year(
+            host_slug=host_slug, year=_year, database_connection=database_connection
+        )
 
     return _appearances

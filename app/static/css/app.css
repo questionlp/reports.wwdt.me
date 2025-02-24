@@ -5113,8 +5113,8 @@ textarea.form-control-lg {
   border-bottom: 0;
 }
 [data-bs-theme=dark] .accordion-button::after {
-  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='rgb%28143.4, 184.2, 255%29'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='rgb%28143.4, 184.2, 255%29'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f4f4f4'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f4f4f4'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
 .breadcrumb {
@@ -11643,6 +11643,25 @@ main #year-list {
   list-style: none;
   margin-bottom: 2.4rem;
 }
+main .accordion h1, main .accordion .h1, main .accordion h2, main .accordion .h2, main .accordion h3, main .accordion .h3, main .accordion h4, main .accordion .h4, main .accordion h5, main .accordion .h5 {
+  margin: unset;
+}
+main .accordion-button {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+main .accordion-button:not(.collapsed) {
+  color: inherit;
+  background-color: #f4f4f4;
+}
+main .accordion-button:disabled {
+  font-weight: 200;
+}
+main .accordion-button:disabled::after {
+  background-image: none;
+  background-repeat: unset;
+  background-size: unset;
+}
 main .info {
   margin-top: 0.4rem;
   padding-right: 0.8rem;
@@ -11813,6 +11832,9 @@ main .details .badge.repeat a {
   border-bottom: none;
   text-decoration: none;
   color: #0043ce;
+}
+main .details .badge.repeat a:hover {
+  color: #000000;
 }
 main .details .badge.guest {
   background-color: #a7f0ba;
@@ -12119,6 +12141,10 @@ footer .copyright {
 [data-bs-theme=dark] main .details .badge.db-id {
   background-color: #262626;
   color: #ffffff;
+}
+[data-bs-theme=dark] main .accordion-button:not(.collapsed) {
+  background-color: #393939;
+  box-shadow: unset;
 }
 [data-bs-theme=dark] main .name-list {
   column-rule: 1px dotted rgba(255, 255, 255, 0.6);

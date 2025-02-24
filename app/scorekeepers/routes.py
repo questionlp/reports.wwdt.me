@@ -88,21 +88,18 @@ def appearances_by_year() -> str:
 
     if request.method == "POST":
         _scorekeeper = "scorekeeper" in request.form and request.form["scorekeeper"]
-        _year = "year" in request.form and request.form["year"]
-        try:
-            _year = int(_year)
-        except ValueError:
-            _year = None
 
-        if _scorekeeper in _scorekeepers_dict and _year in _show_years:
+        if _scorekeeper in _scorekeepers_dict:
             _scorekeeper_info = {
                 "slug": _scorekeeper,
                 "name": _scorekeepers_dict[_scorekeeper],
             }
             _appearances = retrieve_appearance_details(
                 scorekeeper_slug=_scorekeeper,
-                year=_year,
                 database_connection=_database_connection,
+                include_decimal_scores=current_app.config["app_settings"][
+                    "use_decimal_scores"
+                ],
             )
             _database_connection.close()
             return render_template(

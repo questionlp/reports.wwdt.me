@@ -20,11 +20,11 @@
 
 <div class="card report-form mb-5">
     <div class="card-header">
-        Select a location and year to view available show recordings.
+        Select a location to view recordings grouped by year.
     </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
-            <div class="col-6">
+            <div class="col-auto">
                 <label for="location" class="visually-hidden">Location</label>
                 <select id="location" name="location" class="form-select" aria-label="Location selection">
                     <option value="">-- Select a Location --</option>
@@ -38,19 +38,6 @@
                 </select>
             </div>
             <div class="col-6">
-                <label for="year" class="visually-hidden">Year</label>
-                <select id="year" name="year" class="form-select" aria-label="Year selection">
-                    <option value="">-- Select a Year --</option>
-                    {% for _year in years %}
-                    {% if request.form.year and request.form.year | int == _year %}
-                    <option value="{{ _year }}" selected>{{ _year }}</option>
-                    {% else %}
-                    <option value="{{ _year }}">{{ _year }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-6">
                 <input type="submit" class="btn btn-submit" value="Submit">
             </div>
         </form>
@@ -58,104 +45,121 @@
 </div>
 
 {% if request.method == "POST" %}
-{% if request.form.location and request.form.year and recordings %}
-<div class="row">
-    <div class="col-auto">
-        <div class="table-responsive">
-            <h3 class="mt-0">{{ location_info.display_name }}</h3>
-            <table class="table table-bordered table-hover report">
-                <colgroup>
-                    <col class="date">
-                    <col class="boolean">
-                    <col class="date">
-                    <col class="name host">
-                    <col class="name scorekeeper">
-                    <col class="name panelist">
-                    <col class="name guest">
-                    
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Best Of</th>
-                        <th scope="col">Repeat Of</th>
-                        <th scope="col">Host</th>
-                        <th scope="col">Scorekeeper</th>
-                        <th scope="col">Panelists</th>
-                        <th scope="col">Guest</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for show in recordings %}
-                    <tr>
-                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
-                        {% if show.best_of %}
-                        <td>{{ show.best_of }}</td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                        {% if show.repeat and show.original_show_date is not none %}
-                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                        {% if show.host %}
-                        <td>{{ show.host.name }}</td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                        {% if show.scorekeeper %}
-                        {% if show.scorekeeper.guest %}
-                        <td><b>{{ show.scorekeeper.name }}</b></td>
-                        {% else %}
-                        <td>{{ show.scorekeeper.name }}</td>
-                        {% endif %}
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                        {% if show.panelists %}
-                        <td class="panelist-names">
-                            <ul class="no-bullets">
-                                {% for panelist in show.panelists %}
-                                <li>{{ panelist.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                        {% if show.guests %}
-                        <td class="guest-names">
-                            <ul class="no-bullets">
-                                {% for guest in show.guests %}
-                                <li>{{ guest.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
-                    </tr>
-                    {% endfor%}
-                </tbody>
-            </table>
+{% if request.form.location and years and recordings %}
+<div class="accordion" id="accordion">
+    {% for year in years %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            {% if recordings[year] %}
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
+                aria-controls="flush-collapse-{{ year }}">
+                {{ year }}
+            </button>
+            {% else %}
+            <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
+                aria-controls="flush-collapse-{{ year }}">
+                {{ year }}
+            </button>
+            {% endif %}
+        </h2>
+        <div id="flush-collapse-{{ year }}" class="accordion-collapse collapse">
+            <div class="accordion-body">
+                {% if recordings[year] %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover report">
+                        <colgroup>
+                            <col class="date">
+                            <col class="boolean">
+                            <col class="date">
+                            <col class="name host">
+                            <col class="name scorekeeper">
+                            <col class="name panelist">
+                            <col class="name guest">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Best Of</th>
+                                <th scope="col">Repeat Of</th>
+                                <th scope="col">Host</th>
+                                <th scope="col">Scorekeeper</th>
+                                <th scope="col">Panelists</th>
+                                <th scope="col">Guest</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for show in recordings[year] %}
+                            <tr>
+                                <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                                {% if show.best_of %}
+                                <td>{{ show.best_of }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if show.repeat and show.original_show_date is not none %}
+                                <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if show.host %}
+                                <td>{{ show.host.name }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if show.scorekeeper %}
+                                {% if show.scorekeeper.guest %}
+                                <td><b>{{ show.scorekeeper.name }}</b></td>
+                                {% else %}
+                                <td>{{ show.scorekeeper.name }}</td>
+                                {% endif %}
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if show.panelists %}
+                                <td class="panelist-names">
+                                    <ul class="no-bullets">
+                                        {% for panelist in show.panelists %}
+                                        <li>{{ panelist.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if show.guests %}
+                                <td class="guest-names">
+                                    <ul class="no-bullets">
+                                        {% for guest in show.guests %}
+                                        <li>{{ guest.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                No location recordings for {{ year }}.
+                {% endif %}
+            </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-{% elif request.form.location and request.form.year and not appearances %}
+{% elif request.form.location and not recordings %}
 <div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ location_info.display_name }}</b> from <b>{{ request.form.year }}</b> is currently unavailable.
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ location_info.display_name }}</b> from <b>{{ request.form.year
+        }}</b> is currently unavailable.
+</div>
 {% elif not request.form.location %}
 <div class="alert alert-warning my-5" role="alert">
     <i class="bi bi-exclamation-triangle pe-1"></i> No location was selected.
-</div>
-{% elif not request.form.year %}
-<div class="alert alert-warning my-5" role="alert">
-    <i class="bi bi-exclamation-triangle pe-1"></i> No year was selected.
-</div>
-{% else %}
-<div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ location_info.display_name }}</b> is currently unavailable.
 </div>
 {% endif %}
 {% endif %}

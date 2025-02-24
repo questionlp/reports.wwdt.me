@@ -65,22 +65,19 @@ def test_recordings_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Recordings by Year" in response.data
     assert b"Select a Location" in response.data
-    assert b"Select a Year" in response.data
 
 
 @pytest.mark.parametrize(
-    "location_slug, year",
+    "location_slug",
     [
-        ("studebaker-theater-chicago-il", 2024),
-        ("arlene-schnitzer-concert-hall-portland-or", 2007),
+        "studebaker-theater-chicago-il",
+        "arlene-schnitzer-concert-hall-portland-or",
     ],
 )
-def test_recordings_by_year_post(
-    client: FlaskClient, location_slug: str, year: int
-) -> None:
+def test_recordings_by_year_post(client: FlaskClient, location_slug: str) -> None:
     """Testing locations.routes.recordings_by_year (POST)."""
     response: TestResponse = client.post(
-        "/locations/recordings-by-year", data={"location": location_slug, "year": year}
+        "/locations/recordings-by-year", data={"location": location_slug}
     )
     assert response.status_code == 200
     assert b"Recordings by Year" in response.data

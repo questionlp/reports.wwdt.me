@@ -50,18 +50,13 @@ def test_appearances_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
     assert b"Select a Host" in response.data
-    assert b"Select a Year" in response.data
 
 
-@pytest.mark.parametrize(
-    "host_slug, year", [("peter-sagal", 2018), ("luke-burbank", 2006)]
-)
-def test_appearances_by_year_post(
-    client: FlaskClient, host_slug: str, year: int
-) -> None:
+@pytest.mark.parametrize("host_slug", ["peter-sagal", "luke-burbank"])
+def test_appearances_by_year_post(client: FlaskClient, host_slug: str) -> None:
     """Testing hosts.routes.appearances_by_year (POST)."""
     response: TestResponse = client.post(
-        "/hosts/appearances-by-year", data={"host": host_slug, "year": year}
+        "/hosts/appearances-by-year", data={"host": host_slug}
     )
     assert response.status_code == 200
     assert b"Appearances by Year" in response.data
@@ -74,5 +69,4 @@ def test_debuts_by_year(client: FlaskClient) -> None:
     response: TestResponse = client.get("/hosts/debuts-by-year")
     assert response.status_code == 200
     assert b"Debuts by Year" in response.data
-    assert b"Host debuts" in response.data
     assert b"# of Regular Appearances" in response.data

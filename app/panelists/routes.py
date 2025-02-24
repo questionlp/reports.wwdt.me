@@ -109,17 +109,11 @@ def appearances_by_year() -> str:
     if request.method == "POST":
         # Parse panelist dropdown selections
         _panelist = "panelist" in request.form and request.form["panelist"]
-        _year = "year" in request.form and request.form["year"]
-        try:
-            _year = int(_year)
-        except ValueError:
-            _year = None
 
-        if _panelist in _panelists_dict and _year in _show_years:
+        if _panelist in _panelists_dict:
             _panelist_info = {"slug": _panelist, "name": _panelists_dict[_panelist]}
             _appearances = retrieve_appearance_details(
                 panelist_slug=_panelist,
-                year=_year,
                 database_connection=_database_connection,
                 include_decimal_scores=current_app.config["app_settings"][
                     "use_decimal_scores"
@@ -141,7 +135,7 @@ def appearances_by_year() -> str:
             "panelists/appearances-by-year.html",
             panelists=_panelists,
             years=_show_years,
-            average_scores=None,
+            appearances=None,
         )
 
     # Fallback for GET request

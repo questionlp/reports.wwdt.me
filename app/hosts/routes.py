@@ -76,17 +76,11 @@ def appearances_by_year() -> str:
 
     if request.method == "POST":
         _host = "host" in request.form and request.form["host"]
-        _year = "year" in request.form and request.form["year"]
-        try:
-            _year = int(_year)
-        except ValueError:
-            _year = None
 
-        if _host in _hosts_dict and _year in _show_years:
+        if _host in _hosts_dict:
             _host_info = {"slug": _host, "name": _hosts_dict[_host]}
             _appearances = retrieve_appearance_details(
                 host_slug=_host,
-                year=_year,
                 database_connection=_database_connection,
             )
             _database_connection.close()
@@ -98,7 +92,7 @@ def appearances_by_year() -> str:
                 appearances=_appearances,
             )
 
-        # No valid host returned
+        # Host not found
         _database_connection.close()
         return render_template(
             "hosts/appearances-by-year.html",
