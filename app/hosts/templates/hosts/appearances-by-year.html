@@ -52,14 +52,13 @@
         <h2 class="accordion-header">
             {% if appearances[year] %}
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ year }}">
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false" aria-controls="flush-collapse-{{ year }}">
                 {{ year }}
             </button>
             {% else %}
             <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ year }}">
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false" aria-controls="flush-collapse-{{ year }}"
+                aria-disabled="true">
                 {{ year }}
             </button>
             {% endif %}

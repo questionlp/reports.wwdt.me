@@ -25,14 +25,13 @@
         <h2 class="accordion-header">
             {% if introductions[scorekeeper.id] %}
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ scorekeeper.slug }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ scorekeeper.slug }}">
+                data-bs-target="#flush-collapse-{{ scorekeeper.slug }}" aria-expanded="false" aria-controls="flush-collapse-{{ scorekeeper.slug }}">
                 {{ scorekeeper.name }}
             </button>
             {% else %}
             <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ scorekeeper.slug }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ scorekeeper.slug }}">
+                data-bs-target="#flush-collapse-{{ scorekeeper.slug }}" aria-expanded="false" aria-controls="flush-collapse-{{ scorekeeper.slug }}"
+                aria-disabled="true">
                 {{ scorekeeper.name }}
             </button>
             {% endif %}

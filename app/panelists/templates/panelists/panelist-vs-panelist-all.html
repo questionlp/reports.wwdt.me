@@ -25,14 +25,13 @@
         <h2 class="accordion-header">
             {% if results[panelist] %}
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ panelist }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ panelist }}">
+                data-bs-target="#flush-collapse-{{ panelist }}" aria-expanded="false" aria-controls="flush-collapse-{{ panelist }}">
                 {{ panelists[panelist].name }}
             </button>
             {% else %}
             <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse-{{ panelist }}" aria-expanded="false"
-                aria-controls="flush-collapse-{{ panelist }}">
+                data-bs-target="#flush-collapse-{{ panelist }}" aria-expanded="false" aria-controls="flush-collapse-{{ panelist }}"
+                aria-disabled="true">
                 {{ panelists[panelist].name }}
             </button>
             {% endif %}
