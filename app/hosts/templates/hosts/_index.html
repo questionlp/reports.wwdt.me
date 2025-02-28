@@ -18,26 +18,19 @@
 <div class="info">
     <div class="container-fluid py-3">
         <ul class="list-group report-list">
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('hosts.appearance_summary') }}">Appearance Summary</a>
-                </h3>
-                <div class="description">
-                    <p>
-                        This report provides a list of show hosts along with the number of
-                        appearances, their first and most recent appearance, for both
-                        regular and for all shows (including Best Of and Repeat shows).
-                    </p>
-                </div>
-            </li>
+            
             <li class="list-group-item">
                 <h3 class="title">
                     <a href="{{ url_for('hosts.appearance_counts_by_year' )}}">Appearance Counts by Year</a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a list of hosts and the number of appearances
-                        they have made each year.
+                        A collection of show host appearance counts for regular shows and all shows
+                        grouped by year.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
                     </p>
                 </div>
             </li>
@@ -47,8 +40,28 @@
                 </h3>
                 <div class="description">
                     <p>
-                        This report breaks down the number of times a host has appeared on a
-                        show for a given year as a grid.
+                        A large table displaying each show host as rows and hosting appearance counts
+                        for each year as columns. Hosting appearance counts includes regular shows and
+                        all shows, with the count of all shows in parentheses.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('hosts.appearance_summary') }}">Appearance Summary</a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of show hosts with their first and most recent appearances and
+                        corresponding count of hosting appearances for both regular shows and all shows.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
                     </p>
                 </div>
             </li>
@@ -58,12 +71,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a list of show hosts that appear for a
-                        given year.
-                    </p>
-                    <p>
-                        Guest appearances include appearances on regular shows and
-                        unique appearances only on Best Of shows.
+                        A collection of appearances with show information, including location,
+                        scorekeeper, panelists and Not My Job guest(s), for a selected show host grouped
+                        by year.
                     </p>
                 </div>
             </li>
@@ -73,8 +83,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a break down of when hosts made their debut on
-                        the show, grouped by year.
+                        A collection of show host debut appearances with show information, including
+                        location, scorekeeper, panelists and Not My Job guest(s), grouped by year.
                     </p>
                 </div>
             </li>
