@@ -11633,6 +11633,34 @@ main nav#nav-breadcrumb .breadcrumb {
 main nav#nav-breadcrumb .breadcrumb .active {
   color: #000000;
 }
+main .accordion h1, main .accordion .h1,
+main .accordion h2,
+main .accordion .h2,
+main .accordion h3,
+main .accordion .h3,
+main .accordion h4,
+main .accordion .h4,
+main .accordion h5,
+main .accordion .h5 {
+  margin: unset;
+}
+main .accordion-button {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: revert;
+}
+main .accordion-button:not(.collapsed) {
+  color: inherit;
+  background-color: #f4f4f4;
+}
+main .accordion-button:disabled {
+  font-weight: 400;
+}
+main .accordion-button:disabled::after {
+  background-image: none;
+  background-repeat: unset;
+  background-size: unset;
+}
 main .container-fluid.p-4, main .p-4.container-sm, main .p-4.container-md, main .p-4.container-lg, main .p-4.container-xl, main .p-4.container-xxl {
   padding: 2rem !important;
 }
@@ -11642,25 +11670,6 @@ main #year-list {
   column-rule: none;
   list-style: none;
   margin-bottom: 2.4rem;
-}
-main .accordion h1, main .accordion .h1, main .accordion h2, main .accordion .h2, main .accordion h3, main .accordion .h3, main .accordion h4, main .accordion .h4, main .accordion h5, main .accordion .h5 {
-  margin: unset;
-}
-main .accordion-button {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-main .accordion-button:not(.collapsed) {
-  color: inherit;
-  background-color: #f4f4f4;
-}
-main .accordion-button:disabled {
-  font-weight: 200;
-}
-main .accordion-button:disabled::after {
-  background-image: none;
-  background-repeat: unset;
-  background-size: unset;
 }
 main .info {
   margin-top: 0.4rem;
