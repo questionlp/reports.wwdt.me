@@ -13,18 +13,18 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a list of the panelists with the highest average
-        scores for a given year.
+        A list of panelists with their average scores and number of appearances for a
+        selected year. The list is sorted by average score in descending order.
     </p>
     <p>
-        Scoring information excludes Best Of and repeat shows.
+        Scoring information excludes Best Of and repeat shows, as well as the 20th
+        anniversary show that aired on
+        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>
+        due to the unique Lightning Fill-in-the-Blank format.
     </p>
 </div>
 
 <div class="card report-form mb-5">
-    <div class="card-header">
-        Select a year to view panelist average scores.
-    </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-auto">

@@ -13,26 +13,24 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to lookup how well a panelist has scored
-        against another panelist, broken down by show.
+        A comparison of how well two selected panelists performed on shows they shared
+        a panel. The comparison includes scores and rankings for each of their
+        appearances.
     </p>
     <p>
-        Best Of, Repeat and Special shows, including the 20th Anniversary Special
-        that aired on <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
+        Best Of, repeat and the 20th Anniversary Special that aired on
+        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
         will not be included in the results.
     </p>
 </div>
 
 <div class="card report-form mb-5">
-    <div class="card-header">
-        Select two panelists to compare scores
-    </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-6">
                 <label for="panelist-1" class="visually-hidden">Panelist 1</label>
                 <select id="panelist-1" name="panelist_1" class="form-select" aria-label="Panelist 1 selection">
-                    <option value="">-- Select Panelist 1 --</option>
+                    <option value="">-- Select Panelist #1 --</option>
                     {% for slug, name in panelists.items() %}
                     {% if request.form.panelist_1 == slug %}
                     <option value="{{ slug }}" selected>{{ name }}</option>
@@ -45,7 +43,7 @@
             <div class="col-6">
                 <label for="panelist-2" class="visually-hidden">Panelist 2</label>
                 <select id="panelist-2" name="panelist_2" class="form-select" aria-label="Panelist 2 selection">
-                    <option value="">-- Select Panelist 2 --</option>
+                    <option value="">-- Select Panelist #2 --</option>
                     {% for slug, name in panelists.items() %}
                     {% if request.form.panelist_2 == slug %}
                     <option value="{{ slug }}" selected>{{ name }}</option>
