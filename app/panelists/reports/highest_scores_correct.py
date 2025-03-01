@@ -32,6 +32,7 @@ def retrieve_highest_average_scores_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistscore_decimal IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -48,6 +49,7 @@ def retrieve_highest_average_scores_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistscore_decimal IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -64,6 +66,7 @@ def retrieve_highest_average_scores_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistscore IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -80,6 +83,7 @@ def retrieve_highest_average_scores_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistscore IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -128,6 +132,7 @@ def retrieve_highest_average_correct_answers_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistlrndcorrect_decimal IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -144,6 +149,7 @@ def retrieve_highest_average_correct_answers_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistlrndcorrect_decimal IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -160,6 +166,7 @@ def retrieve_highest_average_correct_answers_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistlrndcorrect IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
@@ -175,6 +182,7 @@ def retrieve_highest_average_correct_answers_by_year(
                 JOIN ww_shows s ON s.showid = pm.showid
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE YEAR(s.showdate) = %s
+                AND s.showdate <> '2018-10-27'
                 AND s.bestof = 0 AND s.repeatshowid IS NULL
                 AND pm.panelistlrndcorrect IS NOT NULL
                 GROUP BY p.panelist, p.panelistslug
