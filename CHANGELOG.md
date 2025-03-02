@@ -37,7 +37,6 @@
     - Update: "Bluff the Listener Statistics by Year" report renamed and relocated to "Bluff the Listener Panelist Statistics by Year"
     - New Report: "Appearances by Year"
     - New Report: "Appearance Counts by Year"
-    - New Report: "Appearance Counts by Year: Grid"
     - New Report: "Bluff the Listener Statistics by Year"
     - New Report: "Highest Average Correct Answers by Year"
     - New Report: "Highest Average Scores by Year"
