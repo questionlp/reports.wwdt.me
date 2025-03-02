@@ -28,7 +28,7 @@
     - New Report: "Appearances by Year"
     - New Report: "Debuts by Year"
   - Locations
-  - - Update: Add "Home/Remote Studios" column
+    - Update: Add "Home/Remote Studios" column
     - New Report: "Recording Counts by Year"
     - New Report: "Recordings by Year"
   - Panelists
