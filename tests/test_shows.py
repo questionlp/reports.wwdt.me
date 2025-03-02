@@ -351,7 +351,7 @@ def test_show_counts_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Show Counts by Year" in response.data
     assert b"Best Of" in response.data
-    assert b"Best Of Repeats" in response.data
+    assert b"Repeat Best Ofs" in response.data
 
 
 def test_show_descriptions(client: FlaskClient) -> None:

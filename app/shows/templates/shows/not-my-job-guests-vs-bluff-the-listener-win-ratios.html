@@ -13,21 +13,21 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report compares the rates in which a Not My Job guest wins compared
-        to how often a listener contestant chooses the correct Bluff the Listener
+        A comparison between the rates in which a Not My Job guest earns a win against
+        how often a listener contestant chooses the correct Bluff the Listener
         story.
     </p>
     <p>
-        For Not My Job guests, a win is considered when a guest answers 2 or more
+        For Not My Job guests, a win is considered when a guest answers two or more
         questions correct or when a
-        <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper grants an
-        exception</a>. The report also takes into account
-        <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job guests that were
-        only included in Best Of shows</a>.
+        <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper
+        grants an exception</a>. The report also takes into account
+        <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job
+        guests that were only included in Best Of shows</a>.
     </p>
     <p>
-        As with Not My Job guests who have only been included in Best Of shows,
-        certain Best Of shows also include unique Bluff the Listener segments.
+        As with Not My Job segments and guests that have only been included in Best Of
+        shows, certain Best Of shows also include unique Bluff the Listener segments.
         Both usually come from shows where Wait Wait... Don't Tell Me! travels and
         records a second show. In those cases, the Bluff the Listener segments
         usually include a different theme and a different true story from the

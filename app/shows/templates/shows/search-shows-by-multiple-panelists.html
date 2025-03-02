@@ -13,18 +13,57 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to search for shows with a particular set of
-        panelists (up to three) with options to include Best Of and Repeat shows.
+        A list of shows where up to three selected panelists have appeared on the same
+        panel. Options are available to include Best Of and/or repeats shows.
     </p>
     <p>
-        Shows that are Repeat Best Of shows will be included if either option
-        is checked.
+        Shows that are Repeat Best Of shows will be included if either include show
+        options are checked.
     </p>
 </div>
 
 <div class="card report-form mb-5">
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-6">
+                <label for="panelist-1" class="visually-hidden">Panelist 1</label>
+                <select id="panelist-1" name="panelist_1" class="form-select" aria-label="Panelist 1 selection">
+                    <option value="">-- Select Panelist #1 --</option>
+                    {% for panelist in panelists %}
+                    {% if request.form.panelist_1 == panelist %}
+                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
+                    {% else %}
+                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="panelist-2" class="visually-hidden">Panelist 2</label>
+                <select id="panelist-2" name="panelist_2" class="form-select" aria-label="Panelist 2 selection">
+                    <option value="">-- Select Panelist #2 --</option>
+                    {% for panelist in panelists %}
+                    {% if request.form.panelist_2 == panelist %}
+                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
+                    {% else %}
+                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="panelist-3" class="visually-hidden">Panelist 3</label>
+                <select id="panelist-3" name="panelist_3" class="form-select" aria-label="Panelist 3 selection">
+                    <option value="">-- Select Panelist #3 --</option>
+                    {% for panelist in panelists %}
+                    {% if request.form.panelist_3 == panelist %}
+                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
+                    {% else %}
+                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
             <div class="col-auto">
                 <div class="form-check">
                     <label for="best-of" class="form-check-label">Include Best Ofs</label>
@@ -44,46 +83,6 @@
                     <input class="form-check-input" type="checkbox" id="repeats" name="repeats">
                     {% endif %}
                 </div>
-            </div>
-            <br>
-            <div class="col-6">
-                <label for="panelist-1" class="visually-hidden">Panelist 1</label>
-                <select id="panelist-1" name="panelist_1" class="form-select" aria-label="Panelist 1 selection">
-                    <option value="">-- Panelist 1 --</option>
-                    {% for panelist in panelists %}
-                    {% if request.form.panelist_1 == panelist %}
-                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
-                    {% else %}
-                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-6">
-                <label for="panelist-2" class="visually-hidden">Panelist 2</label>
-                <select id="panelist-2" name="panelist_2" class="form-select" aria-label="Panelist 2 selection">
-                    <option value="">-- Panelist 2 --</option>
-                    {% for panelist in panelists %}
-                    {% if request.form.panelist_2 == panelist %}
-                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
-                    {% else %}
-                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-6">
-                <label for="panelist-3" class="visually-hidden">Panelist 3</label>
-                <select id="panelist-3" name="panelist_3" class="form-select" aria-label="Panelist 3 selection">
-                    <option value="">-- Panelist 3 --</option>
-                    {% for panelist in panelists %}
-                    {% if request.form.panelist_3 == panelist %}
-                    <option value="{{ panelist }}" selected>{{ panelists[panelist] }}</option>
-                    {% else %}
-                    <option value="{{ panelist }}">{{ panelists[panelist] }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
             </div>
             <div class="col-6">
                 <input type="submit" class="btn btn-submit" value="Submit">

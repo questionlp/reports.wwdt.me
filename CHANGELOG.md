@@ -12,6 +12,10 @@
 - For columns that previously displayed `True` or `False`, replace `False` with a hyphen to reduce visual noise
 - Adding new or updating existing reports
   - Use Bootstrap Accordion component to streamline reports with multiple, large tables
+  - Update report descriptions for more consistent use of terms
+  - Match the report descriptions listed each section index page with the description in each report
+  - Remove card header for cards that include forms
+  - Update margin consistency between report descriptions, form cards and generated report results
   - Guests
     - Fix: Filter out entries with guest slug of `none`
     - Update: "Not My Job Scoring Exceptions" is now sorted by show date rather than by Not My Job Guest name
