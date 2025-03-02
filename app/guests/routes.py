@@ -6,11 +6,19 @@
 """Guests Routes for Wait Wait Reports."""
 
 import mysql.connector
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, request
 
+from app.panelists.reports.debut_by_year import retrieve_show_years
+
+from .reports.appearances_by_year import retrieve_appearances_by_year
 from .reports.best_of_only import retrieve_best_of_only_guests
 from .reports.most_appearances import guest_multiple_appearances
-from .reports.scores import retrieve_all_scoring_exceptions, retrieve_all_three_pointers
+from .reports.scores import (
+    retrieve_all_missing_scores,
+    retrieve_all_scoring_exceptions,
+    retrieve_all_three_pointers,
+)
+from .reports.wins_by_year import retrieve_wins_by_year
 
 blueprint = Blueprint("guests", __name__, template_folder="templates")
 
@@ -19,6 +27,54 @@ blueprint = Blueprint("guests", __name__, template_folder="templates")
 def index() -> str:
     """View: Guests Index."""
     return render_template("guests/_index.html")
+
+
+@blueprint.route("/appearances-by-year", methods=["GET", "POST"])
+def appearances_by_year() -> str:
+    """View: Appearances by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "guests/appearances-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _appearances = retrieve_appearances_by_year(
+            year=year,
+            database_connection=_database_connection,
+        )
+        if not _appearances:
+            _database_connection.close()
+            return render_template(
+                "guests/appearances-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "guests/appearances-by-year.html",
+            show_years=_show_years,
+            year=year,
+            appearances=_appearances,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "guests/appearances-by-year.html", show_years=_show_years, appearances=None
+    )
 
 
 @blueprint.route("/best-of-only-not-my-job-guests")
@@ -37,6 +93,17 @@ def most_appearances() -> str:
     _guests = guest_multiple_appearances(database_connection=_database_connection)
     _database_connection.close()
     return render_template("guests/most-appearances.html", guests=_guests)
+
+
+@blueprint.route("/not-my-job-guests-missing-scores")
+def not_my_job_guests_missing_scores() -> str:
+    """View: Not My Job Guests with Missing Scores Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _guests = retrieve_all_missing_scores(database_connection=_database_connection)
+    _database_connection.close()
+    return render_template(
+        "guests/not-my-job-guests-missing-scores.html", guests=_guests
+    )
 
 
 @blueprint.route("/not-my-job-scoring-exceptions")
@@ -62,4 +129,52 @@ def not_my_job_three_pointers() -> str:
     _database_connection.close()
     return render_template(
         "guests/not-my-job-three-pointers.html", three_pointers=_three_pointers
+    )
+
+
+@blueprint.route("/wins-by-year", methods=["GET", "POST"])
+def wins_by_year() -> str:
+    """View: Wins by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "guests/wins-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _appearances = retrieve_wins_by_year(
+            year=year,
+            database_connection=_database_connection,
+        )
+        if not _appearances:
+            _database_connection.close()
+            return render_template(
+                "guests/wins-by-year.html",
+                show_years=_show_years,
+                appearances=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "guests/wins-by-year.html",
+            show_years=_show_years,
+            year=year,
+            appearances=_appearances,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "guests/wins-by-year.html", show_years=_show_years, appearances=None
     )

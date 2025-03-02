@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% set page_title = "Statistics Summary" %}
-{% block title %}Statistics Summary | Panelists{% endblock %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" id="nav-breadcrumb">
@@ -13,8 +13,13 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a break down of scoring statistics for each
-        panelist.
+        A list of panelists each with the number of appearances across regular shows,
+        all shows and shows with corresponding panelist scores, along with scoring
+        statistics.
+    </p>
+    <p>
+        Appearances on and scoring information from Best Of and repeat shows are not
+        included.
     </p>
 </div>
 

@@ -13,7 +13,7 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a list of show notes for all shows.
+        A list of all shows with the corresponding show notes.
     </p>
 </div>
 
@@ -24,11 +24,15 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="date">
+                    <col class="boolean">
+                    <col class="date">
                     <col class="long-text">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat Of</th>
                         <th scope="col">Notes</th>
                     </tr>
                 </thead>
@@ -36,17 +40,29 @@
                     {% for show in notes %}
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.best_of %}
+                        <td>{{ show.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.repeat and show.original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                         {% if show.notes %}
                         <td class="notes-text">{{ show.notes | markdown | safe }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
                     </tr>
-                    {% endfor%}
+                    {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat Of</th>
                         <th scope="col">Notes</th>
                     </tr>
                 </tfoot>

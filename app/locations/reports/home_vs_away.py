@@ -19,7 +19,7 @@ def retrieve_location_home_vs_away(
     query = """
         SELECT DISTINCT YEAR(showdate) FROM ww_shows
         ORDER BY YEAR(showdate) ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=False)
     cursor.execute(query)
     results = cursor.fetchall()
@@ -52,12 +52,22 @@ def retrieve_location_home_vs_away(
                 AND s.repeatshowid IS NULL
                 AND l.city <> 'Chicago'
                 AND l.state <> 'IL'
-            ) AS 'away';
-            """
+            ) AS 'away', (
+                SELECT COUNT(s.showid)
+                FROM ww_shows s
+                JOIN ww_showlocationmap lm ON lm.showid = s.showid
+                JOIN ww_locations l ON l.locationid = lm.locationid
+                WHERE YEAR(s.showdate) = %s
+                AND s.bestof = 0
+                AND s.repeatshowid IS NULL
+                AND lm.locationid = 148
+            ) AS 'studios';
+        """
         cursor = database_connection.cursor(dictionary=True)
         cursor.execute(
             query,
             (
+                year,
                 year,
                 year,
             ),
@@ -68,7 +78,12 @@ def retrieve_location_home_vs_away(
             counts.append({"year": year, "home": None, "away": None})
         else:
             counts.append(
-                {"year": year, "home": result["home"], "away": result["away"]}
+                {
+                    "year": year,
+                    "home": result["home"],
+                    "away": result["away"],
+                    "studios": result["studios"],
+                }
             )
 
     return counts

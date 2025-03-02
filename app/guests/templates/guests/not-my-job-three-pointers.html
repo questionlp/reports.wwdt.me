@@ -13,9 +13,8 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report provides a list of all of the Not My Job guests who answered
-        all three Not My Job questions correctly or were awarded all three points
-        via a scoring exception.
+        A list of all Not My Job guests who correctly answered all three Not My Job
+        questions or were awarded all three points via a scoring exception.
     </p>
 </div>
 
@@ -47,9 +46,17 @@
                     <tr>
                         <td><a href="{{ stats_url }}/guests/{{ guest.slug }}">{{ guest.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ guest.show_date | replace('-', '/') }}">{{ guest.show_date }}</a></td>
-                        <td>{{ guest.show_scorekeeper }}</td>
+                        {% if guest.scorekeeper.guest %}
+                        <td><b>{{ guest.scorekeeper.name }}</b></td>
+                        {% else %}
+                        <td>{{ guest.scorekeeper.name }}</td>
+                        {% endif %}
                         <td>{{ guest.score }}</td>
+                        {% if guest.exception %}
                         <td>{{ guest.exception }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                     {% if guest.exception and guest.show_notes %}
                         <td class="notes">{{ guest.show_notes | markdown | safe }}</td>
                     {% else %}

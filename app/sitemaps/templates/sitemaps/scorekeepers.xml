@@ -2,10 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site_url }}{{ url_for("scorekeepers.appearance_summary") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearance_counts_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearance_counts_by_year_grid") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.appearances_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("scorekeepers.debuts_by_year") }}</loc>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{{ site_url }}{{ url_for("scorekeepers.scorekeeper_introductions") }}</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

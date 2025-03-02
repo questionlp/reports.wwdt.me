@@ -20,21 +20,94 @@
         <ul class="list-group report-list">
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('scorekeepers.appearance_summary') }}">Appearance Summary</a>
+                    <a href="{{ url_for('scorekeepers.appearance_counts_by_year' )}}">
+                        Appearance Counts by Year
+                    </a>
                 </h3>
                 <div class="description">
-                    This report provides a list of scorekeepers along with the number of
-                    appearances, their first and most recent appearance, for both regular and
-                    for all shows (including Best Of and Repeat shows).
+                    <p>
+                        A collection of scorekeeper appearance counts for regular shows and all shows
+                        grouped by year.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
+                    </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('scorekeepers.scorekeeper_introductions') }}">Scorekeeper Introductions</a>
+                    <a href="{{ url_for('scorekeepers.appearance_counts_by_year_grid' )}}">
+                        Appearance Counts by Year: Grid
+                    </a>
                 </h3>
                 <div class="description">
-                    This report provides a list of introductions that Bill Kurtis and other
-                    scorekeepers have used at the start of each show.
+                    <p>
+                        A large table displaying each scorekeeper as rows and appearance counts
+                        for each year as columns. Scorekeeper appearance counts includes regular shows
+                        and all shows, with the count of all shows in parentheses.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.appearance_summary') }}">
+                        Appearance Summary
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of scorekeepers with their first and most recent appearances and
+                        corresponding count of appearances for both regular shows and all shows.
+                    </p>
+                    <p>
+                        Regular shows do not include Best Of or repeat shows, while all shows
+                        include all available shows.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.appearances_by_year' )}}">
+                        Appearances by Year
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A collection of appearances with show information, including location,
+                        host, panelists and Not My Job guest(s), for a selected scorekeeper grouped by
+                        year.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.debuts_by_year') }}">
+                        Debuts by Year
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A collection of scorekeeper debut appearances with show information, including
+                        location, host, panelists and Not My Job guest(s), grouped by year.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('scorekeepers.scorekeeper_introductions') }}">
+                        Scorekeeper Introductions
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A collection of scorekeepers with a list of introductions that they have used
+                        at the start of each show they appeared on.
+                    </p>
                 </div>
             </li>
         </ul>

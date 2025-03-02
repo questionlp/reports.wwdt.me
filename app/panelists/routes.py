@@ -18,6 +18,7 @@ from .reports.aggregate_scores import (
 from .reports.appearances import retrieve_first_most_recent_appearances
 from .reports.appearances_by_year import (
     retrieve_all_appearance_counts,
+    retrieve_all_appearance_counts_by_year,
     retrieve_all_years,
 )
 from .reports.average_scores_by_year import (
@@ -26,12 +27,20 @@ from .reports.average_scores_by_year import (
 )
 from .reports.bluff_stats import (
     retrieve_all_panelist_bluff_stats,
+    retrieve_all_panelist_bluff_stats_by_year,
+    retrieve_most_chosen_by_year,
+    retrieve_most_chosen_correct_by_year,
+    retrieve_most_correct_by_year,
     retrieve_panelist_bluffs_by_year,
 )
 from .reports.common import retrieve_panelists
 from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
 from .reports.gender_stats import retrieve_stats_by_year_gender
+from .reports.highest_scores_correct import (
+    retrieve_highest_average_correct_answers_by_year,
+    retrieve_highest_average_scores_by_year,
+)
 from .reports.panelist_vs_panelist import (
     generate_panelist_vs_panelist_results as pvp_generate_results,
 )
@@ -46,14 +55,17 @@ from .reports.panelist_vs_panelist_scoring import (
 )
 from .reports.perfect_scores import retrieve_perfect_score_counts
 from .reports.rankings_summary import retrieve_all_panelist_rankings
+from .reports.show_appearances import retrieve_appearance_details
 from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
     retrieve_all_panelists_stats as summary_retrieve_all_stats,
 )
+from .reports.stats_summary_by_year import retrieve_stats_all_years
 from .reports.streaks import (
     calculate_panelist_losing_streaks,
     calculate_panelist_win_streaks,
 )
+from .reports.wins import retrieve_combined_outright_wins_ties_by_year
 
 blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
@@ -86,9 +98,72 @@ def aggregate_scores() -> str:
     )
 
 
-@blueprint.route("/appearances-by-year")
+@blueprint.route("/appearances-by-year", methods=["GET", "POST"])
 def appearances_by_year() -> str:
     """View: Appearances by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _panelist = "panelist" in request.form and request.form["panelist"]
+
+        if _panelist in _panelists_dict:
+            _panelist_info = {"slug": _panelist, "name": _panelists_dict[_panelist]}
+            _appearances = retrieve_appearance_details(
+                panelist_slug=_panelist,
+                database_connection=_database_connection,
+                include_decimal_scores=current_app.config["app_settings"][
+                    "use_decimal_scores"
+                ],
+            )
+            _database_connection.close()
+            return render_template(
+                "panelists/appearances-by-year.html",
+                panelists=_panelists,
+                years=_show_years,
+                panelist_info=_panelist_info,
+                appearances=_appearances,
+                rank_map=RANK_MAP,
+            )
+
+        # No valid panelist returned
+        _database_connection.close()
+        return render_template(
+            "panelists/appearances-by-year.html",
+            panelists=_panelists,
+            years=_show_years,
+            appearances=None,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/appearances-by-year.html", panelists=_panelists, years=_show_years
+    )
+
+
+@blueprint.route("/appearance-counts-by-year")
+def appearance_counts_by_year() -> str:
+    """View: Appearance Counts by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _appearances = retrieve_all_appearance_counts_by_year(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    return render_template(
+        "panelists/appearance-counts-by-year.html",
+        years=list(_appearances.keys()),
+        appearances=_appearances,
+    )
+
+
+@blueprint.route("/appearance-counts-by-year/grid")
+def appearance_counts_by_year_grid() -> str:
+    """View: Appearance Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_all_appearance_counts(
         database_connection=_database_connection
@@ -96,7 +171,7 @@ def appearances_by_year() -> str:
     _show_years = retrieve_all_years(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
-        "panelists/appearances-by-year.html",
+        "panelists/appearance-counts-by-year-grid.html",
         panelists=_panelists,
         show_years=_show_years,
     )
@@ -185,6 +260,57 @@ def bluff_the_listener_statistics() -> str:
 def bluff_the_listener_statistics_by_year() -> str:
     """View: Bluff the Listener Statistics by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-the-listener-statistics-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_all_panelist_bluff_stats_by_year(
+            year=year, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/bluff-the-listener-statistics-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/bluff-the-listener-statistics-by-year.html",
+            show_years=_show_years,
+            year=year,
+            bluff_stats=_bluff_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/bluff-the-listener-statistics-by-year.html",
+        show_years=_show_years,
+        bluff_stats=None,
+    )
+
+
+@blueprint.route(
+    "/bluff-the-listener-panelist-statistics-by-year", methods=["GET", "POST"]
+)
+def bluff_the_listener_panelist_statistics_by_year() -> str:
+    """View: Bluff the Listener Panelist Statistics by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists(database_connection=_database_connection)
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
 
@@ -195,7 +321,7 @@ def bluff_the_listener_statistics_by_year() -> str:
         if panelist not in _panelists_dict:
             _database_connection.close()
             return render_template(
-                "panelists/bluff-the-listener-statistics-by-year.html",
+                "panelists/bluff-the-listener-panelist-statistics-by-year.html",
                 panelists=_panelists_dict,
                 bluff_stats=None,
             )
@@ -206,14 +332,14 @@ def bluff_the_listener_statistics_by_year() -> str:
         if not _bluff_stats:
             _database_connection.close()
             return render_template(
-                "panelists/bluff-the-listener-statistics-by-year.html",
+                "panelists/bluff-the-listener-panelist-statistics-by-year.html",
                 panelists=_panelists_dict,
                 bluff_stats=None,
             )
 
         _database_connection.close()
         return render_template(
-            "panelists/bluff-the-listener-statistics-by-year.html",
+            "panelists/bluff-the-listener-panelist-statistics-by-year.html",
             panelists=_panelists_dict,
             bluff_stats=_bluff_stats,
         )
@@ -221,7 +347,7 @@ def bluff_the_listener_statistics_by_year() -> str:
     # Fallback for GET request
     _database_connection.close()
     return render_template(
-        "panelists/bluff-the-listener-statistics-by-year.html",
+        "panelists/bluff-the-listener-panelist-statistics-by-year.html",
         panelists=_panelists_dict,
         bluff_stats=None,
     )
@@ -267,6 +393,118 @@ def first_most_recent_appearances() -> str:
     )
 
 
+@blueprint.route("/highest-average-correct-answers-by-year", methods=["GET", "POST"])
+def highest_average_correct_answers_by_year() -> str:
+    """View: Highest Average Correct Answers by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        _exclude_single = (
+            "exclude_single" in request.form and request.form["exclude_single"] == "on"
+        )
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/highest-average-correct-answers-by-year.html",
+                show_years=_show_years,
+                win_stats=None,
+            )
+
+        _score_stats = retrieve_highest_average_correct_answers_by_year(
+            year=year,
+            database_connection=_database_connection,
+            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+            exclude_single_appearances=_exclude_single,
+        )
+        if not _score_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/highest-average-correct-answers-by-year.html",
+                show_years=_show_years,
+                score_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/highest-average-correct-answers-by-year.html",
+            show_years=_show_years,
+            year=year,
+            score_stats=_score_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/highest-average-correct-answers-by-year.html",
+        show_years=_show_years,
+        score_stats=None,
+    )
+
+
+@blueprint.route("/highest-average-scores-by-year", methods=["GET", "POST"])
+def highest_average_scores_by_year() -> str:
+    """View: Highest Average Scores by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        _exclude_single = (
+            "exclude_single" in request.form and request.form["exclude_single"] == "on"
+        )
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/highest-average-scores-by-year.html",
+                show_years=_show_years,
+                win_stats=None,
+            )
+
+        _score_stats = retrieve_highest_average_scores_by_year(
+            year=year,
+            database_connection=_database_connection,
+            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+            exclude_single_appearances=_exclude_single,
+        )
+        if not _score_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/highest-average-scores-by-year.html",
+                show_years=_show_years,
+                score_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/highest-average-scores-by-year.html",
+            show_years=_show_years,
+            year=year,
+            score_stats=_score_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/highest-average-scores-by-year.html",
+        show_years=_show_years,
+        score_stats=None,
+    )
+
+
 @blueprint.route("/losing-streaks")
 def losing_streaks() -> str:
     """View: Losing Streaks Report."""
@@ -277,6 +515,208 @@ def losing_streaks() -> str:
     )
     _database_connection.close()
     return render_template("panelists/losing-streaks.html", losing_streaks=_streaks)
+
+
+@blueprint.route("/most-chosen-bluff-the-listener-by-year", methods=["GET", "POST"])
+def most_chosen_bluff_the_listener_by_year() -> str:
+    """View: Most Chosen Bluff the Listener Story by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-chosen-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_most_chosen_by_year(
+            year=year, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-chosen-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/most-chosen-bluff-the-listener-by-year.html",
+            show_years=_show_years,
+            year=year,
+            bluff_stats=_bluff_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/most-chosen-bluff-the-listener-by-year.html",
+        show_years=_show_years,
+        bluff_stats=None,
+    )
+
+
+@blueprint.route(
+    "/most-chosen-correct-bluff-the-listener-by-year", methods=["GET", "POST"]
+)
+def most_chosen_correct_bluff_the_listener_by_year() -> str:
+    """View: Most Chosen Correct Bluff the Listener Story by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-chosen-correct-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_most_chosen_correct_by_year(
+            year=year, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-chosen-correct-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/most-chosen-correct-bluff-the-listener-by-year.html",
+            show_years=_show_years,
+            year=year,
+            bluff_stats=_bluff_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/most-chosen-correct-bluff-the-listener-by-year.html",
+        show_years=_show_years,
+        bluff_stats=None,
+    )
+
+
+@blueprint.route("/most-correct-bluff-the-listener-by-year", methods=["GET", "POST"])
+def most_correct_bluff_the_listener_by_year() -> str:
+    """View: Most Correct Bluff the Listener Story by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-correct-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _bluff_stats = retrieve_most_correct_by_year(
+            year=year, database_connection=_database_connection
+        )
+        if not _bluff_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-correct-bluff-the-listener-by-year.html",
+                show_years=_show_years,
+                bluff_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/most-correct-bluff-the-listener-by-year.html",
+            show_years=_show_years,
+            year=year,
+            bluff_stats=_bluff_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/most-correct-bluff-the-listener-by-year.html",
+        show_years=_show_years,
+        bluff_stats=None,
+    )
+
+
+@blueprint.route("/most-wins-by-year", methods=["GET", "POST"])
+def most_wins_by_year() -> str:
+    """View: Most Wins by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _show_years = retrieve_show_years(database_connection=_database_connection)
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        _year = "year" in request.form and request.form["year"]
+        try:
+            year = int(_year)
+        except ValueError:
+            year = None
+
+        if year not in _show_years:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-wins-by-year.html",
+                show_years=_show_years,
+                win_stats=None,
+            )
+
+        _win_stats = retrieve_combined_outright_wins_ties_by_year(
+            year=year, database_connection=_database_connection
+        )
+        if not _win_stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/most-wins-by-year.html",
+                show_years=_show_years,
+                win_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/most-wins-by-year.html",
+            show_years=_show_years,
+            year=year,
+            win_stats=_win_stats,
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/most-wins-by-year.html",
+        show_years=_show_years,
+        win_stats=None,
+    )
 
 
 @blueprint.route("/panelist-vs-panelist", methods=["GET", "POST"])
@@ -489,6 +929,56 @@ def statistics_summary() -> str:
         "panelists/statistics-summary.html",
         panelists=_panelists_dict,
         panelists_stats=_stats,
+    )
+
+
+@blueprint.route("/statistics-summary-by-year", methods=["GET", "POST"])
+def statistics_summary_by_year() -> str:
+    """View: Statistics Summary by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists(database_connection=_database_connection)
+    _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
+
+    if request.method == "POST":
+        # Parse panelist dropdown selections
+        panelist = "panelist" in request.form and request.form["panelist"]
+
+        if panelist not in _panelists_dict:
+            _database_connection.close()
+            return render_template(
+                "panelists/statistics-summary-by-year.html",
+                panelists=_panelists_dict,
+                bluff_stats=None,
+            )
+
+        _stats = retrieve_stats_all_years(
+            panelist_slug=panelist,
+            database_connection=_database_connection,
+            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+        )
+
+        if not _stats:
+            _database_connection.close()
+            return render_template(
+                "panelists/statistics-summary-by-year.html",
+                panelists=_panelists_dict,
+                panelist_stats=None,
+            )
+
+        _database_connection.close()
+        return render_template(
+            "panelists/statistics-summary-by-year.html",
+            panelists=_panelists_dict,
+            panelist_stats=_stats,
+            # use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
+        )
+
+    # Fallback for GET request
+    _database_connection.close()
+    return render_template(
+        "panelists/statistics-summary-by-year.html",
+        panelists=_panelists_dict,
+        panelist_stats=None,
     )
 
 

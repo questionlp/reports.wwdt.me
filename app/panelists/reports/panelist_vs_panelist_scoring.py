@@ -43,7 +43,7 @@ def retrieve_common_shows(
             GROUP BY pm.showid
             HAVING COUNT(pm.showid) = 2
             ORDER BY s.showdate ASC;
-            """
+        """
     else:
         query = """
             SELECT pm.showid FROM ww_showpnlmap pm
@@ -56,7 +56,7 @@ def retrieve_common_shows(
             GROUP BY pm.showid
             HAVING COUNT(pm.showid) = 2
             ORDER BY s.showdate ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -105,7 +105,7 @@ def retrieve_panelists_scores(
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE s.showid = %s
                 AND p.panelistslug IN (%s, %s);
-                """
+            """
         else:
             query = """
                 SELECT s.showdate, p.panelist, p.panelistslug,
@@ -115,7 +115,7 @@ def retrieve_panelists_scores(
                 JOIN ww_panelists p ON p.panelistid = pm.panelistid
                 WHERE s.showid = %s
                 AND p.panelistslug IN (%s, %s);
-                """
+            """
         cursor = database_connection.cursor(dictionary=True)
         cursor.execute(
             query,

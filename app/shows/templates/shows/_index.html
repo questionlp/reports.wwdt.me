@@ -19,250 +19,398 @@
         <ul class="list-group report-list">
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.all_shows') }}">All Shows</a>
-                </h3>
-                <div class="description">
-                    This reports provides a list of all shows that have been broadcasted,
-                    including Best Of and Repeat shows. The list does not include any pledge
-                    specials shows or special shows that were not aired in their original form.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.all_women_panel') }}">All Women Panel</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows that have an all women panel.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.high_scoring_shows') }}">High Scoring Shows</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which the total score for all
-                    three panelists is greater than or equal to 50, listed in descending
-                    order.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.highest_score_equals_sum_other_scores') }}">Highest
-                        Score Equals the Sum of Other Scores</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which the highest panelist
-                    total score matches the sum of the two other panelists' scores.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_ending_three_way_tie') }}">Lightning
-                        Round Ending in a Three-Way Tie</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    finished the Lightning Fill-in-the Blank segment in a three-way tie.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_answering_same_number_correct') }}">Lightning
-                        Round All Panelists Answering the Same Number of Questions Correct</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    answered the same number of Lightning Fill-in-the-Blank questions
-                    correct.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_starting_ending_three_way_tie') }}">Lightning
-                        Round Starting and Ending in a Three-Way Tie</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    started <em>and</em> ended the Lightning Fill-in-the Blank segment in a
-                    three-way tie.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_starting_three_way_tie') }}">Lightning
-                        Round Starting in a Three-Way Tie</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which all three panelists
-                    started the Lightning Fill-in-the Blank segment in a three-way tie.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_starting_zero_points') }}">Lightning
-                        Round Starting with Zero Points</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which a panelist started the
-                    Lightning Fill-in-the Blank segment with zero points.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.lightning_round_zero_correct') }}">Lightning
-                        Round with Zero Correct Answers</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of shows in which a panelist answered zero
-                    Lightning Fill-in-the Blank questions correct.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.low_scoring_shows') }}">Low Scoring Shows</a>
+                    <a href="{{ url_for('shows.all_shows') }}">
+                        All Shows
+                    </a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a list of shows in which the total score for all
-                        three panelists is less than or equal to 30, listed in ascending order.
-                    </p>
-                    <p>
-                        One exception from the scoring is the 25th Anniversary Special that
-                        aired on <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
-                        which is excluded due to the unique Lightning Fill-in-the-Blank format.
+                        A list of all shows that have been broadcasted, including Best Of and repeat
+                        shows. The list does not include any pledge specials shows or special
+                        shows that were not aired in their original form.
                     </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.not_my_job_guests_vs_bluff_the_listener_win_ratios') }}">Not My Job Guests vs Bluff
-                        the Listener Win Ratios</a>
+                    <a href="{{ url_for('shows.all_women_panel') }}">
+                        All Women Panel
+                    </a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report compares the rates in which a Not My Job guest wins compared
-                        to how often a listener contestant chooses the correct Bluff the Listener
+                        A list of shows that have had an all women panel.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.best_of_shows') }}">
+                        Best Of Shows
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all Best Of shows that have been broadcasted. The list does not
+                        include any pledge specials shows or special shows that were not aired in their
+                        original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.high_scoring_shows') }}">
+                        High Scoring Shows
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where the total score for all three panelists is greater than
+                        or equal to 50. The shows are sorted by total score in descending order.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.highest_score_equals_sum_other_scores') }}">
+                        Highest Score Equals the Sum of Other Scores
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where the highest panelist total score is equal to the sum of
+                        the two other panelists' total scores.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_answering_same_number_correct') }}">
+                        Lightning Round All Panelists Answering the Same Number of Questions Correct
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where all three panelists answered the same number of Lightning
+                        Fill-in-the-Blank questions correct.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_ending_three_way_tie') }}">
+                        Lightning Round Ending in a Three-Way Tie
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where all three panelists finished the Lightning
+                        Fill-in-the-Blank segment in a three-way tie.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_starting_ending_three_way_tie') }}">
+                        Lightning Round Starting and Ending in a Three-Way Tie
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where all three panelists started <em>and</em> finished the
+                        Lightning Fill-in-the-Blank segment in a three-way tie.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_starting_three_way_tie') }}">
+                        Lightning Round Starting in a Three-Way Tie
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where all three panelists started the Lightning
+                        Fill-in-the-Blank segment in a three-way tie.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_starting_zero_points') }}">
+                        Lightning Round Starting with Zero Points
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where a panelist started the Lightning Fill-in-the Blank segment
+                        with zero points.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.lightning_round_zero_correct') }}">
+                        Lightning Round with Zero Correct Answers
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where a panelist did not answer any Lightning Fill-in-the-Blank
+                        questions correct, thus netting zero additional points.
+                    </p>
+                    <p>
+                        Scoring from Best Of and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.low_scoring_shows') }}">
+                        Low Scoring Shows
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where the total score for all three panelists is less than 30.
+                        The shows are sorted by total score in descending order.
+                    </p>
+                    <p>
+                        Scoring from the 20th anniversary special that aired on
+                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a> is not included
+                        due to the unique Lightning Fill-in-the-Blank format. Also, scoring from Best Of
+                        and repeat shows are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.not_my_job_guests_vs_bluff_the_listener_win_ratios') }}">
+                        Not My Job Guests vs Bluff the Listener Win Ratios
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A comparison between the rates in which a Not My Job guest earns a win against
+                        how often a listener contestant chooses the correct Bluff the Listener
                         story.
                     </p>
                     <p>
-                        For Not My Job guests, a win is considered when a guest answers 2 or more
+                        For Not My Job guests, a win is considered when a guest answers two or more
                         questions correct or when a
-                        <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper grants an
-                            exception</a>. The report also takes into account
-                        <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job guests that were only
-                            included in Best Of shows</a>.
+                        <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper
+                        grants an exception</a>. The report also takes into account
+                        <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job
+                        guests that were only included in Best Of shows</a>.
+                    </p>
+                    <p>
+                        As with Not My Job segments and guests that have only been included in Best Of
+                        shows, certain Best Of shows also include unique Bluff the Listener segments.
+                        Both usually come from shows where Wait Wait... Don't Tell Me! travels and
+                        records a second show. In those cases, the Bluff the Listener segments
+                        usually include a different theme and a different true story from the
+                        first show.
                     </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.original_shows') }}">Original Shows</a>
-                </h3>
-                <div class="description">
-                    This reports provides a list of original shows that have been broadcasted,
-                    which excludes Best Of and Repeat shows.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.panel_gender_mix') }}">Panel Gender Mix</a>
-                </h3>
-                <div class="description">
-                    This report provides a break down of the gender mix of panels for all
-                    broadcasted shows by year, excluding Best Of, Repeats, pledge specials,
-                    and the 25th Anniversary Special.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.search_shows_by_multiple_panelists') }}">Search
-                        Shows by Multiple Panelists</a>
+                    <a href="{{ url_for('shows.original_shows') }}">
+                        Original Shows
+                    </a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report allows you to search for shows with a particular set of
-                        panelists (up to three) with options to include Best Of and Repeat shows.
-                    </p>
-                    <p>
-                        Shows that are Repeat Best Of shows will be included if either option
-                        is checked.
+                        A list of all original (generally labeled as regular) shows that have been
+                        broadcasted. The list does not Best Of, repeat, or any pledge specials shows
+                        or special shows that were not aired in their original form.
                     </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.show_counts_by_year') }}">Show Counts by Year</a>
+                    <a href="{{ url_for('shows.panel_gender_mix') }}">
+                        Panel Gender Mix
+                    </a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a count of the number of regular, Best Of and Repeat
-                        shows, grouped by year.
+                        A list of years with the number of times a show has had different combination
+                        of men and women on a panel, including any instances of an all men or an all
+                        women panel.
                     </p>
                     <p>
-                        The counts for the current year will only include shows that have already
-                        aired.
+                        Show counts from Best Of and repeat shows, in addition to the 20th anniversary
+                        special that aired on
+                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>, are not
+                        included.
                     </p>
                 </div>
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('shows.show_descriptions') }}">Show Descriptions</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of show descriptions for all shows.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.show_notes') }}">Show Notes</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of show notes for all shows.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.shows_with_guest_host') }}">Shows with a Guest Host</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have a guest host.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.shows_with_guest_host_scorekeeper') }}">Shows with a Guest Host
-                        and a Guest Scorekeeper</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have both a guest host and a guest scorekeeper.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.shows_with_guest_scorekeeper') }}">Shows with a Guest
-                        Scorekeeper</a>
-                </h3>
-                <div class="description">
-                    This report provides a list of all shows, including Best Of and Repeat
-                    shows, that have a guest scorekeeper.
-                </div>
-            </li>
-            <li class="list-group-item">
-                <h3 class="title">
-                    <a href="{{ url_for('shows.shows_with_perfect_panelist_scores') }}">Shows with
-                        Perfect Panelist Scores</a>
+                    <a href="{{ url_for('shows.repeat_best_of_shows') }}">
+                        Repeat Best Of Shows
+                    </a>
                 </h3>
                 <div class="description">
                     <p>
-                        This report provides a list of shows where a panelist finishes the
-                        Lightning Fill-in-the-Blank segment with a total score of 20 points, or
-                        as Bill Kurtis calls it, a "perfect score".
+                        A list of all repeat Best Of shows that have been broadcasted. The list does not
+                        include any pledge specials shows or special shows that were not aired in their
+                        original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.repeat_shows') }}">
+                        Repeat Shows
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all repeat shows that have been broadcasted. The list does not include
+                        any pledge specials shows or special shows that were not aired in their original
+                        form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.search_shows_by_multiple_panelists') }}">
+                        Search Shows by Multiple Panelists
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where up to three selected panelists have appeared on the same
+                        panel. Options are available to include Best Of and/or repeats shows.
+                    </p>
+                    <p>
+                        Shows that are Repeat Best Of shows will be included if either include show
+                        options are checked.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.show_counts_by_year') }}">
+                        Show Counts by Year
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of years with corresponding number of regular shows, Best Of shows,
+                        repeat shows, repeat Best Of shows, and a total number of shows for each year.
+                    </p>
+                    <p>
+                        The counts for the current year will only include shows that have already aired.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.show_descriptions') }}">
+                        Show Descriptions
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all shows with the corresponding show descriptions.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.show_notes') }}">
+                        Show Notes
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all shows with the corresponding show notes.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.shows_with_guest_host') }}">
+                        Shows with a Guest Host
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all shows, including Best Of and repeat shows, that have had a guest
+                        host.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.shows_with_guest_host_scorekeeper') }}">
+                        Shows with a Guest Host and a Guest Scorekeeper
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all shows, including Best Of and repeat shows, that have had a guest
+                        host and a guest scorekeeper.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.shows_with_guest_scorekeeper') }}">
+                        Shows with a Guest Scorekeeper
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of all shows, including Best Of and repeat shows, that have had a guest
+                        scorekeeper.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.shows_with_perfect_panelist_scores') }}">
+                        Shows with Perfect Panelist Scores
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of shows where a panelist finishes the Lightning Fill-in-the-Blank
+                        segment with a total score of 20 points, a "perfect score" according to
+                        scorekeeper Bill Kurtis.
                     </p>
                     <p>
                         The list also includes shows where a panelist has a total score greater
                         than 20 points.
+                    </p>
+                    <p>
+                        <b>Note:</b> Shows that aired in 1998 used a different show format and scoring
+                        system compared to the current show format and scoring system.
                     </p>
                 </div>
             </li>

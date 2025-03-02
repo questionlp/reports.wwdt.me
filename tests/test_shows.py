@@ -19,9 +19,10 @@ def test_index(client: FlaskClient) -> None:
     assert b"Original Shows" in response.data
 
 
-def test_all_shows(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_all_shows(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.all_shows."""
-    response: TestResponse = client.get("/shows/all-shows")
+    response: TestResponse = client.get("/shows/all-shows", query_string={"sort": sort})
     assert response.status_code == 200
     assert b"All Shows" in response.data
     assert b"Sort Order" in response.data
@@ -33,6 +34,18 @@ def test_all_women_panel(client: FlaskClient) -> None:
     response: TestResponse = client.get("/shows/all-women-panel")
     assert response.status_code == 200
     assert b"All Women Panel" in response.data
+    assert b"Guest" in response.data
+
+
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
+    """Testing shows.routes.best_of_shows."""
+    response: TestResponse = client.get(
+        "/shows/best-of-shows", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"Best Of Shows" in response.data
+    assert b"Sort Order" in response.data
     assert b"Guest" in response.data
 
 
@@ -135,9 +148,12 @@ def testnot_my_job_guests_vs_bluff_the_listener_win_ratios(client: FlaskClient) 
     assert b"Win %" in response.data
 
 
-def test_original_shows(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_original_shows(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.original_shows."""
-    response: TestResponse = client.get("/shows/original-shows")
+    response: TestResponse = client.get(
+        "/shows/original-shows", query_string={"sort": sort}
+    )
     assert response.status_code == 200
     assert b"Original Shows" in response.data
     assert b"Panelists" in response.data
@@ -151,6 +167,30 @@ def test_panel_gender_mix(client: FlaskClient) -> None:
     assert b"Panel Gender Mix" in response.data
     assert b"3 W / 0 M" in response.data
     assert b"Total" in response.data
+
+
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_repeat_best_of_shows(client: FlaskClient, sort: str | None) -> None:
+    """Testing shows.routes.repeat_best_of_shows."""
+    response: TestResponse = client.get(
+        "/shows/repeat-best-of-shows", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"Repeat Best Of Shows" in response.data
+    assert b"Sort Order" in response.data
+    assert b"Guest" in response.data
+
+
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_repeat_shows(client: FlaskClient, sort: str | None) -> None:
+    """Testing shows.routes.repeat_shows."""
+    response: TestResponse = client.get(
+        "/shows/repeat-shows", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"Repeat Shows" in response.data
+    assert b"Sort Order" in response.data
+    assert b"Guest" in response.data
 
 
 def test_search_shows_by_multiple_panelists(client: FlaskClient) -> None:
@@ -180,7 +220,8 @@ def test_search_shows_by_multiple_panelists_post_1(
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
     assert b"Include Best Ofs" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -199,7 +240,8 @@ def test_search_shows_by_multiple_panelists_post_2(
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -220,7 +262,8 @@ def test_search_shows_by_multiple_panelists_post_3(
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -245,7 +288,8 @@ def test_search_shows_by_multiple_panelists_post_3_best_of(
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -270,7 +314,8 @@ def test_search_shows_by_multiple_panelists_post_3_repeat(
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -295,7 +340,8 @@ def test_search_shows_by_multiple_panelists_post_3_repeat_best_of(
     )
     assert response.status_code == 200
     assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of/Repeat" in response.data
+    assert b"Best Of" in response.data
+    assert b"Repeat Of" in response.data
     assert b"Location" in response.data
 
 
@@ -305,7 +351,7 @@ def test_show_counts_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Show Counts by Year" in response.data
     assert b"Best Of" in response.data
-    assert b"Best Of Repeats" in response.data
+    assert b"Repeat Best Ofs" in response.data
 
 
 def test_show_descriptions(client: FlaskClient) -> None:

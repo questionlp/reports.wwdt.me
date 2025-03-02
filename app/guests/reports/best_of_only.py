@@ -8,6 +8,8 @@
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.shows.reports.show_details import retrieve_show_date_by_id
+
 
 def retrieve_guest_appearances(
     guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
@@ -20,15 +22,15 @@ def retrieve_guest_appearances(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, "
-        "gm.guestscore, gm.exception "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE g.guestid = %s "
-        "ORDER BY s.showdate ASC;"
-    )
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
+        gm.guestscore, gm.exception
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        WHERE g.guestid = %s
+        ORDER BY s.showdate ASC;
+    """
     cursor.execute(query, (guest_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -43,7 +45,15 @@ def retrieve_guest_appearances(
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
                 "best_of": bool(row["bestof"]),
-                "repeat_show": bool(row["repeatshowid"]),
+                "repeat": bool(row["repeatshowid"]),
+                "original_show_date": (
+                    retrieve_show_date_by_id(
+                        show_id=row["repeatshowid"],
+                        database_connection=database_connection,
+                    )
+                    if row["repeatshowid"]
+                    else None
+                ),
                 "score": row["guestscore"],
                 "exception": bool(row["exception"]),
             }
@@ -60,18 +70,19 @@ def retrieve_best_of_only_guests(
         database_connection.reconnect()
 
     cursor = database_connection.cursor(dictionary=True)
-    query = (
-        "SELECT DISTINCT g.guestid, g.guest, g.guestslug "
-        "FROM ww_showguestmap gm "
-        "JOIN ww_shows s ON s.showid = gm.showid "
-        "JOIN ww_guests g ON g.guestid = gm.guestid "
-        "WHERE s.bestof = 1 AND s.repeatshowid IS NULL "
-        "AND g.guestid NOT IN ( "
-        "  SELECT gm.guestid "
-        "  FROM ww_showguestmap gm "
-        "  JOIN ww_shows s ON s.showid = gm.showid "
-        "  WHERE s.bestof = 0 AND s.repeatshowid IS NULL )"
-    )
+    query = """
+        SELECT DISTINCT g.guestid, g.guest, g.guestslug
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        WHERE s.bestof = 1 AND s.repeatshowid IS NULL
+        AND g.guestid NOT IN (
+            SELECT gm.guestid
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        )
+    """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()

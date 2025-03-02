@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% set page_title = "Appearance Counts by Year" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A collection of panelist appearance counts for regular shows and all shows
+        grouped by year.
+    </p>
+    <p>
+        Regular shows do not include Best Of or repeat shows, while all shows
+        include all available shows.
+    </p>
+</div>
+
+{% if years and appearances %}
+<div class="accordion" id="accordion">
+    {% for year in years %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            {% if appearances[year] %}
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false" aria-controls="flush-collapse-{{ year }}">
+                {{ year }}
+            </button>
+            {% else %}
+            <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false" aria-controls="flush-collapse-{{ year }}"
+                aria-disabled="true">
+                {{ year }}
+            </button>
+            {% endif %}
+        </h2>
+        <div id="flush-collapse-{{ year }}" class="accordion-collapse collapse">
+            <div class="accordion-body">
+                {% if appearances[year] %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover report">
+                        <colgroup>
+                            <col class="name panelist">
+                            <col class="count">
+                            <col class="count">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">Panelist</th>
+                                <th scope="col">Regular Shows</th>
+                                <th scope="col">All Shows</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for panelist in appearances[year] %}
+                            {% set panelist_info = appearances[year][panelist] %}
+                            <tr>
+                                <td><a href="{{ stats_url }}/panelists/{{ appearances[year][panelist]['slug'] }}">{{ appearances[year][panelist]['name'] }}</a></td>
+                                {% if panelist_info.regular_appearances is not none %}
+                                <td>{{ panelist_info.regular_appearances }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if panelist_info.all_appearances is not none %}
+                                <td>{{ panelist_info.all_appearances }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% if appearances[year] | length >= 10 %}
+                        <tfoot>
+                            <tr>
+                                <th scope="col">Panelist</th>
+                                <th scope="col">Regular Shows</th>
+                                <th scope="col">All Shows</th>
+                            </tr>
+                        </tfoot>
+                        {% endif %}
+                    </table>
+                </div>
+                {% else %}
+                No panelists made appearances in {{ year }}.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

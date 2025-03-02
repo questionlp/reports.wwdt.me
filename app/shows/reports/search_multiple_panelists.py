@@ -24,7 +24,7 @@ def retrieve_panelist_slugs(
         SELECT panelistslug FROM ww_panelists
         WHERE panelistslug <> 'multiple'
         ORDER BY panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -47,7 +47,7 @@ def retrieve_panelists(
         SELECT panelistslug, panelist FROM ww_panelists
         WHERE panelistslug <> 'multiple'
         ORDER BY panelist ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -77,7 +77,7 @@ def retrieve_details(
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showid = %s;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
     result = cursor.fetchone()
@@ -91,6 +91,9 @@ def retrieve_details(
         "date": result["showdate"].isoformat(),
         "best_of": bool(result["bestof"]),
         "repeat": bool(result["repeatshowid"]),
+        "original_show_date": details.retrieve_show_date_by_id(
+            show_id=result["repeatshowid"], database_connection=database_connection
+        ),
         "location": {
             "venue": result["venue"],
             "city": result["city"],
@@ -126,7 +129,7 @@ def retrieve_matching_one(
         GROUP BY s.showid
         HAVING COUNT(s.showid) = 1
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_slug_1,))
     result = cursor.fetchall()
@@ -179,7 +182,7 @@ def retrieve_matching_two(
         GROUP BY s.showid
         HAVING COUNT(s.showid) = 2
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -239,7 +242,7 @@ def retrieve_matching_three(
         GROUP BY s.showid
         HAVING COUNT(s.showid) = 3
         ORDER BY s.showdate ASC;
-        """
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,

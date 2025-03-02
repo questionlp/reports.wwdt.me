@@ -13,27 +13,25 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report allows you to lookup the Bluff the Listener statistics for a
-        panelist, including how many times their story was chosen and how many times
-        they had the correct story, aggregated by year.
+        A list of Bluff the Listener statistics, including the number of chosen stories,
+        the number of correct stories, the number of regular Bluff the Listener
+        segments, and the number of Unique Best Of Bluff the Listener segments, for a
+        selected year.
     </p>
 </div>
 
 <div class="card report-form mb-5">
-    <div class="card-header">
-        Select a panelist to view their Bluff the Listener statistics
-    </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-auto">
-                <label for="panelist" class="visually-hidden">Panelist</label>
-                <select id="panelist" name="panelist" class="form-select" aria-label="Panelist selection">
-                    <option value="">-- Select a Panelist --</option>
-                    {% for slug, name in panelists.items() %}
-                    {% if request.form.panelist == slug %}
-                    <option value="{{ slug }}" selected>{{ name }}</option>
+                <label for="year" class="visually-hidden">Year</label>
+                <select id="year" name="year" class="form-select" aria-label="Year selection">
+                    <option value="">-- Select a Year --</option>
+                    {% for _year in show_years %}
+                    {% if request.form.year and request.form.year | int == _year %}
+                    <option value="{{ _year }}" selected>{{ _year }}</option>
                     {% else %}
-                    <option value="{{ slug }}">{{ name }}</option>
+                    <option value="{{ _year }}">{{ _year }}</option>
                     {% endif %}
                     {% endfor %}
                 </select>
@@ -46,14 +44,14 @@
 </div>
 
 {% if request.method == "POST" %}
-{% if request.form.panelist and bluff_stats %}
+{% if year and bluff_stats %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
-            <h3 class="mt-0">{{ panelists[request.form.panelist] }}</h3>
+            <h3 class="mt-0">{{ year }}</h3>
             <table class="table table-bordered table-hover report">
                 <colgroup>
-                    <col class="date">
+                    <col class="name panelist">
                     <col class="count">
                     <col class="count">
                     <col class="count long">
@@ -61,39 +59,40 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">Year</th>
+                        <th scope="col">Panelist</th>
                         <th scope="col">Chosen</th>
                         <th scope="col">Correct</th>
                         <th scope="col">Regular Bluff Segments</th>
                         <th scope="col">
                             <span class="header-info" data-bs-toggle="tooltip"
-                            data-bs-original-title="Bluff the Listener segments that are only unique to Best Of shows">
+                                data-bs-original-title="Bluff the Listener segments that are only unique to Best Of shows">
                                 Unique Best Of Bluff Segments
                             </span>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for year in bluff_stats %}
+                    
+                    {% for panelist in bluff_stats %}
                     <tr>
-                        <td>{{ year }}</td>
-                        {% if bluff_stats[year].chosen %}
-                        <td>{{ bluff_stats[year].chosen }}</td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</td>
+                        {% if panelist.chosen is not none %}
+                        <td>{{ panelist.chosen }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].correct %}
-                        <td>{{ bluff_stats[year].correct }}</td>
+                        {% if panelist.correct is not none %}
+                        <td>{{ panelist.correct }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].appearances %}
-                        <td>{{ bluff_stats[year].appearances }}</td>
-                        {% else%}
+                        {% if panelist.appearances is not none %}
+                        <td>{{ panelist.appearances }}</td>
+                        {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
-                        {% if bluff_stats[year].unique_bluff_appearances %}
-                        <td>{{ bluff_stats[year].unique_bluff_appearances }}</td>
+                        {% if panelist.unique_best_of is not none %}
+                        <td>{{ panelist.unique_best_of }}</td>
                         {% else %}
                         <td class="no-data count float">-</td>
                         {% endif %}
@@ -106,11 +105,11 @@
 </div>
 {% elif not request.form.panelist %}
 <div class="alert alert-warning my-5" role="alert">
-    <i class="bi bi-exclamation-triangle pe-1"></i> No panelist was selected.
+    <i class="bi bi-exclamation-triangle pe-1"></i> No year was selected.
 </div>
 {% else %}
 <div class="alert alert-info my-5" role="alert">
-    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ panelists[request.form.panelist] }}</b> is currently unavailable.
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ year }}</b> is currently unavailable.
 </div>
 {% endif %}
 {% endif %}

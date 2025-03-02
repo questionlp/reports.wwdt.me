@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% set page_title = "Most Chosen Bluff the Listener Stories by Year" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A list of panelists with the number of times their Bluff the Listener story was
+        chosen for a selected year. The list is sorted by the counts in descending
+        order.
+    </p>
+    <p>
+        Counts include Bluff the Listener segments from regular shows and
+        from Best Of shows with unique Bluff segments.
+    </p>
+</div>
+
+<div class="card report-form mb-5">
+    <div class="card-body">
+        <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-auto">
+                <label for="year" class="visually-hidden">Year</label>
+                <select id="year" name="year" class="form-select" aria-label="Year selection">
+                    <option value="">-- Select a Year --</option>
+                    {% for _year in show_years %}
+                    {% if request.form.year and request.form.year | int == _year %}
+                    <option value="{{ _year }}" selected>{{ _year }}</option>
+                    {% else %}
+                    <option value="{{ _year }}">{{ _year }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <input type="submit" class="btn btn-submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if request.method == "POST" %}
+{% if year and bluff_stats %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <h3 class="mt-0">{{ year }}</h3>
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="panelist">
+                    <col class="count long">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col"># of Chosen Stories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in bluff_stats %}
+                    <tr>
+                        <td>{{ panelist.name }}</td>
+                        {% if panelist.count %}
+                        <td>{{ panelist.count }}</td>
+                        {% else %}
+                        <td class="no-data count float">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% elif not request.form.panelist %}
+<div class="alert alert-warning my-5" role="alert">
+    <i class="bi bi-exclamation-triangle pe-1"></i> No year was selected.
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ year }}</b> is currently unavailable.
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock content %}

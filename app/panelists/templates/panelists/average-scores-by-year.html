@@ -13,18 +13,19 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        This report breaks down the average scores for a given panelist, broken out
-        by year. The averages excludes scores from Best Of and Repeat shows; in
-        addition to, scores from the show that aired on
-        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a> are also
-        excluded, due to the unique scoring used.
+        A list of average scores for a selected panelist broken out by year.
+    </p>
+    
+    <p>
+        Scores from Best Of and repeat shows are not included when calculating the
+        average. Additionally, panelist scores from the 29th anniversary show that aired
+        on
+        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a> show are also
+        excluded, due to the unique Lightning Fill-in-the-Blank format.
     </p>
 </div>
 
 <div class="card report-form mb-5">
-    <div class="card-header">
-        Select a panelist to view their average scores by year
-    </div>
     <div class="card-body">
         <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-auto">
@@ -74,7 +75,7 @@
                         <td class="no-data stats float">-</td>
                         {% endif %}
                     </tr>
-                {% endfor%}
+                {% endfor %}
                 </tbody>
             </table>
         </div>

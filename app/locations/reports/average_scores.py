@@ -45,7 +45,7 @@ def retrieve_average_scores_by_location(
             GROUP BY l.locationid
             ORDER BY average_score DESC, average_total DESC,
             show_count DESC, l.venue ASC;
-            """
+        """
     else:
         query = """
             SELECT l.locationid, l.locationslug, l.venue, l.city, l.state,
@@ -62,7 +62,7 @@ def retrieve_average_scores_by_location(
             GROUP BY l.locationid
             ORDER BY average_score DESC, average_total DESC,
             show_count DESC, l.venue ASC;
-            """
+        """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
