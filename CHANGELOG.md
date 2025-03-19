@@ -2,6 +2,18 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 3.2.1
+
+### Application Changes
+
+- Relocate the Bootstrap and application code initialization from towards the end of the document to the head to prevent background flashing on page loads when in dark mode
+- Corrected Umami Analytics include for error page template
+- Update Bootstrap icon classes to include `.bi`
+
+### Component Changes
+
+- Set Jinja2 version to `~=3.1.6`
+
 ## 3.2.0
 
 ### Application Changes
