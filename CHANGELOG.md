@@ -8,6 +8,7 @@
 
 - Relocate the Bootstrap and application code initialization from towards the end of the document to the head to prevent background flashing on page loads when in dark mode
 - Corrected Umami Analytics include for error page template
+- Update Bootstrap icon classes to include `.bi`
 
 ## 3.2.0
 
