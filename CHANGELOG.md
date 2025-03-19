@@ -10,6 +10,10 @@
 - Corrected Umami Analytics include for error page template
 - Update Bootstrap icon classes to include `.bi`
 
+### Component Changes
+
+- Set Jinja2 version to `~=3.1.6`
+
 ## 3.2.0
 
 ### Application Changes
