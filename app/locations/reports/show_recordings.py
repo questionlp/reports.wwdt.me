@@ -212,7 +212,7 @@ def retrieve_location(
     elif result["venue"] and (not result["city"] or not result["state"]):
         _location["display_name"] = result["venue"]
     elif result["city"] and result["state"]:
-        _location["display_name"] = f"({result["city"]}, {result['state']})"
+        _location["display_name"] = f"({result['city']}, {result['state']})"
     elif result["city"]:
         _location["display_name"] = result["city"]
     else:
