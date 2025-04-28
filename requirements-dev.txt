@@ -8,4 +8,4 @@ gunicorn==23.0.0
 Markdown==3.7.0
 mysql-connector-python==9.1.0
 numpy==2.1.2
-pytz==2024.2
+pytz==2025.2
