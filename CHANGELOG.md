@@ -2,6 +2,19 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 3.3.0
+
+Due to the significant changes around the new application theming, the usual Application, Component and Development changes section are being merged into a single Changes section.
+
+### Changes
+
+- Complete re-work of the application theme structure and how theme assets are deployed
+  - `scss` submodule has been replaced by `wwdtm-theme`
+  - `wwdtm-theme` now handles the compiling of the Sass files to CSS into `dist/css` and copies the Bootstrap scripts into `dist/js`
+- Trimming down the included `package.json` to only require `@ibm/plex-mono` and `@ibm/plex-sans`
+- NPM scripts have been simplified to copy the required CSS and JS files from `wwdtm-theme` and the required IBM Plex web font files into the appropriate paths under `app/static`
+- Update pytz from 2024.2 to 2025.2
+
 ## 3.2.1
 
 ### Application Changes

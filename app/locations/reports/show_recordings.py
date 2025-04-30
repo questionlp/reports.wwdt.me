@@ -165,7 +165,7 @@ def retrieve_locations(
         elif row["venue"] and (not row["city"] or not row["state"]):
             _location["display_name"] = row["venue"]
         elif row["city"] and row["state"]:
-            _location["display_name"] = f"({row["city"]}, {row['state']})"
+            _location["display_name"] = f"({row['city']}, {row['state']})"
         elif row["city"]:
             _location["display_name"] = row["city"]
         else:
@@ -212,7 +212,7 @@ def retrieve_location(
     elif result["venue"] and (not result["city"] or not result["state"]):
         _location["display_name"] = result["venue"]
     elif result["city"] and result["state"]:
-        _location["display_name"] = f"({result["city"]}, {result['state']})"
+        _location["display_name"] = f"({result['city']}, {result['state']})"
     elif result["city"]:
         _location["display_name"] = result["city"]
     else:

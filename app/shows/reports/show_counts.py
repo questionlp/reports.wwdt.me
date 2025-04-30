@@ -11,7 +11,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 
 def retrieve_show_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
-) -> dict[int, int]:
+) -> dict[int, dict[int, int]]:
     """Retrieve number of Regular, Best Of, Repeat and Repeat/Best Of shows broken down by year."""
     if not database_connection.is_connected():
         database_connection.reconnect()
