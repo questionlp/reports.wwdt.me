@@ -2,6 +2,26 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 3.3.1
+
+### Application Changes
+
+- Set external links (including Wait Wait Graphs, Wait Wait Reports and Wait Wait Stats API) to open in a new window/tab
+- Add `bluesky_url` and `bluesky_user` configuration to display Bluesky account information
+- Add Bluesky link in footer if the above configuration keys have been set
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.0 to 2.0.5
+  - Upgrade Bootstrap from 5.3.5 to 5.3.6
+  - Upgrade Bootstrap Icons from 1.11.3 to 1.13.1
+
+### Development Changes
+
+- Upgrade ruff from 0.9.6 to 0.11.9
+- Upgrade pytest from 8.3.3 to 8.3.5
+- Upgrade pytest-cov from 5.0.0 to 6.1.1
+
 ## 3.3.0
 
 Due to the significant changes around the new application theming, the usual Application, Component and Development changes section are being merged into a single Changes section.

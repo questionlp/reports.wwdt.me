@@ -29,6 +29,8 @@
             "data_auto_track": true
         },
         "time_zone": "UTC",
+        "bluesky_url": "",
+        "bluesky_user": "",
         "mastodon_url": "",
         "mastodon_user": "",
         "patreon_url": "",

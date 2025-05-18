@@ -65,6 +65,8 @@ def create_app():
     app.jinja_env.globals["repo_url"] = _config["settings"].get("repo_url", "")
     app.jinja_env.globals["site_url"] = _config["settings"].get("site_url", "")
     app.jinja_env.globals["stats_url"] = _config["settings"].get("stats_url", "")
+    app.jinja_env.globals["bluesky_url"] = _config["settings"].get("bluesky_url", "")
+    app.jinja_env.globals["bluesky_user"] = _config["settings"].get("bluesky_user", "")
     app.jinja_env.globals["mastodon_url"] = _config["settings"].get("mastodon_url", "")
     app.jinja_env.globals["mastodon_user"] = _config["settings"].get(
         "mastodon_user", ""
