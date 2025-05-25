@@ -2,6 +2,14 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 3.3.3
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.5 to 2.0.7
+  - Includes fix for correcting margin and font weight for accordion headers
+  - Includes fix for correcting color of accordion elements
+
 ## 3.3.2
 
 ### Component Changes

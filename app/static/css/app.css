@@ -12356,6 +12356,26 @@ main nav#nav-breadcrumb .breadcrumb {
 main nav#nav-breadcrumb .breadcrumb .active {
   color: #000000;
 }
+main .accordion .accordion-button {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: revert;
+}
+main .accordion .accordion-button:not(.collapsed) {
+  color: inherit;
+  background-color: #f4f4f4;
+}
+main .accordion .accordion-button:disabled {
+  font-weight: 400;
+}
+main .accordion .accordion-button:disabled::after {
+  background-image: none;
+  background-repeat: unset;
+  background-size: unset;
+}
+main .accordion .accordion-header {
+  margin: unset;
+}
 main .container-fluid.p-4, main .p-4.container-sm, main .p-4.container-md, main .p-4.container-lg, main .p-4.container-xl, main .p-4.container-xxl {
   padding: 2rem !important;
 }
@@ -12848,6 +12868,10 @@ footer .copyright {
 }
 [data-bs-theme=dark] main #nav-breadcrumb .breadcrumb .active {
   color: #ffffff;
+}
+[data-bs-theme=dark] main .accordion-button:not(.collapsed) {
+  background-color: #393939;
+  box-shadow: unset;
 }
 [data-bs-theme=dark] main .info .dms-coordinates,
 [data-bs-theme=dark] main .info .score-exception,
