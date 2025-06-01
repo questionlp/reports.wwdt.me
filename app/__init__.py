@@ -5,6 +5,8 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Core Application for Wait Wait Reports."""
 
+from urllib.parse import ParseResult, urlparse
+
 from flask import Flask
 
 from app import config, utility
@@ -63,7 +65,15 @@ def create_app():
     app.jinja_env.globals["blog_url"] = _config["settings"].get("blog_url", "")
     app.jinja_env.globals["graphs_url"] = _config["settings"].get("graphs_url", "")
     app.jinja_env.globals["repo_url"] = _config["settings"].get("repo_url", "")
-    app.jinja_env.globals["site_url"] = _config["settings"].get("site_url", "")
+    _site_url: str = _config["settings"].get("site_url", "")
+    app.jinja_env.globals["site_url"] = _site_url
+
+    if _site_url.startswith("http"):
+        parsed_site_url: ParseResult = urlparse(_site_url)
+        if parsed_site_url.hostname:
+            _config["settings"]["site_hostname"] = parsed_site_url.hostname
+            app.jinja_env.globals["site_hostname"] = parsed_site_url.hostname
+
     app.jinja_env.globals["stats_url"] = _config["settings"].get("stats_url", "")
     app.jinja_env.globals["bluesky_url"] = _config["settings"].get("bluesky_url", "")
     app.jinja_env.globals["bluesky_user"] = _config["settings"].get("bluesky_user", "")
