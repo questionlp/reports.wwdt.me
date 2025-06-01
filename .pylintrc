@@ -1,3 +1,6 @@
+[MESSAGE CONTROL]
+exclude = C0206, R0903
+
 [design]
 max-locals = 20
 max-module-lines = 1200

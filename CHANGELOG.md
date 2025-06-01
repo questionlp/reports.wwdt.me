@@ -2,6 +2,14 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 3.3.4
+
+### Application Changes
+
+- Update the Markdown to HTML filter to modify generated external links to open in a new window/tab and add the `bi-box-arrow-up-right` icon at the end of the link text
+- Update list of AI scraper user agents
+- Change the `block_ai_scrapers` logic so that if the configuration key is set to `true`, the action is set to `Disallow: /`. If the configuration key is set to `false`, the action is set to `Crawl-delay: 10`
+
 ## 3.3.3
 
 ### Component Changes
