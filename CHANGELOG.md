@@ -2,6 +2,20 @@
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
+## 4.0.0
+
+### Application Changes
+
+- Wait Wait Stats Database version 4.7 is now required.
+  - Remove `use_decimal_scores` from the application settings and from application logic
+  - All calculated score values now use the corresponding decimal score columns
+  - All dictionaries that return panelist starting score, correct answers and total scores will include both the integer and decimal score values
+- Adding new reports:
+  - Panelists
+    - First Appearances
+  - Shows
+    - TBD
+
 ## 3.3.5
 
 ### Component Changes

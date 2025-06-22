@@ -14,36 +14,19 @@ from mysql.connector.pooling import PooledMySQLConnection
 
 def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve panelists from the Stats Page database."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if use_decimal_scores:
-        query = """
-            SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.panelistscore_decimal IS NOT NULL
-            AND p.panelist <> '<Multiple>'
-            ORDER BY p.panelist ASC;
-        """
-    else:
-        query = """
-            SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.panelistscore IS NOT NULL
-            AND p.panelist <> '<Multiple>'
-            ORDER BY p.panelist ASC;
-        """
+    query = """
+        SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE pm.panelistscore_decimal IS NOT NULL
+        AND p.panelist <> '<Multiple>'
+        ORDER BY p.panelist ASC;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()
@@ -63,42 +46,23 @@ def retrieve_panelists(
 def retrieve_panelist_appearances(
     panelists: dict[str, Any],
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, str]:
     """Retrieve panelist appearances from the Stats Page database."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
     panelist_appearances = {}
     for _, panelist_info in panelists.items():
-        if use_decimal_scores:
-            query = """
-                SELECT s.showdate FROM ww_showpnlmap pm
-                JOIN ww_panelists p ON p.panelistid = pm.panelistid
-                JOIN ww_shows s ON s.showid = pm.showid
-                WHERE p.panelistslug = %s
-                AND pm.panelistscore_decimal IS NOT NULL
-                AND s.bestof = 0
-                AND s.repeatshowid IS NULL
-                ORDER BY s.showdate ASC;
-            """
-        else:
-            query = """
-                SELECT s.showdate FROM ww_showpnlmap pm
-                JOIN ww_panelists p ON p.panelistid = pm.panelistid
-                JOIN ww_shows s ON s.showid = pm.showid
-                WHERE p.panelistslug = %s
-                AND pm.panelistscore IS NOT NULL
-                AND s.bestof = 0
-                AND s.repeatshowid IS NULL
-                ORDER BY s.showdate ASC;
-            """
+        query = """
+            SELECT s.showdate FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE p.panelistslug = %s
+            AND pm.panelistscore_decimal IS NOT NULL
+            AND s.bestof = 0
+            AND s.repeatshowid IS NULL
+            ORDER BY s.showdate ASC;
+        """
         cursor = database_connection.cursor(dictionary=False)
         cursor.execute(query, (panelist_info["slug"],))
         result = cursor.fetchall()
@@ -114,42 +78,22 @@ def retrieve_panelist_appearances(
 
 def retrieve_show_scores(
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve scores for each show and panelist from the Stats Page Database."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
     shows = {}
-
-    if use_decimal_scores:
-        query = """
-            SELECT s.showdate, p.panelistslug, pm.panelistscore_decimal AS score
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE s.bestof = 0
-            AND s.repeatshowid IS NULL
-            AND pm.panelistscore_decimal IS NOT NULL
-            ORDER BY s.showdate ASC, pm.panelistscore_decimal DESC;
-        """
-    else:
-        query = """
-            SELECT s.showdate, p.panelistslug, pm.panelistscore AS score
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE s.bestof = 0
-            AND s.repeatshowid IS NULL
-            AND pm.panelistscore IS NOT NULL
-            ORDER BY s.showdate ASC, pm.panelistscore DESC;
-        """
+    query = """
+        SELECT s.showdate, p.panelistslug, pm.panelistscore_decimal AS score
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE s.bestof = 0
+        AND s.repeatshowid IS NULL
+        AND pm.panelistscore_decimal IS NOT NULL
+        ORDER BY s.showdate ASC, pm.panelistscore_decimal DESC;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
     result = cursor.fetchall()

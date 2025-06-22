@@ -64,7 +64,7 @@ def load_config(
 
     # Read in setting on whether to use decimal scores
     settings_config["use_decimal_scores"] = bool(
-        settings_config.get("use_decimal_scores", False)
+        settings_config.get("use_decimal_scores", True)
     )
 
     # Read in Umami Analytics settings

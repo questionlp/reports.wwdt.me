@@ -121,18 +121,3 @@ def time_zone_parser(time_zone: str) -> pytz.timezone:
         time_zone_string = time_zone_object.zone
 
     return time_zone_object, time_zone_string
-
-
-def panelist_decimal_score_exists(database_settings: dict) -> bool:
-    """Returns if the panelistscore_decimal column exists in the Wait Wait Stats Database."""
-    try:
-        database_connection = connect(**database_settings)
-        cursor = database_connection.cursor()
-        query = "SHOW COLUMNS FROM ww_showpnlmap WHERE Field = 'panelistscore_decimal'"
-        cursor.execute(query)
-        result = cursor.fetchone()
-        cursor.close()
-
-        return bool(result)
-    except DatabaseError:
-        return False
