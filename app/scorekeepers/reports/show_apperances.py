@@ -23,7 +23,6 @@ def retrieve_appearance_details_by_year(
     scorekeeper_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieves details for all appearances for a given scorekeeper and year.
 
@@ -66,7 +65,6 @@ def retrieve_appearance_details_by_year(
         _panelists = retrieve_show_panelists_details(
             show_id=row["showid"],
             database_connection=database_connection,
-            include_decimal_scores=include_decimal_scores,
         )
 
         _guests = retrieve_show_guests(
@@ -105,7 +103,6 @@ def retrieve_appearance_details_by_year(
 def retrieve_appearance_details(
     scorekeeper_slug: str,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieves details for all appearances for a given scorekeeper and year.
 
@@ -125,7 +122,6 @@ def retrieve_appearance_details(
             scorekeeper_slug=scorekeeper_slug,
             year=_year,
             database_connection=database_connection,
-            include_decimal_scores=include_decimal_scores,
         )
 
     return _appearances

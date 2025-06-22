@@ -97,9 +97,6 @@ def appearances_by_year() -> str:
             _appearances = retrieve_appearance_details(
                 scorekeeper_slug=_scorekeeper,
                 database_connection=_database_connection,
-                include_decimal_scores=current_app.config["app_settings"][
-                    "use_decimal_scores"
-                ],
             )
             _database_connection.close()
             return render_template(

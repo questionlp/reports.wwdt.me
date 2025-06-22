@@ -70,8 +70,7 @@ def retrieve_panelists_scores(
     for show_id in show_ids:
         query = """
             SELECT s.showdate, p.panelist, p.panelistslug,
-            pm.panelistscore AS score,
-            pm.panelistscore_decimal AS score_decimal, pm.showpnlrank
+            pm.panelistscore_decimal, pm.showpnlrank
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -100,8 +99,7 @@ def retrieve_panelists_scores(
             panelist_info = {
                 "slug": row["panelistslug"],
                 "name": row["panelist"],
-                "score": row["score"],
-                "score_decimal": row["score_decimal"],
+                "score": row["panelistscore_decimal"],
                 "rank": row["showpnlrank"],
             }
 

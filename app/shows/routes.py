@@ -81,7 +81,6 @@ def all_women_panel() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_women_panel(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -116,7 +115,6 @@ def high_scoring_shows() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_high_scoring(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -129,7 +127,6 @@ def highest_score_equals_sum_other_scores() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_score_sum_match(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -144,7 +141,6 @@ def lightning_round_answering_same_number_correct() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_answering_same_number_correct(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -159,7 +155,6 @@ def lightning_round_ending_three_way_tie() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_ending_with_three_way_tie(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -174,7 +169,6 @@ def lightning_round_starting_ending_three_way_tie() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_ending_three_way_tie(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -189,7 +183,6 @@ def lightning_round_starting_three_way_tie() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_with_three_way_tie(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -204,7 +197,6 @@ def lightning_round_starting_zero_points() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_start_zero(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -219,7 +211,6 @@ def lightning_round_zero_correct() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_zero_correct(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -232,7 +223,6 @@ def low_scoring_shows() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_all_low_scoring(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 
@@ -483,7 +473,6 @@ def shows_with_perfect_panelist_scores() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = retrieve_shows_panelist_perfect_scores(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
 

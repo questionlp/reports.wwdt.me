@@ -43,22 +43,12 @@
                     <tr>
                         <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ panelist.appearance | replace('-', '/') }}">{{ panelist.appearance }}</a></td>
-                        {% if use_decimal_scores %}
                         {% if panelist.score and panelist.rank %}
                         <td>{{ "{:f}".format(panelist.score.normalize()) }} ({{ rank_map[panelist.rank] }})</td>
                         {% elif panelist.score %}
                         <td>{{ "{:f}".format(panelist.score.normalize()) }}</td>
                         {% else %}
                         <td class="no-data">-</td>
-                        {% endif %}
-                        {% else %}
-                        {% if panelist.score and panelist.rank %}
-                        <td>{{ panelist.score }} ({{ rank_map[panelist.rank] }})</td>
-                        {% elif panelist.score %}
-                        <td>{{ panelist.score }}</td>
-                        {% else %}
-                        <td class="no-data">-</td>
-                        {% endif %}
                         {% endif %}
                     </tr>
                     {% endfor %}

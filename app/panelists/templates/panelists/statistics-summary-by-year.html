@@ -99,22 +99,12 @@
                         {% endif %}
 
                         {% if year_stats["stats"] %}
-                        {% if use_decimal_scores %}
                         <td>{{ "{:f}".format(year_stats["stats"]["minimum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(year_stats["stats"]["maximum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(year_stats["stats"]["mean"].normalize()) }}</td>
                         <td>{{ "{:f}".format(year_stats["stats"]["median"].normalize()) }}</td>
-                        <td>{{ "{:f}".format(year_stats["stats"]["standard_deviation"].normalize()) }}
-                        </td>
+                        <td>{{ "{:f}".format(year_stats["stats"]["standard_deviation"].normalize()) }}</td>
                         <td>{{ "{:f}".format(year_stats["stats"]["total"].normalize()) }}</td>
-                        {% else %}
-                        <td>{{ year_stats["stats"]["minimum"] }}</td>
-                        <td>{{ year_stats["stats"]["maximum"] }}</td>
-                        <td>{{ year_stats["stats"]["mean"] }}</td>
-                        <td>{{ year_stats["stats"]["median"] }}</td>
-                        <td>{{ year_stats["stats"]["standard_deviation"] }}</td>
-                        <td>{{ year_stats["stats"]["total"] }}</td>
-                        {% endif %}
                         {% else %}
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>

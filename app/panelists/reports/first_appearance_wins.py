@@ -45,10 +45,8 @@ def retrieve_panelists_first_appearance_wins(
 
         query = """
             SELECT p.panelist, s.showid, s.showdate,
-            pm.panelistlrndstart, pm.panelistlrndstart_decimal,
-            pm.panelistlrndcorrect, pm.panelistlrndcorrect_decimal,
-            pm.panelistscore, pm.panelistscore_decimal,
-            pm.showpnlrank
+            pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
+            pm.panelistscore_decimal, pm.showpnlrank
             FROM ww_showpnlmap pm
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             JOIN ww_shows s ON s.showid = pm.showid
@@ -68,12 +66,9 @@ def retrieve_panelists_first_appearance_wins(
             panelists[panelist_slug] = {
                 "name": result["panelist"],
                 "show_date": result["showdate"].isoformat(),
-                "start": result["panelistlrndstart"],
-                "start_decimal": result["panelistlrndstart_decimal"],
-                "correct": result["panelistlrndcorrect"],
-                "correct_decimal": result["panelistlrndcorrect_decimal"],
-                "score": result["panelistscore"],
-                "score_decimal": result["panelistscore_decimal"],
+                "start": result["panelistlrndstart_decimal"],
+                "correct": result["panelistlrndcorrect_decimal"],
+                "score": result["panelistscore_decimal"],
                 "rank": result["showpnlrank"],
             }
 

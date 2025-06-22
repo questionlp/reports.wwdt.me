@@ -108,7 +108,6 @@
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
-                                {% if use_decimal_scores %}
                                 {% if show.scoring.start_decimal is not none and show.scoring.correct_decimal is not none and show.scoring.score_decimal is not none %}
                                 <td>
                                     {% if show.scoring.rank is not none %}<b>{{ rank_map[show.scoring.rank ]}}</b>:{% endif %}
@@ -121,18 +120,6 @@
                                     "{:f}".format(show.scoring.score_decimal.normalize()) }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
-                                {% endif %}
-                                {% else %}
-                                {% if show.scoring.start is not none and show.scoring.correct is not none and show.score is not none %}
-                                <td>
-                                    {% if show.scoring.rank is not none %}<b>{{ rank_map[show.scoring.rank ]}}</b>:{% endif %}
-                                    {{ show.scoring.score }} ( {{ show.scoring.start }} / {{ show.scoring.correct }})
-                                </td>
-                                {% elif show.scoring.score is not none %}
-                                <td>{% if show.scoring.rank %}<b>{{ rank_map[show.scoring.rank ]}}</b>:{% endif %} {{ show.scoring.score }}</td>
-                                {% else %}
-                                <td class="no-data">-</td>
-                                {% endif %}
                                 {% endif %}
                                 {% if show.location.venue and show.location.city and show.location.city %}
                                 <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>

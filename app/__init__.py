@@ -85,9 +85,6 @@ def create_app():
     app.jinja_env.globals["github_sponsor_url"] = _config["settings"].get(
         "github_sponsor_url", ""
     )
-    app.jinja_env.globals["use_decimal_scores"] = _config["settings"][
-        "use_decimal_scores"
-    ]
     app.jinja_env.globals["block_ai_scrapers"] = bool(
         _config["settings"].get("block_ai_scrapers", False)
     )

@@ -22,7 +22,8 @@ def retrieve_all_scores(
         database_connection.reconnect()
 
     query = """
-        SELECT pm.panelistscore_decimal AS score FROM ww_showpnlmap pm
+        SELECT pm.panelistscore_decimal
+        FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND pm.panelistscore_decimal IS NOT NULL
@@ -37,7 +38,7 @@ def retrieve_all_scores(
     if not result:
         return None
 
-    return [row["score"] for row in result]
+    return [row["panelistscore_decimal"] for row in result]
 
 
 def retrieve_score_spread(
@@ -48,7 +49,7 @@ def retrieve_score_spread(
         database_connection.reconnect()
 
     query = """
-        SELECT pm.panelistscore_decimal AS score,
+        SELECT pm.panelistscore_decimal,
         COUNT(pm.panelistscore_decimal) AS count
         FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
@@ -69,7 +70,7 @@ def retrieve_score_spread(
     for row in result:
         scores.append(
             {
-                "score": row["score"],
+                "score": row["panelistscore_decimal"],
                 "count": row["count"],
             }
         )

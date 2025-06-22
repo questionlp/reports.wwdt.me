@@ -7,9 +7,9 @@
 ### Application Changes
 
 - Wait Wait Stats Database version 4.7 is now required.
-  - Remove `use_decimal_scores` from the application settings and from application logic
+  - Remove `use_decimal_scores` from the application settings and value checks from application logic
   - All calculated score values now use the corresponding decimal score columns
-  - All dictionaries that return panelist starting score, correct answers and total scores will include both the integer and decimal score values
+  - All dictionaries that return panelist starting scores will only return decimal score values
 - Adding new reports:
   - Panelists
     - First Appearances

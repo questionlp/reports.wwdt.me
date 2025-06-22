@@ -22,7 +22,6 @@ def retrieve_recording_details_by_year(
     location_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieves details for all recordings for a given location and year.
 
@@ -66,7 +65,6 @@ def retrieve_recording_details_by_year(
         _panelists = retrieve_show_panelists_details(
             show_id=row["showid"],
             database_connection=database_connection,
-            include_decimal_scores=include_decimal_scores,
         )
 
         _guests = retrieve_show_guests(

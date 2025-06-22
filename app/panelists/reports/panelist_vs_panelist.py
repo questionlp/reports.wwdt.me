@@ -85,7 +85,7 @@ def retrieve_show_scores(
 
     shows = {}
     query = """
-        SELECT s.showdate, p.panelistslug, pm.panelistscore_decimal AS score
+        SELECT s.showdate, p.panelistslug, pm.panelistscore_decimal
         FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
         JOIN ww_shows s ON s.showid = pm.showid
@@ -105,7 +105,7 @@ def retrieve_show_scores(
             if show_date not in shows:
                 shows[show_date] = {}
 
-            shows[show_date][show["panelistslug"]] = show["score"]
+            shows[show_date][show["panelistslug"]] = show["panelistscore_decimal"]
 
     return shows
 

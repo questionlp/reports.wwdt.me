@@ -59,7 +59,7 @@
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        <td>{{ "{:f}".format(panelist_info.score_decimal.normalize()) if use_decimal_scores else panelist_info.score }}</td>
+                        <td>{{ "{:f}".format(panelist_info.score_decimal.normalize()) }}</td>
                         <td>{{ rank_map[panelist_info.rank] }}</td>
                     </tr>
                     {% endfor %}

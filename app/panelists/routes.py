@@ -82,16 +82,9 @@ def aggregate_scores() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _scores = retrieve_all_scores(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
-    _stats = calculate_stats(
-        _scores,
-        decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
-    )
-    _aggregate = retrieve_score_spread(
-        database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
-    )
+    _stats = calculate_stats(scores=_scores)
+    _aggregate = retrieve_score_spread(database_connection=_database_connection)
     _database_connection.close()
     return render_template(
         "panelists/aggregate-scores.html", stats=_stats, aggregate=_aggregate
@@ -115,9 +108,6 @@ def appearances_by_year() -> str:
             _appearances = retrieve_appearance_details(
                 panelist_slug=_panelist,
                 database_connection=_database_connection,
-                include_decimal_scores=current_app.config["app_settings"][
-                    "use_decimal_scores"
-                ],
             )
             _database_connection.close()
             return render_template(
@@ -197,9 +187,6 @@ def average_scores_by_year() -> str:
             average_scores = retrieve_panelist_yearly_average(
                 panelist_slug=panelist,
                 database_connection=_database_connection,
-                use_decimal_scores=current_app.config["app_settings"][
-                    "use_decimal_scores"
-                ],
             )
             _database_connection.close()
             return render_template(
@@ -230,7 +217,6 @@ def average_scores_by_year_all() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     average_scores = retrieve_all_panelists_yearly_average(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     years = retrieve_all_years(database_connection=_database_connection)
     if average_scores and years:
@@ -371,7 +357,6 @@ def first_appearance_wins() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_panelists_first_appearance_wins(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template(
@@ -421,7 +406,6 @@ def highest_average_correct_answers_by_year() -> str:
         _score_stats = retrieve_highest_average_correct_answers_by_year(
             year=year,
             database_connection=_database_connection,
-            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
             exclude_single_appearances=_exclude_single,
         )
         if not _score_stats:
@@ -477,7 +461,6 @@ def highest_average_scores_by_year() -> str:
         _score_stats = retrieve_highest_average_scores_by_year(
             year=year,
             database_connection=_database_connection,
-            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
             exclude_single_appearances=_exclude_single,
         )
         if not _score_stats:
@@ -820,18 +803,12 @@ def panelist_vs_panelist_scoring() -> str:
                     panelist_slug_1=panelist_values[0],
                     panelist_slug_2=panelist_values[1],
                     database_connection=_database_connection,
-                    use_decimal_scores=current_app.config["app_settings"][
-                        "use_decimal_scores"
-                    ],
                 )
                 scores = retrieve_panelists_scores(
                     show_ids=shows,
                     panelist_slug_a=panelist_values[0],
                     panelist_slug_b=panelist_values[1],
                     database_connection=_database_connection,
-                    use_decimal_scores=current_app.config["app_settings"][
-                        "use_decimal_scores"
-                    ],
                 )
                 _database_connection.close()
 
@@ -866,7 +843,6 @@ def perfect_score_counts() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _counts = retrieve_perfect_score_counts(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template("panelists/perfect-score-counts.html", counts=_counts)
@@ -893,7 +869,6 @@ def single_appearance() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _panelists = retrieve_single_appearances(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template(
@@ -908,7 +883,6 @@ def statistics_by_gender() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _stats = retrieve_stats_by_year_gender(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template("panelists/statistics-by-gender.html", gender_stats=_stats)
@@ -922,7 +896,6 @@ def statistics_summary() -> str:
     _panelists_dict = {panelist["slug"]: panelist["name"] for panelist in _panelists}
     _stats = summary_retrieve_all_stats(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template(
@@ -954,7 +927,6 @@ def statistics_summary_by_year() -> str:
         _stats = retrieve_stats_all_years(
             panelist_slug=panelist,
             database_connection=_database_connection,
-            use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
         )
 
         if not _stats:
@@ -970,7 +942,6 @@ def statistics_summary_by_year() -> str:
             "panelists/statistics-summary-by-year.html",
             panelists=_panelists_dict,
             panelist_stats=_stats,
-            # use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
         )
 
     # Fallback for GET request

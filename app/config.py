@@ -62,11 +62,6 @@ def load_config(
     settings_config["time_zone"] = time_zone_string
     database_config["time_zone"] = time_zone_string
 
-    # Read in setting on whether to use decimal scores
-    settings_config["use_decimal_scores"] = bool(
-        settings_config.get("use_decimal_scores", True)
-    )
-
     # Read in Umami Analytics settings
     if "umami_analytics" in settings_config:
         _umami = dict(settings_config["umami_analytics"])

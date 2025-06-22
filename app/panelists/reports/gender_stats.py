@@ -52,7 +52,7 @@ def retrieve_scores_by_year_gender(
         database_connection.reconnect()
 
     query = """
-        SELECT pm.panelistscore_decimal AS score FROM ww_showpnlmap pm
+        SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
@@ -69,7 +69,7 @@ def retrieve_scores_by_year_gender(
     if not result:
         return None
 
-    return [row["score"] for row in result]
+    return [row["panelistscore_decimal"] for row in result]
 
 
 def retrieve_stats_by_year_gender(
