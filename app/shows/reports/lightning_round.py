@@ -373,7 +373,7 @@ def shows_ending_with_three_way_tie(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
-                "score_decimal": row["panelistscore_decimal"],
+                "score": row["panelistscore_decimal"],
                 "panelists": retrieve_panelists_by_show_id(
                     show_id=row["showid"], database_connection=database_connection
                 ),
@@ -422,7 +422,7 @@ def shows_starting_ending_three_way_tie(
                     "id": show_id,
                     "date": score_info["date"],
                     "panelists": retrieve_panelists_by_show_id(
-                        show_id, database_connection
+                        show_id=show_id, database_connection=database_connection
                     ),
                     "start": score_info["start"],
                     "correct": score_info["correct"],

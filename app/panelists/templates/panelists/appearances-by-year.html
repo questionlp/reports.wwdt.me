@@ -108,16 +108,16 @@
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
-                                {% if show.scoring.start_decimal is not none and show.scoring.correct_decimal is not none and show.scoring.score_decimal is not none %}
+                                {% if show.scoring.start is not none and show.scoring.correct is not none and show.scoring.score is not none %}
                                 <td>
                                     {% if show.scoring.rank is not none %}<b>{{ rank_map[show.scoring.rank ]}}</b>:{% endif %}
-                                    {{ "{:f}".format(show.scoring.score_decimal.normalize()) }}
-                                    ({{ "{:f}".format(show.scoring.start_decimal.normalize()) }} / {{
-                                    "{:f}".format(show.scoring.correct_decimal.normalize()) }})
+                                    {{ "{:f}".format(show.scoring.score.normalize()) }}
+                                    ({{ "{:f}".format(show.scoring.start.normalize()) }} / {{
+                                    "{:f}".format(show.scoring.correct.normalize()) }})
                                 </td>
-                                {% elif show.scoring.score_decimal is not none %}
+                                {% elif show.scoring.score is not none %}
                                 <td>{% if show.scoring.rank %}<b>{{ rank_map[show.scoring.rank ]}}</b>:{% endif %} {{
-                                    "{:f}".format(show.scoring.score_decimal.normalize()) }}</td>
+                                    "{:f}".format(show.scoring.score.normalize()) }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}

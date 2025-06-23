@@ -52,13 +52,7 @@
                 <tbody>
                     {% for show in shows %}
                     <tr>
-                        <td>
-                            {% if use_decimal_scores %}
-                            {{ "{:f}".format(show.total_score.normalize()) }}
-                            {% else %}
-                            {{ show.total_score }}
-                            {% endif %}
-                        </td>
+                        <td>{{ "{:f}".format(show.total_score.normalize()) }}</td>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
                         {% if show.location.venue and show.location.city and show.location.city %}
                         <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
@@ -84,7 +78,7 @@
                             <ul class="no-bullets">
                                 {% for panelist in show.panelists %}
                                 <li>{{ panelist.name }}:
-                                    {{ "{:f}".format(panelist.score_decimal.normalize()) if use_decimal_scores else panelist.score }}
+                                    {{ "{:f}".format(panelist.score.normalize()) }}
                                 </li>
                                 {% endfor %}
                             </ul>
