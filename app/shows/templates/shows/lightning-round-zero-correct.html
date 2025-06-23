@@ -49,8 +49,8 @@
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
                         <td>{{ show.panelist.name }}</td>
-                        <td>{{ show.panelist.start }}</td>
-                        <td>{{ show.panelist.correct }}</td>
+                        <td>{{ "{:f}".format(show.panelist.start.normalize()) }}</td>
+                        <td>{{ "{:f}".format(show.panelist.correct.normalize()) }}</td>
                         <td>{{ "{:f}".format(show.panelist.score.normalize()) }}</td>
                         <td>{{ rank_map[show.panelist.rank] }}</td>
                     </tr>
