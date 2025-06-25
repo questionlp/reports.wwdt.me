@@ -49,18 +49,23 @@
                     <tr>
                         <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelist_info.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ panelist_info.show_date | replace('-', '/') }}">{{ panelist_info.show_date }}</a></td>
-                        {% if panelist_info.start %}
+                        {% if panelist_info.start != None %}
                         <td>{{ "{:f}".format(panelist_info.start.normalize()) }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        {% if panelist_info.correct %}
+                        {% if panelist_info.correct != None %}
                         <td>{{ "{:f}".format(panelist_info.correct.normalize()) }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
+                        {% if panelist_info.score != None and panelist_info.rank %}
                         <td>{{ "{:f}".format(panelist_info.score.normalize()) }}</td>
                         <td>{{ rank_map[panelist_info.rank] }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -1,15 +1,19 @@
 # Changes
 
-**Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
-
 ## 4.0.0-alpha
 
 ### Application Changes
 
-- Wait Wait Stats Database version 4.7 is now required.
+- As noted in previous versions of the changlog, the Wait Wait Reports Site now requires version 4.7 of the Wait Wait Stats Database.
   - Remove `use_decimal_scores` from the application settings and value checks from application logic
   - All calculated score values now use the corresponding decimal score columns
   - All dictionaries that return panelist starting scores will only return decimal score values
+- Change the Locations "Recording Counts by Year" report to match the report format used by the host, panelist and scorekeeper "Appearance Counts by Year"
+  - Remove the `POST` method handling in `locations.recording_counts_by_year`
+  - Remove the `POST` method in the corresponding test cases
+- Add Best Of, Repeat and Repeat Best Of columns to Panelists "Appearance Counts by Year" report
+- Add Start and Correct columns and break out Score column into Score and Rank columns in the Panelists "Single Appearance" report
+- Fix handling of zero/None value handling in the Panelists "First Appearance Wins" report
 - Adding new reports:
   - Panelists
     - First Appearances
@@ -17,6 +21,8 @@
     - TBD
 
 ## 3.3.5
+
+**Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
 ### Component Changes
 

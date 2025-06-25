@@ -36,6 +36,7 @@ from .reports.bluff_stats import (
 from .reports.common import retrieve_panelists
 from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
+from .reports.first_appearances import retrieve_panelists_first_appearance
 from .reports.gender_stats import retrieve_stats_by_year_gender
 from .reports.highest_scores_correct import (
     retrieve_highest_average_correct_answers_by_year,
@@ -361,6 +362,19 @@ def first_appearance_wins() -> str:
     _database_connection.close()
     return render_template(
         "panelists/first-appearance-wins.html", panelists=_panelists, rank_map=RANK_MAP
+    )
+
+
+@blueprint.route("/first-appearances")
+def first_appearances() -> str:
+    """View: First Appearances Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists_first_appearance(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+    return render_template(
+        "panelists/first-appearances.html", panelists=_panelists, rank_map=RANK_MAP
     )
 
 

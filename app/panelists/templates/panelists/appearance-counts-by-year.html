@@ -13,12 +13,14 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        A collection of panelist appearance counts for regular shows and all shows
-        grouped by year.
+        A collection of panelist appearance counts for regular, Best Of,
+        repeat Best Ofs, repeat and all shows grouped by year.
     </p>
     <p>
-        Regular shows do not include Best Of or repeat shows, while all shows
-        include all available shows.
+        Regular show counts do not include Best Of or repeat shows. Counts for
+        both Best Of and repeat shows do not include repeat Best Of shows.
+        Counts for all shows should be the sum of regular, Best Of, repeat and
+        repeat Best Of show counts.
     </p>
 </div>
 
@@ -49,11 +51,17 @@
                             <col class="name panelist">
                             <col class="count">
                             <col class="count">
+                            <col class="count">
+                            <col class="count">
+                            <col class="count">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th scope="col">Panelist</th>
                                 <th scope="col">Regular Shows</th>
+                                <th scope="col">Best Of Shows</th>
+                                <th scope="col">Repeat Shows</th>
+                                <th scope="col">Repeat Best Of Shows</th>
                                 <th scope="col">All Shows</th>
                             </tr>
                         </thead>
@@ -62,13 +70,28 @@
                             {% set panelist_info = appearances[year][panelist] %}
                             <tr>
                                 <td><a href="{{ stats_url }}/panelists/{{ appearances[year][panelist]['slug'] }}">{{ appearances[year][panelist]['name'] }}</a></td>
-                                {% if panelist_info.regular_appearances is not none %}
-                                <td>{{ panelist_info.regular_appearances }}</td>
+                                {% if panelist_info.regular is not none %}
+                                <td>{{ panelist_info.regular }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
-                                {% if panelist_info.all_appearances is not none %}
-                                <td>{{ panelist_info.all_appearances }}</td>
+                                {% if panelist_info.best_ofs is not none %}
+                                <td>{{ panelist_info.best_ofs }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if panelist_info.repeats is not none %}
+                                <td>{{ panelist_info.repeats }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if panelist_info.repeat_best_ofs is not none %}
+                                <td>{{ panelist_info.repeat_best_ofs }}</td>
+                                {% else %}
+                                <td class="no-data">-</td>
+                                {% endif %}
+                                {% if panelist_info.all is not none %}
+                                <td>{{ panelist_info.all }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
@@ -80,6 +103,9 @@
                             <tr>
                                 <th scope="col">Panelist</th>
                                 <th scope="col">Regular Shows</th>
+                                <th scope="col">Best Of Shows</th>
+                                <th scope="col">Repeat Shows</th>
+                                <th scope="col">Repeat Best Of Shows</th>
                                 <th scope="col">All Shows</th>
                             </tr>
                         </tfoot>

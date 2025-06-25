@@ -20,21 +20,6 @@ def retrieve_appearance_counts_by_year(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    query = """
-        SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
-        FROM ww_showhostmap hm
-        JOIN ww_shows s ON s.showid = hm.showid
-        JOIN ww_hosts h ON h.hostid = hm.hostid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
-        GROUP BY h.hostid, h.host, h.hostslug
-        ORDER BY COUNT(h.hostid) DESC, h.host ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
-    results = cursor.fetchall()
-    cursor.close()
-
     all_query = """
         SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
         FROM ww_showhostmap hm
@@ -49,27 +34,92 @@ def retrieve_appearance_counts_by_year(
     all_results = all_cursor.fetchall()
     all_cursor.close()
 
-    if not results or not all_results:
+    if not all_results:
         return None
 
+    regular_query = """
+        SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NULL
+        GROUP BY h.hostid, h.host, h.hostslug
+        ORDER BY COUNT(h.hostid) DESC, h.host ASC;
+    """
+    regular_cursor = database_connection.cursor(dictionary=True)
+    regular_cursor.execute(regular_query, (year,))
+    regular_results = regular_cursor.fetchall()
+    regular_cursor.close()
+
+    best_ofs_query = """
+        SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
+        AND s.repeatshowid IS NULL
+        GROUP BY h.hostid, h.host, h.hostslug
+        ORDER BY COUNT(h.hostid) DESC, h.host ASC;
+    """
+    best_ofs_cursor = database_connection.cursor(dictionary=True)
+    best_ofs_cursor.execute(best_ofs_query, (year,))
+    best_ofs_results = best_ofs_cursor.fetchall()
+    best_ofs_cursor.close()
+
+    repeat_best_ofs_query = """
+        SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
+        AND s.repeatshowid IS NOT NULL
+        GROUP BY h.hostid, h.host, h.hostslug
+        ORDER BY COUNT(h.hostid) DESC, h.host ASC;
+    """
+    repeat_best_ofs_cursor = database_connection.cursor(dictionary=True)
+    repeat_best_ofs_cursor.execute(repeat_best_ofs_query, (year,))
+    repeat_best_ofs_results = repeat_best_ofs_cursor.fetchall()
+    repeat_best_ofs_cursor.close()
+
+    repeats_query = """
+        SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
+        FROM ww_showhostmap hm
+        JOIN ww_shows s ON s.showid = hm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NOT NULL
+        GROUP BY h.hostid, h.host, h.hostslug
+        ORDER BY COUNT(h.hostid) DESC, h.host ASC;
+    """
+    repeats_cursor = database_connection.cursor(dictionary=True)
+    repeats_cursor.execute(repeats_query, (year,))
+    repeats_results = repeats_cursor.fetchall()
+    repeats_cursor.close()
+
     _appearances = {}
-    for row in results:
+    for row in all_results:
         _appearances[row["hostslug"]] = {
             "name": row["host"],
             "slug": row["hostslug"],
-            "regular_appearances": row["count"],
+            "regular": 0,
+            "best_ofs": 0,
+            "repeat_best_ofs": 0,
+            "repeats": 0,
+            "all": row["count"],
         }
 
-    for row in all_results:
-        if row["hostslug"] not in _appearances:
-            _appearances[row["hostslug"]] = {
-                "name": row["host"],
-                "slug": row["hostslug"],
-                "regular_appearances": 0,
-                "all_appearances": row["count"],
-            }
-        else:
-            _appearances[row["hostslug"]]["all_appearances"] = row["count"]
+    for row in regular_results:
+        _appearances[row["hostslug"]]["regular"] = row["count"]
+
+    for row in best_ofs_results:
+        _appearances[row["hostslug"]]["best_ofs"] = row["count"]
+
+    for row in repeat_best_ofs_results:
+        _appearances[row["hostslug"]]["repeat_best_ofs"] = row["count"]
+
+    for row in repeats_results:
+        _appearances[row["hostslug"]]["repeats"] = row["count"]
 
     return _appearances
 

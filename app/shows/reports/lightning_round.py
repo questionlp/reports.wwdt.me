@@ -6,7 +6,6 @@
 # pylint: disable=C0301
 """WWDTM Lightning Fill-in-the-Blank Segment Report Functions."""
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 

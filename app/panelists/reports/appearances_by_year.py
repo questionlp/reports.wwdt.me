@@ -18,23 +18,6 @@ def retrieve_appearance_counts_by_year(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    query = """
-        SELECT p.panelistid, p.panelist, p.panelistslug,
-        COUNT(p.panelistid) AS count
-        FROM ww_showpnlmap pm
-        JOIN ww_shows s ON s.showid = pm.showid
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
-        AND p.panelistslug <> 'multiple'
-        GROUP BY p.panelistid, p.panelist, p.panelistslug
-        ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
-    results = cursor.fetchall()
-    cursor.close()
-
     all_query = """
         SELECT p.panelistid, p.panelist, p.panelistslug,
         COUNT(p.panelistid) AS count
@@ -51,27 +34,100 @@ def retrieve_appearance_counts_by_year(
     all_results = all_cursor.fetchall()
     all_cursor.close()
 
-    if not results or not all_results:
+    if not all_results:
         return None
 
+    regular_query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        COUNT(p.panelistid) AS count
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NULL
+        AND p.panelistslug <> 'multiple'
+        GROUP BY p.panelistid, p.panelist, p.panelistslug
+        ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
+    """
+    regular_cursor = database_connection.cursor(dictionary=True)
+    regular_cursor.execute(regular_query, (year,))
+    regular_results = regular_cursor.fetchall()
+    regular_cursor.close()
+
+    best_ofs_query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        COUNT(p.panelistid) AS count
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
+        AND s.repeatshowid IS NULL
+        AND p.panelistslug <> 'multiple'
+        GROUP BY p.panelistid, p.panelist, p.panelistslug
+        ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
+    """
+    best_ofs_cursor = database_connection.cursor(dictionary=True)
+    best_ofs_cursor.execute(best_ofs_query, (year,))
+    best_ofs_results = best_ofs_cursor.fetchall()
+    best_ofs_cursor.close()
+
+    repeat_best_ofs_query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        COUNT(p.panelistid) AS count
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
+        AND s.repeatshowid IS NOT NULL
+        AND p.panelistslug <> 'multiple'
+        GROUP BY p.panelistid, p.panelist, p.panelistslug
+        ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
+    """
+    repeat_best_ofs_cursor = database_connection.cursor(dictionary=True)
+    repeat_best_ofs_cursor.execute(repeat_best_ofs_query, (year,))
+    repeat_best_ofs_results = repeat_best_ofs_cursor.fetchall()
+    repeat_best_ofs_cursor.close()
+
+    repeats_query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        COUNT(p.panelistid) AS count
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NOT NULL
+        AND p.panelistslug <> 'multiple'
+        GROUP BY p.panelistid, p.panelist, p.panelistslug
+        ORDER BY COUNT(p.panelistid) DESC, p.panelist ASC;
+    """
+    repeats_cursor = database_connection.cursor(dictionary=True)
+    repeats_cursor.execute(repeats_query, (year,))
+    repeats_results = repeats_cursor.fetchall()
+    repeats_cursor.close()
+
     _appearances = {}
-    for row in results:
+    for row in all_results:
         _appearances[row["panelistslug"]] = {
             "name": row["panelist"],
             "slug": row["panelistslug"],
-            "regular_appearances": row["count"],
+            "regular": 0,
+            "best_ofs": 0,
+            "repeat_best_ofs": 0,
+            "repeats": 0,
+            "all": row["count"],
         }
 
-    for row in all_results:
-        if row["panelistslug"] not in _appearances:
-            _appearances[row["panelistslug"]] = {
-                "name": row["panelist"],
-                "slug": row["panelistslug"],
-                "regular_appearances": 0,
-                "all_appearances": row["count"],
-            }
-        else:
-            _appearances[row["panelistslug"]]["all_appearances"] = row["count"]
+    for row in regular_results:
+        _appearances[row["panelistslug"]]["regular"] = row["count"]
+
+    for row in best_ofs_results:
+        _appearances[row["panelistslug"]]["best_ofs"] = row["count"]
+
+    for row in repeat_best_ofs_results:
+        _appearances[row["panelistslug"]]["repeat_best_ofs"] = row["count"]
+
+    for row in repeats_results:
+        _appearances[row["panelistslug"]]["repeats"] = row["count"]
 
     return _appearances
 

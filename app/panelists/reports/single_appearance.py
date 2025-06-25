@@ -7,7 +7,6 @@
 
 from typing import Any
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -43,6 +42,7 @@ def retrieve_single_appearances(
 
     query = f"""
         SELECT p.panelist, p.panelistslug, s.showdate,
+        pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
         pm.panelistscore_decimal, pm.showpnlrank
         FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -66,6 +66,8 @@ def retrieve_single_appearances(
                 "name": row["panelist"],
                 "slug": row["panelistslug"],
                 "appearance": row["showdate"].isoformat(),
+                "start": row["panelistlrndstart_decimal"],
+                "correct": row["panelistlrndcorrect_decimal"],
                 "score": row["panelistscore_decimal"],
                 "rank": row["showpnlrank"],
             }

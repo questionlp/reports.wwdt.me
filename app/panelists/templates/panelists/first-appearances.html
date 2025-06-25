@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Single Appearance" %}
+{% set page_title = "First Appearances" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -13,15 +13,13 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        A list of panelists who have only appeared on the show one time along with their
-        total score and ranking.
-    </p>
-    <p>
-        Appearances on Best Of and repeat shows are not included.
+        A list of the first appearance for all panelists, including their score
+        at the start of the Lightning Fill-in-the-Blank round, the number of
+        correct answers, total score, and ranking.
     </p>
 </div>
 
-{% if panelists_appearance %}
+{% if panelists %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -36,32 +34,33 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">Panelist</th>
-                        <th scope="col">Show Date</th>
-                        <th scope="col">Start</th>
-                        <th scope="col">Correct</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Rank</th>
+                        <th>Panelist</th>
+                        <th>Show Date</th>
+                        <th>Start</th>
+                        <th>Correct</th>
+                        <th>Total Score</th>
+                        <th>Rank</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for panelist in panelists_appearance %}
+                    {% for panelist in panelists %}
+                    {% set panelist_info = panelists[panelist] %}
                     <tr>
-                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
-                        <td><a href="{{ stats_url }}/shows/{{ panelist.appearance | replace('-', '/') }}">{{ panelist.appearance }}</a></td>
-                        {% if panelist.start != None %}
-                        <td>{{ "{:f}".format(panelist.start.normalize()) }}</td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelist_info.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.show_date | replace('-', '/') }}">{{ panelist_info.show_date }}</a></td>
+                        {% if panelist_info.start != None %}
+                        <td>{{ "{:f}".format(panelist_info.start.normalize()) }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        {% if panelist.correct != None %}
-                        <td>{{ "{:f}".format(panelist.correct.normalize()) }}</td>
+                        {% if panelist_info.correct != None %}
+                        <td>{{ "{:f}".format(panelist_info.correct.normalize()) }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        {% if panelist.score != None and panelist.rank  %}
-                        <td>{{ "{:f}".format(panelist.score.normalize()) }}</td>
-                        <td>{{ rank_map[panelist.rank] }}</td>
+                        {% if panelist_info.score != None and panelist_info.rank %}
+                        <td>{{ "{:f}".format(panelist_info.score.normalize()) }}</td>
+                        <td>{{ rank_map[panelist_info.rank] }}</td>
                         {% else %}
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
@@ -69,16 +68,6 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col">Panelist</th>
-                        <th scope="col">Show Date</th>
-                        <th scope="col">Start</th>
-                        <th scope="col">Correct</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Rank</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>

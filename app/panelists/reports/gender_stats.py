@@ -9,7 +9,6 @@ from decimal import Decimal
 from typing import Any
 
 import numpy
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 

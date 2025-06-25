@@ -7,7 +7,6 @@
 
 from typing import Any
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
