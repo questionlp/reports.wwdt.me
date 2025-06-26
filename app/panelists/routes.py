@@ -373,8 +373,22 @@ def first_appearances() -> str:
         database_connection=_database_connection
     )
     _database_connection.close()
+
+    _sort_by_panelist = True
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "date":
+            _sort_by_panelist = False
+            _panelists = dict(
+                sorted(_panelists.items(), key=lambda item: item[1]["show_date"])
+            )
+
     return render_template(
-        "panelists/first-appearances.html", panelists=_panelists, rank_map=RANK_MAP
+        "panelists/first-appearances.html",
+        panelists=_panelists,
+        sort_by_panelist=_sort_by_panelist,
+        rank_map=RANK_MAP,
     )
 
 

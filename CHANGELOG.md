@@ -8,17 +8,16 @@
   - Remove `use_decimal_scores` from the application settings and value checks from application logic
   - All calculated score values now use the corresponding decimal score columns
   - All dictionaries that return panelist starting scores will only return decimal score values
-- Change the Locations "Recording Counts by Year" report to match the report format used by the host, panelist and scorekeeper "Appearance Counts by Year"
-  - Remove the `POST` method handling in `locations.recording_counts_by_year`
-  - Remove the `POST` method in the corresponding test cases
 - Add Best Of, Repeat and Repeat Best Of columns to Panelists "Appearance Counts by Year" report
 - Add Start and Correct columns and break out Score column into Score and Rank columns in the Panelists "Single Appearance" report
+- Add year breakdowns to "Not My Job Guests vs Bluff the Listener Win Ratios by Year" and change the background color for the blank `vs` columns
+- Adding new Panelists "First Appearances" report with the show date and scoring information for each panelists' first show. The report table can be sorted by either panelist name or by show date (sorts are only ascending)
+- Change show date sorting user interface for "All Shows", "Best Of Shows", "Original Shows", "Repeat Best Of Shows" and "Repeat Shows" reports from using links above the report table to using links and icons for the "Date" column header
+- Change the Locations "Recording Counts by Year" report to match the report format used by the host, panelist and scorekeeper "Appearance Counts by Year"
+  - Remove the form and use the accordion format to group data for all years by year
+  - Remove the `POST` method handling in `locations.recording_counts_by_year`
+  - Remove the `POST` method in the corresponding test cases
 - Fix handling of zero/None value handling in the Panelists "First Appearance Wins" report
-- Adding new reports:
-  - Panelists
-    - First Appearances
-  - Shows
-    - TBD
 
 ## 3.3.5
 
@@ -26,7 +25,7 @@
 
 ### Component Changes
 
-- Upgrade wwdtm-theme from 2.0.7 to 2.0.20, which includes:
+- Upgrade wwdtm-theme from 2.0.7 to 2.0.21, which includes:
   - Upgrade Bootstrap from 5.3.6 to 5.3.7
 
 ## 3.3.4

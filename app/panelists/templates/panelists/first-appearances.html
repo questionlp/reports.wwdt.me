@@ -26,7 +26,7 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="name panelist">
-                    <col class="date">
+                    <col class="date medium">
                     <col class="score">
                     <col class="score">
                     <col class="score">
@@ -34,8 +34,16 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Panelist</th>
-                        <th>Show Date</th>
+                        {% if sort_by_panelist %}
+                        <th>Panelist <i class="bi bi-sort-down-alt ps-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.first_appearances') }}">Panelist</a></th>
+                        {% endif %}
+                        {% if not sort_by_panelist %}
+                        <th>Show Date <i class="bi bi-sort-down-alt ms-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.first_appearances', sort='date') }}">Show Date</a></th>
+                        {% endif %}
                         <th>Start</th>
                         <th>Correct</th>
                         <th>Total Score</th>

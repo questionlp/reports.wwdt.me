@@ -12,7 +12,8 @@ from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.guest_host import retrieve_shows_guest_host
 from .reports.guest_host_scorekeeper import retrieve_shows_guest_host_scorekeeper
 from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
-from .reports.guests_vs_bluffs import retrieve_bluff_stats, retrieve_not_my_job_stats
+from .reports.guests_vs_bluffs import retrieve_stats_totals
+from .reports.guests_vs_bluffs_by_year import retrieve_stats_all_years
 from .reports.info import retrieve_show_descriptions, retrieve_show_notes
 from .reports.lightning_round import (
     shows_ending_with_three_way_tie,
@@ -231,16 +232,21 @@ def low_scoring_shows() -> str:
 
 @blueprint.route("/not-my-job-guests-vs-bluff-the-listener-win-ratios")
 def not_my_job_guests_vs_bluff_the_listener_win_ratios() -> str:
-    """View: Not My Job Guests vs Bluff the Listener Win Ratios Report."""
+    """View: Not My Job Guests vs Bluff the Listener Win Ratios by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _guest_stats = retrieve_not_my_job_stats(database_connection=_database_connection)
-    _bluff_stats = retrieve_bluff_stats(database_connection=_database_connection)
+    _stats_years = retrieve_stats_all_years(database_connection=_database_connection)
+    _stats_totals = retrieve_stats_totals(database_connection=_database_connection)
     _database_connection.close()
+
+    _stats = {}
+    if _stats_years and _stats_totals:
+        _stats.update(_stats_years)
+        _stats.update(_stats_totals)
 
     return render_template(
         "shows/not-my-job-guests-vs-bluff-the-listener-win-ratios.html",
-        guest_stats=_guest_stats,
-        bluff_stats=_bluff_stats,
+        years=list(_stats_years.keys()),
+        stats=_stats,
     )
 
 

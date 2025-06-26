@@ -70,8 +70,8 @@
                             {% set scorekeeper_info = appearances[year][scorekeeper] %}
                             <tr>
                                 <td><a href="{{ stats_url }}/scorekeepers/{{ scorekeeper_info.slug }}">{{ scorekeeper_info.name }}</a></td>
-                                {% if scorekeeper_info.regular_appearances is not none %}
-                                <td>{{ scorekeeper_info.regular_appearances }}</td>
+                                {% if scorekeeper_info.regular is not none %}
+                                <td>{{ scorekeeper_info.regular }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
@@ -90,8 +90,8 @@
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
-                                {% if scorekeeper_info.all_appearances is not none %}
-                                <td>{{ scorekeeper_info.all_appearances }}</td>
+                                {% if scorekeeper_info.all is not none %}
+                                <td>{{ scorekeeper_info.all }}</td>
                                 {% else %}
                                 <td class="no-data">-</td>
                                 {% endif %}
