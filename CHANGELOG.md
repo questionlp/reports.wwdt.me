@@ -17,6 +17,13 @@
   - Remove the form and use the accordion format to group data for all years by year
   - Remove the `POST` method handling in `locations.recording_counts_by_year`
   - Remove the `POST` method in the corresponding test cases
+- Remove the following unused functions
+  - `guests.reports.scores.retrieve_guest_scores()`
+  - `hosts.reports.appearances.retrieve_hosts_dict()`
+  - `scorekeepers.reports.appearances.retrieve_scorekeepers_dict()`
+  - `shows.reports.search_multiple_panelists.retrieve_panelist_slugs()`
+  - `utility.date_string_to_date()`
+  - `utility.pretty_jsonify()`
 - Fix handling of zero/None value handling in the Panelists "First Appearance Wins" report
 
 ## 3.3.5
@@ -25,7 +32,7 @@
 
 ### Component Changes
 
-- Upgrade wwdtm-theme from 2.0.7 to 2.0.21, which includes:
+- Upgrade wwdtm-theme from 2.0.7 to 2.0.22, which includes:
   - Upgrade Bootstrap from 5.3.6 to 5.3.7
 
 ## 3.3.4

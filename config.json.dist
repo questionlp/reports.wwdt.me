@@ -34,6 +34,7 @@
         "mastodon_url": "",
         "mastodon_user": "",
         "patreon_url": "",
-        "github_sponsor_url": ""
+        "github_sponsor_url": "",
+        "use_minified_css": true
     }
 }

@@ -55,48 +55,6 @@ def retrieve_scoring_exceptions(
     return _exceptions
 
 
-def retrieve_guest_scores(
-    guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
-) -> list[dict[str, Any]]:
-    """Retrieve a list of instances where a requested Not My Job guest has received three points."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(dictionary=True)
-    query = """
-        SELECT g.guestid, g.guest, s.showid, s.showdate,
-        gm.guestscore, gm.exception, sn.shownotes
-        FROM ww_showguestmap gm
-        JOIN ww_shows s ON s.showid = gm.showid
-        JOIN ww_guests g ON g.guestid = gm.guestid
-        JOIN ww_shownotes sn on sn.showid = gm.showid
-        WHERE g.guestid = %s
-        AND s.bestof = 0 AND s.repeatshowid IS NULL
-        AND gm.exception = 1
-        ORDER BY s.showdate ASC;
-    """
-    cursor.execute(query, (guest_id,))
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    _scores = []
-    for row in result:
-        _scores.append(
-            {
-                "id": row["showid"],
-                "date": row["showdate"].isoformat(),
-                "score": row["guestscore"],
-                "exception": bool(row["exception"]),
-                "notes": row["shownotes"],
-            }
-        )
-
-    return _scores
-
-
 def retrieve_all_scoring_exceptions(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
