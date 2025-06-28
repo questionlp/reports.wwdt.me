@@ -26,13 +26,17 @@
   - `utility.pretty_jsonify()`
 - Fix handling of zero/None value handling in the Panelists "First Appearance Wins" report
 
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.20 to 2.0.22
+
 ## 3.3.5
 
 **Note:** In the near future, all reports will require version 4.7 of the [Wait Wait Stats Database](https://github.com/questionlp/wwdtm_database) and all reports that make use of panelist scores will be based on decimal score columns. Code paths that check for use of the decimal scores columns will be updated to remove references to the non-decimal score columns.
 
 ### Component Changes
 
-- Upgrade wwdtm-theme from 2.0.7 to 2.0.22, which includes:
+- Upgrade wwdtm-theme from 2.0.7 to 2.0.20, which includes:
   - Upgrade Bootstrap from 5.3.6 to 5.3.7
 
 ## 3.3.4
