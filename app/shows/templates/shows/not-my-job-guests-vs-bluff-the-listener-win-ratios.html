@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Not My Job Guests vs Bluff the Listener Win Ratios" %}
+{% set page_title = "Not My Job Guests vs Bluff the Listener Win Ratios by Year" %}
 {% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
     <p>
         A comparison between the rates in which a Not My Job guest earns a win against
         how often a listener contestant chooses the correct Bluff the Listener
-        story.
+        story, broken down by year along with total rates across all years.
     </p>
     <p>
         For Not My Job guests, a win is considered when a guest answers two or more
@@ -35,12 +35,13 @@
     </p>
 </div>
 
-{% if guest_stats and bluff_stats %}
+{% if stats %}
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
                 <colgroup>
+                    <col class="date">
                     <col class="count">
                     <col class="count">
                     <col class="count">
@@ -53,6 +54,7 @@
                 </colgroup>
                 <thead>
                     <tr>
+                        <th rowspan="2">Year</th>
                         <th colspan="4">Not My Job Guests</th>
                         <th rowspan="2">vs</th>
                         <th colspan="4">Bluff the Listener</th>
@@ -69,18 +71,56 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% for year in years%}
+                    {% if year in stats %}
                     <tr>
-                        <td>{{ guest_stats.wins }}</td>
-                        <td>{{ guest_stats.losses }}</td>
-                        <td>{{ guest_stats.total }}</td>
-                        <td>{{ guest_stats.win_ratio }}</td>
-                        <td class="no-data">&nbsp;</td>
-                        <td>{{ bluff_stats.correct }}</td>
-                        <td>{{ bluff_stats.incorrect }}</td>
-                        <td>{{ bluff_stats.total }}</td>
-                        <td>{{ bluff_stats.correct_ratio }}</td>
+                        <td>{{ year }} </td>
+                        <td>{{ stats[year].not_my_job.wins }}</td>
+                        <td>{{ stats[year].not_my_job.losses }}</td>
+                        <td>{{ stats[year].not_my_job.total }}</td>
+                        <td>{{ stats[year].not_my_job.win_ratio }}</td>
+                        <td class="filled">&nbsp;</td>
+                        <td>{{ stats[year].bluff.correct }}</td>
+                        <td>{{ stats[year].bluff.incorrect }}</td>
+                        <td>{{ stats[year].bluff.total }}</td>
+                        <td>{{ stats[year].bluff.correct_ratio }}</td>
                     </tr>
+                    {% endif %}
+                {% endfor %}
+                    {% if "all" in stats %}
+                    <tr>
+                        <td><b>All Years</b></td>
+                        <td>{{ stats["all"].not_my_job.wins }}</td>
+                        <td>{{ stats["all"].not_my_job.losses }}</td>
+                        <td>{{ stats["all"].not_my_job.total }}</td>
+                        <td>{{ stats["all"].not_my_job.win_ratio }}</td>
+                        <td class="filled">&nbsp;</td>
+                        <td>{{ stats["all"].bluff.correct }}</td>
+                        <td>{{ stats["all"].bluff.incorrect }}</td>
+                        <td>{{ stats["all"].bluff.total }}</td>
+                        <td>{{ stats["all"].bluff.correct_ratio }}</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th rowspan="2">Year</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Total</th>
+                        <th>Win %</th>
+                        <th rowspan="2">vs</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Total</th>
+                        <th>Correct %</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Not My Job Guests</th>
+                        <th colspan="4">Bluff the Listener</th>
+                    </tr>
+                    
+                </tfoot>
             </table>
         </div>
     </div>

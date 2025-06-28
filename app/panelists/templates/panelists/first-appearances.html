@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "First Appearance Wins" %}
+{% set page_title = "First Appearances" %}
 {% block title %}{{ page_title }} | Panelists{% endblock %}
 
 {% block content %}
@@ -13,10 +13,9 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        A list of panelists who won outright or tied for first place on their debut
-        appearance. Information includes the show date, score at the start of the
-        Lightning Fill-in-the-Blank round, the number of correct answers, total score,
-        and ranking.
+        A list of the first appearance for all panelists, including their score
+        at the start of the Lightning Fill-in-the-Blank round, the number of
+        correct answers, total score, and ranking.
     </p>
 </div>
 
@@ -27,7 +26,7 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="name panelist">
-                    <col class="date">
+                    <col class="date medium">
                     <col class="score">
                     <col class="score">
                     <col class="score">
@@ -35,8 +34,16 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Panelist</th>
-                        <th>Show Date</th>
+                        {% if sort_by_panelist %}
+                        <th>Panelist <i class="bi bi-sort-down-alt ps-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.first_appearances') }}">Panelist</a></th>
+                        {% endif %}
+                        {% if not sort_by_panelist %}
+                        <th>Show Date <i class="bi bi-sort-down-alt ms-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.first_appearances', sort='date') }}">Show Date</a></th>
+                        {% endif %}
                         <th>Start</th>
                         <th>Correct</th>
                         <th>Total Score</th>

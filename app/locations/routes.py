@@ -12,7 +12,9 @@ from app.panelists.reports.debut_by_year import retrieve_show_years
 
 from .reports.average_scores import retrieve_average_scores_by_location
 from .reports.home_vs_away import retrieve_location_home_vs_away
-from .reports.recordings_by_year import retrieve_recording_counts_by_year
+from .reports.recordings_by_year import (
+    retrieve_all_recording_counts_by_year,
+)
 from .reports.show_recordings import (
     retrieve_location,
     retrieve_locations,
@@ -34,7 +36,6 @@ def average_scores_by_location() -> str:
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _locations = retrieve_average_scores_by_location(
         database_connection=_database_connection,
-        use_decimal_scores=current_app.config["app_settings"]["use_decimal_scores"],
     )
     _database_connection.close()
     return render_template(
@@ -109,51 +110,17 @@ def recordings_by_year() -> str:
     )
 
 
-@blueprint.route("/recording-counts-by-year", methods=["GET", "POST"])
+@blueprint.route("/recording-counts-by-year")
 def recording_counts_by_year() -> str:
     """View: Recording Counts by Year Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _show_years = retrieve_show_years(database_connection=_database_connection)
-
-    if request.method == "POST":
-        _year = "year" in request.form and request.form["year"]
-        try:
-            year = int(_year)
-        except ValueError:
-            year = None
-
-        if year not in _show_years:
-            _database_connection.close()
-            return render_template(
-                "locations/recording-counts-by-year.html",
-                show_years=_show_years,
-                recordings=None,
-            )
-
-        _recordings = retrieve_recording_counts_by_year(
-            year=year,
-            database_connection=_database_connection,
-        )
-        if not _recordings:
-            _database_connection.close()
-            return render_template(
-                "locations/recording-counts-by-year.html",
-                show_years=_show_years,
-                recordings=None,
-            )
-
-        _database_connection.close()
-        return render_template(
-            "locations/recording-counts-by-year.html",
-            show_years=_show_years,
-            year=year,
-            recordings=_recordings,
-        )
-
-    # Fallback for GET request
+    _recordings = retrieve_all_recording_counts_by_year(
+        database_connection=_database_connection
+    )
     _database_connection.close()
+
     return render_template(
         "locations/recording-counts-by-year.html",
-        show_years=_show_years,
-        recordings=None,
+        years=list(_recordings.keys()),
+        recordings=_recordings,
     )

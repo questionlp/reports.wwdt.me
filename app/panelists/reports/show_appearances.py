@@ -23,7 +23,6 @@ def retrieve_appearance_details_by_year(
     panelist_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieves details for all appearances for a given panelist and given year.
 
@@ -34,47 +33,24 @@ def retrieve_appearance_details_by_year(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if include_decimal_scores:
-        query = """
-            SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
-            l.venue, l.city, l.state, h.host, h.hostslug,
-            sk.scorekeeper, sk.scorekeeperslug, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndstart_decimal,
-            pm.panelistlrndcorrect, pm.panelistlrndcorrect_decimal,
-            pm.panelistscore, pm.panelistscore_decimal,
-            pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_showhostmap hm ON hm.showid = pm.showid
-            JOIN ww_hosts h ON h.hostid = hm.hostid
-            JOIN ww_showskmap skm ON skm.showid = pm.showid
-            JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
-            JOIN ww_showlocationmap lm ON lm.showid = pm.showid
-            JOIN ww_locations l on l.locationid = lm.locationid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            ORDER BY s.showdate ASC;
-        """
-    else:
-        query = """
-            SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
-            l.venue, l.city, l.state, h.host, h.hostslug,
-            sk.scorekeeper, sk.scorekeeperslug, p.panelist,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_showhostmap hm ON hm.showid = pm.showid
-            JOIN ww_hosts h ON h.hostid = hm.hostid
-            JOIN ww_showskmap skm ON skm.showid = pm.showid
-            JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
-            JOIN ww_showlocationmap lm ON lm.showid = pm.showid
-            JOIN ww_locations l on l.locationid = lm.locationid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            ORDER BY s.showdate ASC;
-        """
-
+    query = """
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
+        l.venue, l.city, l.state, h.host, h.hostslug,
+        sk.scorekeeper, sk.scorekeeperslug, p.panelist,
+        pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
+        pm.panelistscore_decimal, pm.showpnlrank
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_showhostmap hm ON hm.showid = pm.showid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
+        JOIN ww_showskmap skm ON skm.showid = pm.showid
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        JOIN ww_showlocationmap lm ON lm.showid = pm.showid
+        JOIN ww_locations l on l.locationid = lm.locationid
+        WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
+        ORDER BY s.showdate ASC;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -94,7 +70,6 @@ def retrieve_appearance_details_by_year(
         _panelists = retrieve_show_panelists_details(
             show_id=row["showid"],
             database_connection=database_connection,
-            include_decimal_scores=include_decimal_scores,
         )
         _other_panelists = []
         if _panelists:
@@ -131,20 +106,9 @@ def retrieve_appearance_details_by_year(
                 "slug": row["scorekeeperslug"],
             },
             "scoring": {
-                "start": row["panelistlrndstart"],
-                "start_decimal": (
-                    row["panelistlrndstart_decimal"] if include_decimal_scores else None
-                ),
-                "correct": row["panelistlrndcorrect"],
-                "correct_decimal": (
-                    row["panelistlrndcorrect_decimal"]
-                    if include_decimal_scores
-                    else None
-                ),
-                "score": row["panelistscore"],
-                "score_decimal": (
-                    row["panelistscore_decimal"] if include_decimal_scores else None
-                ),
+                "start": (row["panelistlrndstart_decimal"]),
+                "correct": (row["panelistlrndcorrect_decimal"]),
+                "score": (row["panelistscore_decimal"]),
                 "rank": row["showpnlrank"],
             },
             "other_panelists": _other_panelists,
@@ -159,7 +123,6 @@ def retrieve_appearance_details_by_year(
 def retrieve_appearance_details(
     panelist_slug: str,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[list[dict[str, Any]]]:
     """Retrieves details for all appearances for a given panelist and all available years.
 
@@ -180,7 +143,6 @@ def retrieve_appearance_details(
             panelist_slug=panelist_slug,
             year=_year,
             database_connection=database_connection,
-            include_decimal_scores=include_decimal_scores,
         )
 
     return _appearances

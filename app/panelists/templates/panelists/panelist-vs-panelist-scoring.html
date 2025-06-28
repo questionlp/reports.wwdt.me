@@ -103,17 +103,10 @@
                     {% for show in scores %}
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show | replace('-', '/') }}">{{ show }}</a></td>
-                        {% if use_decimal_scores %}
-                            {% set panelist_1_score = scores[show][request.form.panelist_1].score %}
-                            {% set panelist_2_score = scores[show][request.form.panelist_2].score %}
-                            {% set panelist_1_score_text = "{:f}".format(scores[show][request.form.panelist_1].score.normalize()) %}
-                            {% set panelist_2_score_text = "{:f}".format(scores[show][request.form.panelist_2].score.normalize()) %}
-                        {% else %}
-                            {% set panelist_1_score = scores[show][request.form.panelist_1].score %}
-                            {% set panelist_2_score = scores[show][request.form.panelist_2].score %}
-                            {% set panelist_1_score_text = scores[show][request.form.panelist_1].score %}
-                            {% set panelist_2_score_text = scores[show][request.form.panelist_2].score %}
-                        {% endif %}
+                        {% set panelist_1_score = scores[show][request.form.panelist_1].score %}
+                        {% set panelist_2_score = scores[show][request.form.panelist_2].score %}
+                        {% set panelist_1_score_text = "{:f}".format(scores[show][request.form.panelist_1].score.normalize()) %}
+                        {% set panelist_2_score_text = "{:f}".format(scores[show][request.form.panelist_2].score.normalize()) %}
                         {% set panelist_1_rank = scores[show][request.form.panelist_1].rank %}
                         {% set panelist_2_rank = scores[show][request.form.panelist_2].rank %}
                         {% if panelist_1_score > panelist_2_score %}

@@ -20,21 +20,6 @@
 </div>
 
 {% if shows %}
-<!-- Start Report Section -->
-<div class="mb-3">
-    <span class="pe-2"><b>Sort Order:</b></span>
-    {% if ascending %}
-        <b>Ascending</b>
-        <div class="vr mx-2"></div>
-        <a href="{{ url_for('shows.original_shows', sort='desc') }}">Descending</a>
-    {% else %}
-        <a href="{{ url_for('shows.original_shows') }}">Ascending</a>
-        <div class="vr mx-2"></div>
-        <b>Descending</b>
-    {% endif %}
-    </ul>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <div class="table-responsive">
@@ -51,7 +36,19 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Date</th>
+                        {% if ascending %}
+                        <th scope="col">
+                            <a href="{{ url_for('shows.original_shows', sort='desc') }}">
+                                Date <i class="bi bi-sort-down-alt ms-1" title="Change sorting to descending"></i>
+                            </a>
+                        </th>
+                        {% else %}
+                        <th scope="col">
+                            <a href="{{ url_for('shows.original_shows') }}">
+                                Date <i class="bi bi-sort-down ms-1" title="Change sorting to ascending"></i>
+                            </a>
+                        </th>
+                        {% endif %}
                         <th scope="col">Location</th>
                         <th scope="col">Host</th>
                         <th scope="col">Scorekeeper</th>

@@ -5,7 +5,6 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM All Women Panel Report Functions."""
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -13,15 +12,8 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_show_details(
     show_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict:
     """Retrieves host, scorekeeper, panelist, guest and location information."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -76,22 +68,13 @@ def retrieve_show_details(
         }
 
     # Retrieve panelists and their respective show rank and score
-    if use_decimal_scores:
-        query = """
-            SELECT p.panelist, pm.panelistscore, pm.panelistscore_decimal
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.showid = %s
-            ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
-        """
-    else:
-        query = """
-            SELECT p.panelist, pm.panelistscore
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.showid = %s
-            ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
-        """
+    query = """
+        SELECT p.panelist, pm.panelistscore_decimal
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE pm.showid = %s
+        ORDER BY pm.panelistscore DESC, pm.showpnlrank ASC;
+    """
     cursor.execute(query, (show_id,))
     result = cursor.fetchall()
     cursor.close()
@@ -101,21 +84,12 @@ def retrieve_show_details(
     else:
         panelists = []
         for row in result:
-            if use_decimal_scores:
-                panelists.append(
-                    {
-                        "name": row["panelist"],
-                        "score": row["panelistscore"],
-                        "score_decimal": row["panelistscore_decimal"],
-                    }
-                )
-            else:
-                panelists.append(
-                    {
-                        "name": row["panelist"],
-                        "score": row["panelistscore"],
-                    }
-                )
+            panelists.append(
+                {
+                    "name": row["panelist"],
+                    "score": row["panelistscore_decimal"],
+                }
+            )
 
         show_details["panelists"] = panelists
 
@@ -124,15 +98,8 @@ def retrieve_show_details(
 
 def retrieve_shows_all_women_panel(
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> list[dict]:
     """Retrieves details from all shows that have had an all women panel."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -160,7 +127,8 @@ def retrieve_shows_all_women_panel(
     for row in result:
         show_id = row["showid"]
         show_details = retrieve_show_details(
-            show_id, database_connection, use_decimal_scores=use_decimal_scores
+            show_id=show_id,
+            database_connection=database_connection,
         )
         if show_details:
             shows.append(show_details)

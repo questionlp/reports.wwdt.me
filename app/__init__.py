@@ -85,9 +85,6 @@ def create_app():
     app.jinja_env.globals["github_sponsor_url"] = _config["settings"].get(
         "github_sponsor_url", ""
     )
-    app.jinja_env.globals["use_decimal_scores"] = _config["settings"][
-        "use_decimal_scores"
-    ]
     app.jinja_env.globals["block_ai_scrapers"] = bool(
         _config["settings"].get("block_ai_scrapers", False)
     )
@@ -96,13 +93,7 @@ def create_app():
     )
 
     # Register Jinja template filters
-    app.jinja_env.filters["pretty_jsonify"] = utility.pretty_jsonify
     app.jinja_env.filters["markdown"] = utility.md_to_html
-
-    # Check to see if panelistscore_decimal column exists and set a flag
-    app.config["app_settings"]["has_decimal_scores_column"] = (
-        utility.panelist_decimal_score_exists(database_settings=app.config["database"])
-    )
 
     # Register application blueprints
     app.register_blueprint(main_bp)

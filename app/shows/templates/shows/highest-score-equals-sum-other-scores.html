@@ -45,29 +45,17 @@
                     <tr>
                         <td rowspan="3"><a href="{{ stats_url }}/shows/{{ show | replace('-', '/') }}">{{ show }}</a></td>
                         <td>{{ shows[show][0]["panelist"] }}</td>
-                        <td>{{ "{:f}".format(shows[show][0]["score_decimal"].normalize()) if use_decimal_scores else shows[show][0]["score"] }}</td>
+                        <td>{{ "{:f}".format(shows[show][0]["score"].normalize()) }}</td>
                         <td>{{ rank_map[shows[show][0]["rank"]] }}</td>
                     </tr>
                     <tr>
                         <td>{{ shows[show][1]["panelist"] }}</td>
-                        <td>
-                            {% if use_decimal_scores %}
-                            {{ "{:f}".format(shows[show][1]["score_decimal"].normalize()) }}
-                            {% else %}
-                            {{ shows[show][1]["score"] }}
-                            {% endif %}
-                        </td>
+                        <td>{{ "{:f}".format(shows[show][1]["score"].normalize()) }}</td>
                         <td>{{ rank_map[shows[show][1]["rank"]] }}</td>
                     </tr>
                     <tr>
                         <td>{{ shows[show][2]["panelist"] }}</td>
-                        <td>
-                            {% if use_decimal_scores %}
-                            {{ "{:f}".format(shows[show][2]["score_decimal"].normalize()) }}
-                            {% else %}
-                            {{ shows[show][2]["score"] }}
-                            {% endif %}
-                        </td>
+                        <td>{{ "{:f}".format(shows[show][2]["score"].normalize()) }}</td>
                         <td>{{ rank_map[shows[show][2]["rank"]] }}</td>
                     </tr>
                     {% endfor %}

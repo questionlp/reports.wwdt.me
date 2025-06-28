@@ -42,42 +42,6 @@ def retrieve_scorekeepers(
     return _scorekeepers
 
 
-def retrieve_scorekeepers_dict(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> dict[int, dict[str, str]]:
-    """Retrieve a dictionary of all available scorekeepers from the database.
-
-    Host ID is used for the dictionary key and the corresponding
-    value is dictionary with scorekeeper slug string and scorekeeper
-    name.
-    """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(dictionary=True)
-    query = """
-        SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
-        FROM ww_scorekeepers sk
-        WHERE sk.scorekeeper <> '(TBD)'
-        ORDER BY sk.scorekeeperslug ASC;
-    """
-    cursor.execute(query)
-    results = cursor.fetchall()
-    cursor.close()
-
-    if not results:
-        return None
-
-    _scorekeepers = {}
-    for row in results:
-        _scorekeepers[row["scorekeeperid"]] = {
-            "name": row["scorekeeper"],
-            "slug": row["scorekeeperslug"],
-        }
-
-    return _scorekeepers
-
-
 def retrieve_all_scorekeepers(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:

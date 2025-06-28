@@ -40,12 +40,14 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A collection of panelist appearance counts for regular shows and all shows
-                        grouped by year.
+                        A collection of panelist appearance counts for regular, Best Of,
+                        repeat Best Ofs, repeat and all shows grouped by year.
                     </p>
                     <p>
-                        Regular shows do not include Best Of or repeat shows, while all shows
-                        include all available shows.
+                        Regular show counts do not include Best Of or repeat shows. Counts for
+                        both Best Of and repeat shows do not include repeat Best Of shows.
+                        Counts for all shows should be the sum of regular, Best Of, repeat and
+                        repeat Best Of show counts.
                     </p>
                 </div>
             </li>
@@ -196,6 +198,20 @@
                         appearance. Information includes the show date, score at the start of the
                         Lightning Fill-in-the-Blank round, the number of correct answers, total score,
                         and ranking.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('panelists.first_appearances') }}">
+                        First Appearances
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of the first appearance for all panelists, including their score
+                        at the start of the Lightning Fill-in-the-Blank round, the number of
+                        correct answers, total score, and ranking.
                     </p>
                 </div>
             </li>

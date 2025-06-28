@@ -42,27 +42,27 @@
                     </tr>
                     <tr>
                         <td>Minimum</td>
-                        <td>{{ "{:f}".format(stats.minimum.normalize()) if use_decimal_scores else stats.minimum }}</td>
+                        <td>{{ "{:f}".format(stats.minimum.normalize()) }}</td>
                     </tr>
                     <tr>
                         <td>Maximum</td>
-                        <td>{{ "{:f}".format(stats.maximum.normalize()) if use_decimal_scores else stats.maximum }}</td>
+                        <td>{{ "{:f}".format(stats.maximum.normalize()) }}</td>
                     </tr>
                     <tr>
                         <td>Mean</td>
-                        <td>{{ "{:f}".format(stats.mean.normalize()) if use_decimal_scores else stats.mean }}</td>
+                        <td>{{ "{:f}".format(stats.mean.normalize()) }}</td>
                     </tr>
                     <tr>
                         <td>Median</td>
-                        <td>{{ "{:f}".format(stats.median.normalize()) if use_decimal_scores else stats.median }}</td>
+                        <td>{{ "{:f}".format(stats.median.normalize()) }}</td>
                     </tr>
                     <tr>
                         <td>Standard Deviation</td>
-                        <td>{{ "{:f}".format(stats.standard_deviation.normalize()) if use_decimal_scores else stats.standard_deviation }}</td>
+                        <td>{{ "{:f}".format(stats.standard_deviation.normalize()) }}</td>
                     </tr>
                     <tr>
                         <td>Sum</td>
-                        <td>{{ "{:f}".format(stats.sum.normalize()) if use_decimal_scores else stats.sum }}</td>
+                        <td>{{ "{:f}".format(stats.sum.normalize()) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -98,7 +98,7 @@
                 <tbody>
                     {% for score in aggregate %}
                     <tr>
-                        <td>{{ "{:f}".format(score.score.normalize()) if use_decimal_scores else score.score }}</td>
+                        <td>{{ "{:f}".format(score.score.normalize()) }}</td>
                         <td>{{ score.count }}</td>
                     </tr>
                     {% endfor %}
