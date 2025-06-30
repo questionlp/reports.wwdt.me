@@ -18,7 +18,7 @@ def retrieve_recording_counts_by_year(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    all_query = """
+    query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
         FROM ww_showlocationmap lm
@@ -28,15 +28,15 @@ def retrieve_recording_counts_by_year(
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
-    all_cursor = database_connection.cursor(dictionary=True)
-    all_cursor.execute(all_query, (year,))
-    all_results = all_cursor.fetchall()
-    all_cursor.close()
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (year,))
+    all_results = cursor.fetchall()
+    cursor.close()
 
     if not all_results:
         return None
 
-    regular_query = """
+    query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
         FROM ww_showlocationmap lm
@@ -47,12 +47,12 @@ def retrieve_recording_counts_by_year(
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
-    regular_cursor = database_connection.cursor(dictionary=True)
-    regular_cursor.execute(regular_query, (year,))
-    regular_results = regular_cursor.fetchall()
-    regular_cursor.close()
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (year,))
+    regular_results = cursor.fetchall()
+    cursor.close()
 
-    best_ofs_query = """
+    query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
         FROM ww_showlocationmap lm
@@ -63,12 +63,12 @@ def retrieve_recording_counts_by_year(
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
-    best_ofs_cursor = database_connection.cursor(dictionary=True)
-    best_ofs_cursor.execute(best_ofs_query, (year,))
-    best_ofs_results = best_ofs_cursor.fetchall()
-    best_ofs_cursor.close()
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (year,))
+    best_ofs_results = cursor.fetchall()
+    cursor.close()
 
-    repeat_best_ofs_query = """
+    query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
         FROM ww_showlocationmap lm
@@ -79,12 +79,12 @@ def retrieve_recording_counts_by_year(
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
-    repeat_best_ofs_cursor = database_connection.cursor(dictionary=True)
-    repeat_best_ofs_cursor.execute(repeat_best_ofs_query, (year,))
-    repeat_best_ofs_results = repeat_best_ofs_cursor.fetchall()
-    repeat_best_ofs_cursor.close()
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (year,))
+    repeat_best_ofs_results = cursor.fetchall()
+    cursor.close()
 
-    repeats_query = """
+    query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
         FROM ww_showlocationmap lm
@@ -95,10 +95,10 @@ def retrieve_recording_counts_by_year(
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
-    repeats_cursor = database_connection.cursor(dictionary=True)
-    repeats_cursor.execute(repeats_query, (year,))
-    repeats_results = repeats_cursor.fetchall()
-    repeats_cursor.close()
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (year,))
+    repeats_results = cursor.fetchall()
+    cursor.close()
 
     _appearances = {}
     for row in all_results:
