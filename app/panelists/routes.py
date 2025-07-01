@@ -37,6 +37,7 @@ from .reports.common import retrieve_panelists
 from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
 from .reports.first_appearances import retrieve_panelists_first_appearance
+from .reports.first_wins import retrieve_panelists_first_wins
 from .reports.gender_stats import retrieve_stats_by_year_gender
 from .reports.highest_scores_correct import (
     retrieve_highest_average_correct_answers_by_year,
@@ -403,6 +404,17 @@ def first_most_recent_appearances() -> str:
     return render_template(
         "panelists/first-most-recent-appearances.html",
         panelists_appearances=_panelists_appearances,
+    )
+
+
+@blueprint.route("/first-wins")
+def first_wins() -> str:
+    """View: First Wins Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists_first_wins(database_connection=_database_connection)
+    _database_connection.close()
+    return render_template(
+        "panelists/first-wins.html", panelists=_panelists, rank_map=RANK_MAP
     )
 
 

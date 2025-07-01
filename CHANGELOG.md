@@ -1,6 +1,6 @@
 # Changes
 
-## 4.0.0-alpha
+## 4.0.0-beta
 
 ### Application Changes
 
@@ -8,23 +8,26 @@
   - Remove `use_decimal_scores` from the application settings and value checks from application logic
   - All calculated score values now use the corresponding decimal score columns
   - All dictionaries that return panelist starting scores will only return decimal score values
-- Add Best Of, Repeat and Repeat Best Of columns to Panelists "Appearance Counts by Year" report
-- Add Start and Correct columns and break out Score column into Score and Rank columns in the Panelists "Single Appearance" report
-- Add year breakdowns to "Not My Job Guests vs Bluff the Listener Win Ratios by Year" and change the background color for the blank `vs` columns
-- Adding new Panelists "First Appearances" report with the show date and scoring information for each panelists' first show. The report table can be sorted by either panelist name or by show date (sorts are only ascending)
-- Change show date sorting user interface for "All Shows", "Best Of Shows", "Original Shows", "Repeat Best Of Shows" and "Repeat Shows" reports from using links above the report table to using links and icons for the "Date" column header
-- Change the Locations "Recording Counts by Year" report to match the report format used by the host, panelist and scorekeeper "Appearance Counts by Year"
+- Added Best Of, Repeat and Repeat Best Of columns to Panelists "Appearance Counts by Year" report
+- Added Start and Correct columns and break out Score column into Score and Rank columns in the Panelists "Single Appearance" report
+- Added year breakdowns to "Not My Job Guests vs Bluff the Listener Win Ratios by Year" and change the background color for the blank `vs` columns
+- Added new Panelists "First Appearances" report with the show date and scoring information for each panelists' first show. The report table can be sorted by either panelist name or by show date (sorts are only ascending)
+- Added new Panelists "First Wins" report listing when each panelist had their first outright win and their first win by being tied for first place
+- Added missing Panelists "First Appearances" route to Panelists sitemap XML template
+- Added `.focus-ring` to form buttons to show an outline around the button when it has focus
+- Changed show date sorting user interface for "All Shows", "Best Of Shows", "Original Shows", "Repeat Best Of Shows" and "Repeat Shows" reports from using links above the report table to using links and icons for the "Date" column header
+- Changed the Locations "Recording Counts by Year" report to match the report format used by the host, panelist and scorekeeper "Appearance Counts by Year"
   - Remove the form and use the accordion format to group data for all years by year
   - Remove the `POST` method handling in `locations.recording_counts_by_year`
   - Remove the `POST` method in the corresponding test cases
-- Remove the following unused functions
+- Removed the following unused functions
   - `guests.reports.scores.retrieve_guest_scores()`
   - `hosts.reports.appearances.retrieve_hosts_dict()`
   - `scorekeepers.reports.appearances.retrieve_scorekeepers_dict()`
   - `shows.reports.search_multiple_panelists.retrieve_panelist_slugs()`
   - `utility.date_string_to_date()`
   - `utility.pretty_jsonify()`
-- Fix handling of zero/None value handling in the Panelists "First Appearance Wins" report
+- Fixed handling of zero/None value handling in the Panelists "First Appearance Wins" report
 
 ### Component Changes
 

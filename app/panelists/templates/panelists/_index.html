@@ -188,6 +188,20 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('panelists.first_most_recent_appearances') }}">
+                        First and Most Recent Appearances
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A list of panelists with their first and most recent appearances for both
+                        regular shows and for all shows (including Best Of and repeat shows) and the
+                        correponding number of appearances.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('panelists.first_appearance_wins') }}">
                         First Appearance Wins
                     </a>
@@ -217,17 +231,18 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
-                    <a href="{{ url_for('panelists.first_most_recent_appearances') }}">
-                        First and Most Recent Appearances
-                    </a>
+                    <a href="{{ url_for('panelists.first_wins') }}">First Wins</a>
                 </h3>
-                <div class="description">
-                    <p>
-                        A list of panelists with their first and most recent appearances for both
-                        regular shows and for all shows (including Best Of and repeat shows) and the
-                        correponding number of appearances.
-                    </p>
-                </div>
+                <p>
+                    A list of panelists with the show they got their first outright win, by
+                    finishing the Lightning Fill-in-the-Blank segment in first place, and
+                    their first overall win, which includes outright wins and finishing
+                    the segment tied for first.
+                </p>
+                <p>
+                    Panelists who have not won outright and have not finished tied for first
+                    will not be listed.
+                </p>
             </li>
             <li class="list-group-item">
                 <h3 class="title">

@@ -5,4 +5,4 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Version module for Wait Wait Reports."""
 
-APP_VERSION = "4.0.0-alpha"
+APP_VERSION = "4.0.0-beta"

@@ -193,6 +193,15 @@ def test_first_most_recent_appearances(client: FlaskClient) -> None:
     assert b"All Shows" in response.data
 
 
+def test_first_wins(client: FlaskClient) -> None:
+    """Testing panelists.routes.first_wins."""
+    response: TestResponse = client.get("/panelists/first-wins")
+    assert response.status_code == 200
+    assert b"First Wins" in response.data
+    assert b"Outright Win" in response.data
+    assert b"Overall Win" in response.data
+
+
 def test_highest_average_correct_answers_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.highest_average_correct_answers_by_year."""
     response: TestResponse = client.get(
