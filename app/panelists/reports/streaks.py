@@ -7,7 +7,6 @@
 
 from typing import Any
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -49,38 +48,20 @@ def retrieve_panelists(
 def retrieve_panelist_ranks(
     panelist_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of show dates and the panelist rank for the requested panelist ID."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if use_decimal_scores:
-        query = """
-            SELECT s.showid, s.showdate, pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE pm.panelistid = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore_decimal IS NOT NULL
-            ORDER BY s.showdate ASC;
-        """
-    else:
-        query = """
-            SELECT s.showid, s.showdate, pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE pm.panelistid = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore IS NOT NULL
-            ORDER BY s.showdate ASC;
-        """
+    query = """
+        SELECT s.showid, s.showdate, pm.showpnlrank
+        FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE pm.panelistid = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND pm.panelistscore_decimal IS NOT NULL
+        ORDER BY s.showdate ASC;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (panelist_id,))
     result = cursor.fetchall()

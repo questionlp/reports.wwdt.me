@@ -3,15 +3,18 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate Report Functions."""
+"""WWDTM Show Not My Job Guest Wins Rate vs Bluff the Listener Wins Rate by Year Report Functions."""
 
 from typing import Any
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.panelists.reports.appearances_by_year import retrieve_all_years
 
-def retrieve_not_my_job_stats(
+
+def retrieve_not_my_job_stats_by_year(
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns a dictionary containing Not My Job statistics.
@@ -31,12 +34,12 @@ def retrieve_not_my_job_stats(
         FROM ww_showguestmap gm
         JOIN ww_guests g ON g.guestid = gm.guestid
         JOIN ww_shows s ON s.showid = gm.showid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND g.guestslug <> 'none'
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NULL AND g.guestslug <> 'none'
         AND gm.guestscore IS NOT NULL;
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -52,12 +55,12 @@ def retrieve_not_my_job_stats(
         FROM ww_showguestmap gm
         JOIN ww_guests g ON g.guestid = gm.guestid
         JOIN ww_shows s ON s.showid = gm.showid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND g.guestslug <> 'none'
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NULL AND g.guestslug <> 'none'
         AND (gm.guestscore >= 2 OR gm.exception = 1);
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -73,12 +76,12 @@ def retrieve_not_my_job_stats(
         FROM ww_showguestmap gm
         JOIN ww_guests g ON g.guestid = gm.guestid
         JOIN ww_shows s ON s.showid = gm.showid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND g.guestslug <> 'none'
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
+        AND s.repeatshowid IS NULL AND g.guestslug <> 'none'
         AND (gm.guestscore < 2 AND gm.exception = 0);
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -94,7 +97,8 @@ def retrieve_not_my_job_stats(
         FROM ww_showguestmap gm
         JOIN ww_shows s ON s.showid = gm.showid
         JOIN ww_guests g ON g.guestid = gm.guestid
-        WHERE s.bestof = 1 AND s.repeatshowid IS NULL
+        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
+        AND s.repeatshowid IS NULL
         AND g.guestid NOT IN (
         SELECT gm.guestid
         FROM ww_showguestmap gm
@@ -102,37 +106,45 @@ def retrieve_not_my_job_stats(
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL );
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchall()
     cursor.close()
 
     if not result:
-        return None
+        best_of_only_guest_ids = []
+        best_of_only_guest_wins = 0
+        best_of_only_guest_losses = 0
+    else:
+        best_of_only_guest_ids = [guest[0] for guest in result]
+        best_of_only_guest_wins = 0
+        best_of_only_guest_losses = 0
 
-    best_of_only_guest_ids = [guest[0] for guest in result]
-    best_of_only_guest_wins = 0
-    best_of_only_guest_losses = 0
+        for guest_id in best_of_only_guest_ids:
+            query = """
+                SELECT s.showdate, gm.guestscore, gm.exception
+                FROM ww_showguestmap gm
+                JOIN ww_shows s ON s.showid = gm.showid
+                WHERE YEAR(s.showdate) = %s AND s.repeatshowid IS NULL
+                AND gm.guestid = %s
+                ORDER BY s.showdate ASC
+                LIMIT 1;
+            """
+            cursor = database_connection.cursor(dictionary=True)
+            cursor.execute(
+                query,
+                (
+                    year,
+                    guest_id,
+                ),
+            )
+            result = cursor.fetchone()
+            cursor.close()
 
-    for guest_id in best_of_only_guest_ids:
-        query = """
-            SELECT s.showdate, gm.guestscore, gm.exception
-            FROM ww_showguestmap gm
-            JOIN ww_shows s ON s.showid = gm.showid
-            WHERE s.repeatshowid IS NULL
-            AND gm.guestid = %s
-            ORDER BY s.showdate ASC
-            LIMIT 1;
-        """
-        cursor = database_connection.cursor(dictionary=True)
-        cursor.execute(query, (guest_id,))
-        result = cursor.fetchone()
-        cursor.close()
-
-        if result:
-            if result["guestscore"] >= 2 or bool(result["exception"]):
-                best_of_only_guest_wins += 1
-            elif result["guestscore"] < 2 and not bool(result["exception"]):
-                best_of_only_guest_losses += 1
+            if result:
+                if result["guestscore"] >= 2 or bool(result["exception"]):
+                    best_of_only_guest_wins += 1
+                elif result["guestscore"] < 2 and not bool(result["exception"]):
+                    best_of_only_guest_losses += 1
 
     _stats = {
         "total": count_all_guest_scores + len(best_of_only_guest_ids),
@@ -151,7 +163,8 @@ def retrieve_not_my_job_stats(
     return _stats
 
 
-def retrieve_bluff_stats(
+def retrieve_bluff_stats_by_year(
+    year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Retrieves a dictionary containing Bluff the Listener statistics.
@@ -168,7 +181,7 @@ def retrieve_bluff_stats(
         SELECT COUNT(s.showid)
         FROM ww_showbluffmap blm
         JOIN ww_shows s ON s.showid = blm.showid
-        WHERE
+        WHERE YEAR(s.showdate) = %s AND
         (s.bestof = 0 AND blm.chosenbluffpnlid IS NOT NULL AND
             blm.correctbluffpnlid IS NOT NULL) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
@@ -176,7 +189,7 @@ def retrieve_bluff_stats(
             NULL);
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -189,13 +202,13 @@ def retrieve_bluff_stats(
         SELECT COUNT(s.showid)
         FROM ww_showbluffmap blm
         JOIN ww_shows s ON s.showid = blm.showid
-        WHERE
+        WHERE YEAR(s.showdate) = %s AND
         (s.bestof = 0 AND blm.chosenbluffpnlid = blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND
             blm.chosenbluffpnlid = blm.correctbluffpnlid);
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -208,13 +221,13 @@ def retrieve_bluff_stats(
         SELECT COUNT(s.showid)
         FROM ww_showbluffmap blm
         JOIN ww_shows s ON s.showid = blm.showid
-        WHERE
+        WHERE YEAR(s.showdate) = %s AND
         (s.bestof = 0 AND blm.chosenbluffpnlid <> blm.correctbluffpnlid) OR
         (s.bestof = 1 AND s.bestofuniquebluff = 1 AND blm.chosenbluffpnlid
             <> blm.correctbluffpnlid);
     """
     cursor = database_connection.cursor(dictionary=False)
-    cursor.execute(query)
+    cursor.execute(query, (year,))
     result = cursor.fetchone()
     cursor.close()
 
@@ -231,32 +244,27 @@ def retrieve_bluff_stats(
     }
 
 
-def retrieve_stats_totals(
+def retrieve_stats_all_years(
     database_connection: MySQLConnection | PooledMySQLConnection,
-) -> dict[str, dict[str, Any]]:
-    """Retrieve a dictionary with Not My Job and Bluff the Listener statistics.
-
-    Not My Job: Returned statistics includes the total number of guest
-    entries that have a score entered, total number of times a Not My
-    Job guest has won (including exceptions), and a total number of
-    times a Not My Job guest has lost.
-
-    Bluff the Listener: Returned statistics includes a total count of
-    shows with a unique segment, a count of times where the contestant
-    chooses the correct story, and a count of times where the contestant
-    does not choose the correct story.
-    """
+) -> dict[int, dict[str, Any]]:
+    """Retrieves Not My Job and Bluff the Listener win stats for all years."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    _not_my_job_stats = retrieve_not_my_job_stats(
-        database_connection=database_connection
-    )
-    _bluff_stats = retrieve_bluff_stats(database_connection=database_connection)
+    _years_list = retrieve_all_years(database_connection=database_connection)
 
-    return {
-        "all": {
-            "not_my_job": _not_my_job_stats,
-            "bluff": _bluff_stats,
+    if not _years_list:
+        return None
+
+    _years = {}
+    for _year in _years_list:
+        _years[_year] = {
+            "not_my_job": retrieve_not_my_job_stats_by_year(
+                year=_year, database_connection=database_connection
+            ),
+            "bluff": retrieve_bluff_stats_by_year(
+                year=_year, database_connection=database_connection
+            ),
         }
-    }
+
+    return _years

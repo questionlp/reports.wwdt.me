@@ -172,6 +172,18 @@ def test_first_appearance_wins(client: FlaskClient) -> None:
     assert b"Show Date" in response.data
 
 
+@pytest.mark.parametrize("sort", [None, "panelist", "date"])
+def test_first_appearances(client: FlaskClient, sort: str | None) -> None:
+    """Testing panelists.first_appearances."""
+    response: TestResponse = client.get(
+        "/panelists/first-appearances", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"First Appearances" in response.data
+    assert b"Show Date" in response.data
+    assert b"Rank" in response.data
+
+
 def test_first_most_recent_appearances(client: FlaskClient) -> None:
     """Testing panelists.routes.first_most_recent_appearances."""
     response: TestResponse = client.get("/panelists/first-most-recent-appearances")
@@ -179,6 +191,15 @@ def test_first_most_recent_appearances(client: FlaskClient) -> None:
     assert b"First and Most Recent Appearances" in response.data
     assert b"Regular Shows" in response.data
     assert b"All Shows" in response.data
+
+
+def test_first_wins(client: FlaskClient) -> None:
+    """Testing panelists.routes.first_wins."""
+    response: TestResponse = client.get("/panelists/first-wins")
+    assert response.status_code == 200
+    assert b"First Wins" in response.data
+    assert b"Outright Win" in response.data
+    assert b"Overall Win" in response.data
 
 
 def test_highest_average_correct_answers_by_year(client: FlaskClient) -> None:

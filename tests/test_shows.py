@@ -25,7 +25,7 @@ def test_all_shows(client: FlaskClient, sort: str | None) -> None:
     response: TestResponse = client.get("/shows/all-shows", query_string={"sort": sort})
     assert response.status_code == 200
     assert b"All Shows" in response.data
-    assert b"Sort Order" in response.data
+    assert b"Change sorting to" in response.data
     assert b"Guest" in response.data
 
 
@@ -45,7 +45,7 @@ def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     )
     assert response.status_code == 200
     assert b"Best Of Shows" in response.data
-    assert b"Sort Order" in response.data
+    assert b"Change sorting to" in response.data
     assert b"Guest" in response.data
 
 
@@ -177,7 +177,7 @@ def test_repeat_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     )
     assert response.status_code == 200
     assert b"Repeat Best Of Shows" in response.data
-    assert b"Sort Order" in response.data
+    assert b"Change sorting to" in response.data
     assert b"Guest" in response.data
 
 
@@ -189,7 +189,7 @@ def test_repeat_shows(client: FlaskClient, sort: str | None) -> None:
     )
     assert response.status_code == 200
     assert b"Repeat Shows" in response.data
-    assert b"Sort Order" in response.data
+    assert b"Change sorting to" in response.data
     assert b"Guest" in response.data
 
 

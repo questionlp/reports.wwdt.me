@@ -61,7 +61,7 @@
                                 <li>
                                     {% if panelist.score %}
                                     {{ panelist.name }}:
-                                    {{ "{:f}".format(panelist.score_decimal.normalize()) if use_decimal_scores else panelist.score }}
+                                    {{ "{:f}".format(panelist.score.normalize()) }}
                                     {% else %}
                                     {{ panelist.name }}
                                     {% endif %}

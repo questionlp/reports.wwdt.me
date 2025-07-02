@@ -73,21 +73,12 @@
                         {% endif %}
 
                         {% if panelists_stats[panelist]["stats"] %}
-                        {% if use_decimal_scores %}
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["minimum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["maximum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["mean"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["median"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["standard_deviation"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["total"].normalize()) }}</td>
-                        {% else %}
-                        <td>{{ panelists_stats[panelist]["stats"]["minimum"] }}</td>
-                        <td>{{ panelists_stats[panelist]["stats"]["maximum"] }}</td>
-                        <td>{{ panelists_stats[panelist]["stats"]["mean"] }}</td>
-                        <td>{{ panelists_stats[panelist]["stats"]["median"] }}</td>
-                        <td>{{ panelists_stats[panelist]["stats"]["standard_deviation"] }}</td>
-                        <td>{{ panelists_stats[panelist]["stats"]["total"] }}</td>
-                        {% endif %}
                         {% else %}
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>

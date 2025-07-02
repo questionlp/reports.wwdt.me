@@ -20,52 +20,30 @@ def retrieve_appearances_by_year(
     panelist_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, int]:
     """Retrieve appearance data for a given panelist."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if use_decimal_scores:
-        query = """
-            SELECT (
-            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s AND
-            s.bestof = 0 AND s.repeatshowid IS NULL) AS regular, (
-            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s) AS all_shows, (
-            SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON pm.showid = s.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore_decimal IS NOT NULL )
-            AS with_scores;
-        """
-    else:
-        query = """
-            SELECT (
-            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s AND
-            s.bestof = 0 AND s.repeatshowid IS NULL) AS regular, (
-            SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON s.showid = pm.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s) AS all_shows, (
-            SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm
-            JOIN ww_shows s ON pm.showid = s.showid
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore IS NOT NULL )
-            AS with_scores;
-        """
+    query = """
+        SELECT (
+        SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s AND
+        s.bestof = 0 AND s.repeatshowid IS NULL) AS regular, (
+        SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON s.showid = pm.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s) AS all_shows, (
+        SELECT COUNT(pm.panelistid) FROM ww_showpnlmap pm
+        JOIN ww_shows s ON pm.showid = s.showid
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND pm.panelistscore_decimal IS NOT NULL )
+        AS with_scores;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -98,30 +76,19 @@ def retrieve_scores_by_year(
     panelist_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> list[int]:
     """Retrieve all scores for a given panelist."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if use_decimal_scores:
-        query = """
-            SELECT pm.panelistscore_decimal AS score FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore_decimal IS NOT NULL;
-        """
-    else:
-        query = """
-            SELECT pm.panelistscore AS score FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            JOIN ww_shows s ON s.showid = pm.showid
-            WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
-            AND s.bestof = 0 AND s.repeatshowid IS NULL
-            AND pm.panelistscore IS NOT NULL;
-        """
+    query = """
+        SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        JOIN ww_shows s ON s.showid = pm.showid
+        WHERE p.panelistslug = %s AND YEAR(s.showdate) = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
+        AND pm.panelistscore_decimal IS NOT NULL;
+    """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
         query,
@@ -136,14 +103,13 @@ def retrieve_scores_by_year(
     if not result:
         return None
 
-    return [row["score"] for row in result]
+    return [row["panelistscore_decimal"] for row in result]
 
 
 def retrieve_all_stats_by_year(
     panelist_slug: str,
     year: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, Any]:
     """Retrieve common statistics for a given panelist."""
     if not database_connection.is_connected():
@@ -154,7 +120,6 @@ def retrieve_all_stats_by_year(
             panelist_slug=panelist_slug,
             year=year,
             database_connection=database_connection,
-            use_decimal_scores=use_decimal_scores,
         ),
     }
 
@@ -162,27 +127,16 @@ def retrieve_all_stats_by_year(
         panelist_slug=panelist_slug,
         year=year,
         database_connection=database_connection,
-        use_decimal_scores=use_decimal_scores,
     )
     if scores:
-        if use_decimal_scores:
-            all_stats["stats"] = {
-                "minimum": Decimal(numpy.amin(scores)),
-                "maximum": Decimal(numpy.amax(scores)),
-                "mean": round(Decimal(numpy.mean(scores)), 5),
-                "median": Decimal(numpy.median(scores)),
-                "standard_deviation": round(Decimal(numpy.std(scores)), 5),
-                "total": Decimal(numpy.sum(scores)),
-            }
-        else:
-            all_stats["stats"] = {
-                "minimum": int(numpy.amin(scores)),
-                "maximum": int(numpy.amax(scores)),
-                "mean": round(numpy.mean(scores), 5),
-                "median": int(numpy.median(scores)),
-                "standard_deviation": round(numpy.std(scores), 5),
-                "total": int(numpy.sum(scores)),
-            }
+        all_stats["stats"] = {
+            "minimum": Decimal(numpy.amin(scores)),
+            "maximum": Decimal(numpy.amax(scores)),
+            "mean": round(Decimal(numpy.mean(scores)), 5),
+            "median": Decimal(numpy.median(scores)),
+            "standard_deviation": round(Decimal(numpy.std(scores)), 5),
+            "total": Decimal(numpy.sum(scores)),
+        }
     else:
         all_stats["stats"] = None
 
@@ -192,7 +146,6 @@ def retrieve_all_stats_by_year(
 def retrieve_stats_all_years(
     panelist_slug: str,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ):
     """Retrieves statistics for all years for a given panelist."""
     if not database_connection.is_connected():
@@ -212,7 +165,6 @@ def retrieve_stats_all_years(
             panelist_slug=panelist_slug,
             year=_year,
             database_connection=database_connection,
-            use_decimal_scores=use_decimal_scores,
         )
 
     _panelist = {"name": _info["name"], "slug": _info["slug"], "statistics": _stats}

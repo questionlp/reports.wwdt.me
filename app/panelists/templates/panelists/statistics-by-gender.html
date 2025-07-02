@@ -73,25 +73,25 @@
                     <tr>
                         <td>{{ year }}</td>
                         {% if gender_stats[year]["M"] %}
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["minimum"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["minimum"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["maximum"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["maximum"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["mean"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["mean"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["median"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["median"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["standard_deviation"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["standard_deviation"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["count"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["count"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["M"]["total"].normalize()) if use_decimal_scores else gender_stats[year]["M"]["total"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["minimum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["maximum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["mean"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["median"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["standard_deviation"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["count"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["total"].normalize()) }}</td>
                         {% else %}
                         <td class="no-data" colspan="7">-</td>
                         {% endif %}
 
                         {% if gender_stats[year]["F"] %}
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["minimum"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["minimum"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["maximum"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["maximum"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["mean"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["mean"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["median"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["median"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["standard_deviation"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["standard_deviation"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["count"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["count"] }}</td>
-                        <td>{{ "{:f}".format(gender_stats[year]["F"]["total"].normalize()) if use_decimal_scores else gender_stats[year]["F"]["total"] }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["minimum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["maximum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["mean"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["median"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["standard_deviation"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["count"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["total"].normalize()) }}</td>
                         {% else %}
                         <td class="no-data" colspan="7">-</td>
                         {% endif %}

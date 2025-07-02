@@ -29,13 +29,19 @@
                 <colgroup>
                     <col class="name panelist">
                     <col class="date">
-                    <col class="score long">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="rank">
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">Correct</th>
                         <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,22 +49,22 @@
                     <tr>
                         <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
                         <td><a href="{{ stats_url }}/shows/{{ panelist.appearance | replace('-', '/') }}">{{ panelist.appearance }}</a></td>
-                        {% if use_decimal_scores %}
-                        {% if panelist.score and panelist.rank %}
-                        <td>{{ "{:f}".format(panelist.score.normalize()) }} ({{ rank_map[panelist.rank] }})</td>
-                        {% elif panelist.score %}
+                        {% if panelist.start != None %}
+                        <td>{{ "{:f}".format(panelist.start.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist.correct != None %}
+                        <td>{{ "{:f}".format(panelist.correct.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist.score != None and panelist.rank  %}
                         <td>{{ "{:f}".format(panelist.score.normalize()) }}</td>
+                        <td>{{ rank_map[panelist.rank] }}</td>
                         {% else %}
                         <td class="no-data">-</td>
-                        {% endif %}
-                        {% else %}
-                        {% if panelist.score and panelist.rank %}
-                        <td>{{ panelist.score }} ({{ rank_map[panelist.rank] }})</td>
-                        {% elif panelist.score %}
-                        <td>{{ panelist.score }}</td>
-                        {% else %}
                         <td class="no-data">-</td>
-                        {% endif %}
                         {% endif %}
                     </tr>
                     {% endfor %}
@@ -67,7 +73,10 @@
                     <tr>
                         <th scope="col">Panelist</th>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">Correct</th>
                         <th scope="col">Score</th>
+                        <th scope="col">Rank</th>
                     </tr>
                 </tfoot>
             </table>

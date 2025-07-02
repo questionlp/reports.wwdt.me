@@ -44,41 +44,6 @@ def retrieve_hosts(
     return _hosts
 
 
-def retrieve_hosts_dict(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> dict[int, dict[str, str]]:
-    """Retrieve a dictionary of all available hosts from the database.
-
-    Host ID is used for the dictionary key and the corresponding
-    value is dictionary with host slug string and host name.
-    """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(dictionary=True)
-    query = """
-        SELECT h.hostid, h.host, h.hostslug
-        FROM ww_hosts h
-        WHERE h.host <> '(TBD)'
-        ORDER BY h.hostid ASC;
-    """
-    cursor.execute(query)
-    results = cursor.fetchall()
-    cursor.close()
-
-    if not results:
-        return None
-
-    _hosts = {}
-    for row in results:
-        _hosts[row["hostid"]] = {
-            "name": row["host"],
-            "slug": row["hostslug"],
-        }
-
-    return _hosts
-
-
 def retrieve_appearances_by_host(
     host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, int]:

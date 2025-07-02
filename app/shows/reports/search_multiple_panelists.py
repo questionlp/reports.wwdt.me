@@ -13,29 +13,6 @@ from mysql.connector.pooling import PooledMySQLConnection
 from . import show_details as details
 
 
-def retrieve_panelist_slugs(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[str]:
-    """Returns a list of valid panelist slugs."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    query = """
-        SELECT panelistslug FROM ww_panelists
-        WHERE panelistslug <> 'multiple'
-        ORDER BY panelist ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    return [row["panelistslug"] for row in result]
-
-
 def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str]:

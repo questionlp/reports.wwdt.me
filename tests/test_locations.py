@@ -42,19 +42,6 @@ def test_recording_counts_by_year(client: FlaskClient) -> None:
     response: TestResponse = client.get("/locations/recording-counts-by-year")
     assert response.status_code == 200
     assert b"Recording Counts by Year" in response.data
-    assert b"Select a Year" in response.data
-
-
-@pytest.mark.parametrize("year", [1998, 2018])
-def test_recording_counts_by_year_post(client: FlaskClient, year: int) -> None:
-    """Testing locations.routes.recording_counts_by_year (POST)."""
-    response: TestResponse = client.post(
-        "/locations/recording-counts-by-year",
-        data={"year": year},
-    )
-    assert response.status_code == 200
-    assert b"Recording Counts by Year" in response.data
-    assert b"Select a Year" in response.data
     assert b"Venue" in response.data
     assert b"Regular Shows" in response.data
 

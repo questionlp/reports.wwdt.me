@@ -55,19 +55,6 @@ def current_year(time_zone: pytz.timezone = _utc_timezone):
     return now.strftime("%Y")
 
 
-def date_string_to_date(**kwargs) -> datetime | None:
-    """Used to convert an ISO-style date string into a datetime object."""
-    if "date_string" in kwargs and kwargs["date_string"]:
-        try:
-            date_object = datetime.strptime(kwargs["date_string"], "%Y-%m-%d")
-        except ValueError:
-            return None
-
-        return date_object
-
-    return None
-
-
 def generate_date_time_stamp(time_zone: pytz.timezone = _utc_timezone):
     """Generate a current date/timestamp string."""
     now = datetime.now(time_zone)
@@ -85,11 +72,6 @@ def md_to_html(markdown_text: str):
         updated_html = re.sub(pattern, replacement, html_text, flags=re.DOTALL)
 
     return updated_html
-
-
-def pretty_jsonify(data):
-    """Returns a prettier JSON output for an object than Flask's default tojson filter."""
-    return json.dumps(data, indent=2)
 
 
 def redirect_url(url: str, status_code: int = 302):
@@ -121,18 +103,3 @@ def time_zone_parser(time_zone: str) -> pytz.timezone:
         time_zone_string = time_zone_object.zone
 
     return time_zone_object, time_zone_string
-
-
-def panelist_decimal_score_exists(database_settings: dict) -> bool:
-    """Returns if the panelistscore_decimal column exists in the Wait Wait Stats Database."""
-    try:
-        database_connection = connect(**database_settings)
-        cursor = database_connection.cursor()
-        query = "SHOW COLUMNS FROM ww_showpnlmap WHERE Field = 'panelistscore_decimal'"
-        cursor.execute(query)
-        result = cursor.fetchone()
-        cursor.close()
-
-        return bool(result)
-    except DatabaseError:
-        return False

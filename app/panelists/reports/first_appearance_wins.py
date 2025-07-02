@@ -7,22 +7,14 @@
 
 from decimal import Decimal
 
-from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 
 def retrieve_panelists_first_appearance_wins(
     database_connection: MySQLConnection | PooledMySQLConnection,
-    use_decimal_scores: bool = False,
 ) -> dict[str, str | int | Decimal]:
     """Returns a dictionary containing wins or tied for first for panelists' first appearance."""
-    if (
-        use_decimal_scores
-        and not current_app.config["app_settings"]["has_decimal_scores_column"]
-    ):
-        return None
-
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -49,31 +41,19 @@ def retrieve_panelists_first_appearance_wins(
     panelists = {}
     for panelist_slug in panelist_slugs:
         cursor = database_connection.cursor(dictionary=True)
-        if use_decimal_scores:
-            query = """
-                SELECT p.panelist, s.showid, s.showdate, pm.panelistlrndstart,
-                pm.panelistlrndcorrect, pm.panelistscore, pm.panelistscore_decimal,
-                pm.showpnlrank
-                FROM ww_showpnlmap pm
-                JOIN ww_panelists p ON p.panelistid = pm.panelistid
-                JOIN ww_shows s ON s.showid = pm.showid
-                WHERE p.panelistslug = %s
-                AND s.bestof = 0 AND s.repeatshowid IS NULL
-                ORDER BY s.showdate ASC
-                LIMIT 1;
-            """
-        else:
-            query = """
-                SELECT p.panelist, s.showid, s.showdate, pm.panelistlrndstart,
-                pm.panelistlrndcorrect, pm.panelistscore, pm.showpnlrank
-                FROM ww_showpnlmap pm
-                JOIN ww_panelists p ON p.panelistid = pm.panelistid
-                JOIN ww_shows s ON s.showid = pm.showid
-                WHERE p.panelistslug = %s
-                AND s.bestof = 0 AND s.repeatshowid IS NULL
-                ORDER BY s.showdate ASC
-                LIMIT 1;
-            """
+
+        query = """
+            SELECT p.panelist, s.showid, s.showdate,
+            pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
+            pm.panelistscore_decimal, pm.showpnlrank
+            FROM ww_showpnlmap pm
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            JOIN ww_shows s ON s.showid = pm.showid
+            WHERE p.panelistslug = %s
+            AND s.bestof = 0 AND s.repeatshowid IS NULL
+            ORDER BY s.showdate ASC
+            LIMIT 1;
+        """
         cursor.execute(query, (panelist_slug,))
         result = cursor.fetchone()
         cursor.close()
@@ -82,24 +62,13 @@ def retrieve_panelists_first_appearance_wins(
             return None
 
         if result["showpnlrank"] in ("1", "1t"):
-            if use_decimal_scores:
-                panelists[panelist_slug] = {
-                    "name": result["panelist"],
-                    "show_date": result["showdate"].isoformat(),
-                    "start": result["panelistlrndstart"],
-                    "correct": result["panelistlrndcorrect"],
-                    "score": result["panelistscore"],
-                    "score_decimal": result["panelistscore_decimal"],
-                    "rank": result["showpnlrank"],
-                }
-            else:
-                panelists[panelist_slug] = {
-                    "name": result["panelist"],
-                    "show_date": result["showdate"].isoformat(),
-                    "start": result["panelistlrndstart"],
-                    "correct": result["panelistlrndcorrect"],
-                    "score": result["panelistscore"],
-                    "rank": result["showpnlrank"],
-                }
+            panelists[panelist_slug] = {
+                "name": result["panelist"],
+                "show_date": result["showdate"].isoformat(),
+                "start": result["panelistlrndstart_decimal"],
+                "correct": result["panelistlrndcorrect_decimal"],
+                "score": result["panelistscore_decimal"],
+                "rank": result["showpnlrank"],
+            }
 
     return panelists
