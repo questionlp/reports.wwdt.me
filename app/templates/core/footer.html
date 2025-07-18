@@ -8,6 +8,9 @@
                         <li><a href="{{ blog_url }}" target="_blank">Blog</a></li>
                         <li><a href="{{ graphs_url }}" target="_blank">Graphs</a></li>
                         <li><a href="{{ stats_url }}" target="_blank">Stats Page</a></li>
+                        {% if support_npr_url %}
+                        <li><a href="{{ support_npr_url }}" target="_blank">Support NPR</a></li>
+                        {% endif %}
                         {% if github_sponsor_url %}
                         <li><a href="{{ github_sponsor_url }}" target="_blank">GitHub Sponsor</a></li>
                         {% endif %}
