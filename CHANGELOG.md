@@ -1,5 +1,16 @@
 # Changes
 
+## 4.0.4
+
+### Application Changes
+
+- Added a little check on the version number to only display a little easter egg of sorts in the footer
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.24 to 2.0.25
+  - Increased line height for the `.footer.links` across the board
+
 ## 4.0.3
 
 ### Component Changes
