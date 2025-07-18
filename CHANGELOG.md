@@ -1,5 +1,12 @@
 # Changes
 
+## 4.0.2
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.22 to 2.0.23
+  - Increases line height for the `.footer.links` on smaller screens to make it easier to tap or click specific links when the text is wrapped
+
 ## 4.0.1
 
 ### Application Changes
