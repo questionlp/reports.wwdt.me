@@ -33,6 +33,7 @@
         "bluesky_user": "",
         "mastodon_url": "",
         "mastodon_user": "",
+        "support_npr_url": "",
         "patreon_url": "",
         "github_sponsor_url": "",
         "use_minified_css": true
