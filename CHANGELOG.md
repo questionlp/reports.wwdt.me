@@ -1,5 +1,11 @@
 # Changes
 
+## 4.0.5
+
+### Application Changes
+
+- Discreetly display the node rendering and serving the page as a tooltip in the footer
+
 ## 4.0.4
 
 ### Application Changes
