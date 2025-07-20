@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Core Application for Wait Wait Reports."""
 
+import platform
 from urllib.parse import ParseResult, urlparse
 
 from flask import Flask
@@ -93,6 +94,10 @@ def create_app():
     )
     app.jinja_env.globals["use_minified_css"] = bool(
         _config["settings"].get("use_minified_css", False)
+    )
+
+    app.jinja_env.globals["node_name"] = (
+        platform.node().split(".")[0] if platform.node() else None
     )
 
     # Register Jinja template filters
