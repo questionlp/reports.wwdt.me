@@ -1,5 +1,16 @@
 # Changes
 
+## 4.0.6
+
+### Application Changes
+
+- Changed the disclaimer in the footer to be inside a collapsible container with an info icon at the end of the copyright and contact line acting as a button to toggle the collapsible
+  - This change was done to make the footer more minimal in its default state
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.26 to 2.0.28
+
 ## 4.0.5
 
 ### Application Changes
