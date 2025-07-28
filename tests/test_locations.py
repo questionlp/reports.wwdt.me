@@ -37,15 +37,6 @@ def test_average_scores_by_location(client: FlaskClient) -> None:
     assert b"Average Total" in response.data
 
 
-def test_recording_counts_by_year(client: FlaskClient) -> None:
-    """Testing locations.routes.recording_counts_by_year."""
-    response: TestResponse = client.get("/locations/recording-counts-by-year")
-    assert response.status_code == 200
-    assert b"Recording Counts by Year" in response.data
-    assert b"Venue" in response.data
-    assert b"Regular Shows" in response.data
-
-
 def test_recordings_by_year(client: FlaskClient) -> None:
     """Testing locations.routes.recordings_by_year."""
     response: TestResponse = client.get("/locations/recordings-by-year")
@@ -70,3 +61,30 @@ def test_recordings_by_year_post(client: FlaskClient, location_slug: str) -> Non
     assert b"Recordings by Year" in response.data
     assert location_slug.encode("utf-8") in response.data
     assert b"Repeat Of" in response.data
+
+
+def test_recording_counts_by_location(client: FlaskClient) -> None:
+    """Testing locations.routes.recording_counts_by_location."""
+    response: TestResponse = client.get("/locations/recording-counts-by-location")
+    assert response.status_code == 200
+    assert b"Recording Counts by Location" in response.data
+    assert b"Venue" in response.data
+    assert b"Regular Shows" in response.data
+
+
+def test_recording_counts_by_state(client: FlaskClient) -> None:
+    """Testing locations.routes.recording_counts_by_state."""
+    response: TestResponse = client.get("/locations/recording-counts-by-state")
+    assert response.status_code == 200
+    assert b"Recording Counts by State" in response.data
+    assert b"State" in response.data
+    assert b"Regular Shows" in response.data
+
+
+def test_recording_counts_by_year(client: FlaskClient) -> None:
+    """Testing locations.routes.recording_counts_by_year."""
+    response: TestResponse = client.get("/locations/recording-counts-by-year")
+    assert response.status_code == 200
+    assert b"Recording Counts by Year" in response.data
+    assert b"Venue" in response.data
+    assert b"Regular Shows" in response.data
