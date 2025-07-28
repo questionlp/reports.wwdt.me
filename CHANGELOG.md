@@ -1,5 +1,19 @@
 # Changes
 
+## 4.1.0
+
+### Application Changes
+
+- Added a couple of new reports:
+  - Locations "Recording Counts by Location"
+  - Locations "Recording Counts by State"
+- Corrected Locations "Recordings by Year" report where the repeat shows count was not correct due to a mistake in the database query
+
+### Component Changes
+
+- Upgrade wwdtm-theme from 2.0.28 to 2.0.29
+  - Added new `.col.state.medium` and `.col.state.long` entries with length values of `12rem` and `20rem` respectively
+
 ## 4.0.6
 
 ### Application Changes

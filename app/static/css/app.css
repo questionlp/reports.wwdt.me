@@ -12673,7 +12673,8 @@ main .report.table col.rank {
   width: 9rem;
 }
 main .report.table col.city,
-main .report.table col.date.medium {
+main .report.table col.date.medium,
+main .report.table col.state.medium {
   width: 12rem;
 }
 main .report.table col.count.long,
@@ -12690,7 +12691,8 @@ main .report.table col.name.panelist,
 main .report.table col.name.guest {
   width: 16rem;
 }
-main .report.table col.name.guest.long {
+main .report.table col.name.guest.long,
+main .report.table col.state.long {
   width: 20rem;
 }
 main .report.table col.name.venue {

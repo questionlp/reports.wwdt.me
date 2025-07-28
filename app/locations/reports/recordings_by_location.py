@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""WWDTM Location Recordings by Year Report Functions."""
+"""WWDTM Location Recordings by Location Report Functions."""
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -11,10 +11,10 @@ from mysql.connector.pooling import PooledMySQLConnection
 from app.panelists.reports.appearances_by_year import retrieve_all_years
 
 
-def retrieve_recording_counts_by_year(
-    year: int, database_connection: MySQLConnection | PooledMySQLConnection
+def retrieve_recording_counts_by_location(
+    database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, dict[str, str | int | None]]:
-    """Retrieve location recording counts for a given year."""
+    """Retrieve recording counts for all available locations."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -24,12 +24,12 @@ def retrieve_recording_counts_by_year(
         FROM ww_showlocationmap lm
         JOIN ww_shows s ON s.showid = lm.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
-        WHERE YEAR(s.showdate) = %s
+        WHERE l.locationid <> 3
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(query)
     all_results = cursor.fetchall()
     cursor.close()
 
@@ -42,13 +42,12 @@ def retrieve_recording_counts_by_year(
         FROM ww_showlocationmap lm
         JOIN ww_shows s ON s.showid = lm.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
+        WHERE l.locationid <> 3 AND s.bestof = 0 AND s.repeatshowid IS NULL
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(query)
     regular_results = cursor.fetchall()
     cursor.close()
 
@@ -58,13 +57,12 @@ def retrieve_recording_counts_by_year(
         FROM ww_showlocationmap lm
         JOIN ww_shows s ON s.showid = lm.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NULL
+        WHERE l.locationid <> 3 AND s.bestof = 1 AND s.repeatshowid IS NULL
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(query)
     best_ofs_results = cursor.fetchall()
     cursor.close()
 
@@ -74,13 +72,12 @@ def retrieve_recording_counts_by_year(
         FROM ww_showlocationmap lm
         JOIN ww_shows s ON s.showid = lm.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NOT NULL
+        WHERE l.locationid <> 3 AND s.bestof = 1 AND s.repeatshowid IS NOT NULL
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(query)
     repeat_best_ofs_results = cursor.fetchall()
     cursor.close()
 
@@ -90,13 +87,12 @@ def retrieve_recording_counts_by_year(
         FROM ww_showlocationmap lm
         JOIN ww_shows s ON s.showid = lm.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
-        WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NOT NULL
+        WHERE l.locationid <> 3 AND s.bestof = 0 AND s.repeatshowid IS NOT NULL
         GROUP BY l.locationid, l.locationslug
         ORDER BY COUNT(l.locationid) DESC, l.locationslug ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(query)
     repeats_results = cursor.fetchall()
     cursor.close()
 
@@ -127,29 +123,3 @@ def retrieve_recording_counts_by_year(
         _recordings[row["locationslug"]]["repeats"] = row["count"]
 
     return _recordings
-
-
-def retrieve_all_recording_counts_by_year(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> dict[int, dict[str, str | int | None]]:
-    """Retrieve all recording counts for all locations from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    _years_list = retrieve_all_years(database_connection=database_connection)
-
-    if not _years_list:
-        return None
-
-    _years = {}
-    for _year in _years_list:
-        _recordings = retrieve_recording_counts_by_year(
-            year=_year, database_connection=database_connection
-        )
-
-        if _recordings:
-            _years[_year] = _recordings
-        else:
-            _years[_year] = None
-
-    return _years

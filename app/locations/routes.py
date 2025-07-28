@@ -12,6 +12,8 @@ from app.panelists.reports.debut_by_year import retrieve_show_years
 
 from .reports.average_scores import retrieve_average_scores_by_location
 from .reports.home_vs_away import retrieve_location_home_vs_away
+from .reports.recordings_by_location import retrieve_recording_counts_by_location
+from .reports.recordings_by_state import retrieve_recording_counts_by_state
 from .reports.recordings_by_year import (
     retrieve_all_recording_counts_by_year,
 )
@@ -45,7 +47,7 @@ def average_scores_by_location() -> str:
 
 @blueprint.route("/home-vs-away")
 def home_vs_away() -> str:
-    """View: Show Locations: Home vs Away."""
+    """View: Home vs Away Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _show_counts = retrieve_location_home_vs_away(
         database_connection=_database_connection
@@ -108,6 +110,28 @@ def recordings_by_year() -> str:
         years=_show_years,
         recordings=None,
     )
+
+
+@blueprint.route("/recording-counts-by-location")
+def recording_counts_by_location() -> str:
+    """View: Recordings by Location Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _locations = retrieve_recording_counts_by_location(
+        database_connection=_database_connection
+    )
+    return render_template(
+        "locations/recording-counts-by-location.html", locations=_locations
+    )
+
+
+@blueprint.route("/recording-counts-by-state")
+def recording_counts_by_state() -> str:
+    """View: Recordings by State Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _states = retrieve_recording_counts_by_state(
+        database_connection=_database_connection
+    )
+    return render_template("locations/recording-counts-by-state.html", states=_states)
 
 
 @blueprint.route("/recording-counts-by-year")

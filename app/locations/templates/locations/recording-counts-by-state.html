@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% set page_title = "Recording Counts by State" %}
+{% block title %}{{ page_title }} | Locations{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A list of states with recording counts for the number of regular, Best Of,
+        repeat Best Ofs, repeat and all shows for each.
+    </p>
+    <p>
+        Regular show counts do not include Best Of or repeat shows. Counts for
+        both Best Of and repeat shows do not include repeat Best Of shows.
+        Counts for all shows should be the sum of regular, Best Of, repeat and
+        repeat Best Of show counts.
+    </p>
+</div>
+
+{% if states %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name state medium">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">State</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">Best Of Shows</th>
+                        <th scope="col">Repeat Shows</th>
+                        <th scope="col">Repeat Best Of Shows</th>
+                        <th scope="col">All Shows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for state in states %}
+                    {% set state_info = states[state] %}
+                    <tr>
+                        {% if state_info.name %}
+                        <td>{{ state_info.name }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if state_info.regular is not none %}
+                        <td>{{ state_info.regular }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if state_info.best_ofs is not none %}
+                        <td>{{ state_info.best_ofs }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if state_info.repeats is not none %}
+                        <td>{{ state_info.repeats }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if state_info.repeat_best_ofs is not none %}
+                        <td>{{ state_info.repeat_best_ofs }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if state_info.all is not none %}
+                        <td>{{ state_info.all }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">State</th>
+                        <th scope="col">Regular Shows</th>
+                        <th scope="col">Best Of Shows</th>
+                        <th scope="col">Repeat Shows</th>
+                        <th scope="col">Repeat Best Of Shows</th>
+                        <th scope="col">All Shows</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}
