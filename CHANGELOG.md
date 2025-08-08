@@ -1,6 +1,6 @@
 # Changes
 
-## 4.2.0-beta
+## 4.2.0
 
 ### Application Changes
 
