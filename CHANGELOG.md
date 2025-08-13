@@ -1,5 +1,22 @@
 # Changes
 
+## 4.2.1
+
+### Application Changes
+
+- Moved towards standardizing on a font weight of 600 for all headers, subheaders and bottom navigation links
+  - Prior to this update, both 500 and 600 font weights were used
+  - This matches the [recommended font weights](https://carbondesignsystem.com/elements/typography/overview/#weights) defined in the [Carbon Design System](https://carbondesignsystem.com/)
+- Changed the sans-serif, serif and monospace font stacks based on the [font stack](https://carbondesignsystem.com/elements/typography/overview/#typeface:-ibm-plex) defined in the Carbon Design System
+  - sans-serif: `"IBM Plex Sans", "Helvetica Neue", system-ui, -apple-system, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"`
+  - serif: `"IBM Plex Serif", "Georgia", Times, serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"`
+  - monospace: `"IBM Plex Mono", "Menlo", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", Courier, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", monospace`
+
+### Component Changes
+
+- Upgrade NumPy from 2.1.2 to 2.2.6
+- Upgrade wwdtm-theme from 2.1.0 to 2.2.2
+
 ## 4.2.0
 
 ### Application Changes
