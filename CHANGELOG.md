@@ -15,7 +15,7 @@
 ### Component Changes
 
 - Upgrade NumPy from 2.1.2 to 2.2.6
-- Upgrade wwdtm-theme from 2.1.0 to 2.2.2
+- Upgrade wwdtm-theme from 2.1.0 to 2.2.3
 
 ## 4.2.0
 
