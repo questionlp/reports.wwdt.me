@@ -17,6 +17,12 @@
 - Upgrade NumPy from 2.1.2 to 2.2.6
 - Upgrade wwdtm-theme from 2.1.0 to 2.2.4
 
+### Development Changes
+
+- Upgrade Ruff from 0.11.9 to 0.12.8
+- Upgrade pytest from 8.3.5 to 8.4.1
+- Upgrade pytest-cov from 6.1.1 to 6.2.1
+
 ## 4.2.0
 
 ### Application Changes
