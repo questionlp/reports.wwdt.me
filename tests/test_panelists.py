@@ -486,3 +486,34 @@ def test_win_streaks(client: FlaskClient) -> None:
     assert b"Win Streaks" in response.data
     assert b"Outright Wins" in response.data
     assert b"Wins with Draws" in response.data
+
+
+def test_wins_draws_losses(client: FlaskClient) -> None:
+    """Testing panelists.routes.wins_draws_losses."""
+    response: TestResponse = client.get("/panelists/wins-draws-losses")
+    assert response.status_code == 200
+    assert b"Wins, Draws and Losses" in response.data
+    assert b"Sort Column" in response.data
+    assert b"<table" in response.data
+
+
+@pytest.mark.parametrize(
+    "minimum_total, sort_column, sort_descending",
+    [(0, "", False), (0, "", True), (5, "panelist", False), (5, "panelist", True)],
+)
+def test_wins_draws_losses_post(
+    client: FlaskClient, minimum_total: int, sort_column: str, sort_descending: bool
+) -> None:
+    """Testing panelists.routes.wins_draws_losses (POST)."""
+    response: TestResponse = client.post(
+        "/panelists/wins-draws-losses",
+        data={
+            "minimum_total": minimum_total,
+            "sort_column": sort_column,
+            "sort_descending": sort_descending,
+        },
+    )
+    assert response.status_code == 200
+    assert b"Wins, Draws and Losses" in response.data
+    assert b"Sort Column" in response.data
+    assert b"<table" in response.data
