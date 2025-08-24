@@ -1,5 +1,12 @@
 # Changes
 
+## 4.3.0
+
+### Application Changes
+
+- Adding new Panelists "Wins, Draws and Losses" report that includes the number of times a panelist finished in first place (win), finished tied for first (draw), or lost (all other positions)
+- Reworded the beginning of report descriptions for more consistency
+
 ## 4.2.1
 
 ### Application Changes

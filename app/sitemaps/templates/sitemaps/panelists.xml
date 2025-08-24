@@ -124,4 +124,8 @@
     <loc>{{ site_url }}{{ url_for("panelists.win_streaks") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("panelists.wins_draws_losses") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

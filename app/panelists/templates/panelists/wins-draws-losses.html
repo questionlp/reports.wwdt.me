@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% set page_title = "Wins, Draws and Losses" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying panelists with the numbers of wins, draws, losses and
+        total counts.
+    </p>
+    <p>
+        In this report, a panelist finishing Lightning Fill-in-the-Blank in
+        first place is a win, finishing tied for first place is a draw, and
+        any other result is considered a loss.
+    </p>
+    <p>
+        Appearances on and ranking from Best Of and repeat shows are not
+        included.
+    </p>
+</div>
+
+<div class="card report-form mb-5">
+    <div class="card-body">
+        <form method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-6">
+                <label for="sort-column">Sort Column</label>
+                <select id="sort-column" name="sort_column" class="form-select" aria-label="Sort column selection">
+                    <option value="">-- Select Column to Sort --</option>
+                    {% for column in table_columns %}
+                    {% if request.form.sort_column == column or sort_column == column %}
+                    <option value="{{ column }}" selected>{{ table_columns[column] }}</option>
+                    {% else %}
+                    <option value="{{ column }}">{{ table_columns[column] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="minimum-total">Minimum Total Count</label>
+                <select id="minimum-total" name="minimum_total" class="form-select" aria-label="Minimum total count filter">
+                    <option value="">No Minimum</option>
+                    {% for min_value in minimum_values %}
+                    {% if request.form.minimum_total == min_value or minimum_total == min_value %}
+                    <option value="{{ min_value }}" selected>{{ min_value }}</option>
+                    {% else %}
+                    <option value="{{ min_value }}">{{ min_value }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <div class="form-check">
+                    <label for="sort-descending" class="form-check-label">Sort Descending</label>
+                    {% if request.form.sort_descending %}
+                    <input class="form-check-input" type="checkbox" id="sort-descending" name="sort_descending" checked>
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" id="sort-descending" name="sort_descending">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-submit focus-ring" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if panelists %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
+                    <col class="count long">
+                </colgroup>
+                <thead>
+                    <tr>
+                        {% for column in table_columns %}
+                        <th scope="col">
+                        {% if sort_column == column and sort_descending %}
+                            {{ table_columns[column] }} <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% elif sort_column == column and not sort_descending %}
+                            {{ table_columns[column] }} <i class="bi bi-sort-down-alt ps-1"><span class="d-none">Sort: Ascending</span></i>
+                        {% else %}
+                            {{ table_columns[column] }}
+                        {% endif %}
+                        </th>
+                        {% endfor %}
+                        {#
+                        <th scope="col">
+                        {% if sorted_by == "panelist" or sorted_by is none %}
+                            Panelist <i class="bi bi-sort-down-alt ps-1"><span class="d-none">Sort: Ascending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='panelist') }}">Panelist</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "wins" %}
+                            Wins <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins') }}">Wins</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "wins_percent" %}
+                            Wins % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins_percent') }}">Wins %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "draws" %}
+                            Draws <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws') }}">Draws</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "draws_percent" %}
+                            Draws % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws_percent') }}">Draws %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "losses" %}
+                            Losses <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses') }}">Losses</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "losses_percent" %}
+                            Losses % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses_percent') }}">Losses %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">Total</th>
+                        #}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists %}
+                    {% set _panelist = panelists[panelist] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ _panelist.slug }}">{{ _panelist.name }}</a></td>
+                        {% if _panelist.wins is not none %}
+                        <td>{{ _panelist.wins }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.wins_percent is not none %}
+                        <td>{{ "{:f}".format(_panelist.wins_percent.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.draws is not none %}
+                        <td>{{ _panelist.draws }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.draws_percent is not none %}
+                        <td>{{ "{:f}".format(_panelist.draws_percent.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.losses is not none %}
+                        <td>{{ _panelist.losses }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.losses_percent is not none %}
+                        <td>{{ "{:f}".format(_panelist.losses_percent.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if _panelist.total is not none %}
+                        <td>{{ _panelist.total }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">
+                        {% if sorted_by == "panelist" or sorted_by is none %}
+                            Panelist <i class="bi bi-sort-down-alt ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='panelist') }}">Panelist</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "wins" %}
+                            Wins <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins') }}">Wins</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "wins_percent" %}
+                            Wins % <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins_percent') }}">Wins %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "draws" %}
+                            Draws <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws') }}">Draws</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "draws_percent" %}
+                            Draws % <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws_percent') }}">Draws %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "losses" %}
+                            Losses <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses') }}">Losses</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">
+                        {% if sorted_by == "losses_percent" %}
+                            Losses % <i class="bi bi-sort-down ps-1"></i>
+                        {% else %}
+                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses_percent') }}">Losses %</a>
+                        {% endif %}
+                        </th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -68,6 +68,11 @@ from .reports.streaks import (
     calculate_panelist_win_streaks,
 )
 from .reports.wins import retrieve_combined_outright_wins_ties_by_year
+from .reports.wins_draws_losses import (
+    form_minimum_values,
+    retrieve_all_wins_draws_losses,
+)
+from .reports.wins_draws_losses import table_columns as wdl_table_columns
 
 blueprint = Blueprint("panelists", __name__, template_folder="templates")
 
@@ -1003,3 +1008,85 @@ def win_streaks() -> str:
     )
     _database_connection.close()
     return render_template("panelists/win-streaks.html", win_streaks=_streaks)
+
+
+@blueprint.route("/wins-draws-losses", methods=["GET", "POST"])
+def wins_draws_losses() -> str:
+    """View: Wins, Draws and Losses Report."""
+    if request.method == "POST":
+        # Parse form fields
+        try:
+            minimum_total = "minimum_total" in request.form and int(
+                request.form["minimum_total"]
+            )
+        except ValueError:
+            minimum_total = 0
+
+        _database_connection = mysql.connector.connect(**current_app.config["database"])
+        _panelists = retrieve_all_wins_draws_losses(
+            database_connection=_database_connection, minimum_total_count=minimum_total
+        )
+        _database_connection.close()
+
+        if not _panelists:
+            return render_template(
+                "panelists/wins-draws-losses.html",
+                table_columns=wdl_table_columns,
+                minimum_values=form_minimum_values,
+                sort_column="panelist",
+            )
+
+        if "sort_column" in request.form and request.form["sort_column"]:
+            _column = request.form["sort_column"].lower().strip()
+            sort_column = _column if _column in wdl_table_columns else None
+
+        else:
+            sort_column = "panelist"
+
+        if "sort_descending" in request.form and request.form["sort_descending"]:
+            sort_descending = bool(request.form["sort_descending"])
+        else:
+            sort_descending = False
+
+        if sort_column:
+            if sort_column == "panelist":
+                _panelists = dict(
+                    sorted(
+                        _panelists.items(),
+                        key=lambda item: item[1]["slug"],
+                        reverse=sort_descending,
+                    )
+                )
+            else:
+                _panelists = dict(
+                    sorted(
+                        _panelists.items(),
+                        key=lambda item: item[1][sort_column],
+                        reverse=sort_descending,
+                    )
+                )
+
+        return render_template(
+            "panelists/wins-draws-losses.html",
+            panelists=_panelists,
+            table_columns=wdl_table_columns,
+            minimum_values=form_minimum_values,
+            sort_column=sort_column,
+            sort_descending=sort_descending,
+            minimum_total=minimum_total,
+        )
+    else:
+        _database_connection = mysql.connector.connect(**current_app.config["database"])
+        _panelists = retrieve_all_wins_draws_losses(
+            database_connection=_database_connection
+        )
+        _database_connection.close()
+
+        return render_template(
+            "panelists/wins-draws-losses.html",
+            panelists=_panelists,
+            table_columns=wdl_table_columns,
+            minimum_values=form_minimum_values,
+            sort_column="panelist",
+            sort_descending=False,
+        )
