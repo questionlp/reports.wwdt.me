@@ -1,5 +1,12 @@
 # Changes
 
+## 4.3.1
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.2.4 to 2.3.0
+  - Includes upgrading Bootstrap from 5.3.7 to 5.3.8
+
 ## 4.3.0
 
 ### Application Changes
