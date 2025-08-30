@@ -1,5 +1,11 @@
 # Changes
 
+## 4.3.2
+
+### Application Changes
+
+- Update robots.txt to include latest list of AI bots from [ai-robots-txt/ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt)
+
 ## 4.3.1
 
 ### Component Changes
