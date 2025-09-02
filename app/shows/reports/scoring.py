@@ -162,7 +162,7 @@ def retrieve_shows_all_low_scoring(
     """Retrieves details from shows with a panelist total score of less than 30.
 
     Excludes the 20th anniversary show due to unique Lightning
-    Fill-in-the-Blank segment.
+    Fill In The Blank segment.
     """
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -206,7 +206,7 @@ def retrieve_shows_panelist_score_sum_match(
     """Retrieves shows where a panelist's first place score matches the sum of the scores of the other two panelists.
 
     Excludes the 20th anniversary show due to unique Lightning
-    Fill-in-the-Blank segment.
+    Fill In The Blank segment.
     """
     if not database_connection.is_connected():
         database_connection.reconnect()

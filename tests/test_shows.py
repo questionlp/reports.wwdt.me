@@ -74,7 +74,7 @@ def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> N
     )
     assert response.status_code == 200
     assert (
-        b"Lightning Fill In The Blank All Panelists Answering the Same Number of Questions Correct"
+        b"Lightning Fill In The Blank: All Panelists Answering the Same Number of Questions Correct"
         in response.data
     )
     assert b"Panelists" in response.data
@@ -126,7 +126,10 @@ def test_lightning_round_zero_correct(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_zero_correct."""
     response: TestResponse = client.get("/shows/lightning-round-zero-correct")
     assert response.status_code == 200
-    assert b"Lightning Fill In The Blank with Zero Correct Answers" in response.data
+    assert (
+        b"Lightning Fill In The Blank Segment with Zero Correct Answers"
+        in response.data
+    )
     assert b"Panelist" in response.data
     assert b"Rank" in response.data
 

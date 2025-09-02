@@ -4,7 +4,7 @@
 #
 # vim: set noai syntax=python ts=4 sw=4:
 # pylint: disable=C0301
-"""WWDTM Lightning Fill-in-the-Blank Segment Report Functions."""
+"""WWDTM Lightning Fill In The Blank Segment Report Functions."""
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -13,7 +13,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_all_lightning_round_start(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
-    """Retrieve a dictionary of all Lightning Fill-in-the-Blank round starting scores."""
+    """Retrieve a dictionary of all Lightning Fill In The Blank round starting scores."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -57,7 +57,7 @@ def retrieve_scoring_info_by_show_id(
     show_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
-    """Return Lightning Fill-in-the-Blank segment scoring information.
+    """Return Lightning Fill In The Blank segment scoring information.
 
     Returned information includes starting points, number of correct
     answers and final score for the requested show ID. Used for
