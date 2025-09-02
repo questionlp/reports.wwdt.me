@@ -74,7 +74,7 @@ def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> N
     )
     assert response.status_code == 200
     assert (
-        b"Lightning Round All Panelists Answering the Same Number of Questions Correct"
+        b"Lightning Fill In The Blank All Panelists Answering the Same Number of Questions Correct"
         in response.data
     )
     assert b"Panelists" in response.data
@@ -85,7 +85,7 @@ def test_lightning_round_ending_three_way_tie(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_ending_three_way_tie."""
     response: TestResponse = client.get("/shows/lightning-round-ending-three-way-tie")
     assert response.status_code == 200
-    assert b"Lightning Round Ending in a Three-Way Tie" in response.data
+    assert b"Lightning Fill In The Blank Ending in a Three-Way Tie" in response.data
     assert b"Panelists" in response.data
     assert b"Final Score" in response.data
 
@@ -96,7 +96,10 @@ def test_lightning_round_starting_ending_three_way_tie(client: FlaskClient) -> N
         "/shows/lightning-round-starting-ending-three-way-tie"
     )
     assert response.status_code == 200
-    assert b"Lightning Round Starting and Ending in a Three-Way Tie" in response.data
+    assert (
+        b"Lightning Fill In The Blank Starting and Ending in a Three-Way Tie"
+        in response.data
+    )
     assert b"Panelists" in response.data
     assert b"Final Score" in response.data
 
@@ -105,7 +108,7 @@ def test_lightning_round_starting_three_way_tie(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_starting_three_way_tie."""
     response: TestResponse = client.get("/shows/lightning-round-starting-three-way-tie")
     assert response.status_code == 200
-    assert b"Lightning Round Starting in a Three-Way Tie" in response.data
+    assert b"Lightning Fill In The Blank Starting in a Three-Way Tie" in response.data
     assert b"Panelists" in response.data
     assert b"Starting Score" in response.data
 
@@ -114,7 +117,7 @@ def test_lightning_round_starting_zero_points(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_starting_zero_points."""
     response: TestResponse = client.get("/shows/lightning-round-starting-zero-points")
     assert response.status_code == 200
-    assert b"Lightning Round Starting with Zero Points" in response.data
+    assert b"Lightning Fill In The Blank Starting with Zero Points" in response.data
     assert b"Panelist" in response.data
     assert b"Rank" in response.data
 
@@ -123,7 +126,7 @@ def test_lightning_round_zero_correct(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_zero_correct."""
     response: TestResponse = client.get("/shows/lightning-round-zero-correct")
     assert response.status_code == 200
-    assert b"Lightning Round with Zero Correct Answers" in response.data
+    assert b"Lightning Fill In The Blank with Zero Correct Answers" in response.data
     assert b"Panelist" in response.data
     assert b"Rank" in response.data
 

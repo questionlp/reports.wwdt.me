@@ -57,11 +57,11 @@ def retrieve_scoring_info_by_show_id(
     show_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
-    """Return Lightning Fill-in-the-Blank round scoring information.
+    """Return Lightning Fill-in-the-Blank segment scoring information.
 
     Returned information includes starting points, number of correct
     answers and final score for the requested show ID. Used for
-    getting scoring details where the round starts in a three-way tie.
+    getting scoring details where the segment starts in a three-way tie.
     """
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -131,7 +131,7 @@ def retrieve_panelists_by_show_id(
 def shows_with_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Return shows in which panelists start the Lightning round with zero points."""
+    """Return shows in which panelists start Lightning Fill In The Blank with zero points."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -177,7 +177,7 @@ def shows_with_lightning_round_start_zero(
 def shows_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Return list of shows in which a panelist starts the Lightning round with zero points."""
+    """Return list of shows in which a panelist starts the Lightning Fill In The Blank with zero points."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -222,7 +222,7 @@ def shows_lightning_round_start_zero(
 def shows_lightning_round_zero_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Return list of shows in which a panelist answers zero Lightning round questions correct."""
+    """Return list of shows in which a panelist answers zero Lightning Fill In The Blank questions correct."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -314,7 +314,7 @@ def shows_lightning_round_answering_same_number_correct(
 def shows_starting_with_three_way_tie(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Retrieve all shows in which all three panelists started the Lightning round in a three-way tie."""
+    """Retrieve all shows in which all three panelists started the Lightning Fill In The Blank in a three-way tie."""
     show_scores = retrieve_all_lightning_round_start(
         database_connection=database_connection,
     )
@@ -342,7 +342,7 @@ def shows_starting_with_three_way_tie(
 def shows_ending_with_three_way_tie(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Retrieve all shows in which all three panelists ended the Lightning round in a three-way tie."""
+    """Retrieve all shows in which all three panelists ended the Lightning Fill In The Blank in a three-way tie."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
@@ -385,7 +385,7 @@ def shows_ending_with_three_way_tie(
 def shows_starting_ending_three_way_tie(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
-    """Retrieve all shows in which all three panelists started and ended the Lightning round in a three-way tie."""
+    """Retrieve all shows in which all three panelists started and ended the Lightning Fill In The Blank in a three-way tie."""
     start_tie = shows_starting_with_three_way_tie(database_connection)
     end_tie = shows_ending_with_three_way_tie(
         database_connection=database_connection,

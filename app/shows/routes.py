@@ -138,7 +138,7 @@ def highest_score_equals_sum_other_scores() -> str:
 
 @blueprint.route("/lightning-round-answering-same-number-correct")
 def lightning_round_answering_same_number_correct() -> str:
-    """View: Lightning Round Panelists Answering the Same Number of Questions Correct."""
+    """View: Lightning Fill In The Blank Panelists Answering the Same Number of Questions Correct."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_answering_same_number_correct(
         database_connection=_database_connection,
@@ -152,7 +152,7 @@ def lightning_round_answering_same_number_correct() -> str:
 
 @blueprint.route("/lightning-round-ending-three-way-tie")
 def lightning_round_ending_three_way_tie() -> str:
-    """View: Lightning Round Ending in a Three-Way Tie Report."""
+    """View: Lightning Fill In The Blank Ending in a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_ending_with_three_way_tie(
         database_connection=_database_connection,
@@ -166,7 +166,7 @@ def lightning_round_ending_three_way_tie() -> str:
 
 @blueprint.route("/lightning-round-starting-ending-three-way-tie")
 def lightning_round_starting_ending_three_way_tie() -> str:
-    """View: Lightning Round Starting and Ending in a Three-Way Tie Report."""
+    """View: Lightning Fill In The Blank Starting and Ending in a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_ending_three_way_tie(
         database_connection=_database_connection,
@@ -180,7 +180,7 @@ def lightning_round_starting_ending_three_way_tie() -> str:
 
 @blueprint.route("/lightning-round-starting-three-way-tie")
 def lightning_round_starting_three_way_tie() -> str:
-    """View: Lightning Round Starting with a Three-Way Tie Report."""
+    """View: Lightning Fill In The Blank Starting with a Three-Way Tie Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_starting_with_three_way_tie(
         database_connection=_database_connection,
@@ -194,7 +194,7 @@ def lightning_round_starting_three_way_tie() -> str:
 
 @blueprint.route("/lightning-round-starting-zero-points")
 def lightning_round_starting_zero_points() -> str:
-    """View: Lightning Round Starting with Zero Points Report."""
+    """View: Lightning Fill In The Blank Starting with Zero Points Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_start_zero(
         database_connection=_database_connection,
@@ -208,7 +208,7 @@ def lightning_round_starting_zero_points() -> str:
 
 @blueprint.route("/lightning-round-zero-correct")
 def lightning_round_zero_correct() -> str:
-    """View: Lightning Round with Zero Correct Answers Report."""
+    """View: Lightning Fill In The Blank with Zero Correct Answers Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = shows_lightning_round_zero_correct(
         database_connection=_database_connection,

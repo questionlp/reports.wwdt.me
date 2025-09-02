@@ -86,7 +86,7 @@ def highest_score_equals_sum_other_scores() -> Response:
 
 @blueprint.route("/show/lightning_round_end_three_way_tie")
 def lightning_round_ending_three_way_tie() -> Response:
-    """View: Lightning Round Ending in a Three-Way Tie Report Redirect."""
+    """View: Lightning Fill In The Blank Ending in a Three-Way Tie Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_ending_three_way_tie"), status_code=301
     )
@@ -94,7 +94,7 @@ def lightning_round_ending_three_way_tie() -> Response:
 
 @blueprint.route("/show/lightning_round_start_end_three_way_tie")
 def lightning_round_start_ending_three_way_tie() -> Response:
-    """View: Lightning Round Starting and Ending in a Three-Way Tie Report Redirect."""
+    """View: Lightning Fill In The Blank Starting and Ending in a Three-Way Tie Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_starting_ending_three_way_tie"), status_code=301
     )
@@ -102,7 +102,7 @@ def lightning_round_start_ending_three_way_tie() -> Response:
 
 @blueprint.route("/show/lighting_round_start_zero")
 def lightning_round_starting_zero_points() -> Response:
-    """View: Lightning Round Starting with Zero Points Report Redirect."""
+    """View: Lightning Fill In The Blank Starting with Zero Points Report Redirect."""
     return redirect_url(
         url_for("shows.lightning_round_starting_zero_points"), status_code=301
     )
@@ -110,7 +110,7 @@ def lightning_round_starting_zero_points() -> Response:
 
 @blueprint.route("/show/lightning_round_zero_correct")
 def lightning_round_zero_correct():
-    """View: Lightning Round with Zero Correct Answers Report Redirect."""
+    """View: Lightning Fill In The Blank with Zero Correct Answers Report Redirect."""
     return redirect_url(url_for("shows.lightning_round_zero_correct"), status_code=301)
 
 

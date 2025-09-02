@@ -1,5 +1,14 @@
 # Changes
 
+## 4.3.3
+
+### Application Changes
+
+- Standardized on the name "Lightning Fill In The Blank" for the segment, including:
+  - Replaced all references of "Lightning Round" in report titles with "Lightning Fill In The Blank Segment"
+  - Replaced "Fill-in-the-Blank" with "Fill In The Blank"
+  - This does not change the name of the functions or variables
+
 ## 4.3.2
 
 ### Application Changes
