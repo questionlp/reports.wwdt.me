@@ -13,7 +13,7 @@ from mysql.connector.pooling import PooledMySQLConnection
 def retrieve_all_lightning_round_start(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
-    """Retrieve a dictionary of all Lightning Fill In The Blank Segment starting scores."""
+    """Retrieve a dictionary of all Lightning Fill In The Blank segment starting scores."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
