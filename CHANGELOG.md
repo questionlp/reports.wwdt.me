@@ -1,5 +1,12 @@
 # Changes
 
+## 4.4.0
+
+### Application Changes
+
+- Added new Panelists "First Appearance Answering All Lightning Questions Correct" report that lists panelists who answered all eight (or nine for really early show) Lightning Fill In The Blank questions correct on their first appearance
+- Fixed logic for Panelists "First Appearance Wins" report in which an empty query result could lead to no or imcomplete data returned instead of skipping the empty result
+
 ## 4.3.3
 
 ### Application Changes

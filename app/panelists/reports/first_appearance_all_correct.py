@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""WWDTM Panelist First Appearance Wins."""
+"""WWDTM Panelist First Appearance All Correct."""
 
 from decimal import Decimal
 
@@ -11,22 +11,18 @@ from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 
-def retrieve_panelists_first_appearance_wins(
+def retrieve_panelists_first_appearance_all_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str | int | Decimal]:
-    """Returns a dictionary containing wins or tied for first for panelists' first appearance."""
+    """Returns panelists answering all Lightning questions correct in first appearance."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
     query = """
-        SELECT DISTINCT p.panelistslug
-        FROM ww_showpnlmap pm
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
-        JOIN ww_shows s ON s.showid = pm.showid
-        WHERE s.bestof = 0
-        AND s.repeatshowid IS NULL
-        AND pm.showpnlrank IN ('1', '1t')
-        ORDER BY p.panelistslug;
+        SELECT panelistid, panelist, panelistslug
+        FROM ww_panelists
+        WHERE panelistslug <> 'multiple'
+        ORDER BY panelist;
     """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query)
@@ -41,7 +37,6 @@ def retrieve_panelists_first_appearance_wins(
     panelists = {}
     for panelist_slug in panelist_slugs:
         cursor = database_connection.cursor(dictionary=True)
-
         query = """
             SELECT p.panelist, s.showid, s.showdate,
             pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
@@ -50,6 +45,7 @@ def retrieve_panelists_first_appearance_wins(
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
             JOIN ww_shows s ON s.showid = pm.showid
             WHERE p.panelistslug = %s
+            AND pm.panelistlrndcorrect_decimal IS NOT NULL
             AND s.bestof = 0 AND s.repeatshowid IS NULL
             ORDER BY s.showdate ASC
             LIMIT 1;
@@ -58,7 +54,7 @@ def retrieve_panelists_first_appearance_wins(
         result = cursor.fetchone()
         cursor.close()
 
-        if result and result["showpnlrank"] in ("1", "1t"):
+        if result and result["panelistlrndcorrect_decimal"] >= 8:
             panelists[panelist_slug] = {
                 "name": result["panelist"],
                 "show_date": result["showdate"].isoformat(),

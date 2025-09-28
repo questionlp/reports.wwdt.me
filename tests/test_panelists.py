@@ -164,6 +164,16 @@ def test_debuts_by_year(client: FlaskClient) -> None:
     assert b"# of Regular Appearances" in response.data
 
 
+def test_first_appearance_all_correct(client: FlaskClient) -> None:
+    """Testing panelists.first_appearance_all_correct."""
+    response: TestResponse = client.get("/panelists/first-appearance-all-correct")
+    assert response.status_code == 200
+    assert (
+        b"First Appearance Answering All Lightning Questions Correct" in response.data
+    )
+    assert b"Show Date" in response.data
+
+
 def test_first_appearance_wins(client: FlaskClient) -> None:
     """Testing panelists.first_appearance_wins."""
     response: TestResponse = client.get("/panelists/first-appearance-wins")

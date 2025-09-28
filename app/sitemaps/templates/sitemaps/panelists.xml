@@ -41,6 +41,10 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("panelists.first_appearance_all_correct") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("panelists.first_appearance_wins") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
