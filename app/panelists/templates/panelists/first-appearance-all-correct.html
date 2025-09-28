@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% set page_title = "First Appearance Answering All Lightning Questions Correct" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying panelists who answered all Lightning Fill In The Blank
+        questions (eight in almost every single case) on their debut appearance.
+        Information includes the show date, score at the start of the Lightning
+        Fill In The Blank segment, the number of correct answers, total score,
+        and ranking.
+    </p>
+</div>
+
+{% if panelists %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="date">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="rank">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Panelist</th>
+                        <th>Show Date</th>
+                        <th>Start</th>
+                        <th>Correct</th>
+                        <th>Total Score</th>
+                        <th>Rank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists %}
+                    {% set panelist_info = panelists[panelist] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ panelist_info.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ panelist_info.show_date | replace('-', '/') }}">{{ panelist_info.show_date }}</a></td>
+                        {% if panelist_info.start != None %}
+                        <td>{{ "{:f}".format(panelist_info.start.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.correct != None %}
+                        <td>{{ "{:f}".format(panelist_info.correct.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist_info.score != None and panelist_info.rank %}
+                        <td>{{ "{:f}".format(panelist_info.score.normalize()) }}</td>
+                        <td>{{ rank_map[panelist_info.rank] }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

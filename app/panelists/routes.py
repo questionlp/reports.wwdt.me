@@ -35,6 +35,9 @@ from .reports.bluff_stats import (
 )
 from .reports.common import retrieve_panelists
 from .reports.debut_by_year import panelist_debuts_by_year, retrieve_show_years
+from .reports.first_appearance_all_correct import (
+    retrieve_panelists_first_appearance_all_correct,
+)
 from .reports.first_appearance_wins import retrieve_panelists_first_appearance_wins
 from .reports.first_appearances import retrieve_panelists_first_appearance
 from .reports.first_wins import retrieve_panelists_first_wins
@@ -355,6 +358,21 @@ def debuts_by_year() -> str:
     _database_connection.close()
     return render_template(
         "panelists/debuts-by-year.html", years=_years, debuts=_debuts
+    )
+
+
+@blueprint.route("/first-appearance-all-correct")
+def first_appearance_all_correct() -> str:
+    """View: First Appearance Answering All Lightning Questions Correct Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _panelists = retrieve_panelists_first_appearance_all_correct(
+        database_connection=_database_connection,
+    )
+    _database_connection.close()
+    return render_template(
+        "panelists/first-appearance-all-correct.html",
+        panelists=_panelists,
+        rank_map=RANK_MAP,
     )
 
 
