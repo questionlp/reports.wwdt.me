@@ -25,6 +25,10 @@ For changelogs, refer to [CHANGELOG.md](./CHANGELOG.md).
 
 If you would like contribute to this project, please make sure to review both the [Code of Conduct](./CODE_OF_CONDUCT.md) and the [Contributing](./CONTRIBUTING.md) documents in this repository.
 
+### AI Generated Code
+
+Please note that this project does not accept pull requests or bugfixes that include code that has been partially or wholly generated using AI.
+
 ## License
 
 This web application is licensed under the terms of the [Apache License 2.0](./LICENSE).
