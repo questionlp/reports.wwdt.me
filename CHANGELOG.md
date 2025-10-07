@@ -1,5 +1,12 @@
 # Changes
 
+## 4.4.1
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.3.0 to 2.4.0
+  - Changed the dark theme background color from IBM Gray 100 to IBM Gray 90 to improve readability
+
 ## 4.4.0
 
 ### Application Changes
