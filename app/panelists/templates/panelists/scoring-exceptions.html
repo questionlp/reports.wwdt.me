@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% set page_title = "Scoring Exceptions and Anomalies" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table containing panelist scoring exceptions and anomalies where
+        the total score does not match the sum of the starting score and two
+        points for each correct answer. This is usually due to the score
+        presented by the scorekeeper includes: miscounting the number of
+        correct answers, using the incorrect starting score when calculating
+        the total, or general miscalculation.
+    </p>
+    <p>
+        Scoring exceptions for shows from 1998 typically involve the use
+        of a bonus phrase during the final segments of the show, including
+        early versions of Lightning Fill In The Blank.
+    </p>
+    <p>
+        Only scoring exceptions from regular shows are displayed, meaning
+        repeat and Best Of shows are excluded.
+    </p>
+</div>
+
+{% if scoring_exceptions %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date medium">
+                    <col class="name panelist">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="rank">
+                    <col class="notes">
+                </colgroup>
+                <thead>
+                    <tr>
+                        {% if sort_by_date %}
+                        <th>Show Date <i class="bi bi-sort-down-alt ms-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.scoring_exceptions', sort='date') }}">Show Date</a></th>
+                        {% endif %}
+                        {% if sort_by_panelist %}
+                        <th>Panelist <i class="bi bi-sort-down-alt ps-1"></i></th>
+                        {% else %}
+                        <th><a href="{{ url_for('panelists.scoring_exceptions', sort='panelist') }}">Panelist</a></th>
+                        {% endif %}
+                        <th>Start</th>
+                        <th>Correct</th>
+                        <th>Total Score</th>
+                        <th>Rank</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scoring_exception in scoring_exceptions %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ scoring_exception.show_date | replace('-', '/') }}">{{ scoring_exception.show_date }}</a></td>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist }}">{{ scoring_exception.name }}</a></td>
+                        {% if scoring_exception.start != None %}
+                        <td>{{ "{:f}".format(scoring_exception.start.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scoring_exception.correct != None %}
+                        <td>{{ "{:f}".format(scoring_exception.correct.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scoring_exception.score != None and scoring_exception.rank %}
+                        <td>{{ "{:f}".format(scoring_exception.score.normalize()) }}</td>
+                        <td>{{ rank_map[scoring_exception.rank] }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scoring_exception.show_notes != None %}
+                        <td class="notes-text">{{ scoring_exception.show_notes | markdown | safe }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}
