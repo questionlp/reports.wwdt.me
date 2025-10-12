@@ -6,12 +6,10 @@ Flask-based web application that serves up a collection of reports based on coll
 
 ## Requirements
 
-- Python 3.10 or newer
-- MySQL Server 8.0 or newer (or another MySQL Server distribution based on MySQL Server 8.0 or newer) or MariaDB Server 11.4.2 or newer *(Experimental)*
+- Python 3.12 or newer
+- MySQL Server 8.0 or newer (or another MySQL Server distribution based on MySQL Server 8.0 or newer) or MariaDB Server 11.8 or newer *(Provisional)*
 
-**Note:** Experimental support for MariaDB Server is only available starting with version 2.10.0 of the application. Older versions of MariaDB Server are not supported.
-
-Also, due to potential incompatibilities with the divergence of MySQL and MariaDB, including the Python Connector libraries, support for MariaDB may not be feasible in the long term.
+**Note:** Provisional support for MariaDB Server is only available starting with version 2.10.0 of the application. Older versions of MariaDB Server are not supported.
 
 ## Installation
 
