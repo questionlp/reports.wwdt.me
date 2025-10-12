@@ -441,6 +441,18 @@ def test_rankings_summary(client: FlaskClient) -> None:
     assert b"Second" in response.data
 
 
+@pytest.mark.parametrize("sort", [None, "panelist", "date"])
+def test_scoring_exceptions(client: FlaskClient, sort: str | None) -> None:
+    """Testing panelists.first_appearances."""
+    response: TestResponse = client.get(
+        "/panelists/scoring-exceptions", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"Scoring Exceptions and Anomalies" in response.data
+    assert b"Show Date" in response.data
+    assert b"Notes" in response.data
+
+
 def test_single_appearance(client: FlaskClient) -> None:
     """Testing panelists.routes.single_appearance."""
     response: TestResponse = client.get("/panelists/single-appearance")

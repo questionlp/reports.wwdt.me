@@ -60,6 +60,7 @@ from .reports.panelist_vs_panelist_scoring import (
 )
 from .reports.perfect_scores import retrieve_perfect_score_counts
 from .reports.rankings_summary import retrieve_all_panelist_rankings
+from .reports.scoring_exceptions import retrieve_panelist_scoring_exceptions
 from .reports.show_appearances import retrieve_appearance_details
 from .reports.single_appearance import retrieve_single_appearances
 from .reports.stats_summary import (
@@ -923,6 +924,44 @@ def rankings_summary() -> str:
         "panelists/rankings-summary.html",
         panelists=_panelists_dict,
         panelists_rankings=_rankings,
+    )
+
+
+@blueprint.route("/scoring-exceptions")
+def scoring_exceptions() -> str:
+    """View: Scoring Exceptions and Anomalies Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _scoring_exceptions = retrieve_panelist_scoring_exceptions(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    _sort_by_date = True
+    _sort_by_panelist = False
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "date":
+            _sort_by_date = True
+            _sort_by_panelist = False
+            _scoring_exceptions = sorted(
+                _scoring_exceptions, key=lambda item: item["show_date"]
+            )
+
+        elif _sort.lower() == "panelist":
+            _sort_by_date = False
+            _sort_by_panelist = True
+            _scoring_exceptions = sorted(
+                _scoring_exceptions, key=lambda item: item["name"]
+            )
+
+    return render_template(
+        "panelists/scoring-exceptions.html",
+        scoring_exceptions=_scoring_exceptions,
+        sort_by_date=_sort_by_date,
+        sort_by_panelist=_sort_by_panelist,
+        rank_map=RANK_MAP,
     )
 
 

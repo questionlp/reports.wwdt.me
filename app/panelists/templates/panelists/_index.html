@@ -471,6 +471,32 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('panelists.scoring_exceptions') }}">
+                        Scoring Exceptions and Anomalies
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table containing panelist scoring exceptions and anomalies where
+                        the total score does not match the sum of the starting score and two
+                        points for each correct answer. This is usually due to the score
+                        presented by the scorekeeper includes: miscounting the number of
+                        correct answers, using the incorrect starting score when calculating
+                        the total, or general miscalculation.
+                    </p>
+                    <p>
+                        Scoring exceptions for shows from 1998 typically involve the use
+                        of a bonus phrase during the final segments of the show, including
+                        early versions of Lightning Fill In The Blank.
+                    </p>
+                    <p>
+                        Only scoring exceptions from regular shows are displayed, meaning
+                        repeat and Best Of shows are excluded.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('panelists.single_appearance') }}">
                         Single Appearance
                     </a>

@@ -1,5 +1,11 @@
 # Changes
 
+## 4.5.0
+
+### Application Changes
+
+- Added new Panelists "Scoring Exceptions and Anomalies" report that lists panelist total score does not equal the Lightning Fill In The Blank starting score and the number of correct answers doubled
+
 ## 4.4.1
 
 ### Component Changes
