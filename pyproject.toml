@@ -1,3 +1,13 @@
+[project]
+name = "reports.wwdt.me"
+authors = [
+    {name = "Linh Pham", email = "dev@wwdt.me"}
+]
+description = "Wait Wait Reports Site"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = "Apache-2.0"
+requires-python = ">=3.12"
+
 [tool.pytest.ini_options]
 minversion = "8.3"
 filterwarnings = ["ignore::DeprecationWarning:mysql.*:"]
@@ -5,7 +15,7 @@ norecursedirs = [".git", "venv", "dist", ".eggs", "wwdtm.egg-info"]
 
 [tool.ruff]
 required-version = ">= 0.9.0"
-target-version = "py310"
+target-version = "py312"
 
 exclude = [
     "migrations",
