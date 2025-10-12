@@ -1,5 +1,20 @@
 # Changes
 
+## 4.6.0
+
+### Application Changes
+
+- Python 3.12 is now the minimum supported version of Python
+
+### Component Changes
+
+- Upgraded Flask from 3.1.1 to 3.1.2
+
+### Development Changes
+
+- Added project information in `pyproject.toml`
+- Upgraded Ruff from 0.12.8 to 0.13.3
+
 ## 4.5.0
 
 ### Application Changes
