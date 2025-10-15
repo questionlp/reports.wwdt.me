@@ -1,5 +1,12 @@
 # Changes
 
+## 4.6.1
+
+### Component Changes
+
+- Upgraded MySQL Connector/Python from 9.1.0 to 9.4.0
+- Upgraded numpy from 2.2.6 to 2.3.3
+
 ## 4.6.0
 
 ### Application Changes
