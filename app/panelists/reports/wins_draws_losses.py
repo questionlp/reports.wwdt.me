@@ -78,15 +78,18 @@ def retrieve_panelist_wins_draws_losses(
     _losses = result["losses"]
     _total = result["wins"] + result["draws"] + result["losses"]
 
-    return {
-        "wins": _wins,
-        "wins_percent": round(Decimal((_wins / _total) * 100), 5),
-        "draws": _draws,
-        "draws_percent": round(Decimal((_draws / _total) * 100), 5),
-        "losses": _losses,
-        "losses_percent": round(Decimal((_losses / _total) * 100), 5),
-        "total": _total,
-    }
+    if _total:
+        return {
+            "wins": _wins,
+            "wins_percent": round(Decimal((_wins / _total) * 100), 5),
+            "draws": _draws,
+            "draws_percent": round(Decimal((_draws / _total) * 100), 5),
+            "losses": _losses,
+            "losses_percent": round(Decimal((_losses / _total) * 100), 5),
+            "total": _total,
+        }
+
+    return None
 
 
 def retrieve_all_wins_draws_losses(
@@ -120,17 +123,17 @@ def retrieve_all_wins_draws_losses(
                 "losses_percent": panelist_counts["losses_percent"],
                 "total": panelist_counts["total"],
             }
-        # else:
-        #     _counts[_panelist["slug"]] = {
-        #         "name": _panelist["name"],
-        #         "slug": _panelist["slug"],
-        #         "wins": 0,
-        #         "wins_percent": Decimal(0),
-        #         "draws": 0,
-        #         "draws_percent": Decimal(0),
-        #         "losses": 0,
-        #         "losses_percent": Decimal(0),
-        #         "total": 0,
-        #     }
+        else:
+            _counts[_panelist["slug"]] = {
+                "name": _panelist["name"],
+                "slug": _panelist["slug"],
+                "wins": 0,
+                "wins_percent": Decimal(0),
+                "draws": 0,
+                "draws_percent": Decimal(0),
+                "losses": 0,
+                "losses_percent": Decimal(0),
+                "total": 0,
+            }
 
     return _counts
