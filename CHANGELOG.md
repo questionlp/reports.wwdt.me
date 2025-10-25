@@ -1,5 +1,11 @@
 # Changes
 
+## 4.6.2
+
+### Application Changes
+
+- Fixed an issue where an unhandled divide by zero exception is thrown in the Panelists "Wins, Draws and Losses" report when a panelist has been added to the Stats Database but no appearances have been recorded for the panelist at the time the report is generated. If a panelist does not have any recorded appearances, they will be included in the report but with zeroes for all values.
+
 ## 4.6.1
 
 ### Component Changes
