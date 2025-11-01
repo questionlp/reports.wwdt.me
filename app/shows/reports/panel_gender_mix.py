@@ -37,12 +37,13 @@ def retrieve_show_years(
 def retrieve_panel_gender_count_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> int:
-    """Get a count of shows for the requested year that has the requested number of panelists of a given gender."""
+    """Return a count of shows for a year with counts of panel gender counts."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
     counts = {}
-    for gender_count in range(0, 4):
+
+    for gender_count in range(1, 4):
         query = """
             SELECT s.showdate FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
@@ -65,6 +66,25 @@ def retrieve_panel_gender_count_by_year(
         cursor.fetchall()
         counts[f"{gender_count}F"] = cursor.rowcount
         cursor.close()
+
+    # Get a count of all men panels due to potential excluded zero women
+    # panel counts from above
+    query = """
+            SELECT s.showdate FROM ww_showpnlmap pm
+            JOIN ww_shows s ON s.showid = pm.showid
+            JOIN ww_panelists p ON p.panelistid = pm.panelistid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+            AND p.panelistgender = 'M'
+            AND year(s.showdate) = %s
+            AND s.showdate <> '2018-10-27' -- Exclude 25th anniversary special
+            GROUP BY s.showdate
+            HAVING COUNT(p.panelistgender) = 3;
+        """
+    cursor = database_connection.cursor(dictionary=False)
+    cursor.execute(query, (year,))
+    cursor.fetchall()
+    counts["0F"] = cursor.rowcount
+    cursor.close()
 
     counts["total"] = sum(counts.values())
     return counts

@@ -1,5 +1,12 @@
 # Changes
 
+## 4.7.0
+
+### Application Changes
+
+- Added a new Shows "All Men Panel" report now that there has been one show with an all men panel
+- Fixed an issue in the Shows "Panel Gender Mix" report where shows with an all men panel were not being included in counts
+
 ## 4.6.2
 
 ### Application Changes

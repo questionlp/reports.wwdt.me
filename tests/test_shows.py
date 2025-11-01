@@ -19,6 +19,14 @@ def test_index(client: FlaskClient) -> None:
     assert b"Original Shows" in response.data
 
 
+def test_all_men_panel(client: FlaskClient) -> None:
+    """Testing shows.routes.all_men_panel."""
+    response: TestResponse = client.get("/shows/all-men-panel")
+    assert response.status_code == 200
+    assert b"All Men Panel" in response.data
+    assert b"Guest" in response.data
+
+
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
 def test_all_shows(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.all_shows."""
