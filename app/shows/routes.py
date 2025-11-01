@@ -8,6 +8,7 @@
 import mysql.connector
 from flask import Blueprint, current_app, render_template, request
 
+from .reports.all_men_panel import retrieve_shows_all_men_panel
 from .reports.all_women_panel import retrieve_shows_all_women_panel
 from .reports.guest_host import retrieve_shows_guest_host
 from .reports.guest_host_scorekeeper import retrieve_shows_guest_host_scorekeeper
@@ -74,6 +75,18 @@ def all_shows() -> str:
         _shows.reverse()
 
     return render_template("shows/all-shows.html", shows=_shows, ascending=_ascending)
+
+
+@blueprint.route("/all-men-panel")
+def all_men_panel() -> str:
+    """View: All Men Panel Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_all_men_panel(
+        database_connection=_database_connection,
+    )
+    _database_connection.close()
+
+    return render_template("shows/all-men-panel.html", shows=_shows)
 
 
 @blueprint.route("/all-women-panel")
