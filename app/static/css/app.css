@@ -13344,6 +13344,12 @@ main .report.table th {
 main .report.table tbody .filled {
   background-color: #f4f4f4;
 }
+main .report.table colgroup.cg-border-end {
+  border-right: 2px solid;
+}
+main .report.table colgroup.cg-border-start {
+  border-left: 2px solid;
+}
 main .report.table col.state {
   width: 6rem;
 }
@@ -13756,7 +13762,7 @@ th {
   color: #ffffff;
 }
 [data-bs-theme=dark] main .details .badge.db-id {
-  background-color: #262626;
+  background-color: #393939;
   color: #ffffff;
 }
 [data-bs-theme=dark] main .details .badge.is-guest,
@@ -13766,7 +13772,7 @@ th {
   color: #f4f4f4 !important;
 }
 [data-bs-theme=dark] main .details .badge.rank {
-  background-color: #262626;
+  background-color: #393939;
   color: #f4f4f4;
 }
 [data-bs-theme=dark] main .name-list {

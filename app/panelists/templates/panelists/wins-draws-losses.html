@@ -78,14 +78,22 @@
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
-                <colgroup>
+                <colgroup class="cg-border-end">
                     <col class="name">
+                </colgroup>
+                <colgroup class="cg-border-end">
                     <col class="count long">
                     <col class="count long">
+                </colgroup>
+                <colgroup class="cg-border-end">
                     <col class="count long">
                     <col class="count long">
+                </colgroup>
+                <colgroup class="cg-border-end">
                     <col class="count long">
                     <col class="count long">
+                </colgroup>
+                <colgroup>
                     <col class="count long">
                 </colgroup>
                 <thead>
@@ -101,58 +109,6 @@
                         {% endif %}
                         </th>
                         {% endfor %}
-                        {#
-                        <th scope="col">
-                        {% if sorted_by == "panelist" or sorted_by is none %}
-                            Panelist <i class="bi bi-sort-down-alt ps-1"><span class="d-none">Sort: Ascending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='panelist') }}">Panelist</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "wins" %}
-                            Wins <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins') }}">Wins</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "wins_percent" %}
-                            Wins % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='wins_percent') }}">Wins %</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "draws" %}
-                            Draws <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws') }}">Draws</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "draws_percent" %}
-                            Draws % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='draws_percent') }}">Draws %</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "losses" %}
-                            Losses <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses') }}">Losses</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">
-                        {% if sorted_by == "losses_percent" %}
-                            Losses % <i class="bi bi-sort-down ps-1"><span class="d-none">Sort: Descending</span></i>
-                        {% else %}
-                            <a href="{{ url_for('panelists.wins_draws_losses', sort='losses_percent') }}">Losses %</a>
-                        {% endif %}
-                        </th>
-                        <th scope="col">Total</th>
-                        #}
                     </tr>
                 </thead>
                 <tbody>

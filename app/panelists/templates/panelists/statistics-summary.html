@@ -28,11 +28,15 @@
     <div class="col-auto">
         <div class="table-responsive">
             <table class="table table-bordered table-hover report">
-                <colgroup>
+                <colgroup class="cg-border-end">
                     <col class="name">
+                </colgroup>
+                <colgroup class="cg-border-end">
                     <col class="count">
                     <col class="count">
                     <col class="count">
+                </colgroup>
+                <colgroup>
                     <col class="score">
                     <col class="score">
                     <col class="stats float">
@@ -90,7 +94,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
+                <tbody>
                     <tr>
                         <th scope="col" rowspan="2">Panelist</th>
                         <th colspan="3">Appearances</th>

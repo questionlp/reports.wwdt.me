@@ -262,6 +262,15 @@ def test_highest_average_scres_by_year_post(
     assert b"Average Score" in response.data
 
 
+def test_lightning_statistics_summary(client: FlaskClient) -> None:
+    """Testing panelists.routes.lightning_statistics_summary."""
+    response: TestResponse = client.get("/panelists/lightning-statistics-summary")
+    assert response.status_code == 200
+    assert b"Lightning Fill In The Blank Statistics Summary" in response.data
+    assert b"Appearances" in response.data
+    assert b"Correct" in response.data
+
+
 def test_losing_streaks(client: FlaskClient) -> None:
     """Testing panelists.routes.losing_streaks."""
     response: TestResponse = client.get("/panelists/losing-streaks")
