@@ -1,5 +1,18 @@
 # Changes
 
+## 4.8.0
+
+### Application Changes
+
+- Added a new Panelists "Lightning Fill In The Blank Statistics Summary" report that provides statistics for each panelist's Lightning Round starting scores, correct answers and total scores
+- Added borders for tables with logical column groups to visually delineate groups of columns
+- Updated Hosts and Scorekeepers reports to exclude the respective TBD placeholder hosts and scorekeepers
+- Updated "Scorekeeper Introductions" report to only include table footers for each panelist if there are more than 10 shows listed
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.4.2 to 2.4.5
+
 ## 4.7.0
 
 ### Application Changes

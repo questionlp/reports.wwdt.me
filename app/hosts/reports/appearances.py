@@ -22,7 +22,7 @@ def retrieve_hosts(
     query = """
         SELECT h.hostid, h.host, h.hostslug
         FROM ww_hosts h
-        WHERE h.host <> '(TBD)'
+        WHERE h.hostslug <> 'tbd'
         ORDER BY h.hostslug ASC;
     """
     cursor.execute(query)

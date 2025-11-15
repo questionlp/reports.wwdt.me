@@ -20,7 +20,7 @@ def retrieve_scorekeepers(
     query = """
         SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         FROM ww_scorekeepers sk
-        WHERE sk.scorekeeper <> '(TBD)'
+        WHERE sk.scorekeeperslug <> 'tbd'
         ORDER BY sk.scorekeeperslug ASC;
     """
     cursor.execute(query)
@@ -53,7 +53,7 @@ def retrieve_all_scorekeepers(
     query = """
         SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         FROM ww_scorekeepers sk
-        WHERE sk.scorekeeper <> '(TBD)'
+        WHERE sk.scorekeeperslug <> 'tbd'
         ORDER BY sk.scorekeeperslug ASC;
     """
     cursor.execute(query)

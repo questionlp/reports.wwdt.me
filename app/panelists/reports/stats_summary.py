@@ -67,7 +67,7 @@ def retrieve_appearances_by_panelist(
 def retrieve_scores_by_panelist(
     panelist_slug: str,
     database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[int]:
+) -> list[Decimal]:
     """Retrieve all scores for the requested panelist by the panelist's slug string."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -76,8 +76,8 @@ def retrieve_scores_by_panelist(
         SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
         JOIN ww_shows s ON s.showid = pm.showid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND p.panelistslug = %s
+        WHERE p.panelistslug = %s
+        AND s.bestof = 0 AND s.repeatshowid IS NULL
         AND pm.panelistscore_decimal IS NOT NULL;
     """
     cursor = database_connection.cursor(dictionary=True)

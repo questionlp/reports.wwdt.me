@@ -72,6 +72,7 @@
                             </tr>
                             {% endfor %}
                         </tbody>
+                        {% if introductions[scorekeeper.id] | length > 10 %}
                         <tfoot>
                             <tr>
                                 <th scope="col">Show Date</th>
@@ -80,6 +81,7 @@
                                 <th scope="col">Introduction</th>
                             </tr>
                         </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             </div>

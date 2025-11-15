@@ -301,6 +301,27 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('panelists.lightning_statistics_summary') }}">
+                        Lightning Fill In The Blank Statistics Summary
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table displaying Lightning Fill In The Blank statistics for each panelist.
+                    </p>
+                    <p>
+                        Discrepencies between the number of panelist appearances for shows with scores
+                        and counts for Start, Correct and Total columns are typically due to earlier
+                        shows from 1998 had different segments and formats for scoring.
+                    </p>
+                    <p>
+                        Appearances on and scoring information from Best Of and repeat shows are not
+                        included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('panelists.losing_streaks') }}">
                         Losing Streaks
                     </a>

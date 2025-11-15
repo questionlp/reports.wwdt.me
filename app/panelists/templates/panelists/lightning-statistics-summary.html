@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% set page_title = "Lightning Fill In The Blank Statistics Summary" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying Lightning Fill In The Blank statistics for each panelist.
+    </p>
+    <p>
+        Discrepencies between the number of panelist appearances for shows with scores
+        and counts for Start, Correct and Total columns are typically due to earlier
+        shows from 1998 had different segments and formats for scoring.
+    </p>
+    <p>
+        Appearances on and scoring information from Best Of and repeat shows are not
+        included.
+    </p>
+</div>
+
+{% if lightning_stats %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup class="cg-border-end">
+                    <col class="name">
+                </colgroup>
+                <colgroup class="cg-border-end">
+                    <col class="count">
+                    <col class="count">
+                </colgroup>
+                <colgroup class="cg-border-end">
+                    <col class="count">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="stats float">
+                </colgroup>
+                <colgroup class="cg-border-end">
+                    <col class="count">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="stats float">
+                </colgroup>
+                <colgroup>
+                    <col class="count">
+                    <col class="score">
+                    <col class="score">
+                    <col class="score">
+                    <col class="stats float">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th colspan="2">Appearances</th>
+                        <th colspan="5">Start</th>
+                        <th colspan="5">Correct</th>
+                        <th colspan="5">Total</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Regular</th>
+                        <th scope="col">With Scores</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in lightning_stats %}
+                        {% set _stats = lightning_stats[panelist] %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ _stats['slug'] }}">{{ _stats["name"] }}</a></td>
+
+                        {% if _stats["appearances"] %}
+                        <td>{{ _stats["appearances"]["regular"] }}</td>
+                        <td>{{ _stats["appearances"]["with_scores"] }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+
+                        {% if _stats["start_stats"] %}
+                        <td>{{ _stats["start_stats"]["count"] }}</td>
+                        <td>{{ "{:f}".format(_stats["start_stats"]["minimum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["start_stats"]["maximum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["start_stats"]["sum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["start_stats"]["mean"].normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+
+                        {% if _stats["correct_stats"] %}
+                        <td>{{ _stats["correct_stats"]["count"] }}</td>
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["minimum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["maximum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["sum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["mean"].normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+
+                        {% if _stats["total_stats"] %}
+                        <td>{{ _stats["total_stats"]["count"] }}</td>
+                        <td>{{ "{:f}".format(_stats["total_stats"]["minimum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["total_stats"]["maximum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["total_stats"]["sum"].normalize()) }}</td>
+                        <td>{{ "{:f}".format(_stats["total_stats"]["mean"].normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col" rowspan="2">Panelist</th>
+                        <th colspan="2">Appearances</th>
+                        <th colspan="5">Start</th>
+                        <th colspan="5">Correct</th>
+                        <th colspan="5">Total</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Regular</th>
+                        <th scope="col">With Scores</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Min</th>
+                        <th scope="col">Max</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col stats float">Mean</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

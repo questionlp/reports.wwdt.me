@@ -46,6 +46,9 @@ from .reports.highest_scores_correct import (
     retrieve_highest_average_correct_answers_by_year,
     retrieve_highest_average_scores_by_year,
 )
+from .reports.lightning_scoring_stats import (
+    retrieve_all_panelists_lightning_scoring_stats,
+)
 from .reports.panelist_vs_panelist import (
     generate_panelist_vs_panelist_results as pvp_generate_results,
 )
@@ -549,6 +552,19 @@ def highest_average_scores_by_year() -> str:
         "panelists/highest-average-scores-by-year.html",
         show_years=_show_years,
         score_stats=None,
+    )
+
+
+@blueprint.route("/lightning-statistics-summary")
+def lightning_statistics_summary() -> str:
+    """View: Lightning Fill In The Blank Statistics Summary Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _lightning_stats = retrieve_all_panelists_lightning_scoring_stats(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+    return render_template(
+        "panelists/lightning-statistics-summary.html", lightning_stats=_lightning_stats
     )
 
 

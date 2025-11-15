@@ -69,6 +69,10 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("panelists.lightning_statistics_summary") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("panelists.losing_streaks") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
