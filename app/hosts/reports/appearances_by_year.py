@@ -25,7 +25,7 @@ def retrieve_appearance_counts_by_year(
         FROM ww_showhostmap hm
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
-        WHERE YEAR(s.showdate) = %s
+        WHERE YEAR(s.showdate) = %s AND h.hostslug <> 'tbd'
         GROUP BY h.hostid, h.host, h.hostslug
         ORDER BY COUNT(h.hostid) DESC, h.host ASC;
     """
@@ -43,7 +43,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
+        AND s.repeatshowid IS NULL AND h.hostslug <> 'tbd'
         GROUP BY h.hostid, h.host, h.hostslug
         ORDER BY COUNT(h.hostid) DESC, h.host ASC;
     """
@@ -58,7 +58,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NULL
+        AND s.repeatshowid IS NULL AND h.hostslug <> 'tbd'
         GROUP BY h.hostid, h.host, h.hostslug
         ORDER BY COUNT(h.hostid) DESC, h.host ASC;
     """
@@ -73,7 +73,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NOT NULL
+        AND s.repeatshowid IS NOT NULL AND h.hostslug <> 'tbd'
         GROUP BY h.hostid, h.host, h.hostslug
         ORDER BY COUNT(h.hostid) DESC, h.host ASC;
     """
@@ -88,7 +88,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = hm.showid
         JOIN ww_hosts h ON h.hostid = hm.hostid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NOT NULL
+        AND s.repeatshowid IS NOT NULL AND h.hostslug <> 'tbd'
         GROUP BY h.hostid, h.host, h.hostslug
         ORDER BY COUNT(h.hostid) DESC, h.host ASC;
     """

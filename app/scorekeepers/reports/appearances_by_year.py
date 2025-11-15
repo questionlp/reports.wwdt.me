@@ -26,7 +26,7 @@ def retrieve_appearance_counts_by_year(
         FROM ww_showskmap skm
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
-        WHERE YEAR(s.showdate) = %s
+        WHERE YEAR(s.showdate) = %s AND sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         ORDER BY COUNT(sk.scorekeeperid) DESC, sk.scorekeeper ASC;
     """
@@ -45,7 +45,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
+        AND s.repeatshowid IS NULL AND sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         ORDER BY COUNT(sk.scorekeeperid) DESC, sk.scorekeeper ASC;
     """
@@ -61,7 +61,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NULL
+        AND s.repeatshowid IS NULL AND sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         ORDER BY COUNT(sk.scorekeeperid) DESC, sk.scorekeeper ASC;
     """
@@ -77,7 +77,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 1
-        AND s.repeatshowid IS NOT NULL
+        AND s.repeatshowid IS NOT NULL AND sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         ORDER BY COUNT(sk.scorekeeperid) DESC, sk.scorekeeper ASC;
     """
@@ -93,7 +93,7 @@ def retrieve_appearance_counts_by_year(
         JOIN ww_shows s ON s.showid = skm.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE YEAR(s.showdate) = %s AND s.bestof = 0
-        AND s.repeatshowid IS NULL
+        AND s.repeatshowid IS NULL AND sk.scorekeeperslug <> 'tbd'
         GROUP BY sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         ORDER BY COUNT(sk.scorekeeperid) DESC, sk.scorekeeper ASC;
     """
@@ -217,6 +217,7 @@ def retrieve_all_appearance_counts(
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         JOIN ww_shows s ON s.showid = skm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        AND sk.scorekeeperslug <> 'tbd'
         ORDER BY sk.scorekeeper ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
