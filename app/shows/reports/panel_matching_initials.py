@@ -19,9 +19,9 @@ def retrieve_shows_panelists_matching_initials(
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    panelists_double_initials = current_app.config["app_settings"][
-        "panelists_double_initials"
-    ]
+    panelists_double_initials = current_app.config["app_settings"].get(
+        "panelists_double_initials", None
+    )
     if not panelists_double_initials or not isinstance(panelists_double_initials, list):
         return None
 
