@@ -36,6 +36,18 @@
         "support_npr_url": "",
         "patreon_url": "",
         "github_sponsor_url": "",
-        "use_minified_css": true
+        "use_minified_css": true,
+        "panelists_double_initials": [
+            "brian-babylon",
+            "fortune-feimster",
+            "helen-hong",
+            "janelle-james",
+            "keegan-michael-key",
+            "paul-provenza",
+            "paula-pell",
+            "paula-poundstone",
+            "richard-roeper",
+            "roxanne-roberts"
+        ]
     }
 }

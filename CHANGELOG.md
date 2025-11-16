@@ -1,5 +1,15 @@
 # Changes
 
+## 4.9.0
+
+### Application Changes
+
+- Added a new Shows "Shows with Panelists Having Matching Initials" report that lists shows where each of the panelists on the panel have the same first and last initial
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.4.5 to 2.4.6
+
 ## 4.8.0
 
 ### Application Changes

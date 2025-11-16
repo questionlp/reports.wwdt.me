@@ -406,6 +406,24 @@
             </li>
             <li class="list-group-item">
                 <h3 class="title">
+                    <a href="{{ url_for('shows.shows_with_panelists_matching_initials') }}">
+                        Shows with Panelists Having Matching Initials
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table displaying shows where each of the three panelists on the panel
+                        have the same letter for their first and last initials.
+                    </p>
+                    <p>
+                        Best Of and repeat shows, along with the 20th anniversary special that
+                        aired on <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+                        which had a special mix of panelists, are not included.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
                     <a href="{{ url_for('shows.shows_with_perfect_panelist_scores') }}">
                         Shows with Perfect Panelist Scores
                     </a>
