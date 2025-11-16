@@ -25,6 +25,7 @@ from .reports.lightning_round import (
     shows_starting_with_three_way_tie,
 )
 from .reports.panel_gender_mix import panel_gender_mix_breakdown
+from .reports.panel_matching_initials import retrieve_shows_panelists_matching_initials
 from .reports.scoring import (
     retrieve_shows_all_high_scoring,
     retrieve_shows_all_low_scoring,
@@ -484,6 +485,20 @@ def shows_with_guest_scorekeeper() -> str:
     _database_connection.close()
 
     return render_template("shows/shows-with-guest-scorekeeper.html", shows=_shows)
+
+
+@blueprint.route("/shows-with-panelists-matching-initials")
+def shows_with_panelists_matching_initials() -> str:
+    """View: Shows with Panelists Having Matching Initials."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_shows_panelists_matching_initials(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    return render_template(
+        "shows/shows-with-panelists-matching-initials.html", shows=_shows
+    )
 
 
 @blueprint.route("/shows-with-perfect-panelist-scores")

@@ -411,6 +411,15 @@ def test_shows_with_guest_scorekeeper(client: FlaskClient) -> None:
     assert b"Guest(s)" in response.data
 
 
+def test_shows_with_panelists_matching_initials(client: FlaskClient) -> None:
+    """Testing shows.routes.shows_with_panelists_matching_initials."""
+    response: TestResponse = client.get("/shows/shows-with-panelists-matching-initials")
+    assert response.status_code == 200
+    assert b"Shows with Panelists Having Matching Initials"
+    assert b"Show Date"
+    assert b"Location"
+
+
 def test_shows_with_perfect_panelist_scores(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_perfect_panelist_scores."""
     response: TestResponse = client.get("/shows/shows-with-perfect-panelist-scores")

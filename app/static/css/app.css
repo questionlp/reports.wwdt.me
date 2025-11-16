@@ -13317,6 +13317,12 @@ main .details .recordings .appearance-list .appearance-list.panelist,
 main .details .recordings .recording-list .appearance-list.panelist {
   column-count: 2;
 }
+main .details .appearances .appearance-list li,
+main .details .appearances .recording-list li,
+main .details .recordings .appearance-list li,
+main .details .recordings .recording-list li {
+  break-inside: avoid-column;
+}
 main .details .appearances .appearance-list.list-col-2,
 main .details .appearances .recording-list.list-col-2,
 main .details .recordings .appearance-list.list-col-2,

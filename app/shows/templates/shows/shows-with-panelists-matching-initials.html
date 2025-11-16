@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% set page_title = "Shows with Panelists Having Matching Initials" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying shows where each of the three panelists on the panel
+        have the same letter for their first and last initials.
+    </p>
+    <p>
+        Best Of and repeat shows, along with the 20th anniversary special that
+        aired on <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+        which had a special mix of panelists, are not included.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="name venue">
+                    <col class="name host">
+                    <col class="name scorekeeper">
+                    <col class="name panelist">
+                    <col class="name guest">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Host</th>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Panelists</th>
+                        <th scope="col">Guest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.location.venue and show.location.city and show.location.city %}
+                        <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
+                        {% elif show.location.venue and (not show.location.city or not show.location.state) %}
+                        <td>{{ show.location.venue }}</td>
+                        {% elif show.location.city %}
+                        <td>{{ show.location.city }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        <td>{{ show.host }}</td>
+                        <td>{{ show.scorekeeper }}</td>
+                        <td>
+                            <ul class="no-bullets">
+                                {% for panelist in show.panelists %}
+                                <li>
+                                    {% if panelist.score %}
+                                    {{ panelist.name }}:
+                                    {{ "{:f}".format(panelist.score.normalize()) }}
+                                    {% else %}
+                                    {{ panelist.name }}
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            {% if show.guest.score %}
+                            {{ show.guest.name }}: {{ show.guest.score }}
+                            {% else %}
+                            {{ show.guest.name }}
+                            {% endif %}
+                            {% if show.guest.exception %}
+                            *
+                            {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}
