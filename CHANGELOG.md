@@ -1,5 +1,13 @@
 # Changes
 
+## 4.9.1
+
+### Application Changes
+
+- Changed the behavior of the `block_ai_scrapers` settings flag to only include the list of blocked AI scrapers and the disallow statement in the rendered `robots.txt` file when set to `true`
+- Removed unnecessary `aria-labelledby` in the page navigation
+- Updated the list of AI bots in the `robots.txt` template to reflect the latest version published at [ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt)
+
 ## 4.9.0
 
 ### Application Changes
