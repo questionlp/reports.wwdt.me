@@ -1,5 +1,11 @@
 # Changes
 
+## 4.9.2
+
+### Application Changes
+
+- Fixed the Bluff the Listener database queries for the "Not My Job Guests vs Bluff the Listener Win Ratios by Year" report that had incorrect filters causing additional data to be included and counted for
+
 ## 4.9.1
 
 ### Application Changes
