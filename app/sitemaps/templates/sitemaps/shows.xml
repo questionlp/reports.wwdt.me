@@ -17,6 +17,10 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("shows.best_of_shows_with_unique_bluff") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("shows.high_scoring_shows") }}</loc>
     <changefreq>weekly</changefreq>
   </url>

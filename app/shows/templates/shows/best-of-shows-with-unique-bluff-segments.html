@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% set page_title = "Best Of Shows with Unique Bluff the Listener Segments" %}
+{% block title %}{{ page_title }} | Shows{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying all of the unique Bluff the Listener segments that have
+        only aired as part of Best Of shows.
+    </p>
+</div>
+
+{% if shows %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="date">
+                    <col class="count label">
+                    <col class="name panelist">
+                    <col class="name panelist">
+                </colgroup>
+                <thead>
+                    <tr>
+                        {% if ascending %}
+                        <th scope="col">
+                            <a href="{{ url_for('shows.best_of_shows_with_unique_bluff', sort='desc') }}">
+                                Date <i class="bi bi-sort-down-alt ms-1" title="Change sorting to descending"></i>
+                            </a>
+                        </th>
+                        {% else %}
+                        <th scope="col">
+                            <a href="{{ url_for('shows.best_of_shows_with_unique_bluff') }}">
+                                Date <i class="bi bi-sort-down ms-1" title="Change sorting to ascending"></i>
+                            </a>
+                        </th>
+                        {% endif %}
+                        <th scope="col">Repeat Of</th>
+                        <th scope="col">Bluff Segment #</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in shows %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        {% if show.repeat and show.original_show_date is not none %}
+                        <td><a href="{{ stats_url }}/shows/{{ show.original_show_date | replace('-', '/') }}">{{ show.original_show_date }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        <td>{{ show.bluff_segment }}</td>
+                        {% if show.chosen_bluff and show.chosen_bluff is not none %}
+                        <td><a href="{{ stats_url }}/panelists/{{ show.chosen_bluff.slug }}">{{ show.chosen_bluff.name }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if show.correct_bluff and show.correct_bluff is not none %}
+                        <td><a href="{{ stats_url }}/panelists/{{ show.correct_bluff.slug }}">{{ show.correct_bluff.name }}</a></td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Repeat Of</th>
+                        <th scope="col">Bluff Segment #</th>
+                        <th scope="col">Chosen</th>
+                        <th scope="col">Correct</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -57,6 +57,18 @@ def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     assert b"Guest" in response.data
 
 
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_best_of_shows_with_unique_bluff(client: FlaskClient, sort: str | None) -> None:
+    """Testing shows.routes.best_of_shows_with_unique_bluff."""
+    response: TestResponse = client.get(
+        "/shows/best-of-shows-with-unique-bluff-segments", query_string={"sort": sort}
+    )
+    assert response.status_code == 200
+    assert b"Best Of Shows with Unique Bluff the Listener Segments" in response.data
+    assert b"Change sorting to" in response.data
+    assert b"Bluff Segment #" in response.data
+
+
 def test_high_scoring_shows(client: FlaskClient) -> None:
     """Testing shows.routes.high_scoring_shows."""
     response: TestResponse = client.get("/shows/high-scoring-shows")
