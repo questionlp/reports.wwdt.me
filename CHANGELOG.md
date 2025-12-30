@@ -939,7 +939,7 @@ Due to the significant changes around the new application theming, the usual App
 - Changed section names from singular to plural to match the naming convention used by the Wait Wait Stats Page, Wait Wait API and Wait Wait Graphs applications:
 
 | v1 Section Name | v2 Section Name |
-|-----------------|-----------------|
+| --------------- | --------------- |
 | guest           | guests          |
 | host            | hosts           |
 | location        | locations       |
@@ -956,7 +956,7 @@ Due to the significant changes around the new application theming, the usual App
 - Standardize column widths across all reports
 - Redesign the Panelist vs Panelist report use the same base temlate as other reports
 - Enable Markdown handling for show notes fields in the respective reports
-- Display `-` for table cells containing no data
+- Display a hyphen for table cells containing no data
 - Change MySQL Connector cursor return type from `dict` to `NamedTuple` where applicable
 
 ### Development Changes
