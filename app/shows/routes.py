@@ -48,6 +48,9 @@ from .reports.show_details import (
 )
 from .reports.show_details import retrieve_all_repeat_shows as details_repeat_shows
 from .reports.show_details import retrieve_all_shows as details_all_shows
+from .reports.unique_best_of_bluff import (
+    retrieve_unique_best_of_bluff_shows as unique_bluff_shows,
+)
 
 blueprint = Blueprint("shows", __name__, template_folder="templates")
 
@@ -104,7 +107,7 @@ def all_women_panel() -> str:
 
 @blueprint.route("/best-of-shows")
 def best_of_shows() -> str:
-    """View: All Shows Report."""
+    """View: Best Of Shows Report."""
     _ascending = True
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_best_of_shows(database_connection=_database_connection)
@@ -121,6 +124,30 @@ def best_of_shows() -> str:
 
     return render_template(
         "shows/best-of-shows.html", shows=_shows, ascending=_ascending
+    )
+
+
+@blueprint.route("/best-of-shows-with-unique-bluff-segments")
+def best_of_shows_with_unique_bluff() -> str:
+    """View: Best Of Shows with Unique Bluff the Listener Segments Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = unique_bluff_shows(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/best-of-shows-with-unique-bluff-segments.html",
+        shows=_shows,
+        ascending=_ascending,
     )
 
 
@@ -298,7 +325,7 @@ def panel_gender_mix() -> str:
 
 @blueprint.route("/repeat-best-of-shows")
 def repeat_best_of_shows() -> str:
-    """View: All Shows Report."""
+    """View: Repeat Best Of Shows Report."""
     _ascending = True
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_repeat_best_of_shows(database_connection=_database_connection)
@@ -320,7 +347,7 @@ def repeat_best_of_shows() -> str:
 
 @blueprint.route("/repeat-shows")
 def repeat_shows() -> str:
-    """View: All Shows Report."""
+    """View: Repeat Shows Report."""
     _ascending = True
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _shows = details_repeat_shows(database_connection=_database_connection)

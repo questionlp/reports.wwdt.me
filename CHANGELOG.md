@@ -1,5 +1,12 @@
 # Changes
 
+## 4.10.0
+
+### Application Changes
+
+- Added a new Shows "Best Of Shows with Unique Bluff the Listener Segments" report that lists Best Of shows that have a Bluff the Listener segment that has not been included in a regular show. This usually happens when the show has a second recording when traveling away from Chicago. The report includes the name of the panelist with the chosen Bluff story and the name of the panelist with the correct Bluff story
+- Corrected docstring for `app.shows.routes.best_of_shows()`, `app.shows.routes.repeat_best_of_shows()` and `app.shows.routes.repeat_shows()` to reflect the correct report name
+
 ## 4.9.2
 
 ### Application Changes
@@ -491,7 +498,7 @@ Due to the significant changes around the new application theming, the usual App
 #### Guests
 
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
-|----------------------|---------------------|-----------------|----------------|
+| -------------------- | ------------------- | --------------- | -------------- |
 | Best Of Not My Job Guests | `/guests/best-of-only` | N/A | `/guests/best-of-only-not-my-job-guests` |
 | Not My Job Scoring Exceptions | `/guests/scoring-exceptions` | N/A | `/guests/not-my-job-scoring-exceptions` |
 | Not My Job Three Pointers | `/guests/three-pointers` | N/A | `/guests/not-my-job-three-pointers` |
@@ -499,13 +506,13 @@ Due to the significant changes around the new application theming, the usual App
 #### Locations
 
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
-|----------------------|---------------------|-----------------|----------------|
+| -------------------- | ------------------- | --------------- | -------------- |
 | Average Score by Location | `/locations/average-scores` | Average Scores by Location | `/locations/average-scores-by-location` |
 
 #### Panelists
 
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
-|----------------------|---------------------|-----------------|----------------|
+| -------------------- | ------------------- | --------------- | -------------- |
 | Bluff the Listener Statistics | `/panelists/bluff-stats` | N/A | `/panelists/bluff-the-listener-statistics` |
 | Bluff the Listener Statistics by Year | `/panelists/bluff-stats-by-year` | N/A | `/panelists/bluff-the-listener-statistics-by-year` |
 | Debut by Year | `/panelists/debut-by-year` | Debuts by Year | `/panelists/debuts-by-year` |
@@ -518,13 +525,13 @@ Due to the significant changes around the new application theming, the usual App
 #### Scorekeepers
 
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
-|----------------------|---------------------|-----------------|----------------|
+| -------------------- | ------------------- | --------------- | -------------- |
 | Introductions | `/scorekeepers/introductions` | Scorekeeper Introductions | `/scorekeepers/scorekeeper-introductions` |
 
 #### Shows
 
 | Original Report Name | Original Report URL | New Report Name (if applicable) | New Report URL |
-|----------------------|---------------------|-----------------|----------------|
+| -------------------- | ------------------- | --------------- | -------------- |
 | High Scoring Shows | `/shows/high-scoring` | N/A | `/shows/high-scoring-shows` |
 | Low Scoring Shows | `/shows/low-scoring` | N/A | `/shows/low-scoring-shows` |
 | Not My Job Guests vs Bluff the Listener Win Ratios | `/shows/not-my-job-vs-bluffs` | N/A | `/shows/not-my-job-guests-vs-bluff-the-listener-win-ratios` |
