@@ -146,18 +146,23 @@ def retrieve_not_my_job_stats_by_year(
                 elif result["guestscore"] < 2 and not bool(result["exception"]):
                     best_of_only_guest_losses += 1
 
-    _stats = {
-        "total": count_all_guest_scores + len(best_of_only_guest_ids),
-        "wins": count_guest_wins + best_of_only_guest_wins,
-        "losses": count_guest_losses + best_of_only_guest_losses,
-        "win_ratio": round(
+    if count_all_guest_scores or best_of_only_guest_ids:
+        win_ratio = round(
             100
             * (
                 (count_guest_wins + best_of_only_guest_wins)
                 / (count_all_guest_scores + len(best_of_only_guest_ids))
             ),
             5,
-        ),
+        )
+    else:
+        win_ratio = 0
+
+    _stats = {
+        "total": count_all_guest_scores + len(best_of_only_guest_ids),
+        "wins": count_guest_wins + best_of_only_guest_wins,
+        "losses": count_guest_losses + best_of_only_guest_losses,
+        "win_ratio": win_ratio,
     }
 
     return _stats
@@ -245,11 +250,15 @@ def retrieve_bluff_stats_by_year(
 
     count_chosen_incorrect = result[0]
 
+    if count_unique_bluffs:
+        correct_ratio = round(100 * (count_chosen_correct / count_unique_bluffs), 5)
+    else:
+        correct_ratio = 0
     return {
         "total": count_unique_bluffs,
         "correct": count_chosen_correct,
         "incorrect": count_chosen_incorrect,
-        "correct_ratio": round(100 * (count_chosen_correct / count_unique_bluffs), 5),
+        "correct_ratio": correct_ratio,
     }
 
 

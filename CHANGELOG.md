@@ -1,5 +1,12 @@
 # Changes
 
+## 4.10.1
+
+### Application Changes
+
+- Changed the "Win %" columns in the "Not My Job Guests vs Bluff the Listener Win Ratios by Year" report to display a hyphen instead of zero
+- Fixed a divide-by-zero error that occurs in the "Not My Job Guests vs Bluff the Listener Win Ratios by Year" report when there aren't any Bluff the Listener or Not My Job data for a given year
+
 ## 4.10.0
 
 ### Application Changes

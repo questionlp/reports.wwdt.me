@@ -78,12 +78,20 @@
                         <td>{{ stats[year].not_my_job.wins }}</td>
                         <td>{{ stats[year].not_my_job.losses }}</td>
                         <td>{{ stats[year].not_my_job.total }}</td>
+                        {% if stats[year].not_my_job.win_ratio %}
                         <td>{{ stats[year].not_my_job.win_ratio }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                         <td class="filled">&nbsp;</td>
                         <td>{{ stats[year].bluff.correct }}</td>
                         <td>{{ stats[year].bluff.incorrect }}</td>
                         <td>{{ stats[year].bluff.total }}</td>
+                        {% if stats[year].bluff.correct_ratio %}
                         <td>{{ stats[year].bluff.correct_ratio }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
                     </tr>
                     {% endif %}
                 {% endfor %}
