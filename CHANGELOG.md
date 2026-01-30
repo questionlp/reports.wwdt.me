@@ -1,16 +1,27 @@
 # Changes
 
-## 4.11.0-alpha
+## 4.11.0
 
 ### Application Changes
 
 - Added a new higher contrast dark theme that increases the contrast between the page background and text colors
   - This was introduced for those who prefer or require a higher contrast than the slightly decreased contrast of the updated dark theme
 - Updated the location of the `app-code.js` script block to fix an issue where tooltips were not appearing
+- Updated copyright year in source code comments
+- Updated the list of AI bots in the `robots.txt` template to reflect the latest version published at [ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt)
 
 ### Component Changes
 
-- Upgraded wwdtm-theme from 2.4.6 to 2.5.0-alpha
+- Upgraded gunicorn from 23.0.0 to 24.1.1
+- Upgraded MySQL Connector/Python from 9.4.0 to 9.5.0
+- Upgraded NumPy from 2.3.3 to 2.4.1
+- Upgraded wwdtm-theme from 2.4.6 to 2.5.1
+
+### Development Changes
+
+- Upgraded Ruff from 0.13.3 to 0.14.14
+- Upgraded pytest from 8.4.1 to 9.0.2
+- Upgraded pytest-cov from 6.2.1 to 7.0.0
 
 ## 4.10.1
 
