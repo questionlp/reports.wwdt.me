@@ -1,5 +1,16 @@
 # Changes
 
+## 4.12.0
+
+### Application Changes
+
+- Consolidated all instances of the `retrieve_show_years()` function into a function available in the `app.shows.reports.info` module
+
+### Component Changes
+
+- Upgraded @ibm/plex-serif from 1.1.0 to 2.0.0
+- Upgraded wwdtm-theme from 2.5.1 to 2.5.2
+
 ## 4.11.0
 
 ### Application Changes

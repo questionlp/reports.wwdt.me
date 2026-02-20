@@ -12,28 +12,7 @@ import numpy
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
-
-def retrieve_show_years(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[int]:
-    """Retrieve a list of available show years."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    query = """
-        SELECT DISTINCT YEAR(showdate)
-        FROM ww_shows
-        ORDER BY YEAR(showdate) ASC;
-    """
-    cursor = database_connection.cursor()
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    return [row[0] for row in result]
+from app.shows.reports.info import retrieve_show_years
 
 
 def retrieve_scores_by_year_gender(

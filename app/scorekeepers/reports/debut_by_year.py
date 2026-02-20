@@ -11,32 +11,10 @@ from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 from app.panelists.reports.appearances import retrieve_panelists_by_show_id
+from app.shows.reports.info import retrieve_show_years
 from app.shows.reports.show_details import retrieve_show_date_by_id
 
 from .appearances import retrieve_appearances_by_scorekeeper
-
-
-def retrieve_show_years(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[int]:
-    """Retrieve a list of all show years."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    query = """
-        SELECT DISTINCT YEAR(showdate) AS year
-        FROM ww_shows
-        ORDER BY YEAR(showdate) ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    return [row["year"] for row in result]
 
 
 def retrieve_show_info(

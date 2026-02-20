@@ -3,6 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""Version module for Wait Wait Reports."""
+"""WWDTM Guest Host Report Functions."""
 
-APP_VERSION = "4.12.0"
+from app.shows.reports.info import retrieve_show_years
