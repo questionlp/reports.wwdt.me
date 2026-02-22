@@ -17,6 +17,18 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>{{ site_url }}{{ url_for("shows.best_of_shows_with_guest_host") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.best_of_shows_with_guest_host_scorekeeper") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{{ site_url }}{{ url_for("shows.best_of_shows_with_guest_scorekeeper") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>{{ site_url }}{{ url_for("shows.best_of_shows_with_unique_bluff") }}</loc>
     <changefreq>weekly</changefreq>
   </url>

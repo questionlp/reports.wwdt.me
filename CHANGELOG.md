@@ -4,7 +4,9 @@
 
 ### Application Changes
 
+- Added "Best Of Shows with a Guest Host", "Best Of Shows with a Guest Host and a Guest Scorekeeper", and "Best Of Shows with a Guest Scorekeeper" reports
 - Consolidated all instances of the `retrieve_show_years()` function into a function available in the `app.shows.reports.info` module
+- Updated the description of several reports to make phrasing more consistent and to correct a couple of typos
 
 ### Component Changes
 

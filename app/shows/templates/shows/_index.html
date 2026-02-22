@@ -37,9 +37,10 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all shows that have been broadcasted, including Best Of and repeat
-                        shows. The list does not include any pledge specials shows or special
-                        shows that were not aired in their original form.
+                        A table displaying all shows that have aired,including Best Of
+                        and repeat shows. The list does not include any pledge specials
+                        shows or special shows that were not aired in their original
+                        form.
                     </p>
                 </div>
             </li>
@@ -63,9 +64,53 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all Best Of shows that have been broadcasted. The list does not
-                        include any pledge specials shows or special shows that were not aired in their
-                        original form.
+                        A table displaying all Best Of shows that have aired. The list
+                        does not include any pledge specials shows or special shows
+                        that were not aired in their original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.best_of_shows_with_guest_host') }}">
+                        Best Of Shows with a Guest Host
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table displaying all Best Of shows with a guest host that have
+                        aired. The list does not include any pledge specials shows or
+                        special shows that were not aired in their original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.best_of_shows_with_guest_host_scorekeeper') }}">
+                        Best Of Shows with a Guest Host and a Guest Scorekeeper
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table displaying all Best Of shows with a guest host and a
+                        guest scorekeeper that have aired. The list does not include any
+                        pledge specials shows or special shows that were not aired in
+                        their original form.
+                    </p>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h3 class="title">
+                    <a href="{{ url_for('shows.best_of_shows_with_guest_scorekeeper') }}">
+                        Best Of Shows with a Guest Scorekeeper
+                    </a>
+                </h3>
+                <div class="description">
+                    <p>
+                        A table displaying all Best Of shows with a guest scorekeeper
+                        that have aired. The list does not include any pledge specials
+                        shows or special shows that were not aired in their original
+                        form.
                     </p>
                 </div>
             </li>
@@ -77,8 +122,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all of the unique Bluff the Listener segments that have
-                        only aired as part of Best Of shows.
+                        A table displaying all of the unique Bluff the Listener segments
+                        that have only aired as part of Best Of shows.
                     </p>
                 </div>
             </li>
@@ -90,8 +135,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where the total score for all three panelists is greater than
-                        or equal to 50. The shows are sorted by total score in descending order.
+                        A table displaying shows where the total score for all three
+                        panelists is greater than or equal to 50. The shows are sorted
+                        by total score in descending order.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -106,8 +152,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where the highest panelist total score is equal to the sum of
-                        the two other panelists' total scores.
+                        A table displaying shows where the highest panelist total score
+                        is equal to the sum of the two other panelists' total scores.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -122,8 +168,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where all three panelists answered the same number of Lightning
-                        Fill In The Blank questions correct.
+                        A table displaying shows where all three panelists answered the
+                        same number of Lightning Fill In The Blank questions correct.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -138,8 +184,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where all three panelists finished the Lightning
-                        Fill In The Blank segment in a three-way tie.
+                        A table displaying shows where all three panelists finished the
+                        Lightning Fill In The Blank segment in a three-way tie.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -154,8 +200,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where all three panelists started <em>and</em> finished the
-                        Lightning Fill In The Blank segment in a three-way tie.
+                        A table displaying shows where all three panelists started
+                        <em>and</em> finished the Lightning Fill In The Blank segment in
+                        a three-way tie.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -170,8 +217,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where all three panelists started the Lightning
-                        Fill In The Blank segment in a three-way tie.
+                        A table displaying shows where all three panelists started the
+                        Lightning Fill In The Blank segment in a three-way tie.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -186,8 +233,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where a panelist started the Lightning Fill In The Blank segment
-                        with zero points.
+                        A table displaying shows where a panelist started the Lightning
+                        Fill In The Blank segment with zero points.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -202,8 +249,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where a panelist did not answer any Lightning Fill In The Blank
-                        questions correct, thus netting zero additional points.
+                        A table displaying shows where a panelist did not answer any
+                        Lightning Fill In The Blank questions correct, thus netting zero
+                        additional points.
                     </p>
                     <p>
                         Scoring from Best Of and repeat shows are not included.
@@ -218,14 +266,16 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where the total score for all three panelists is less than 30.
-                        The shows are sorted by total score in descending order.
+                        A table displaying shows where the total score for all three
+                        panelists is less than 30. The shows are sorted by total score
+                        in descending order.
                     </p>
                     <p>
                         Scoring from the 20th anniversary special that aired on
-                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a> is not included
-                        due to the unique Lightning Fill In The Blank format. Also, scoring from Best Of
-                        and repeat shows are not included.
+                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>
+                        is not included due to the unique Lightning Fill In The Blank
+                        format. Also, scoring from Best Of and repeat shows are not
+                        included.
                     </p>
                 </div>
             </li>
@@ -237,24 +287,26 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A comparison between the rates in which a Not My Job guest earns a win against
-                        how often a listener contestant chooses the correct Bluff the Listener
-                        story, broken down by year along with total rates across all years.
+                        A comparison between the rates in which a Not My Job guest earns
+                        a win against how often a listener contestant chooses the
+                        correct Bluff the Listener story, broken down by year along with
+                        total rates across all years.
                     </p>
                     <p>
-                        For Not My Job guests, a win is considered when a guest answers two or more
-                        questions correct or when a
+                        For Not My Job guests, a win is considered when a guest answers
+                        two or more questions correct or when a
                         <a href="{{ url_for('guests.not_my_job_scoring_exceptions') }}">scorekeeper
-                            grants an exception</a>. The report also takes into account
+                        grants an exception</a>. The report also takes into account
                         <a href="{{ url_for('guests.best_of_only_not_my_job_guests') }}">Not My Job
-                            guests that were only included in Best Of shows</a>.
+                        guests that were only included in Best Of shows</a>.
                     </p>
                     <p>
-                        As with Not My Job segments and guests that have only been included in Best Of
-                        shows, certain Best Of shows also include unique Bluff the Listener segments.
-                        Both usually come from shows where Wait Wait... Don't Tell Me! travels and
-                        records a second show. In those cases, the Bluff the Listener segments
-                        usually include a different theme and a different true story from the
+                        As with Not My Job segments and guests that have only been
+                        included in Best Of shows, certain Best Of shows also include
+                        unique Bluff the Listener segments. Both usually come from shows
+                        where Wait Wait... Don't Tell Me! travels and records a second
+                        show. In those cases, the Bluff the Listener segments usually
+                        include a different theme and a different true story from the
                         first show.
                     </p>
                 </div>
@@ -267,9 +319,10 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all original (generally labeled as regular) shows that have been
-                        broadcasted. The list does not Best Of, repeat, or any pledge specials shows
-                        or special shows that were not aired in their original form.
+                        A table displaying all original (generally labeled as regular)
+                        shows that have aired. The list does not Best Of, repeat, or any
+                        pledge specials shows or special shows that were not aired in
+                        their original form.
                     </p>
                 </div>
             </li>
@@ -281,15 +334,15 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying years with the number of times a show has had different combination
-                        of men and women on a panel, including any instances of an all men or an all
-                        women panel.
+                        A table displaying years with the number of times a show has had
+                        different combination of men and women on a panel, including any
+                        instances of an all men or an all women panel.
                     </p>
                     <p>
-                        Show counts from Best Of and repeat shows, in addition to the 20th anniversary
-                        special that aired on
-                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>, are not
-                        included.
+                        Show counts from Best Of and repeat shows, in addition to the
+                        20th anniversary special that aired on
+                        <a href="{{ stats_url }}/shows/2018/10/27">October 27, 2018</a>,
+                        are not included.
                     </p>
                 </div>
             </li>
@@ -301,9 +354,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all repeat Best Of shows that have been broadcasted. The list does not
-                        include any pledge specials shows or special shows that were not aired in their
-                        original form.
+                        A table displaying all repeat Best Of shows that have aired.
+                        The list does not include any pledge specials shows or special
+                        shows that were not aired in their original form.
                     </p>
                 </div>
             </li>
@@ -315,9 +368,9 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all repeat shows that have been broadcasted. The list does not include
-                        any pledge specials shows or special shows that were not aired in their original
-                        form.
+                        A table displaying all repeat shows that have aired. The list
+                        does not include any pledge specials shows or special shows that
+                        were not aired in their original form.
                     </p>
                 </div>
             </li>
@@ -329,12 +382,13 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where up to three selected panelists have appeared on the same
-                        panel. Options are available to include Best Of and/or repeats shows.
+                        A table displaying shows where up to three selected panelists
+                        have appeared on the same panel. Options are available to
+                        include Best Of and/or repeats shows.
                     </p>
                     <p>
-                        Shows that are Repeat Best Of shows will be included if either include show
-                        options are checked.
+                        Shows that are Repeat Best Of shows will be included if either
+                        include show options are checked.
                     </p>
                 </div>
             </li>
@@ -346,11 +400,13 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying years with corresponding number of regular shows, Best Of shows,
-                        repeat shows, repeat Best Of shows, and a total number of shows for each year.
+                        A table displaying years with corresponding number of regular
+                        shows, Best Of shows, repeat shows, repeat Best Of shows, and a
+                        total number of shows for each year.
                     </p>
                     <p>
-                        The counts for the current year will only include shows that have already aired.
+                        The counts for the current year will only include shows that
+                        have already aired.
                     </p>
                 </div>
             </li>
@@ -362,7 +418,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all shows with the corresponding show descriptions.
+                        A table displaying all shows with the corresponding show
+                        descriptions.
                     </p>
                 </div>
             </li>
@@ -386,8 +443,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all shows, including Best Of and repeat shows, that have had a guest
-                        host.
+                        A table displaying all shows, including Best Of and repeat
+                        shows, that have had a guest host.
                     </p>
                 </div>
             </li>
@@ -399,8 +456,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all shows, including Best Of and repeat shows, that have had a guest
-                        host and a guest scorekeeper.
+                        A table displaying all shows, including Best Of and repeat
+                        shows, that have had a guest host and a guest scorekeeper.
                     </p>
                 </div>
             </li>
@@ -412,8 +469,8 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying all shows, including Best Of and repeat shows, that have had a guest
-                        scorekeeper.
+                        A table displaying all shows, including Best Of and repeat
+                        shows, that have had a guest scorekeeper.
                     </p>
                 </div>
             </li>
@@ -425,12 +482,14 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where each of the three panelists on the panel
-                        have the same letter for their first and last initials.
+                        A table displaying shows where each of the three panelists on
+                        the panel have the same letter for their first and last
+                        initials.
                     </p>
                     <p>
-                        Best Of and repeat shows, along with the 20th anniversary special that
-                        aired on <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
+                        Best Of and repeat shows, along with the 20th anniversary
+                        special that aired on
+                        <a href="{{ stats_url }}/shows/2018/10/27">2018-10-27</a>
                         which had a special mix of panelists, are not included.
                     </p>
                 </div>
@@ -443,17 +502,18 @@
                 </h3>
                 <div class="description">
                     <p>
-                        A table displaying shows where a panelist finishes the Lightning Fill In The Blank
-                        segment with a total score of 20 points, a "perfect score" according to
-                        scorekeeper Bill Kurtis.
+                        A table displaying shows where a panelist finishes the Lightning
+                        Fill In The Blank segment with a total score of 20 points, a
+                        "perfect score" according to scorekeeper Bill Kurtis.
                     </p>
                     <p>
-                        The list also includes shows where a panelist has a total score greater
-                        than 20 points.
+                        The list also includes shows where a panelist has a total score
+                        greater than 20 points.
                     </p>
                     <p>
-                        <b>Note:</b> Shows that aired in 1998 used a different show format and scoring
-                        system compared to the current show format and scoring system.
+                        <b>Note:</b> Shows that aired in 1998 used a different show
+                        format and scoring system compared to the current show format
+                        and scoring system.
                     </p>
                 </div>
             </li>

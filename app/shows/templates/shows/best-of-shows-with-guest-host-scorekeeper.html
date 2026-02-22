@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set page_title = "Repeat Best Of Shows" %}
+{% set page_title = "Best Of Shows with a Guest Host and a Guest Scorekeeper" %}
 {% block title %}{{ page_title }} | Shows{% endblock %}
 
 {% block content %}
@@ -13,9 +13,10 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        A table displaying all repeat Best Of shows that have been aired. The
-        list does not include any pledge specials shows or special shows that
-        were not aired in their original form.
+        A table displaying all Best Of shows with a guest host and a guest
+        scorekeeper that have aired. The list does not include any pledge
+        specials shows or special shows that were not aired in their original
+        form.
     </p>
 </div>
 
@@ -27,7 +28,7 @@
                 <colgroup>
                     <col class="count">
                     <col class="date">
-                    <col class="date">
+                    <col class="boolean">
                     <col class="name venue">
                     <col class="name host">
                     <col class="name scorekeeper">
@@ -39,13 +40,13 @@
                         <th scope="col">#</th>
                         {% if ascending %}
                         <th scope="col">
-                            <a href="{{ url_for('shows.repeat_best_of_shows', sort='desc') }}">
+                            <a href="{{ url_for('shows.best_of_shows', sort='desc') }}">
                                 Date <i class="bi bi-sort-down-alt ms-1" title="Change sorting to descending"></i>
                             </a>
                         </th>
                         {% else %}
                         <th scope="col">
-                            <a href="{{ url_for('shows.repeat_best_of_shows') }}">
+                            <a href="{{ url_for('shows.best_of_shows') }}">
                                 Date <i class="bi bi-sort-down ms-1" title="Change sorting to ascending"></i>
                             </a>
                         </th>
@@ -77,8 +78,16 @@
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
+                        {% if show.host_guest %}
+                        <td><b>{{ show.host }}</b></td>
+                        {% else %}
                         <td>{{ show.host }}</td>
+                        {% endif %}
+                        {% if show.scorekeeper_guest %}
+                        <td><b>{{ show.scorekeeper }}</b></td>
+                        {% else %}
                         <td>{{ show.scorekeeper }}</td>
+                        {% endif %}
                         {% if show.panelists %}
                         <td class="panelist-names">
                             <ul class="no-bullets">

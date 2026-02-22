@@ -34,7 +34,7 @@ def test_all_shows(client: FlaskClient, sort: str | None) -> None:
     assert response.status_code == 200
     assert b"All Shows" in response.data
     assert b"Change sorting to" in response.data
-    assert b"Guest" in response.data
+    assert b"Guest(s)" in response.data
 
 
 def test_all_women_panel(client: FlaskClient) -> None:
@@ -54,7 +54,36 @@ def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     assert response.status_code == 200
     assert b"Best Of Shows" in response.data
     assert b"Change sorting to" in response.data
-    assert b"Guest" in response.data
+    assert b"Guest(s)" in response.data
+
+
+def test_best_of_shows_with_guest_host(client: FlaskClient) -> None:
+    """Testing shows.routes.best_of_shows_with_guest_host."""
+    response: TestResponse = client.get("/shows/best-of-shows-with-guest-host")
+    assert response.status_code == 200
+    assert b"Best Of Shows with a Guest Host" in response.data
+    assert b"Panelists" in response.data
+    assert b"Guest(s)" in response.data
+
+
+def test_best_of_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
+    """Testing shows.routes.best_of_shows_with_guest_host_scorekeeper."""
+    response: TestResponse = client.get(
+        "/shows/best-of-shows-with-guest-host-scorekeeper"
+    )
+    assert response.status_code == 200
+    assert b"Best Of Shows with a Guest Host and a Guest Scorekeeper" in response.data
+    assert b"Panelists" in response.data
+    assert b"Guest(s)" in response.data
+
+
+def test_best_of_shows_with_guest_scorekeeper(client: FlaskClient) -> None:
+    """Testing shows.routes.best_of_shows_with_guest_scorekeeper."""
+    response: TestResponse = client.get("/shows/best-of-shows-with-guest-scorekeeper")
+    assert response.status_code == 200
+    assert b"Best Of Shows with a Guest Scorekeeper" in response.data
+    assert b"Panelists" in response.data
+    assert b"Guest(s)" in response.data
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -204,7 +233,7 @@ def test_repeat_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     assert response.status_code == 200
     assert b"Repeat Best Of Shows" in response.data
     assert b"Change sorting to" in response.data
-    assert b"Guest" in response.data
+    assert b"Guest(s)" in response.data
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
