@@ -9,6 +9,10 @@
 - Consolidated all instances of the `retrieve_show_years()` function into a function available in the `app.shows.reports.info` module
 - Updated the description of several reports to make phrasing more consistent and to correct a couple of typos
 
+### Development Changes
+
+- Simplified the `runner.sh` and `runner-remote.sh` scripts used to run the Flask application for local development and testing
+
 ### Component Changes
 
 - Upgraded @ibm/plex-serif from 1.1.0 to 2.0.0
