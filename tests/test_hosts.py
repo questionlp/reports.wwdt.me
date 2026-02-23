@@ -70,3 +70,11 @@ def test_debuts_by_year(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"Debuts by Year" in response.data
     assert b"# of Regular Appearances" in response.data
+
+
+def test_guest_host_counts_by_year(client: FlaskClient) -> None:
+    """Testing hosts.routes.guest_host_counts_by_year."""
+    response: TestResponse = client.get("/hosts/guest-host-counts-by-year")
+    assert response.status_code == 200
+    assert b"Guest Host Appearance Counts by Year" in response.data
+    assert b'<th scope="col">Year</th>' in response.data

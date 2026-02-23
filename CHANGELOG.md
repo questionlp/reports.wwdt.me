@@ -5,6 +5,7 @@
 ### Application Changes
 
 - Added "Best Of Shows with a Guest Host", "Best Of Shows with a Guest Host and a Guest Scorekeeper", and "Best Of Shows with a Guest Scorekeeper" reports
+- Added "Guest Host Appearance Counts by Year" and "Guest Scorekeeper Appearance Counts By Year" reports as a counterpart to the respective charts for the [Wait Wait Graphs Site](https://graphs.wwdt.me/)
 - Consolidated all instances of the `retrieve_show_years()` function into a function available in the `app.shows.reports.info` module
 - Updated the description of several reports to make phrasing more consistent and to correct a couple of typos
 

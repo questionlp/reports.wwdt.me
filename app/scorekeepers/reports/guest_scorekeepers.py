@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # vim: set noai syntax=python ts=4 sw=4:
-"""WWDTM Guest Host Counts Report Functions."""
+"""WWDTM Guest Scorekeeper Counts Report Functions."""
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -11,10 +11,10 @@ from mysql.connector.pooling import PooledMySQLConnection
 from app.shows.reports.info import retrieve_show_years
 
 
-def retrieve_guest_host_counts_by_year(
+def retrieve_guest_scorekeeper_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, int | None] | None:
-    """Retrieve a breakdown of guest host counts per year for all years.
+    """Retrieve a breakdown of guest scorekeeper counts per year for all years.
 
     The returned dictionary uses year as the key.
     """
@@ -27,9 +27,9 @@ def retrieve_guest_host_counts_by_year(
 
     query = """
         SELECT YEAR(s.showdate) AS year, COUNT(s.showdate) AS count
-        FROM ww_showhostmap hm
-        JOIN ww_shows s ON s.showid = hm.showid
-        WHERE hm.guest = 1
+        FROM ww_showskmap skm
+        JOIN ww_shows s ON s.showid = skm.showid
+        WHERE skm.guest = 1
         GROUP BY YEAR(s.showdate)
         ORDER BY YEAR(s.showdate);
     """

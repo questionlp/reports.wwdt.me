@@ -57,19 +57,25 @@ def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
     assert b"Guest(s)" in response.data
 
 
-def test_best_of_shows_with_guest_host(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_best_of_shows_with_guest_host(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.best_of_shows_with_guest_host."""
-    response: TestResponse = client.get("/shows/best-of-shows-with-guest-host")
+    response: TestResponse = client.get(
+        "/shows/best-of-shows-with-guest-host", query_string={"sort": sort}
+    )
     assert response.status_code == 200
     assert b"Best Of Shows with a Guest Host" in response.data
     assert b"Panelists" in response.data
     assert b"Guest(s)" in response.data
 
 
-def test_best_of_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_best_of_shows_with_guest_host_scorekeeper(
+    client: FlaskClient, sort: str | None
+) -> None:
     """Testing shows.routes.best_of_shows_with_guest_host_scorekeeper."""
     response: TestResponse = client.get(
-        "/shows/best-of-shows-with-guest-host-scorekeeper"
+        "/shows/best-of-shows-with-guest-host-scorekeeper", query_string={"sort": sort}
     )
     assert response.status_code == 200
     assert b"Best Of Shows with a Guest Host and a Guest Scorekeeper" in response.data
@@ -77,9 +83,14 @@ def test_best_of_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
     assert b"Guest(s)" in response.data
 
 
-def test_best_of_shows_with_guest_scorekeeper(client: FlaskClient) -> None:
+@pytest.mark.parametrize("sort", [None, "asc", "desc"])
+def test_best_of_shows_with_guest_scorekeeper(
+    client: FlaskClient, sort: str | None
+) -> None:
     """Testing shows.routes.best_of_shows_with_guest_scorekeeper."""
-    response: TestResponse = client.get("/shows/best-of-shows-with-guest-scorekeeper")
+    response: TestResponse = client.get(
+        "/shows/best-of-shows-with-guest-scorekeeper", query_string={"sort": sort}
+    )
     assert response.status_code == 200
     assert b"Best Of Shows with a Guest Scorekeeper" in response.data
     assert b"Panelists" in response.data

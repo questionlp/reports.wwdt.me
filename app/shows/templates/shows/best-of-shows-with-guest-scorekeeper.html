@@ -39,13 +39,13 @@
                         <th scope="col">#</th>
                         {% if ascending %}
                         <th scope="col">
-                            <a href="{{ url_for('shows.best_of_shows', sort='desc') }}">
+                            <a href="{{ url_for('shows.best_of_shows_with_guest_scorekeeper', sort='desc') }}">
                                 Date <i class="bi bi-sort-down-alt ms-1" title="Change sorting to descending"></i>
                             </a>
                         </th>
                         {% else %}
                         <th scope="col">
-                            <a href="{{ url_for('shows.best_of_shows') }}">
+                            <a href="{{ url_for('shows.best_of_shows_with_guest_scorekeeper') }}">
                                 Date <i class="bi bi-sort-down ms-1" title="Change sorting to ascending"></i>
                             </a>
                         </th>
