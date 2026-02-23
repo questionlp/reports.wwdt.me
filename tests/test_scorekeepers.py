@@ -78,3 +78,13 @@ def test_scorekeeper_introductions(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert b"" in response.data
     assert b"" in response.data
+
+
+def test_guest_scorekeeper_counts_by_year(client: FlaskClient) -> None:
+    """Testing scorekeepers.routes.guest_scorekeeper_counts_by_year."""
+    response: TestResponse = client.get(
+        "/scorekeepers/guest-scorekeeper-counts-by-year"
+    )
+    assert response.status_code == 200
+    assert b"Guest Scorekeeper Appearance Counts by Year" in response.data
+    assert b'<th scope="col">Year</th>' in response.data

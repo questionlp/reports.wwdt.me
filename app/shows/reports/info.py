@@ -103,3 +103,26 @@ def retrieve_show_notes(
         )
 
     return shows
+
+
+def retrieve_show_years(
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[int]:
+    """Retrieve a list of all show years."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT DISTINCT YEAR(showdate) AS year
+        FROM ww_shows
+        ORDER BY YEAR(showdate) ASC;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+
+    if not result:
+        return None
+
+    return [row["year"] for row in result]

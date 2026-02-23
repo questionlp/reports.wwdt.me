@@ -11,27 +11,7 @@ from typing import Any
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
-
-def retrieve_show_years(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[int]:
-    """Retrieve a list of show years available in the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    query = """
-        SELECT DISTINCT YEAR(s.showdate) AS year FROM ww_shows s
-        ORDER BY YEAR(s.showdate) ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    return [row["year"] for row in result]
+from app.shows.reports.info import retrieve_show_years
 
 
 def retrieve_panel_gender_count_by_year(

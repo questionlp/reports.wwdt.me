@@ -16,6 +16,7 @@ from .reports.appearances_by_year import (
     retrieve_all_appearance_counts_by_year,
 )
 from .reports.debut_by_year import host_debuts_by_year, retrieve_show_years
+from .reports.guest_hosts import retrieve_guest_host_counts_by_year
 from .reports.show_appearances import retrieve_appearance_details
 
 blueprint = Blueprint("hosts", __name__, template_folder="templates")
@@ -116,3 +117,14 @@ def debuts_by_year() -> str:
     _debuts = host_debuts_by_year(database_connection=_database_connection)
     _database_connection.close()
     return render_template("hosts/debuts-by-year.html", years=_years, debuts=_debuts)
+
+
+@blueprint.route("/guest-host-counts-by-year")
+def guest_host_counts_by_year() -> str:
+    """View: Guest Host Appearance Counts by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _counts = retrieve_guest_host_counts_by_year(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+    return render_template("hosts/guest-host-counts-by-year.html", counts=_counts)

@@ -10,9 +10,18 @@ from flask import Blueprint, current_app, render_template, request
 
 from .reports.all_men_panel import retrieve_shows_all_men_panel
 from .reports.all_women_panel import retrieve_shows_all_women_panel
-from .reports.guest_host import retrieve_shows_guest_host
-from .reports.guest_host_scorekeeper import retrieve_shows_guest_host_scorekeeper
-from .reports.guest_scorekeeper import retrieve_shows_guest_scorekeeper
+from .reports.guest_host import (
+    retrieve_best_of_shows_guest_host,
+    retrieve_shows_guest_host,
+)
+from .reports.guest_host_scorekeeper import (
+    retrieve_best_of_shows_guest_host_scorekeeper,
+    retrieve_shows_guest_host_scorekeeper,
+)
+from .reports.guest_scorekeeper import (
+    retrieve_best_of_shows_guest_scorekeeper,
+    retrieve_shows_guest_scorekeeper,
+)
 from .reports.guests_vs_bluffs import retrieve_stats_totals
 from .reports.guests_vs_bluffs_by_year import retrieve_stats_all_years
 from .reports.info import retrieve_show_descriptions, retrieve_show_notes
@@ -124,6 +133,80 @@ def best_of_shows() -> str:
 
     return render_template(
         "shows/best-of-shows.html", shows=_shows, ascending=_ascending
+    )
+
+
+@blueprint.route("/best-of-shows-with-guest-host")
+def best_of_shows_with_guest_host() -> str:
+    """View: Best Of Shows with a Guest Host Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_best_of_shows_guest_host(database_connection=_database_connection)
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/best-of-shows-with-guest-host.html", shows=_shows, ascending=_ascending
+    )
+
+
+@blueprint.route("/best-of-shows-with-guest-host-scorekeeper")
+def best_of_shows_with_guest_host_scorekeeper() -> str:
+    """View: Best Of Shows with a Guest Host and a Guest Scorekeeper Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_best_of_shows_guest_host_scorekeeper(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/best-of-shows-with-guest-host-scorekeeper.html",
+        shows=_shows,
+        ascending=_ascending,
+    )
+
+
+@blueprint.route("/best-of-shows-with-guest-scorekeeper")
+def best_of_shows_with_guest_scorekeeper() -> str:
+    """View: Best Of Shows with a Guest Scorekeeper Report."""
+    _ascending = True
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _shows = retrieve_best_of_shows_guest_scorekeeper(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+
+    if "sort" in request.args:
+        _sort = str(request.args["sort"])
+
+        if _sort.lower() == "desc":
+            _ascending = False
+
+    if not _ascending:
+        _shows.reverse()
+
+    return render_template(
+        "shows/best-of-shows-with-guest-scorekeeper.html",
+        shows=_shows,
+        ascending=_ascending,
     )
 
 

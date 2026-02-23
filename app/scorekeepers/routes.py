@@ -19,6 +19,7 @@ from .reports.appearances_by_year import (
     retrieve_all_appearance_counts_by_year,
 )
 from .reports.debut_by_year import retrieve_show_years, scorekeeper_debuts_by_year
+from .reports.guest_scorekeepers import retrieve_guest_scorekeeper_counts_by_year
 from .reports.introductions import (
     retrieve_all_scorekeeper_introductions,
     retrieve_scorekeepers_with_introductions,
@@ -153,4 +154,17 @@ def debuts_by_year() -> str:
     _database_connection.close()
     return render_template(
         "scorekeepers/debuts-by-year.html", years=_years, debuts=_debuts
+    )
+
+
+@blueprint.route("/guest-scorekeeper-counts-by-year")
+def guest_scorekeeper_counts_by_year() -> str:
+    """View: Guest Scorekeeper Appearance Counts by Year Report."""
+    _database_connection = mysql.connector.connect(**current_app.config["database"])
+    _counts = retrieve_guest_scorekeeper_counts_by_year(
+        database_connection=_database_connection
+    )
+    _database_connection.close()
+    return render_template(
+        "scorekeepers/guest-scorekeeper-counts-by-year.html", counts=_counts
     )

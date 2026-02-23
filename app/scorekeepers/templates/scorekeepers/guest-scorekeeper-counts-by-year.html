@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set page_title = "Guest Scorekeeper Appearance Counts by Year" %}
+{% block title %}{{ page_title }} | Panelists{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+    </ol>
+</nav>
+
+<div id="intro" class="mb-5">
+    <h2>{{ page_title }}</h2>
+    <p>
+        A table displaying the number of shows that had a guest scorekeeper for each
+        year. Best Of, repeat and repeat Best Of shows are included.
+    </p>
+</div>
+
+{% if counts %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="date">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Shows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for year in counts %}
+                    <tr>
+                        <td>{{ year }}</td>
+                        <td>{{ counts[year] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Shows</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for {{ page_title }} is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock content %}
