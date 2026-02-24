@@ -1,5 +1,11 @@
 # Changes
 
+## 4.12.1
+
+### Component Changes
+
+- Upgraded Flask from 3.1.2 to 3.1.3
+
 ## 4.12.0
 
 ### Application Changes
