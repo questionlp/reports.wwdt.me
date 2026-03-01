@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Aggregate Scores Report Functions."""
 
+import statistics
 from decimal import Decimal
 from typing import Any
 
@@ -79,12 +80,15 @@ def retrieve_score_spread(
 
 def calculate_stats(scores: list[int]) -> dict[str, Any]:
     """Calculate stats for all of the panelist scores."""
+    sorted_scores = sorted(scores)
     return {
         "count": len(scores),
         "minimum": Decimal(numpy.amin(scores)),
         "maximum": Decimal(numpy.amax(scores)),
         "mean": round(Decimal(numpy.mean(scores)), 5),
         "median": Decimal(numpy.median(scores)),
+        "mode": statistics.mode(sorted_scores),
+        "mode_multiple": (statistics.multimode(sorted_scores)),
         "standard_deviation": round(Decimal(numpy.std(scores)), 5),
         "sum": Decimal(numpy.sum(scores)),
     }

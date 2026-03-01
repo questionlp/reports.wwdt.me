@@ -1,5 +1,21 @@
 # Changes
 
+## 4.13.0
+
+### Application Changes
+
+- Added "Mode" column to the following Panelists reports with the calculated mode or multimodel values for panelist scoring data, including Lightning Fill In The Blank start, correct and total scores. If multiple mode values are calculated, all values are available as a tooltip when hovering over the Info icon next to each value.
+  - Aggregate Scores
+  - Lightning Fill In The Blank Statistics Summary
+  - Statistics by Gender
+  - Statistics Summary
+  - Statistics Summary by Year
+- Removed files related to Pure CSS
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.5.2 to 2.5.5
+
 ## 4.12.1
 
 ### Component Changes

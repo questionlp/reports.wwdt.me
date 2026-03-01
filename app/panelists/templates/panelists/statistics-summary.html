@@ -13,9 +13,15 @@
 <div id="intro" class="mb-5">
     <h2>{{ page_title }}</h2>
     <p>
-        A table displaying panelists each with the number of appearances across regular shows,
-        all shows and shows with corresponding panelist scores, along with scoring
-        statistics.
+        A table displaying panelists each with the number of appearances across regular
+        shows, all shows and shows with corresponding panelist scores, along with
+        scoring statistics.
+    </p>
+    <p>
+        For panelists who have multiple modes calculated from their scoring information,
+        the lowest value is displayed under the Mode column. Hovering over the info
+        icon (<i class="px-1 bi bi-info-circle" aria-hidden="true"></i>)
+        next to the value will display a list of all mode values.
     </p>
     <p>
         Appearances on and scoring information from Best Of and repeat shows are not
@@ -40,7 +46,8 @@
                     <col class="score">
                     <col class="score">
                     <col class="stats float">
-                    <col class="stats">
+                    <col class="score">
+                    <col class="score">
                     <col class="stats float">
                     <col class="stats int">
                 </colgroup>
@@ -48,7 +55,7 @@
                     <tr>
                         <th scope="col" rowspan="2">Panelist</th>
                         <th colspan="3">Appearances</th>
-                        <th colspan="6">Scoring</th>
+                        <th colspan="7">Scoring</th>
                     </tr>
                     <tr>
                         <th scope="col">Regular</th>
@@ -58,6 +65,7 @@
                         <th scope="col">Max</th>
                         <th scope="col stats float">Mean</th>
                         <th scope="col stats float">Median</th>
+                        <th scope="col">Mode</th>
                         <th scope="col stats float">Std Dev</th>
                         <th scope="col">Sum</th>
                     </tr>
@@ -81,9 +89,19 @@
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["maximum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["mean"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["median"].normalize()) }}</td>
+                            {% if panelists_stats[panelist]["stats"]["mode_multiple"] and panelists_stats[panelist]["stats"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ panelists_stats[panelist]['stats']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["mode"].normalize()) }}</td>
+                            {% endif %}
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["standard_deviation"].normalize()) }}</td>
                         <td>{{ "{:f}".format(panelists_stats[panelist]["stats"]["total"].normalize()) }}</td>
                         {% else %}
+                        <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
@@ -98,7 +116,7 @@
                     <tr>
                         <th scope="col" rowspan="2">Panelist</th>
                         <th colspan="3">Appearances</th>
-                        <th colspan="6">Scoring</th>
+                        <th colspan="7">Scoring</th>
                     </tr>
                     <tr>
                         <th scope="col">Regular</th>
@@ -108,6 +126,7 @@
                         <th scope="col">Max</th>
                         <th scope="col">Mean</th>
                         <th scope="col">Median</th>
+                        <th scope="col">Mode</th>
                         <th scope="col">Std Dev</th>
                         <th scope="col">Sum</th>
                     </tr>

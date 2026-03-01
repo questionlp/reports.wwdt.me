@@ -57,6 +57,19 @@
                         <td>{{ "{:f}".format(stats.median.normalize()) }}</td>
                     </tr>
                     <tr>
+                        <td>Mode</td>
+                        {% if stats.mode_multiple and stats.mode_multiple | length > 1 %}
+                        <td>{{ "{:f}".format(stats.mode.normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ stats.mode_multiple | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i>
+                            </span>
+                        </td>
+                        {% else %}
+                        <td>{{ "{:f}".format(stats.mode.normalize()) }}</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
                         <td>Standard Deviation</td>
                         <td>{{ "{:f}".format(stats.standard_deviation.normalize()) }}</td>
                     </tr>

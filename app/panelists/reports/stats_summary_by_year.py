@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Statistics Summary Report Functions."""
 
+import statistics
 from decimal import Decimal
 from typing import Any
 
@@ -129,11 +130,14 @@ def retrieve_all_stats_by_year(
         database_connection=database_connection,
     )
     if scores:
+        sorted_scores = sorted(scores)
         all_stats["stats"] = {
             "minimum": Decimal(numpy.amin(scores)),
             "maximum": Decimal(numpy.amax(scores)),
             "mean": round(Decimal(numpy.mean(scores)), 5),
             "median": Decimal(numpy.median(scores)),
+            "mode": statistics.mode(sorted_scores),
+            "mode_multiple": statistics.multimode(sorted_scores),
             "standard_deviation": round(Decimal(numpy.std(scores)), 5),
             "total": Decimal(numpy.sum(scores)),
         }
