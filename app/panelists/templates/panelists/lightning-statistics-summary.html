@@ -42,30 +42,36 @@
                     <col class="count">
                     <col class="score">
                     <col class="score">
-                    <col class="score">
                     <col class="stats float">
+                    <col class="score">
+                    <col class="score">
+                    
                 </colgroup>
                 <colgroup class="cg-border-end">
                     <col class="count">
                     <col class="score">
                     <col class="score">
-                    <col class="score">
                     <col class="stats float">
+                    <col class="score">
+                    <col class="score">
+                    
                 </colgroup>
                 <colgroup>
                     <col class="count">
                     <col class="score">
                     <col class="score">
-                    <col class="score">
                     <col class="stats float">
+                    <col class="score">
+                    <col class="score">
+                    
                 </colgroup>
                 <thead>
                     <tr>
                         <th scope="col" rowspan="2">Panelist</th>
                         <th colspan="2">Appearances</th>
-                        <th colspan="5">Start</th>
-                        <th colspan="5">Correct</th>
-                        <th colspan="5">Total</th>
+                        <th colspan="6">Start</th>
+                        <th colspan="6">Correct</th>
+                        <th colspan="6">Total</th>
                     </tr>
                     <tr>
                         <th scope="col">Regular</th>
@@ -73,18 +79,21 @@
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,9 +114,19 @@
                         <td>{{ _stats["start_stats"]["count"] }}</td>
                         <td>{{ "{:f}".format(_stats["start_stats"]["minimum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["start_stats"]["maximum"].normalize()) }}</td>
-                        <td>{{ "{:f}".format(_stats["start_stats"]["sum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["start_stats"]["mean"].normalize()) }}</td>
+                            {% if _stats["start_stats"]["mode_multiple"] and _stats["start_stats"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(_stats["start_stats"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ _stats['start_stats']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(_stats["start_stats"]["mode"].normalize()) }}</td>
+                            {% endif %}
+                        <td>{{ "{:f}".format(_stats["start_stats"]["sum"].normalize()) }}</td>
                         {% else %}
+                        <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
@@ -119,9 +138,20 @@
                         <td>{{ _stats["correct_stats"]["count"] }}</td>
                         <td>{{ "{:f}".format(_stats["correct_stats"]["minimum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["correct_stats"]["maximum"].normalize()) }}</td>
-                        <td>{{ "{:f}".format(_stats["correct_stats"]["sum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["correct_stats"]["mean"].normalize()) }}</td>
+                            {% if _stats["correct_stats"]["mode_multiple"] and _stats["correct_stats"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ _stats['correct_stats']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["mode"].normalize()) }}</td>
+                            {% endif %}
+
+                        <td>{{ "{:f}".format(_stats["correct_stats"]["sum"].normalize()) }}</td>
                         {% else %}
+                        <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
@@ -133,9 +163,19 @@
                         <td>{{ _stats["total_stats"]["count"] }}</td>
                         <td>{{ "{:f}".format(_stats["total_stats"]["minimum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["total_stats"]["maximum"].normalize()) }}</td>
-                        <td>{{ "{:f}".format(_stats["total_stats"]["sum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(_stats["total_stats"]["mean"].normalize()) }}</td>
+                            {% if _stats["total_stats"]["mode_multiple"] and _stats["total_stats"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(_stats["total_stats"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ _stats['total_stats']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(_stats["total_stats"]["mode"].normalize()) }}</td>
+                            {% endif %}
+                        <td>{{ "{:f}".format(_stats["total_stats"]["sum"].normalize()) }}</td>
                         {% else %}
+                        <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
                         <td class="no-data">-</td>
@@ -149,9 +189,9 @@
                     <tr>
                         <th scope="col" rowspan="2">Panelist</th>
                         <th colspan="2">Appearances</th>
-                        <th colspan="5">Start</th>
-                        <th colspan="5">Correct</th>
-                        <th colspan="5">Total</th>
+                        <th colspan="6">Start</th>
+                        <th colspan="6">Correct</th>
+                        <th colspan="6">Total</th>
                     </tr>
                     <tr>
                         <th scope="col">Regular</th>
@@ -159,18 +199,21 @@
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                         <th scope="col">Count</th>
                         <th scope="col">Min</th>
                         <th scope="col">Max</th>
-                        <th scope="col">Sum</th>
                         <th scope="col stats float">Mean</th>
+                        <th scope="col">Mode</th>
+                        <th scope="col">Sum</th>
                     </tr>
                 </tfoot>
             </table>

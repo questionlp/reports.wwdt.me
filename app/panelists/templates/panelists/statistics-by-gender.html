@@ -28,19 +28,21 @@
                     <col class="date year">
                 </colgroup>
                 <colgroup class="cg-border-end" id="cg-men">
-                    <col class="stats int">
-                    <col class="stats int">
+                    <col class="score">
+                    <col class="score">
                     <col class="stats float">
-                    <col class="stats int">
+                    <col class="score">
+                    <col class="score">
                     <col class="stats float">
                     <col class="count">
                     <col class="stats int">
                 </colgroup>
                 <colgroup id="gc-women">
-                    <col class="stats int">
-                    <col class="stats int">
+                    <col class="score">
+                    <col class="score">
                     <col class="stats float">
-                    <col class="stats int">
+                    <col class="score">
+                    <col class="score">
                     <col class="stats float">
                     <col class="count">
                     <col class="stats int">
@@ -48,8 +50,8 @@
                 <thead>
                     <tr>
                         <th scope="col" rowspan="2">Year</th>
-                        <th colspan="7">Men</th>
-                        <th colspan="7">Women</th>
+                        <th colspan="8">Men</th>
+                        <th colspan="8">Women</th>
                     </tr>
                     <tr>
                         <!-- Men -->
@@ -57,6 +59,7 @@
                         <th scope="col">Max</th>
                         <th scope="col">Mean</th>
                         <th scope="col">Median</th>
+                        <th scope="col">Mode</th>
                         <th scope="col">Std Dev</th>
                         <th scope="col">Count</th>
                         <th scope="col">Sum</th>
@@ -65,6 +68,7 @@
                         <th scope="col">Max</th>
                         <th scope="col">Mean</th>
                         <th scope="col">Median</th>
+                        <th scope="col">Mode</th>
                         <th scope="col">Std Dev</th>
                         <th scope="col">Count</th>
                         <th scope="col">Sum</th>
@@ -79,11 +83,20 @@
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["maximum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["mean"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["median"].normalize()) }}</td>
+                            {% if gender_stats[year]["M"]["mode_multiple"] and gender_stats[year]["M"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ gender_stats[year]['M']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(gender_stats[year]["M"]["mode"].normalize()) }}</td>
+                            {% endif %}
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["standard_deviation"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["count"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["M"]["total"].normalize()) }}</td>
                         {% else %}
-                        <td class="no-data" colspan="7">-</td>
+                        <td class="no-data" colspan="8">-</td>
                         {% endif %}
 
                         {% if gender_stats[year]["F"] %}
@@ -91,11 +104,20 @@
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["maximum"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["mean"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["median"].normalize()) }}</td>
+                            {% if gender_stats[year]["F"]["mode_multiple"] and gender_stats[year]["F"]["mode_multiple"] | length > 1 %}
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["mode"].normalize()) }}
+                            <span class="help-notes" data-bs-toggle="tooltip" data-bs-custom-class="ww-tooltip"
+                            title="Modes: {{ gender_stats[year]['F']['mode_multiple'] | join_decimals(', ') }}">
+                            <i class="ps-1 bi bi-info-circle" aria-hidden="true"></i></span>
+                        </td>
+                            {% else %}
+                        <td>{{ "{:f}".format(gender_stats[year]["F"]["mode"].normalize()) }}</td>
+                            {% endif %}
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["standard_deviation"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["count"].normalize()) }}</td>
                         <td>{{ "{:f}".format(gender_stats[year]["F"]["total"].normalize()) }}</td>
                         {% else %}
-                        <td class="no-data" colspan="7">-</td>
+                        <td class="no-data" colspan="8">-</td>
                         {% endif %}
                     </tr>
                     {% endfor %}

@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Lightning Round Scoring Statistics Report Functions."""
 
+import statistics
 from decimal import Decimal
 from typing import Any
 
@@ -126,12 +127,15 @@ def retrieve_all_panelists_lightning_scoring_stats(
         )
 
         if _starts:
+            _sorted_starts = sorted(_starts)
             _starts_stats = {
                 "count": len(_starts),
                 "minimum": Decimal(numpy.amin(_starts)),
                 "maximum": Decimal(numpy.amax(_starts)),
                 "mean": round(Decimal(numpy.mean(_starts)), 5),
                 "median": Decimal(numpy.median(_starts)),
+                "mode": statistics.mode(_sorted_starts),
+                "mode_multiple": statistics.multimode(_sorted_starts),
                 "standard_deviation": round(Decimal(numpy.std(_starts)), 5),
                 "sum": Decimal(numpy.sum(_starts)),
             }
@@ -139,12 +143,15 @@ def retrieve_all_panelists_lightning_scoring_stats(
             _starts_stats = None
 
         if _corrects:
+            _sorted_correct = sorted(_corrects)
             _corrects_stats = {
                 "count": len(_corrects),
                 "minimum": Decimal(numpy.amin(_corrects)),
                 "maximum": Decimal(numpy.amax(_corrects)),
                 "mean": round(Decimal(numpy.mean(_corrects)), 5),
                 "median": Decimal(numpy.median(_corrects)),
+                "mode": statistics.mode(_sorted_correct),
+                "mode_multiple": statistics.multimode(_sorted_correct),
                 "standard_deviation": round(Decimal(numpy.std(_corrects)), 5),
                 "sum": Decimal(numpy.sum(_corrects)),
             }
@@ -152,12 +159,15 @@ def retrieve_all_panelists_lightning_scoring_stats(
             _corrects_stats = None
 
         if _totals:
+            _sorted_totals = sorted(_totals)
             _totals_stats = {
                 "count": len(_totals),
                 "minimum": Decimal(numpy.amin(_totals)),
                 "maximum": Decimal(numpy.amax(_totals)),
                 "mean": round(Decimal(numpy.mean(_totals)), 5),
                 "median": Decimal(numpy.median(_totals)),
+                "mode": statistics.mode(_sorted_totals),
+                "mode_multiple": statistics.multimode(_sorted_totals),
                 "standard_deviation": round(Decimal(numpy.std(_totals)), 5),
                 "sum": Decimal(numpy.sum(_totals)),
             }

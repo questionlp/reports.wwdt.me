@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panel Gender Mix Report Functions."""
 
+import statistics
 from decimal import Decimal
 from typing import Any
 
@@ -66,11 +67,14 @@ def retrieve_stats_by_year_gender(
                 database_connection=database_connection,
             )
             if scores:
+                sorted_scores = sorted(scores)
                 all_stats[year][gender] = {
                     "minimum": Decimal(numpy.amin(scores)),
                     "maximum": Decimal(numpy.amax(scores)),
                     "mean": round(Decimal(numpy.mean(scores)), 5),
                     "median": Decimal(numpy.median(scores)),
+                    "mode": statistics.mode(sorted_scores),
+                    "mode_multiple": statistics.multimode(sorted_scores),
                     "standard_deviation": round(Decimal(numpy.std(scores)), 5),
                     "count": Decimal(len(scores)),
                     "total": Decimal(numpy.sum(scores)),

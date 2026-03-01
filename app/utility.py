@@ -8,6 +8,7 @@
 import json
 import re
 from datetime import datetime
+from decimal import Decimal
 from functools import cmp_to_key
 from operator import itemgetter
 
@@ -59,6 +60,12 @@ def generate_date_time_stamp(time_zone: pytz.timezone = _utc_timezone):
     """Generate a current date/timestamp string."""
     now = datetime.now(time_zone)
     return now.strftime("%Y-%m-%d %H:%M:%S %Z")
+
+
+def join_decimals(decimals: list[Decimal], delimiter: str = ", ") -> str:
+    """Return a joined string of formatted decimals."""
+    normalized: list[str] = [f"{d.normalize():f}" for d in decimals]
+    return delimiter.join(normalized)
 
 
 def md_to_html(markdown_text: str):
