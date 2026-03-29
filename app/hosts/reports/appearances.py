@@ -36,6 +36,7 @@ def retrieve_hosts(
     for row in result:
         _hosts.append(
             {
+                "id": row["hostid"],
                 "name": row["host"],
                 "slug": row["hostslug"],
             }

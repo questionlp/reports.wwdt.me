@@ -1,5 +1,13 @@
 # Changes
 
+## 4.14.0
+
+### Application Changes
+
+- Added ID key/value pairs to the returned list of hosts and scorekeepers from `app.hosts.reports.appearances.retrieve_hosts()` and `app.scorekeepers.reports.appearances.retrieve_scorekeepers()`
+- Removed all straggling references and checks for `include_decimal_scores`
+- Removed redundant `app.scorekeepers.reports.appearances.retrieve_all_scorekeepers()`
+
 ## 4.13.0
 
 ### Application Changes

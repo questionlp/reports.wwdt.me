@@ -80,6 +80,10 @@ def load_config(
             "enabled": False,
         }
 
+    # Default "enable_on_this_day_report" to False
+    if "enable_on_this_day_report" not in settings_config:
+        settings_config["enable_on_this_day_report"] = False
+
     return {
         "database": database_config,
         "settings": settings_config,

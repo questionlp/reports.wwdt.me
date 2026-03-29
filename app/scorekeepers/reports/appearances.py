@@ -34,45 +34,13 @@ def retrieve_scorekeepers(
     for row in result:
         _scorekeepers.append(
             {
+                "id": row["scorekeeperid"],
                 "name": row["scorekeeper"],
                 "slug": row["scorekeeperslug"],
             }
         )
 
     return _scorekeepers
-
-
-def retrieve_all_scorekeepers(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[dict]:
-    """Retrieves a dictionary for all available scorekeepers from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(dictionary=True)
-    query = """
-        SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
-        FROM ww_scorekeepers sk
-        WHERE sk.scorekeeperslug <> 'tbd'
-        ORDER BY sk.scorekeeperslug ASC;
-    """
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    scorekeepers = []
-    for row in result:
-        scorekeepers.append(
-            {
-                "name": row["scorekeeper"],
-                "slug": row["scorekeeperslug"],
-            }
-        )
-
-    return scorekeepers
 
 
 def retrieve_appearances_by_scorekeeper(
@@ -181,7 +149,7 @@ def retrieve_appearance_summaries(
     Returned summary includes appearance counts, and first and most
     recent appearances.
     """
-    scorekeepers = retrieve_all_scorekeepers(database_connection)
+    scorekeepers = retrieve_scorekeepers(database_connection)
 
     if not scorekeepers:
         return None

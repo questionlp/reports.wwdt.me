@@ -22,6 +22,7 @@ from .locations.redirects import blueprint as locations_redirects_bp
 from .locations.routes import blueprint as locations_bp
 from .main.redirects import blueprint as redirects_bp
 from .main.routes import blueprint as main_bp
+from .on_this_day.routes import blueprint as on_this_day_bp
 from .panelists.redirects import blueprint as panelists_redirects_bp
 from .panelists.routes import blueprint as panelists_bp
 from .scorekeepers.redirects import blueprint as scorekeepers_redirects_bp
@@ -120,5 +121,8 @@ def create_app():
     app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     app.register_blueprint(shows_redirects_bp)
     app.register_blueprint(shows_bp, url_prefix="/shows")
+
+    if _config["settings"].get("enable_on_this_day_report", False):
+        app.register_blueprint(on_this_day_bp, url_prefix="/on-this-day")
 
     return app
