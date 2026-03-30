@@ -26,7 +26,12 @@ def index() -> str:
         month=_date.month, day=_date.day, database_connection=_database_connection
     )
 
-    return render_template("on_this_day/report.html", date=_date, details=_details)
+    return render_template(
+        "on_this_day/_report.html",
+        date=_date,
+        details=_details,
+        specific_month_day=False,
+    )
 
 
 @blueprint.route("/<int:show_month>/<int:show_day>")
@@ -36,14 +41,16 @@ def month_day(show_month: int, show_day: int) -> str:
     if not 1 <= show_month <= 12 or not 1 <= show_day <= 31:
         return redirect_url(url_for("on_this_day.index"), status_code=302)
 
-    _temp_date: date = date(year=date.today().year, month=show_month, day=show_day)
+    # Using 2004 as the year due to needing to a year that is a leap year. The
+    # year value is not used as part of the queries or when rendering the page.
+    _temp_date: date = date(year=2004, month=show_month, day=show_day)
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _details = retrieve_details(
         month=show_month, day=show_day, database_connection=_database_connection
     )
 
     return render_template(
-        "on_this_day/report.html",
+        "on_this_day/_report.html",
         date=_temp_date,
         details=_details,
         specific_month_day=True,

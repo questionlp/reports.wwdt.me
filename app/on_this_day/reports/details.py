@@ -15,6 +15,7 @@ from .debuts import (
     retrieve_panelist_debuts_by_month_day,
     retrieve_scorekeeper_debuts_by_month_day,
 )
+from .scoring_exceptions import retrieve_scoring_exceptions_by_month_day
 from .shows import retrieve_shows_by_month_day
 
 
@@ -34,6 +35,9 @@ def retrieve_details(
     _shows_details: list[dict[str, Any]] = retrieve_shows_by_month_day(
         month=month, day=day, database_connection=database_connection
     )
+    _guest_scoring_exceptions = retrieve_scoring_exceptions_by_month_day(
+        month=month, day=day, database_connection=database_connection
+    )
 
     return {
         "debuts": {
@@ -41,5 +45,6 @@ def retrieve_details(
             "panelists": _panelist_debuts,
             "scorekeepers": _scorekeeper_debuts,
         },
+        "guest_scoring_exceptions": _guest_scoring_exceptions,
         "shows": _shows_details,
     }

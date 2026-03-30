@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% set page_title = "On This Day" %}
+{% block title %}
+{%- if specific_month_day %}{{ date.strftime("%B %-d") }} | {%- endif %} {{ page_title -}}
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" id="nav-breadcrumb">
+    <ol class="breadcrumb">
+        {% if specific_month_day %}
+        <li class="breadcrumb-item"><a href="{{ url_for('on_this_day.index' )}}">{{ page_title }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ date.strftime("%B %-d") }}</li>
+        {% else %}
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+        {% endif %}
+    </ol>
+</nav>
+
+<div id="intro" class="mb-4">
+    <h2>
+        {{- page_title -}}{%- if specific_month_day %}: {{ date.strftime("%B %-d") }}{% endif -%}
+    </h2>
+    <p>
+        An omnibus report that displays certain events that happened on this
+        particular day ({{ date.strftime("%B %-d") }}), including shows that aired and
+        host, panelist and scorekeeper debuts.
+    </p>
+</div>
+
+{% if details %}
+<div class="row pb-2">
+    <div class="col">
+    <h3>Shows</h3>
+    {% if details.shows %}
+        {% include "on_this_day/report.shows.html" %}
+    {% else %}
+        <p>No shows on {{ date.strftime("%B %-d") }}</p>
+    {% endif %}
+    </div>
+</div>
+
+<div class="row pb-2">
+    <div class="col-12 col-lg-6">
+    <h3>Host Debuts</h3>
+    {% if details.debuts.hosts %}
+        {% include "on_this_day/report.hosts.html" %}
+    {% else %}
+        <p>No hosts debuted on {{ date.strftime("%B %-d") }}</p>
+    {% endif %}
+    </div>
+    <div class="col-12 col-lg-6">
+    <h3>Scorekeeper Debuts</h3>
+    {% if details.debuts.scorekeepers %}
+        {% include "on_this_day/report.scorekeepers.html" %}
+    {% else %}
+        <p>No scorekeepers debuted on {{ date.strftime("%B %-d") }}</p>
+    {% endif %}
+    </div>
+</div>
+
+<div class="row pb-2">
+    <div class="col-12 col-lg-6">
+    <h3>Panelist Debuts</h3>
+    {% if details.debuts.panelists %}
+        {% include "on_this_day/report.panelists.html" %}
+    {% else %}
+        <p>No panelists debuted on {{ date.strftime("%B %-d") }}</p>
+    {% endif %}
+    </div>
+    <div class="col-12 col-lg-6">
+    <h3>Not My Job Scoring Exceptions</h3>
+    {% if details.guest_scoring_exceptions %}
+        {% include "on_this_day/report.scoring-exceptions.html" %}
+    {% else %}
+        <p>No Not My Job scoring exceptions for {{ date.strftime("%B %-d") }}</p>
+    {% endif %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info my-5" role="alert">
+    <i class="bi bi-info-circle pe-1"></i> Data for <b>{{ page_title }}</b> is currently unavailable.
+</div>
+{% endif %}
+
+{% endblock %}

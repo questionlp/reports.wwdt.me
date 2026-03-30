@@ -31,8 +31,8 @@ def retrieve_shows_by_month_day(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showid, s.bestof, s.repeatshowid, l.venue, l.city, l.state,
-        h.host, sk.scorekeeper
+        SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, l.venue,
+        l.city, l.state, h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
         JOIN ww_locations l ON l.locationid = lm.locationid
@@ -40,7 +40,7 @@ def retrieve_shows_by_month_day(
         JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
-        WHERE MONTH(s.showdate) = %s AND YEAR(s.showdate) = %s
+        WHERE MONTH(s.showdate) = %s AND DAY(s.showdate) = %s
     """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(

@@ -1,0 +1,59 @@
+{% set hosts = details.debuts.hosts %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name host">
+                    <col class="date">
+                    <col class="name long">
+                    <col class="boolean">
+                    <col class="boolean">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Host</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Guest Host</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for host in hosts %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/hosts/{{ host.slug }}">{{ host.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ host.show_date | replace('-', '/') }}">{{ host.show_date }}</a></td>
+                        {% if host.guest %}
+                        <td>{{ host.guest }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if host.best_of %}
+                        <td>{{ host.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if host.repeat %}
+                        <td>{{ host.repeat }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length > 5 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Host</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Guest Host</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
