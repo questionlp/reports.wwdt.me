@@ -5,8 +5,6 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """On This Day Guest Scoring Exceptions module for Wait Wait Reports."""
 
-from typing import Any
-
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -15,7 +13,7 @@ from app.utility import multi_key_sort
 
 def retrieve_scoring_exceptions_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
-):
+) -> list[dict[str, str | int | bool]] | None:
     """Retrieve Not My Job guest scoring exceptions for a given month and day."""
     if not database_connection.is_connected():
         database_connection.reconnect()
@@ -71,7 +69,7 @@ def retrieve_scoring_exceptions_by_month_day(
     if not result and not result_best_of_only:
         return None
 
-    _score_exceptions = []
+    _score_exceptions: list = []
     for row in result:
         _score_exceptions.append(
             {
@@ -93,7 +91,7 @@ def retrieve_scoring_exceptions_by_month_day(
                 }
             )
 
-    _sorted_score_exceptions = multi_key_sort(
+    _sorted_score_exceptions: list[dict] = multi_key_sort(
         items=_score_exceptions, columns=["show_date", "name"]
     )
     return _sorted_score_exceptions

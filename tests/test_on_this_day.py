@@ -11,7 +11,7 @@ from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
 
-def test_index(app: Flask, client: FlaskClient):
+def test_index(app: Flask, client: FlaskClient) -> None:
     """Testing on_this_day.routes.index."""
     _report_enabled: bool = app.config["app_settings"].get(
         "enable_on_this_day_report", False
@@ -27,7 +27,7 @@ def test_index(app: Flask, client: FlaskClient):
 
 
 @pytest.mark.parametrize("month, day", [(1, 3), (9, 21)])
-def test_month_day(app: Flask, client: FlaskClient, month: int, day: int):
+def test_month_day(app: Flask, client: FlaskClient, month: int, day: int) -> None:
     """Testing on_this_day.routes.month_day."""
     _report_enabled: bool = app.config["app_settings"].get(
         "enable_on_this_day_report", False
@@ -43,7 +43,9 @@ def test_month_day(app: Flask, client: FlaskClient, month: int, day: int):
 
 
 @pytest.mark.parametrize("month, day", [(13, 3), (9, 32)])
-def test_month_day_invalid(app: Flask, client: FlaskClient, month: int, day: int):
+def test_month_day_invalid(
+    app: Flask, client: FlaskClient, month: int, day: int
+) -> None:
     """Testing on_this_day.routes.month_day."""
     _report_enabled: bool = app.config["app_settings"].get(
         "enable_on_this_day_report", False

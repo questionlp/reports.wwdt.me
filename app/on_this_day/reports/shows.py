@@ -5,7 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """On This Day Shows module for Wait Wait Reports."""
 
-from typing import Any
+from decimal import Decimal
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -21,7 +21,10 @@ def retrieve_shows_by_month_day(
     month: int,
     day: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[dict[str, Any]]:
+) -> (
+    list[dict[str, str | int | bool | Decimal, list[dict[str, str | int | bool]]]]
+    | None
+):
     """Retrieve show details by a given date."""
     # Simple validation of month and day
     if not 1 <= month <= 12 or not 1 <= day <= 31:
@@ -58,7 +61,7 @@ def retrieve_shows_by_month_day(
 
     _shows: list = []
     for row in results:
-        _id = row["showid"]
+        _id: int = row["showid"]
         _shows.append(
             {
                 "id": _id,

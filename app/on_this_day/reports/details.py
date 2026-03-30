@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """On This Day Details module for Wait Wait Reports."""
 
+from decimal import Decimal
 from typing import Any
 
 from mysql.connector.connection import MySQLConnection
@@ -23,20 +24,30 @@ def retrieve_details(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, list[dict[str, Any]]]:
     """Retrieve details for On This Day reports."""
-    _host_debuts = retrieve_host_debuts_by_month_day(
-        month=month, day=day, database_connection=database_connection
+    _host_debuts: list[dict[str, str | bool]] | None = (
+        retrieve_host_debuts_by_month_day(
+            month=month, day=day, database_connection=database_connection
+        )
     )
-    _panelist_debuts = retrieve_panelist_debuts_by_month_day(
-        month=month, day=day, database_connection=database_connection
+    _panelist_debuts: list[dict[str, str | int | bool | Decimal]] | None = (
+        retrieve_panelist_debuts_by_month_day(
+            month=month, day=day, database_connection=database_connection
+        )
     )
-    _scorekeeper_debuts = retrieve_scorekeeper_debuts_by_month_day(
-        month=month, day=day, database_connection=database_connection
+    _scorekeeper_debuts: list[dict[str, str | bool]] | None = (
+        retrieve_scorekeeper_debuts_by_month_day(
+            month=month, day=day, database_connection=database_connection
+        )
     )
-    _shows_details: list[dict[str, Any]] = retrieve_shows_by_month_day(
-        month=month, day=day, database_connection=database_connection
+    _shows_details: list[dict[str, str | int | bool | Decimal]] | None = (
+        retrieve_shows_by_month_day(
+            month=month, day=day, database_connection=database_connection
+        )
     )
-    _guest_scoring_exceptions = retrieve_scoring_exceptions_by_month_day(
-        month=month, day=day, database_connection=database_connection
+    _guest_scoring_exceptions: list[dict[str, str | int | bool]] | None = (
+        retrieve_scoring_exceptions_by_month_day(
+            month=month, day=day, database_connection=database_connection
+        )
     )
 
     return {

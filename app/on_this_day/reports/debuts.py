@@ -6,6 +6,7 @@
 """On This Day Shows module for Wait Wait Reports."""
 
 from datetime import date
+from decimal import Decimal
 from typing import Any
 
 from mysql.connector.connection import MySQLConnection
@@ -18,16 +19,18 @@ from app.scorekeepers.reports.appearances import retrieve_scorekeepers
 
 def retrieve_host_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
-):
+) -> list[dict[str, str | bool]] | None:
     """Retrieve host debuts for a given month and day."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    _list_hosts = retrieve_hosts(database_connection=database_connection)
+    _list_hosts: list[dict[str, str]] = retrieve_hosts(
+        database_connection=database_connection
+    )
     if not _list_hosts:
         return None
 
-    _hosts_details = []
+    _hosts_details: list = []
     for _host in _list_hosts:
         query = """
             SELECT s.showdate, s.bestof, s.repeatshowid, hm.guest
@@ -61,16 +64,18 @@ def retrieve_host_debuts_by_month_day(
 
 def retrieve_panelist_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
-):
+) -> list[dict[str, str | int | bool | Decimal]] | None:
     """Retrieve panelist debuts for a given month and day."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    _list_panelists = retrieve_panelists(database_connection=database_connection)
+    _list_panelists: list[dict[str, Any]] = retrieve_panelists(
+        database_connection=database_connection
+    )
     if not _list_panelists:
         return None
 
-    _panelists_details = []
+    _panelists_details: list = []
     for _panelist in _list_panelists:
         query = """
             SELECT s.showdate, s.bestof, s.repeatshowid,
@@ -109,16 +114,18 @@ def retrieve_panelist_debuts_by_month_day(
 
 def retrieve_scorekeeper_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
-):
+) -> list[dict[str, str | bool]] | None:
     """Retrieve scorekeeper debuts for a given month and day."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    _list_scorekeepers = retrieve_scorekeepers(database_connection=database_connection)
+    _list_scorekeepers: list[dict[str, str]] = retrieve_scorekeepers(
+        database_connection=database_connection
+    )
     if not _list_scorekeepers:
         return None
 
-    _scorekeepers_details = []
+    _scorekeepers_details: list = []
     for _host in _list_scorekeepers:
         query = """
             SELECT s.showdate, s.bestof, s.repeatshowid, skm.guest

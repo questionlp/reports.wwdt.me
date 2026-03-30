@@ -6,6 +6,7 @@
 """Shows Routes for Wait Wait Reports."""
 
 from datetime import date
+from typing import Any
 
 import mysql.connector
 from flask import Blueprint, current_app, render_template, url_for
@@ -22,7 +23,7 @@ def index() -> str:
     """View: On This Day Report."""
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _date: date = date.today()
-    _details = retrieve_details(
+    _details: dict[str, list[dict[str, Any]]] = retrieve_details(
         month=_date.month, day=_date.day, database_connection=_database_connection
     )
 
@@ -45,7 +46,7 @@ def month_day(show_month: int, show_day: int) -> str:
     # year value is not used as part of the queries or when rendering the page.
     _temp_date: date = date(year=2004, month=show_month, day=show_day)
     _database_connection = mysql.connector.connect(**current_app.config["database"])
-    _details = retrieve_details(
+    _details: dict[str, list[dict[str, Any]]] = retrieve_details(
         month=show_month, day=show_day, database_connection=_database_connection
     )
 

@@ -5,6 +5,14 @@
 ### Application Changes
 
 - Added ID key/value pairs to the returned list of hosts and scorekeepers from `app.hosts.reports.appearances.retrieve_hosts()` and `app.scorekeepers.reports.appearances.retrieve_scorekeepers()`
+- Added "On This Day" omnibus report that includes the following for the current or specified day (via a separate route):
+  - Table of shows
+  - Tables of host, panelist and scorekeeper debuts
+  - Table of Not My Job guest scoring exceptions
+- Added `enable_on_this_day` application configuration flag that determines whether the On This Day reports and routes are available
+- Corrected handling of the main `sitemap.xml` template to use `sitemapindex`
+  - Added `sitemaps.routes.main()` to cover main routes
+  - Added handling for the On This Day sitemap and conditional inclusion of entries based on the `enable_on_this_day` application configuration key
 - Refactored the "Not My Job Scoring Exceptions" to include Not My Job guests who have only appeared in Best Of shows
   - Include show date, guest score, score exception flag and show notes directly in each exception dictionary
   - Removed the no longer needed `app.guests.reports.retrieve_scoring_exceptions()` function
