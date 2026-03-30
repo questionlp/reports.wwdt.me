@@ -14,17 +14,17 @@ def test_index(client: FlaskClient) -> None:
     """Testing shows.routes.index."""
     response: TestResponse = client.get("/shows/")
     assert response.status_code == 200
-    assert b"Shows" in response.data
-    assert b"All Shows" in response.data
-    assert b"Original Shows" in response.data
+    assert "Shows" in response.text
+    assert "All Shows" in response.text
+    assert "Original Shows" in response.text
 
 
 def test_all_men_panel(client: FlaskClient) -> None:
     """Testing shows.routes.all_men_panel."""
     response: TestResponse = client.get("/shows/all-men-panel")
     assert response.status_code == 200
-    assert b"All Men Panel" in response.data
-    assert b"Guest" in response.data
+    assert "All Men Panel" in response.text
+    assert "Guest" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -32,17 +32,17 @@ def test_all_shows(client: FlaskClient, sort: str | None) -> None:
     """Testing shows.routes.all_shows."""
     response: TestResponse = client.get("/shows/all-shows", query_string={"sort": sort})
     assert response.status_code == 200
-    assert b"All Shows" in response.data
-    assert b"Change sorting to" in response.data
-    assert b"Guest(s)" in response.data
+    assert "All Shows" in response.text
+    assert "Change sorting to" in response.text
+    assert "Guest(s)" in response.text
 
 
 def test_all_women_panel(client: FlaskClient) -> None:
     """Testing shows.routes.all_women_panel."""
     response: TestResponse = client.get("/shows/all-women-panel")
     assert response.status_code == 200
-    assert b"All Women Panel" in response.data
-    assert b"Guest" in response.data
+    assert "All Women Panel" in response.text
+    assert "Guest" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -52,9 +52,9 @@ def test_best_of_shows(client: FlaskClient, sort: str | None) -> None:
         "/shows/best-of-shows", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Best Of Shows" in response.data
-    assert b"Change sorting to" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Best Of Shows" in response.text
+    assert "Change sorting to" in response.text
+    assert "Guest(s)" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -64,9 +64,9 @@ def test_best_of_shows_with_guest_host(client: FlaskClient, sort: str | None) ->
         "/shows/best-of-shows-with-guest-host", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Best Of Shows with a Guest Host" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Best Of Shows with a Guest Host" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -78,9 +78,9 @@ def test_best_of_shows_with_guest_host_scorekeeper(
         "/shows/best-of-shows-with-guest-host-scorekeeper", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Best Of Shows with a Guest Host and a Guest Scorekeeper" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Best Of Shows with a Guest Host and a Guest Scorekeeper" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -92,9 +92,9 @@ def test_best_of_shows_with_guest_scorekeeper(
         "/shows/best-of-shows-with-guest-scorekeeper", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Best Of Shows with a Guest Scorekeeper" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Best Of Shows with a Guest Scorekeeper" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -104,27 +104,27 @@ def test_best_of_shows_with_unique_bluff(client: FlaskClient, sort: str | None) 
         "/shows/best-of-shows-with-unique-bluff-segments", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Best Of Shows with Unique Bluff the Listener Segments" in response.data
-    assert b"Change sorting to" in response.data
-    assert b"Bluff Segment #" in response.data
+    assert "Best Of Shows with Unique Bluff the Listener Segments" in response.text
+    assert "Change sorting to" in response.text
+    assert "Bluff Segment #" in response.text
 
 
 def test_high_scoring_shows(client: FlaskClient) -> None:
     """Testing shows.routes.high_scoring_shows."""
     response: TestResponse = client.get("/shows/high-scoring-shows")
     assert response.status_code == 200
-    assert b"High Scoring Shows" in response.data
-    assert b"Show Date" in response.data
-    assert b"Panelists" in response.data
+    assert "High Scoring Shows" in response.text
+    assert "Show Date" in response.text
+    assert "Panelists" in response.text
 
 
 def test_highest_score_equals_sum_other_scores(client: FlaskClient) -> None:
     """Testing shows.routes.highest_score_equals_sum_other_scores."""
     response: TestResponse = client.get("/shows/highest-score-equals-sum-other-scores")
     assert response.status_code == 200
-    assert b"Highest Score Equals the Sum of Other Scores" in response.data
-    assert b"Panelist" in response.data
-    assert b"Rank" in response.data
+    assert "Highest Score Equals the Sum of Other Scores" in response.text
+    assert "Panelist" in response.text
+    assert "Rank" in response.text
 
 
 def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> None:
@@ -134,20 +134,20 @@ def test_lightning_round_answering_same_number_correct(client: FlaskClient) -> N
     )
     assert response.status_code == 200
     assert (
-        b"Lightning Fill In The Blank: All Panelists Answering the Same Number of Questions Correct"
-        in response.data
+        "Lightning Fill In The Blank: All Panelists Answering the Same Number of Questions Correct"
+        in response.text
     )
-    assert b"Panelists" in response.data
-    assert b"Correct Answers" in response.data
+    assert "Panelists" in response.text
+    assert "Correct Answers" in response.text
 
 
 def test_lightning_round_ending_three_way_tie(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_ending_three_way_tie."""
     response: TestResponse = client.get("/shows/lightning-round-ending-three-way-tie")
     assert response.status_code == 200
-    assert b"Lightning Fill In The Blank Ending in a Three-Way Tie" in response.data
-    assert b"Panelists" in response.data
-    assert b"Final Score" in response.data
+    assert "Lightning Fill In The Blank Ending in a Three-Way Tie" in response.text
+    assert "Panelists" in response.text
+    assert "Final Score" in response.text
 
 
 def test_lightning_round_starting_ending_three_way_tie(client: FlaskClient) -> None:
@@ -157,29 +157,29 @@ def test_lightning_round_starting_ending_three_way_tie(client: FlaskClient) -> N
     )
     assert response.status_code == 200
     assert (
-        b"Lightning Fill In The Blank Starting and Ending in a Three-Way Tie"
-        in response.data
+        "Lightning Fill In The Blank Starting and Ending in a Three-Way Tie"
+        in response.text
     )
-    assert b"Panelists" in response.data
-    assert b"Final Score" in response.data
+    assert "Panelists" in response.text
+    assert "Final Score" in response.text
 
 
 def test_lightning_round_starting_three_way_tie(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_starting_three_way_tie."""
     response: TestResponse = client.get("/shows/lightning-round-starting-three-way-tie")
     assert response.status_code == 200
-    assert b"Lightning Fill In The Blank Starting in a Three-Way Tie" in response.data
-    assert b"Panelists" in response.data
-    assert b"Starting Score" in response.data
+    assert "Lightning Fill In The Blank Starting in a Three-Way Tie" in response.text
+    assert "Panelists" in response.text
+    assert "Starting Score" in response.text
 
 
 def test_lightning_round_starting_zero_points(client: FlaskClient) -> None:
     """Testing shows.routes.lightning_round_starting_zero_points."""
     response: TestResponse = client.get("/shows/lightning-round-starting-zero-points")
     assert response.status_code == 200
-    assert b"Lightning Fill In The Blank Starting with Zero Points" in response.data
-    assert b"Panelist" in response.data
-    assert b"Rank" in response.data
+    assert "Lightning Fill In The Blank Starting with Zero Points" in response.text
+    assert "Panelist" in response.text
+    assert "Rank" in response.text
 
 
 def test_lightning_round_zero_correct(client: FlaskClient) -> None:
@@ -187,20 +187,19 @@ def test_lightning_round_zero_correct(client: FlaskClient) -> None:
     response: TestResponse = client.get("/shows/lightning-round-zero-correct")
     assert response.status_code == 200
     assert (
-        b"Lightning Fill In The Blank Segment with Zero Correct Answers"
-        in response.data
+        "Lightning Fill In The Blank Segment with Zero Correct Answers" in response.text
     )
-    assert b"Panelist" in response.data
-    assert b"Rank" in response.data
+    assert "Panelist" in response.text
+    assert "Rank" in response.text
 
 
 def test_low_scoring_shows(client: FlaskClient) -> None:
     """Testing shows.routes.low_scoring_shows."""
     response: TestResponse = client.get("/shows/low-scoring-shows")
     assert response.status_code == 200
-    assert b"Low Scoring Shows" in response.data
-    assert b"Show Date" in response.data
-    assert b"Panelists" in response.data
+    assert "Low Scoring Shows" in response.text
+    assert "Show Date" in response.text
+    assert "Panelists" in response.text
 
 
 def testnot_my_job_guests_vs_bluff_the_listener_win_ratios(client: FlaskClient) -> None:
@@ -209,9 +208,9 @@ def testnot_my_job_guests_vs_bluff_the_listener_win_ratios(client: FlaskClient) 
         "/shows/not-my-job-guests-vs-bluff-the-listener-win-ratios"
     )
     assert response.status_code == 200
-    assert b"Not My Job Guests" in response.data
-    assert b"Bluff the Listener" in response.data
-    assert b"Win %" in response.data
+    assert "Not My Job Guests" in response.text
+    assert "Bluff the Listener" in response.text
+    assert "Win %" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -221,18 +220,18 @@ def test_original_shows(client: FlaskClient, sort: str | None) -> None:
         "/shows/original-shows", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Original Shows" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest" in response.data
+    assert "Original Shows" in response.text
+    assert "Panelists" in response.text
+    assert "Guest" in response.text
 
 
 def test_panel_gender_mix(client: FlaskClient) -> None:
     """Testing shows.routes.panel_gender_mix."""
     response: TestResponse = client.get("/shows/panel-gender-mix")
     assert response.status_code == 200
-    assert b"Panel Gender Mix" in response.data
-    assert b"3 W / 0 M" in response.data
-    assert b"Total" in response.data
+    assert "Panel Gender Mix" in response.text
+    assert "3 W / 0 M" in response.text
+    assert "Total" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -242,9 +241,9 @@ def test_repeat_best_of_shows(client: FlaskClient, sort: str | None) -> None:
         "/shows/repeat-best-of-shows", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Repeat Best Of Shows" in response.data
-    assert b"Change sorting to" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Repeat Best Of Shows" in response.text
+    assert "Change sorting to" in response.text
+    assert "Guest(s)" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "asc", "desc"])
@@ -254,20 +253,20 @@ def test_repeat_shows(client: FlaskClient, sort: str | None) -> None:
         "/shows/repeat-shows", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Repeat Shows" in response.data
-    assert b"Change sorting to" in response.data
-    assert b"Guest" in response.data
+    assert "Repeat Shows" in response.text
+    assert "Change sorting to" in response.text
+    assert "Guest" in response.text
 
 
 def test_search_shows_by_multiple_panelists(client: FlaskClient) -> None:
     """Testing shows.routes.search_shows_by_multiple_panelists (GET)."""
     response: TestResponse = client.get("/shows/search-shows-by-multiple-panelists")
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Include Best Ofs" in response.data
-    assert b"Panelist 1" in response.data
-    assert b"Panelist 2" in response.data
-    assert b"Panelist 3" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Include Best Ofs" in response.text
+    assert "Panelist 1" in response.text
+    assert "Panelist 2" in response.text
+    assert "Panelist 3" in response.text
 
 
 @pytest.mark.parametrize("panelist_1", ["faith-salie"])
@@ -284,11 +283,11 @@ def test_search_shows_by_multiple_panelists_post_1(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Include Best Ofs" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Include Best Ofs" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 @pytest.mark.parametrize("panelist_1, panelist_2", [("faith-salie", "mo-rocca")])
@@ -305,10 +304,10 @@ def test_search_shows_by_multiple_panelists_post_2(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 @pytest.mark.parametrize(
@@ -327,10 +326,10 @@ def test_search_shows_by_multiple_panelists_post_3(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 @pytest.mark.parametrize(
@@ -353,10 +352,10 @@ def test_search_shows_by_multiple_panelists_post_3_best_of(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 @pytest.mark.parametrize(
@@ -379,10 +378,10 @@ def test_search_shows_by_multiple_panelists_post_3_repeat(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 @pytest.mark.parametrize(
@@ -405,76 +404,76 @@ def test_search_shows_by_multiple_panelists_post_3_repeat_best_of(
         },
     )
     assert response.status_code == 200
-    assert b"Search Shows by Multiple Panelists" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Of" in response.data
-    assert b"Location" in response.data
+    assert "Search Shows by Multiple Panelists" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Of" in response.text
+    assert "Location" in response.text
 
 
 def test_show_counts_by_year(client: FlaskClient) -> None:
     """Testing shows.routes.show_counts_by_year."""
     response: TestResponse = client.get("/shows/show-counts-by-year")
     assert response.status_code == 200
-    assert b"Show Counts by Year" in response.data
-    assert b"Best Of" in response.data
-    assert b"Repeat Best Ofs" in response.data
+    assert "Show Counts by Year" in response.text
+    assert "Best Of" in response.text
+    assert "Repeat Best Ofs" in response.text
 
 
 def test_show_descriptions(client: FlaskClient) -> None:
     """Testing shows.routes.show_descriptions."""
     response: TestResponse = client.get("/shows/show-descriptions")
     assert response.status_code == 200
-    assert b"Show Descriptions" in response.data
-    assert b"Show Date" in response.data
+    assert "Show Descriptions" in response.text
+    assert "Show Date" in response.text
 
 
 def test_show_notes(client: FlaskClient) -> None:
     """Testing shows.routes.show_notes."""
     response: TestResponse = client.get("/shows/show-notes")
     assert response.status_code == 200
-    assert b"Show Notes" in response.data
-    assert b"Show Date" in response.data
+    assert "Show Notes" in response.text
+    assert "Show Date" in response.text
 
 
 def test_shows_with_guest_host(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_guest_host."""
     response: TestResponse = client.get("/shows/shows-with-guest-host")
     assert response.status_code == 200
-    assert b"Shows with a Guest Host" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Shows with a Guest Host" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 def test_shows_with_guest_host_scorekeeper(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_guest_host_scorekeeper."""
     response: TestResponse = client.get("/shows/shows-with-guest-host-scorekeeper")
     assert response.status_code == 200
-    assert b"Shows with a Guest Host and a Guest Scorekeeper" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Shows with a Guest Host and a Guest Scorekeeper" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 def test_shows_with_guest_scorekeeper(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_guest_scorekeeper."""
     response: TestResponse = client.get("/shows/shows-with-guest-scorekeeper")
     assert response.status_code == 200
-    assert b"Shows with a Guest Scorekeeper" in response.data
-    assert b"Panelists" in response.data
-    assert b"Guest(s)" in response.data
+    assert "Shows with a Guest Scorekeeper" in response.text
+    assert "Panelists" in response.text
+    assert "Guest(s)" in response.text
 
 
 def test_shows_with_panelists_matching_initials(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_panelists_matching_initials."""
     response: TestResponse = client.get("/shows/shows-with-panelists-matching-initials")
     assert response.status_code == 200
-    assert b"Shows with Panelists Having Matching Initials"
-    assert b"Show Date"
-    assert b"Location"
+    assert "Shows with Panelists Having Matching Initials"
+    assert "Show Date"
+    assert "Location"
 
 
 def test_shows_with_perfect_panelist_scores(client: FlaskClient) -> None:
     """Testing shows.routes.shows_with_perfect_panelist_scores."""
     response: TestResponse = client.get("/shows/shows-with-perfect-panelist-scores")
     assert response.status_code == 200
-    assert b"Shows with Perfect Panelist Scores"
-    assert b"Show Date"
+    assert "Shows with Perfect Panelist Scores"
+    assert "Show Date"

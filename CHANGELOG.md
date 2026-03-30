@@ -5,8 +5,17 @@
 ### Application Changes
 
 - Added ID key/value pairs to the returned list of hosts and scorekeepers from `app.hosts.reports.appearances.retrieve_hosts()` and `app.scorekeepers.reports.appearances.retrieve_scorekeepers()`
+- Refactored the "Not My Job Scoring Exceptions" to include Not My Job guests who have only appeared in Best Of shows
+  - Include show date, guest score, score exception flag and show notes directly in each exception dictionary
+  - Removed the no longer needed `app.guests.reports.retrieve_scoring_exceptions()` function
+  - Sorting of the exceptions is by show date, then by Not My Job guest name
 - Removed all straggling references and checks for `include_decimal_scores`
 - Removed redundant `app.scorekeepers.reports.appearances.retrieve_all_scorekeepers()`
+
+### Development Changes
+
+- Added Flask app to test fixtures in order to read application configuration settings in tests
+- Changed tests to use `response.text` rather than `response.data` when checking contents of the page to remove the need to use `b""`
 
 ## 4.13.0
 

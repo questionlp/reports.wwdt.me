@@ -15,10 +15,10 @@ def test_primary(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"guests" in response.data
-    assert b"hosts" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "guests" in response.text
+    assert "hosts" in response.text
 
 
 def test_guest(client: FlaskClient) -> None:
@@ -27,9 +27,9 @@ def test_guest(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/guests" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/guests" in response.text
 
 
 def test_hosts(client: FlaskClient) -> None:
@@ -38,9 +38,9 @@ def test_hosts(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/hosts" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/hosts" in response.text
 
 
 def test_locations(client: FlaskClient) -> None:
@@ -49,9 +49,9 @@ def test_locations(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/locations" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/locations" in response.text
 
 
 def test_panelists(client: FlaskClient) -> None:
@@ -60,9 +60,9 @@ def test_panelists(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/panelists" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/panelists" in response.text
 
 
 def test_scorekeepers(client: FlaskClient) -> None:
@@ -71,9 +71,9 @@ def test_scorekeepers(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/scorekeepers" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/scorekeepers" in response.text
 
 
 def test_shows(client: FlaskClient) -> None:
@@ -82,6 +82,6 @@ def test_shows(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert b"?xml" in response.data
-    assert b"urlset" in response.data
-    assert b"/shows" in response.data
+    assert "?xml" in response.text
+    assert "urlset" in response.text
+    assert "/shows" in response.text
