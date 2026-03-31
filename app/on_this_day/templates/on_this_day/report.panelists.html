@@ -1,0 +1,59 @@
+{% set panelists = details.debuts.panelists %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name panelist">
+                    <col class="date">
+                    <col class="boolean">
+                    <col class="name panelist">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Scoring</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panelist in panelists %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/panelists/{{ panelist.slug }}">{{ panelist.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ panelist.show_date | replace('-', '/') }}">{{ panelist.show_date }}</a></td>
+                        {% if panelist.best_of %}
+                        <td>{{ panelist.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if panelist.start is not none and panelist.correct is not none and panelist.score is not none %}
+                        <td>
+                            {% if panelist.rank is not none %}<b>{{ rank_map[panelist.rank ]}}</b>:{% endif %}
+                            {{ "{:f}".format(panelist.score.normalize()) }}
+                            ({{ "{:f}".format(panelist.start.normalize()) }} / {{
+                            "{:f}".format(panelist.correct.normalize()) }})
+                        </td>
+                        {% elif panelist.score is not none %}
+                        <td>{% if panelist.rank %}<b>{{ rank_map[panelist.rank] }}</b>:{% endif %}
+                            {{ "{:f}".format(panelist.score.normalize()) }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length > 5 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Panelist</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Scoring</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>

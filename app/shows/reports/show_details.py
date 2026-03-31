@@ -44,7 +44,7 @@ def retrieve_show_guests(
     query = """
         SELECT g.guestid, g.guest, g.guestslug
         FROM ww_showguestmap gm
-        JOIN ww_guests g on g.guestid = gm.guestid
+        JOIN ww_guests g ON g.guestid = gm.guestid
         WHERE gm.showid = %s;
     """
     cursor = database_connection.cursor(dictionary=True)
@@ -106,33 +106,21 @@ def retrieve_show_panelists(
 def retrieve_show_panelists_details(
     show_id: int,
     database_connection: MySQLConnection | PooledMySQLConnection,
-    include_decimal_scores: bool = False,
 ) -> list[dict[str, str]]:
     """Retrieve details for panelists for the requested show ID."""
     if not database_connection.is_connected():
         database_connection.reconnect()
 
-    if include_decimal_scores:
-        query = """
-            SELECT p.panelistid, p.panelist, p.panelistslug,
-            pm.panelistlrndstart, pm.panelistlrndstart_decimal,
-            pm.panelistlrndcorrect, pm.panelistlrndcorrect_decimal,
-            pm.panelistscore, pm.panelistscore_decimal, pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.showid = %s
-            ORDER BY pm.showpnlmapid ASC;
-        """
-    else:
-        query = """
-            SELECT p.panelistid, p.panelist, p.panelistslug,
-            pm.panelistlrndstart, pm.panelistlrndcorrect, pm.panelistscore,
-            pm.showpnlrank
-            FROM ww_showpnlmap pm
-            JOIN ww_panelists p ON p.panelistid = pm.panelistid
-            WHERE pm.showid = %s
-            ORDER BY pm.showpnlmapid ASC;
-        """
+    query = """
+        SELECT p.panelistid, p.panelist, p.panelistslug,
+        pm.panelistlrndstart, pm.panelistlrndstart_decimal,
+        pm.panelistlrndcorrect, pm.panelistlrndcorrect_decimal,
+        pm.panelistscore, pm.panelistscore_decimal, pm.showpnlrank
+        FROM ww_showpnlmap pm
+        JOIN ww_panelists p ON p.panelistid = pm.panelistid
+        WHERE pm.showid = %s
+        ORDER BY pm.showpnlmapid ASC;
+    """
 
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(query, (show_id,))
@@ -151,21 +139,11 @@ def retrieve_show_panelists_details(
                 "slug": row["panelistslug"],
                 "scoring": {
                     "start": row["panelistlrndstart"],
-                    "start_decimal": (
-                        row["panelistlrndstart_decimal"]
-                        if include_decimal_scores
-                        else None
-                    ),
+                    "start_decimal": (row["panelistlrndstart_decimal"]),
                     "correct": row["panelistlrndcorrect"],
-                    "correct_decimal": (
-                        row["panelistlrndcorrect_decimal"]
-                        if include_decimal_scores
-                        else None
-                    ),
+                    "correct_decimal": (row["panelistlrndcorrect_decimal"]),
                     "score": row["panelistscore"],
-                    "score_decimal": (
-                        row["panelistscore_decimal"] if include_decimal_scores else None
-                    ),
+                    "score_decimal": (row["panelistscore_decimal"]),
                     "rank": row["showpnlrank"],
                 },
             }
@@ -190,9 +168,9 @@ def retrieve_all_shows(
         l.venue, l.city, l.state, h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
-        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_locations l ON l.locationid = lm.locationid
         JOIN ww_showhostmap hm ON hm.showid = s.showid
-        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate < NOW()
@@ -261,9 +239,9 @@ def retrieve_all_best_of_shows(
         l.venue, l.city, l.state, h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
-        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_locations l ON l.locationid = lm.locationid
         JOIN ww_showhostmap hm ON hm.showid = s.showid
-        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate < NOW()
@@ -333,9 +311,9 @@ def retrieve_all_original_shows(
         h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
-        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_locations l ON l.locationid = lm.locationid
         JOIN ww_showhostmap hm ON hm.showid = s.showid
-        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
@@ -399,9 +377,9 @@ def retrieve_all_repeat_shows(
         l.venue, l.city, l.state, h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
-        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_locations l ON l.locationid = lm.locationid
         JOIN ww_showhostmap hm ON hm.showid = s.showid
-        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate < NOW()
@@ -471,9 +449,9 @@ def retrieve_all_repeat_best_of_shows(
         l.venue, l.city, l.state, h.host, sk.scorekeeper
         FROM ww_shows s
         JOIN ww_showlocationmap lm ON lm.showid = s.showid
-        JOIN ww_locations l on l.locationid = lm.locationid
+        JOIN ww_locations l ON l.locationid = lm.locationid
         JOIN ww_showhostmap hm ON hm.showid = s.showid
-        JOIN ww_hosts h on h.hostid = hm.hostid
+        JOIN ww_hosts h ON h.hostid = hm.hostid
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE s.showdate < NOW()

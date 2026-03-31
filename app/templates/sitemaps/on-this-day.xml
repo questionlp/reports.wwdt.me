@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% if enable_on_this_day_report %}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site_url }}{{ url_for("on_this_day.index") }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+</urlset>
+{% else %}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" />
+{% endif %}

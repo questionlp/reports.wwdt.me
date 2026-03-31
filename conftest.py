@@ -17,3 +17,9 @@ def client():
     app: Flask = create_app()
     with app.test_client() as _client:
         yield _client
+
+
+@pytest.fixture
+def app():
+    app: Flask = create_app()
+    yield app

@@ -11,48 +11,7 @@ from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
 from app.shows.reports.show_details import retrieve_show_date_by_id
-
-
-def retrieve_scoring_exceptions(
-    guest_id: int, database_connection: MySQLConnection | PooledMySQLConnection
-) -> list[dict[str, Any]]:
-    """Retrieve a list of instances where a Not My Job guest has had a scoring exception."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    cursor = database_connection.cursor(dictionary=True)
-    query = """
-        SELECT g.guestid, g.guest, s.showid, s.showdate,
-        gm.guestscore, gm.exception, sn.shownotes
-        FROM ww_showguestmap gm
-        JOIN ww_shows s ON s.showid = gm.showid
-        JOIN ww_guests g ON g.guestid = gm.guestid
-        JOIN ww_shownotes sn on sn.showid = gm.showid
-        WHERE g.guestid = %s
-        AND s.bestof = 0 AND s.repeatshowid IS NULL
-        AND gm.exception = 1
-        ORDER BY s.showdate ASC;
-    """
-    cursor.execute(query, (guest_id,))
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    _exceptions = []
-    for row in result:
-        _exceptions.append(
-            {
-                "id": row["showid"],
-                "date": row["showdate"].isoformat(),
-                "score": row["guestscore"],
-                "exception": bool(row["exception"]),
-                "notes": row["shownotes"],
-            }
-        )
-
-    return _exceptions
+from app.utility import multi_key_sort
 
 
 def retrieve_all_scoring_exceptions(
@@ -64,10 +23,12 @@ def retrieve_all_scoring_exceptions(
 
     cursor = database_connection.cursor(dictionary=True)
     query = """
-        SELECT DISTINCT g.guestid, g.guest, g.guestslug, s.showdate
+        SELECT s.showdate, g.guestid, g.guest, g.guestslug,
+        gm.guestscore, gm.exception, sn.shownotes
         FROM ww_showguestmap gm
         JOIN ww_shows s ON s.showid = gm.showid
         JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shownotes sn ON sn.showid = gm.showid
         WHERE s.bestof = 0 AND s.repeatshowid IS NULL
         AND gm.exception = 1
         ORDER BY s.showdate ASC;
@@ -76,8 +37,29 @@ def retrieve_all_scoring_exceptions(
     result = cursor.fetchall()
     cursor.close()
 
-    if not result:
-        database_connection.close()
+    cursor = database_connection.cursor(dictionary=True)
+    best_of_only_query = """
+        SELECT s.showdate, g.guestid, g.guest, g.guestslug,
+        gm.guestscore, gm.exception, sn.shownotes
+        FROM ww_showguestmap gm
+        JOIN ww_shows s ON s.showid = gm.showid
+        JOIN ww_guests g ON g.guestid = gm.guestid
+        JOIN ww_shownotes sn ON sn.showid = gm.showid
+        WHERE s.bestof = 1 AND s.repeatshowid IS NULL
+        AND g.guestid NOT IN (
+            SELECT gm.guestid
+            FROM ww_showguestmap gm
+            JOIN ww_shows s ON s.showid = gm.showid
+            WHERE s.bestof = 0 AND s.repeatshowid IS NULL
+        )
+        AND gm.exception = 1
+        ORDER BY s.showdate ASC;
+    """
+    cursor.execute(best_of_only_query)
+    result_best_of_only = cursor.fetchall()
+    cursor.close()
+
+    if not result and not result_best_of_only:
         return None
 
     _exceptions = []
@@ -87,13 +69,31 @@ def retrieve_all_scoring_exceptions(
                 "id": row["guestid"],
                 "name": row["guest"],
                 "slug": row["guestslug"],
-                "exceptions": retrieve_scoring_exceptions(
-                    guest_id=row["guestid"], database_connection=database_connection
-                ),
+                "show_date": row["showdate"],
+                "score": row["guestscore"],
+                "exception": bool(row["exception"]),
+                "notes": row["shownotes"],
             }
         )
 
-    return _exceptions
+    if result_best_of_only:
+        for row in result_best_of_only:
+            _exceptions.append(
+                {
+                    "id": row["guestid"],
+                    "name": row["guest"],
+                    "slug": row["guestslug"],
+                    "show_date": row["showdate"],
+                    "score": row["guestscore"],
+                    "exception": bool(row["exception"]),
+                    "notes": row["shownotes"],
+                }
+            )
+
+    _sorted_exceptions = multi_key_sort(
+        items=_exceptions, columns=["show_date", "name"]
+    )
+    return _sorted_exceptions
 
 
 def retrieve_all_three_pointers(

@@ -1,0 +1,59 @@
+{% set scorekeepers = details.debuts.scorekeepers %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name host">
+                    <col class="date">
+                    <col class="name long">
+                    <col class="boolean">
+                    <col class="boolean">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Guest Host</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scorekeeper in scorekeepers %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/scorekeepers/{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ scorekeeper.show_date | replace('-', '/') }}">{{ scorekeeper.show_date }}</a></td>
+                        {% if scorekeeper.guest %}
+                        <td>{{ scorekeeper.guest }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scorekeeper.best_of %}
+                        <td>{{ scorekeeper.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scorekeeper.repeat %}
+                        <td>{{ scorekeeper.repeat }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length > 5 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Scorekeeper</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Guest Host</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Repeat</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
