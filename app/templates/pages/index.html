@@ -19,6 +19,9 @@
             <li class="list-group-item"><a href="{{ url_for('guests.index') }}">Guests</a></li>
             <li class="list-group-item"><a href="{{ url_for('hosts.index') }}">Hosts</a></li>
             <li class="list-group-item"><a href="{{ url_for('locations.index') }}">Locations</a></li>
+            {% if enable_on_this_day_report %}
+            <li class="list-group-item"><a href="{{ url_for('on_this_day.index') }}">On This Day</a></li>
+            {% endif %}
             <li class="list-group-item"><a href="{{ url_for('panelists.index') }}">Panelists</a></li>
             <li class="list-group-item"><a href="{{ url_for('scorekeepers.index') }}">Scorekeepers</a></li>
             <li class="list-group-item"><a href="{{ url_for('shows.index') }}">Shows</a></li>

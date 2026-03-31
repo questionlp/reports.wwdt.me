@@ -2,7 +2,9 @@ Sitemap: {{ site_url }}{{ url_for("sitemaps.primary") }}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.guests") }}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.hosts") }}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.locations") }}
+{% if enable_on_this_day_report %}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.on_this_day") }}
+{% endif %}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.panelists") }}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.scorekeepers") }}
 Sitemap: {{ site_url }}{{ url_for("sitemaps.shows") }}

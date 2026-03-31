@@ -32,6 +32,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('locations.index') }}">Locations</a>
                         </li>
+                        {% if enable_on_this_day_report %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('on_this_day.index') }}">On This Day</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('panelists.index') }}">Panelists</a>
                         </li>

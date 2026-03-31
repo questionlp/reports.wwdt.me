@@ -5,7 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """Sitemap Routes for Wait Wait Reports."""
 
-from flask import Blueprint, Response, current_app, render_template
+from flask import Blueprint, Response, current_app, redirect, render_template
 
 blueprint = Blueprint("sitemaps", __name__)
 
@@ -47,13 +47,11 @@ def main() -> Response:
 
 @blueprint.route("/sitemap-on-this-day.xml")
 def on_this_day() -> Response | None:
-    sitemap: str = render_template(
-        "sitemaps/on-this-day.xml",
-        on_this_day_enabled=current_app.config["app_settings"][
-            "enable_on_this_day_report"
-        ],
-    )
-    return Response(sitemap, mimetype="text/xml")
+    if current_app.config["app_settings"]["enable_on_this_day_report"]:
+        sitemap: str = render_template("sitemaps/on-this-day.xml")
+        return Response(sitemap, mimetype="text/xml")
+    else:
+        return Response(None)
 
 
 @blueprint.route("/sitemap-panelists.xml")
