@@ -9,11 +9,11 @@
   - Table of shows
   - Tables of host, panelist and scorekeeper debuts
   - Table of Not My Job guest scoring exceptions
-- Added `enable_on_this_day` application configuration flag that determines whether the On This Day report is available
+- Added `enable_on_this_day_report` application configuration flag that determines whether the On This Day report is available
   - If the report is not enabled, the routes will redirect to the main index page
 - Corrected handling of the main `sitemap.xml` template to use `sitemapindex`
   - Added `sitemaps.routes.main()` to cover main routes
-  - Added handling for the On This Day sitemap and conditional inclusion of entries based on the `enable_on_this_day` application configuration key
+  - Added handling for the On This Day sitemap and conditional inclusion of entries based on the `enable_on_this_day_report` application configuration key
   - Moved `app/sitemap/templates/sitemaps` to `app/templates/sitemaps` and update the Blueprint to match how sitemaps are handled in the Stats Page and Graphs Site applications
 - Refactored the "Not My Job Scoring Exceptions" to include Not My Job guests who have only appeared in Best Of shows
   - Include show date, guest score, score exception flag and show notes directly in each exception dictionary
