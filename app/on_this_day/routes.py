@@ -21,6 +21,9 @@ blueprint = Blueprint("on_this_day", __name__, template_folder="templates")
 @blueprint.route("/")
 def index() -> str:
     """View: On This Day Report."""
+    if not current_app.config["app_settings"]["enable_on_this_day_report"]:
+        return redirect_url(url_for("main.index"), status_code=302)
+
     _database_connection = mysql.connector.connect(**current_app.config["database"])
     _date: date = date.today()
     _details: dict[str, list[dict[str, Any]]] = retrieve_details(
@@ -39,6 +42,9 @@ def index() -> str:
 def month_day(show_month: int, show_day: int) -> str:
     """View: One This Day by Month and Day Report."""
     # Simple validation of month and day
+    if not current_app.config["app_settings"]["enable_on_this_day_report"]:
+        return redirect_url(url_for("main.index"), status_code=302)
+
     if not 1 <= show_month <= 12 or not 1 <= show_day <= 31:
         return redirect_url(url_for("on_this_day.index"), status_code=302)
 

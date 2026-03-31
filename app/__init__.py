@@ -119,14 +119,12 @@ def create_app():
     app.register_blueprint(hosts_bp, url_prefix="/hosts")
     app.register_blueprint(locations_redirects_bp)
     app.register_blueprint(locations_bp, url_prefix="/locations")
+    app.register_blueprint(on_this_day_bp, url_prefix="/on-this-day")
     app.register_blueprint(panelists_redirects_bp)
     app.register_blueprint(panelists_bp, url_prefix="/panelists")
     app.register_blueprint(scorekeepers_redirects_bp)
     app.register_blueprint(scorekeepers_bp, url_prefix="/scorekeepers")
     app.register_blueprint(shows_redirects_bp)
     app.register_blueprint(shows_bp, url_prefix="/shows")
-
-    if _enable_on_this_day_report:
-        app.register_blueprint(on_this_day_bp, url_prefix="/on-this-day")
 
     return app
