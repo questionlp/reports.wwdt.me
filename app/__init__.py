@@ -96,10 +96,10 @@ def create_app():
     app.jinja_env.globals["use_minified_css"] = bool(
         _config["settings"].get("use_minified_css", False)
     )
-    _enable_on_this_day_report = bool(
-        _config["settings"].get("enable_on_this_day_report", False)
+
+    app.jinja_env.globals["enable_on_this_day_report"] = _config["settings"].get(
+        "enable_on_this_day_report", True
     )
-    app.jinja_env.globals["enable_on_this_day_report"] = _enable_on_this_day_report
 
     app.jinja_env.globals["node_name"] = (
         platform.node().split(".")[0] if platform.node() else None

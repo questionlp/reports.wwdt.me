@@ -10,6 +10,7 @@
   - Tables of host, panelist and scorekeeper debuts
   - Table of Not My Job guest scoring exceptions
 - Added `enable_on_this_day_report` application configuration flag that determines whether the On This Day report is available
+  - The report is enabled by default
   - If the report is not enabled, the routes will redirect to the main index page
 - Corrected handling of the main `sitemap.xml` template to use `sitemapindex`
   - Added `sitemaps.routes.main()` to cover main routes
