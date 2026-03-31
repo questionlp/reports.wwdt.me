@@ -13,12 +13,13 @@
 - Corrected handling of the main `sitemap.xml` template to use `sitemapindex`
   - Added `sitemaps.routes.main()` to cover main routes
   - Added handling for the On This Day sitemap and conditional inclusion of entries based on the `enable_on_this_day` application configuration key
+  - Moved `app/sitemap/templates/sitemaps` to `app/templates/sitemaps` and update the Blueprint to match how sitemaps are handled in the Stats Page and Graphs Site applications
 - Refactored the "Not My Job Scoring Exceptions" to include Not My Job guests who have only appeared in Best Of shows
   - Include show date, guest score, score exception flag and show notes directly in each exception dictionary
   - Removed the no longer needed `app.guests.reports.retrieve_scoring_exceptions()` function
   - Sorting of the exceptions is by show date, then by Not My Job guest name
 - Removed all straggling references and checks for `include_decimal_scores`
-- Removed redundant `app.scorekeepers.reports.appearances.retrieve_all_scorekeepers()`
+- Removed the now redundant `app.scorekeepers.reports.appearances.retrieve_all_scorekeepers()`
 
 ### Development Changes
 

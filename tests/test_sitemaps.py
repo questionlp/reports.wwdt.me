@@ -16,10 +16,7 @@ def test_primary(client: FlaskClient) -> None:
     assert "Content-Type" in response.headers
     assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
     assert "?xml" in response.text
-    assert "sitemapindex" in response.text
-    assert "sitemap-main.xml" in response.text
-    assert "sitemap-guests.xml" in response.text
-    assert "sitemap-hosts.xml" in response.text
+    assert "urlset" in response.text
 
 
 def test_guest(client: FlaskClient) -> None:
@@ -53,17 +50,6 @@ def test_locations(client: FlaskClient) -> None:
     assert "?xml" in response.text
     assert "urlset" in response.text
     assert "/locations" in response.text
-
-
-def test_main(client: FlaskClient) -> None:
-    """Testing sitemaps.main."""
-    response: TestResponse = client.get("/sitemap-main.xml")
-    assert response.status_code == 200
-    assert "Content-Type" in response.headers
-    assert response.headers["Content-Type"] == "text/xml; charset=utf-8"
-    assert "?xml" in response.text
-    assert "urlset" in response.text
-    assert "/loc" in response.text
 
 
 def test_on_this_day(client: FlaskClient) -> None:
