@@ -7,7 +7,7 @@
 
 from pathlib import Path
 
-from flask import Blueprint, Response, render_template, send_file
+from flask import Blueprint, Response, current_app, render_template, send_file
 
 blueprint = Blueprint("main", __name__)
 
@@ -15,7 +15,9 @@ blueprint = Blueprint("main", __name__)
 @blueprint.route("/")
 def index() -> str:
     """View: Site Index."""
-    return render_template("pages/index.html")
+    return render_template(
+        "pages/index.html",
+    )
 
 
 @blueprint.route("/robots.txt")

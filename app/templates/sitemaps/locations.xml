@@ -24,6 +24,4 @@
     <loc>{{ site_url }}{{ url_for("locations.recording_counts_by_year") }}</loc>
     <changefreq>weekly</changefreq>
   </url>
-  
-  
 </urlset>

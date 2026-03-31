@@ -1,0 +1,50 @@
+{% set scoring_exceptions = details.guest_scoring_exceptions %}
+<div class="row">
+    <div class="col-auto">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover report">
+                <colgroup>
+                    <col class="name guest">
+                    <col class="date">
+                    <col class="score">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scoring_exception in scoring_exceptions %}
+                    <tr>
+                        <td><a href="{{ stats_url }}/guests/{{ scoring_exception.slug }}">{{ scoring_exception.name }}</a></td>
+                        <td><a href="{{ stats_url }}/shows/{{ scoring_exception.show_date | replace('-', '/') }}">{{ scoring_exception.show_date }}</a></td>
+                        {% if scoring_exception.best_of %}
+                        <td>{{ scoring_exception.best_of }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                        {% if scoring_exception.score %}
+                        <td>{{ scoring_exception.score }}</td>
+                        {% else %}
+                        <td class="no-data">-</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if shows | length > 5 %}
+                <tfoot>
+                    <tr>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Show Date</th>
+                        <th scope="col">Best Of</th>
+                        <th scope="col">Score</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>

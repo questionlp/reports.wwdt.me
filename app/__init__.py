@@ -22,6 +22,7 @@ from .locations.redirects import blueprint as locations_redirects_bp
 from .locations.routes import blueprint as locations_bp
 from .main.redirects import blueprint as redirects_bp
 from .main.routes import blueprint as main_bp
+from .on_this_day.routes import blueprint as on_this_day_bp
 from .panelists.redirects import blueprint as panelists_redirects_bp
 from .panelists.routes import blueprint as panelists_bp
 from .scorekeepers.redirects import blueprint as scorekeepers_redirects_bp
@@ -96,6 +97,10 @@ def create_app():
         _config["settings"].get("use_minified_css", False)
     )
 
+    app.jinja_env.globals["enable_on_this_day_report"] = _config["settings"].get(
+        "enable_on_this_day_report", True
+    )
+
     app.jinja_env.globals["node_name"] = (
         platform.node().split(".")[0] if platform.node() else None
     )
@@ -114,6 +119,7 @@ def create_app():
     app.register_blueprint(hosts_bp, url_prefix="/hosts")
     app.register_blueprint(locations_redirects_bp)
     app.register_blueprint(locations_bp, url_prefix="/locations")
+    app.register_blueprint(on_this_day_bp, url_prefix="/on-this-day")
     app.register_blueprint(panelists_redirects_bp)
     app.register_blueprint(panelists_bp, url_prefix="/panelists")
     app.register_blueprint(scorekeepers_redirects_bp)

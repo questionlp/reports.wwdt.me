@@ -48,6 +48,7 @@
             "paula-poundstone",
             "richard-roeper",
             "roxanne-roberts"
-        ]
+        ],
+        "enable_on_this_day_report": true
     }
 }

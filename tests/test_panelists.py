@@ -14,25 +14,25 @@ def test_index(client: FlaskClient) -> None:
     """Testing panelists.routes.index."""
     response: TestResponse = client.get("/panelists/")
     assert response.status_code == 200
-    assert b"Panelists" in response.data
-    assert b"Aggregate Scores" in response.data
-    assert b"Debuts by Year" in response.data
+    assert "Panelists" in response.text
+    assert "Aggregate Scores" in response.text
+    assert "Debuts by Year" in response.text
 
 
 def test_aggregate_scores(client: FlaskClient) -> None:
     """Testing panelists.routes.aggregate_scores."""
     response: TestResponse = client.get("/panelists/aggregate-scores")
     assert response.status_code == 200
-    assert b"Aggregate Score Statistics" in response.data
-    assert b"Aggregate Score Spread" in response.data
+    assert "Aggregate Score Statistics" in response.text
+    assert "Aggregate Score Spread" in response.text
 
 
 def test_average_scores_by_year(client) -> None:
     """Testing panelists.routes.average_scores_by_year (GET)."""
     response: TestResponse = client.get("/panelists/average-scores-by-year")
     assert response.status_code == 200
-    assert b"Average Scores by Year" in response.data
-    assert b"Select a Panelist" in response.data
+    assert "Average Scores by Year" in response.text
+    assert "Select a Panelist" in response.text
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -42,45 +42,45 @@ def test_average_scores_by_year_post(client: FlaskClient, panelist_slug: str) ->
         "/panelists/average-scores-by-year", data={"panelist": panelist_slug}
     )
     assert response.status_code == 200
-    assert b"Average Scores by Year" in response.data
+    assert "Average Scores by Year" in response.text
     assert panelist_slug.encode("utf-8") in response.data
-    assert b"stats float" in response.data
+    assert "stats float" in response.text
 
 
 def test_average_scores_by_year_all(client: FlaskClient) -> None:
     """Testing panelists.routes.all_average_scores_by_year_all."""
     response: TestResponse = client.get("/panelists/average-scores-by-year-all")
     assert response.status_code == 200
-    assert b"Average Scores by Year: All" in response.data
-    assert b"stats float" in response.data
-    assert b"No data available" not in response.data
+    assert "Average Scores by Year: All" in response.text
+    assert "stats float" in response.text
+    assert "No data available" not in response.text
 
 
 def test_appearance_counts_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.appearance_counts_by_year."""
     response: TestResponse = client.get("/panelists/appearance-counts-by-year")
     assert response.status_code == 200
-    assert b"Appearance Counts by Year" in response.data
-    assert b"Regular Shows" in response.data
-    assert b"All Shows" in response.data
-    assert b"No data available" not in response.data
+    assert "Appearance Counts by Year" in response.text
+    assert "Regular Shows" in response.text
+    assert "All Shows" in response.text
+    assert "No data available" not in response.text
 
 
 def test_appearance_counts_by_year_grid(client: FlaskClient) -> None:
     """Testing panelists.routes.appearance_counts_by_year_grid."""
     response: TestResponse = client.get("/panelists/appearance-counts-by-year/grid")
     assert response.status_code == 200
-    assert b"Appearance Counts by Year: Grid" in response.data
-    assert b"Total" in response.data
-    assert b"No data available" not in response.data
+    assert "Appearance Counts by Year: Grid" in response.text
+    assert "Total" in response.text
+    assert "No data available" not in response.text
 
 
 def test_appearances_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.appearances_by_year."""
     response: TestResponse = client.get("/panelists/appearances-by-year")
     assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
-    assert b"Select a Panelist" in response.data
+    assert "Appearances by Year" in response.text
+    assert "Select a Panelist" in response.text
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie", "paula-poundstone"])
@@ -93,17 +93,17 @@ def test_appearances_by_year_post(
         "/panelists/appearances-by-year", data={"panelist": panelist_slug}
     )
     assert response.status_code == 200
-    assert b"Appearances by Year" in response.data
+    assert "Appearances by Year" in response.text
     assert panelist_slug.encode("utf-8") in response.data
-    assert b"Repeat Of" in response.data
+    assert "Repeat Of" in response.text
 
 
 def test_bluff_the_listener_statistics(client: FlaskClient) -> None:
     """Testing panelists.routes.bluff_the_listener_statistics."""
     response: TestResponse = client.get("/panelists/bluff-the-listener-statistics")
     assert response.status_code == 200
-    assert b"Bluff the Listener Statistics" in response.data
-    assert b"Unique Best Of" in response.data
+    assert "Bluff the Listener Statistics" in response.text
+    assert "Unique Best Of" in response.text
 
 
 def test_bluff_the_listener_panelist_statistics_by_year(client: FlaskClient) -> None:
@@ -112,8 +112,8 @@ def test_bluff_the_listener_panelist_statistics_by_year(client: FlaskClient) -> 
         "/panelists/bluff-the-listener-panelist-statistics-by-year"
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Panelist Statistics by Year" in response.data
-    assert b"Panelist" in response.data
+    assert "Bluff the Listener Panelist Statistics by Year" in response.text
+    assert "Panelist" in response.text
 
 
 @pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
@@ -126,9 +126,9 @@ def test_bluff_the_listener_panelist_statistics_by_year_post(
         data={"panelist": panelist_slug},
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Panelist Statistics by Year" in response.data
-    assert b"Panelist" in response.data
-    assert b"Unique Best Of" in response.data
+    assert "Bluff the Listener Panelist Statistics by Year" in response.text
+    assert "Panelist" in response.text
+    assert "Unique Best Of" in response.text
 
 
 def test_bluff_the_listener_statistics_by_year(client: FlaskClient) -> None:
@@ -137,8 +137,8 @@ def test_bluff_the_listener_statistics_by_year(client: FlaskClient) -> None:
         "/panelists/bluff-the-listener-statistics-by-year"
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Bluff the Listener Statistics by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize("year", [2018, 2024])
@@ -151,35 +151,33 @@ def test_bluff_the_listener_statistics_by_year_post(
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Bluff the Listener Statistics by Year" in response.data
-    assert b"Regular Bluff Segments" in response.data
-    assert b"Unique Best Of Bluff Segments" in response.data
+    assert "Bluff the Listener Statistics by Year" in response.text
+    assert "Regular Bluff Segments" in response.text
+    assert "Unique Best Of Bluff Segments" in response.text
 
 
 def test_debuts_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.debuts_by_year."""
     response: TestResponse = client.get("/panelists/debuts-by-year")
     assert response.status_code == 200
-    assert b"Debuts by Year" in response.data
-    assert b"# of Regular Appearances" in response.data
+    assert "Debuts by Year" in response.text
+    assert "# of Regular Appearances" in response.text
 
 
 def test_first_appearance_all_correct(client: FlaskClient) -> None:
     """Testing panelists.first_appearance_all_correct."""
     response: TestResponse = client.get("/panelists/first-appearance-all-correct")
     assert response.status_code == 200
-    assert (
-        b"First Appearance Answering All Lightning Questions Correct" in response.data
-    )
-    assert b"Show Date" in response.data
+    assert "First Appearance Answering All Lightning Questions Correct" in response.text
+    assert "Show Date" in response.text
 
 
 def test_first_appearance_wins(client: FlaskClient) -> None:
     """Testing panelists.first_appearance_wins."""
     response: TestResponse = client.get("/panelists/first-appearance-wins")
     assert response.status_code == 200
-    assert b"First Appearance Win" in response.data
-    assert b"Show Date" in response.data
+    assert "First Appearance Win" in response.text
+    assert "Show Date" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "panelist", "date"])
@@ -189,27 +187,27 @@ def test_first_appearances(client: FlaskClient, sort: str | None) -> None:
         "/panelists/first-appearances", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"First Appearances" in response.data
-    assert b"Show Date" in response.data
-    assert b"Rank" in response.data
+    assert "First Appearances" in response.text
+    assert "Show Date" in response.text
+    assert "Rank" in response.text
 
 
 def test_first_most_recent_appearances(client: FlaskClient) -> None:
     """Testing panelists.routes.first_most_recent_appearances."""
     response: TestResponse = client.get("/panelists/first-most-recent-appearances")
     assert response.status_code == 200
-    assert b"First and Most Recent Appearances" in response.data
-    assert b"Regular Shows" in response.data
-    assert b"All Shows" in response.data
+    assert "First and Most Recent Appearances" in response.text
+    assert "Regular Shows" in response.text
+    assert "All Shows" in response.text
 
 
 def test_first_wins(client: FlaskClient) -> None:
     """Testing panelists.routes.first_wins."""
     response: TestResponse = client.get("/panelists/first-wins")
     assert response.status_code == 200
-    assert b"First Wins" in response.data
-    assert b"Outright Win" in response.data
-    assert b"Overall Win" in response.data
+    assert "First Wins" in response.text
+    assert "Outright Win" in response.text
+    assert "Overall Win" in response.text
 
 
 def test_highest_average_correct_answers_by_year(client: FlaskClient) -> None:
@@ -218,8 +216,8 @@ def test_highest_average_correct_answers_by_year(client: FlaskClient) -> None:
         "/panelists/highest-average-correct-answers-by-year"
     )
     assert response.status_code == 200
-    assert b"Highest Average Correct Answers by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Highest Average Correct Answers by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize(
@@ -234,16 +232,16 @@ def test_highest_average_correct_answers_by_year_post(
         data={"year": year, "exclude_single": exclude_single},
     )
     assert response.status_code == 200
-    assert b"Highest Average Correct Answers by Year" in response.data
-    assert b"Average Correct Answers" in response.data
+    assert "Highest Average Correct Answers by Year" in response.text
+    assert "Average Correct Answers" in response.text
 
 
 def test_highest_average_scores_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.highest_average_scores_by_year."""
     response: TestResponse = client.get("/panelists/highest-average-scores-by-year")
     assert response.status_code == 200
-    assert b"Highest Average Scores by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Highest Average Scores by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize(
@@ -258,26 +256,26 @@ def test_highest_average_scres_by_year_post(
         data={"year": year, "exclude_single": exclude_single},
     )
     assert response.status_code == 200
-    assert b"Highest Average Scores by Year" in response.data
-    assert b"Average Score" in response.data
+    assert "Highest Average Scores by Year" in response.text
+    assert "Average Score" in response.text
 
 
 def test_lightning_statistics_summary(client: FlaskClient) -> None:
     """Testing panelists.routes.lightning_statistics_summary."""
     response: TestResponse = client.get("/panelists/lightning-statistics-summary")
     assert response.status_code == 200
-    assert b"Lightning Fill In The Blank Statistics Summary" in response.data
-    assert b"Appearances" in response.data
-    assert b"Correct" in response.data
+    assert "Lightning Fill In The Blank Statistics Summary" in response.text
+    assert "Appearances" in response.text
+    assert "Correct" in response.text
 
 
 def test_losing_streaks(client: FlaskClient) -> None:
     """Testing panelists.routes.losing_streaks."""
     response: TestResponse = client.get("/panelists/losing-streaks")
     assert response.status_code == 200
-    assert b"Losing Streaks" in response.data
-    assert b"All Losses" in response.data
-    assert b"Third Place Losses" in response.data
+    assert "Losing Streaks" in response.text
+    assert "All Losses" in response.text
+    assert "Third Place Losses" in response.text
 
 
 def test_most_chosen_bluff_the_listener_by_year(client: FlaskClient) -> None:
@@ -286,8 +284,8 @@ def test_most_chosen_bluff_the_listener_by_year(client: FlaskClient) -> None:
         "/panelists/most-chosen-bluff-the-listener-by-year"
     )
     assert response.status_code == 200
-    assert b"Most Chosen Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Most Chosen Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize("year", [1998, 2018])
@@ -300,9 +298,9 @@ def test_most_chosen_bluff_the_listener_by_year_post(
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Most Chosen Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
-    assert b"# of Chosen Stories" in response.data
+    assert "Most Chosen Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
+    assert "# of Chosen Stories" in response.text
 
 
 def test_most_chosen_correct_bluff_the_listener_by_year(client: FlaskClient) -> None:
@@ -311,8 +309,8 @@ def test_most_chosen_correct_bluff_the_listener_by_year(client: FlaskClient) -> 
         "/panelists/most-chosen-correct-bluff-the-listener-by-year"
     )
     assert response.status_code == 200
-    assert b"Most Chosen Correct Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Most Chosen Correct Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize("year", [1998, 2018])
@@ -325,9 +323,9 @@ def test_most_chosen_correct_bluff_the_listener_by_year_post(
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Most Chosen Correct Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
-    assert b"# of Chosen Correct Stories" in response.data
+    assert "Most Chosen Correct Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
+    assert "# of Chosen Correct Stories" in response.text
 
 
 def test_most_correct_bluff_the_listener_by_year(client: FlaskClient) -> None:
@@ -336,8 +334,8 @@ def test_most_correct_bluff_the_listener_by_year(client: FlaskClient) -> None:
         "/panelists/most-correct-bluff-the-listener-by-year"
     )
     assert response.status_code == 200
-    assert b"Most Correct Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Most Correct Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize("year", [1998, 2018])
@@ -350,17 +348,17 @@ def test_most_correct_bluff_the_listener_by_year_post(
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Most Correct Bluff the Listener Stories by Year" in response.data
-    assert b"Select a Year" in response.data
-    assert b"# of Correct Stories" in response.data
+    assert "Most Correct Bluff the Listener Stories by Year" in response.text
+    assert "Select a Year" in response.text
+    assert "# of Correct Stories" in response.text
 
 
 def test_most_wins_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.most_wins_by_year."""
     response: TestResponse = client.get("/panelists/most-wins-by-year")
     assert response.status_code == 200
-    assert b"Most Wins by Year" in response.data
-    assert b"Select a Year" in response.data
+    assert "Most Wins by Year" in response.text
+    assert "Select a Year" in response.text
 
 
 @pytest.mark.parametrize("year", [1998, 2018])
@@ -371,16 +369,16 @@ def test_most_wins_by_year_post(client: FlaskClient, year: int) -> None:
         data={"year": year},
     )
     assert response.status_code == 200
-    assert b"Most Wins by Year" in response.data
-    assert b"Outright Wins" in response.data
+    assert "Most Wins by Year" in response.text
+    assert "Outright Wins" in response.text
 
 
 def test_panelist_vs_panelist(client) -> None:
     """Testing panelists.routes.panelist_vs_panelist (GET)."""
     response: TestResponse = client.get("/panelists/panelist-vs-panelist")
     assert response.status_code == 200
-    assert b"Panelist vs Panelist" in response.data
-    assert b"Select a Panelist" in response.data
+    assert "Panelist vs Panelist" in response.text
+    assert "Select a Panelist" in response.text
 
 
 @pytest.mark.parametrize("panelist_slug", ["faith-salie"])
@@ -390,27 +388,27 @@ def test_panelist_vs_panelist_post(client: FlaskClient, panelist_slug: str) -> N
         "/panelists/panelist-vs-panelist", data={"panelist": panelist_slug}
     )
     assert response.status_code == 200
-    assert b"Panelist vs Panelist" in response.data
+    assert "Panelist vs Panelist" in response.text
     assert panelist_slug.encode("utf-8") in response.data
-    assert b"Ranked vs" in response.data
+    assert "Ranked vs" in response.text
 
 
 def test_panelist_vs_panelist_all(client: FlaskClient) -> None:
     """Testing panelists.routes.panelist_vs_panelist_all."""
     response: TestResponse = client.get("/panelists/panelist-vs-panelist/all")
     assert response.status_code == 200
-    assert b"Panelist vs Panelist: All" in response.data
-    assert b"Ranked vs" in response.data
-    assert b"Total" in response.data
+    assert "Panelist vs Panelist: All" in response.text
+    assert "Ranked vs" in response.text
+    assert "Total" in response.text
 
 
 def test_panelist_vs_panelist_scoring(client: FlaskClient) -> None:
     """Testing panelists.routes.panelist_vs_panelist_scoring (GET)."""
     response: TestResponse = client.get("/panelists/panelist-vs-panelist-scoring")
     assert response.status_code == 200
-    assert b"Panelist vs Panelist Scoring" in response.data
-    assert b"Panelist 1" in response.data
-    assert b"Panelist 2" in response.data
+    assert "Panelist vs Panelist Scoring" in response.text
+    assert "Panelist 1" in response.text
+    assert "Panelist 2" in response.text
 
 
 @pytest.mark.parametrize("panelist_1, panelist_2", [("adam-felber", "faith-salie")])
@@ -426,28 +424,28 @@ def test_panelist_vs_panelist_scoring_post(
         },
     )
     assert response.status_code == 200
-    assert b"Panelist vs Panelist Scoring" in response.data
+    assert "Panelist vs Panelist Scoring" in response.text
     assert panelist_1.encode("utf-8") in response.data
     assert panelist_2.encode("utf-8") in response.data
-    assert b"Score" in response.data
-    assert b"Rank" in response.data
+    assert "Score" in response.text
+    assert "Rank" in response.text
 
 
 def test_perfect_score_counts(client: FlaskClient) -> None:
     """Testing panelists.routes.perfect_score_counts."""
     response: TestResponse = client.get("/panelists/perfect-score-counts")
     assert response.status_code == 200
-    assert b"Perfect Scores Count"
-    assert b"Total Score Count"
+    assert "Perfect Scores Count"
+    assert "Total Score Count"
 
 
 def test_rankings_summary(client: FlaskClient) -> None:
     """Testing panelists.routes.rankings_summary."""
     response: TestResponse = client.get("/panelists/rankings-summary")
     assert response.status_code == 200
-    assert b"Rankings Summary" in response.data
-    assert b"First" in response.data
-    assert b"Second" in response.data
+    assert "Rankings Summary" in response.text
+    assert "First" in response.text
+    assert "Second" in response.text
 
 
 @pytest.mark.parametrize("sort", [None, "panelist", "date"])
@@ -457,41 +455,41 @@ def test_scoring_exceptions(client: FlaskClient, sort: str | None) -> None:
         "/panelists/scoring-exceptions", query_string={"sort": sort}
     )
     assert response.status_code == 200
-    assert b"Scoring Exceptions and Anomalies" in response.data
-    assert b"Show Date" in response.data
-    assert b"Notes" in response.data
+    assert "Scoring Exceptions and Anomalies" in response.text
+    assert "Show Date" in response.text
+    assert "Notes" in response.text
 
 
 def test_single_appearance(client: FlaskClient) -> None:
     """Testing panelists.routes.single_appearance."""
     response: TestResponse = client.get("/panelists/single-appearance")
     assert response.status_code == 200
-    assert b"Single Appearance" in response.data
-    assert b"Show Date" in response.data
+    assert "Single Appearance" in response.text
+    assert "Show Date" in response.text
 
 
 def test_statistics_by_gender(client: FlaskClient) -> None:
     """Testing panelists.routes.statistics_by_gender."""
     response: TestResponse = client.get("/panelists/statistics-by-gender")
     assert response.status_code == 200
-    assert b"Statistics by Gender" in response.data
-    assert b"Std Dev" in response.data
+    assert "Statistics by Gender" in response.text
+    assert "Std Dev" in response.text
 
 
 def test_statistics_summary(client: FlaskClient) -> None:
     """Testing panelists.routes.statistics_summary."""
     response: TestResponse = client.get("/panelists/statistics-summary")
     assert response.status_code == 200
-    assert b"Statistics Summary" in response.data
-    assert b"Std Dev" in response.data
+    assert "Statistics Summary" in response.text
+    assert "Std Dev" in response.text
 
 
 def test_statistics_summary_by_year(client: FlaskClient) -> None:
     """Testing panelists.routes.statistics_summary_by_year."""
     response: TestResponse = client.get("/panelists/statistics-summary-by-year")
     assert response.status_code == 200
-    assert b"Statistics Summary by Year" in response.data
-    assert b"Select a Panelist" in response.data
+    assert "Statistics Summary by Year" in response.text
+    assert "Select a Panelist" in response.text
 
 
 @pytest.mark.parametrize("panelist_slug", ["roxanne-roberts"])
@@ -504,28 +502,28 @@ def test_statistics_summary_by_year_post(
         data={"panelist": panelist_slug},
     )
     assert response.status_code == 200
-    assert b"Statistics Summary by Year" in response.data
-    assert b"Panelist" in response.data
-    assert b"Appearances" in response.data
-    assert b"With Scores" in response.data
+    assert "Statistics Summary by Year" in response.text
+    assert "Panelist" in response.text
+    assert "Appearances" in response.text
+    assert "With Scores" in response.text
 
 
 def test_win_streaks(client: FlaskClient) -> None:
     """Testing panelists.routes.win_streaks."""
     response: TestResponse = client.get("/panelists/win-streaks")
     assert response.status_code == 200
-    assert b"Win Streaks" in response.data
-    assert b"Outright Wins" in response.data
-    assert b"Wins with Draws" in response.data
+    assert "Win Streaks" in response.text
+    assert "Outright Wins" in response.text
+    assert "Wins with Draws" in response.text
 
 
 def test_wins_draws_losses(client: FlaskClient) -> None:
     """Testing panelists.routes.wins_draws_losses."""
     response: TestResponse = client.get("/panelists/wins-draws-losses")
     assert response.status_code == 200
-    assert b"Wins, Draws and Losses" in response.data
-    assert b"Sort Column" in response.data
-    assert b"<table" in response.data
+    assert "Wins, Draws and Losses" in response.text
+    assert "Sort Column" in response.text
+    assert "<table" in response.text
 
 
 @pytest.mark.parametrize(
@@ -545,6 +543,6 @@ def test_wins_draws_losses_post(
         },
     )
     assert response.status_code == 200
-    assert b"Wins, Draws and Losses" in response.data
-    assert b"Sort Column" in response.data
-    assert b"<table" in response.data
+    assert "Wins, Draws and Losses" in response.text
+    assert "Sort Column" in response.text
+    assert "<table" in response.text

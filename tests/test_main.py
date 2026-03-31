@@ -13,13 +13,13 @@ def test_index(client: FlaskClient) -> None:
     """Testing main.index."""
     response: TestResponse = client.get("/")
     assert response.status_code == 200
-    assert b"Wait Wait Reports" in response.data
-    assert b"Welcome to the Wait Wait Reports" in response.data
-    assert b"Scorekeepers" in response.data
+    assert "Wait Wait Reports" in response.text
+    assert "Welcome to the Wait Wait Reports" in response.text
+    assert "Scorekeepers" in response.text
 
 
 def test_robots_txt(client: FlaskClient) -> None:
     """Testing main.robots_txt."""
     response: TestResponse = client.get("/robots.txt")
     assert response.status_code == 200
-    assert b"Sitemap:" in response.data
+    assert "Sitemap:" in response.text
