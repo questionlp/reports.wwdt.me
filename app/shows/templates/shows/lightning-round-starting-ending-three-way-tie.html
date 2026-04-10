@@ -28,6 +28,7 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="date">
+                    <col class="name scorekeeper">
                     <col class="name panelist">
                     <col class="score">
                     <col class="score">
@@ -36,6 +37,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Scorekeeper</th>
                         <th scope="col">Panelists</th>
                         <th scope="col">Starting Score</th>
                         <th scope="col">Correct</th>
@@ -46,6 +48,7 @@
                     {% for show in shows %}
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
+                        <td>{{ show.scorekeeper.name }}</td>
                         <td>
                             <ul class="no-bullets">
                                 {% for panelist in show.panelists %}
@@ -63,6 +66,7 @@
                 <tfoot>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Scorekeeper</th>
                         <th scope="col">Panelists</th>
                         <th scope="col">Starting Score</th>
                         <th scope="col">Correct</th>

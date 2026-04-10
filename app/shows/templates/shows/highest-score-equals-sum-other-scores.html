@@ -28,6 +28,7 @@
             <table class="table table-bordered table-hover report">
                 <colgroup>
                     <col class="date">
+                    <col class="name scorekeeper">
                     <col class="name panelist">
                     <col class="score">
                     <col class="rank">
@@ -35,6 +36,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Scorekeeper</th>
                         <th scope="col">Panelist</th>
                         <th scope="col">Score</th>
                         <th scope="col">Rank</th>
@@ -44,6 +46,7 @@
                     {% for show in shows %}
                     <tr>
                         <td rowspan="3"><a href="{{ stats_url }}/shows/{{ show | replace('-', '/') }}">{{ show }}</a></td>
+                        <td rowspan="3">{{ shows[show][0]["scorekeeper"]["name"] }}</td>
                         <td>{{ shows[show][0]["panelist"] }}</td>
                         <td>{{ "{:f}".format(shows[show][0]["score"].normalize()) }}</td>
                         <td>{{ rank_map[shows[show][0]["rank"]] }}</td>
@@ -63,6 +66,7 @@
                 <tfoot>
                     <tr>
                         <th scope="col">Show Date</th>
+                        <th scope="col">Scorekeeper</th>
                         <th scope="col">Panelist</th>
                         <th scope="col">Score</th>
                         <th scope="col">Rank</th>

@@ -9,6 +9,8 @@
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.scorekeepers.reports.appearances import retrieve_scorekeeper_by_show_id
+
 
 def retrieve_all_lightning_round_start(
     database_connection: MySQLConnection | PooledMySQLConnection,
@@ -160,6 +162,9 @@ def shows_with_lightning_round_start_zero(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelist": {
                     "id": row["panelistid"],
                     "name": row["panelist"],
@@ -206,6 +211,9 @@ def shows_lightning_round_start_zero(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelist": {
                     "id": row["panelistid"],
                     "name": row["panelist"],
@@ -251,6 +259,9 @@ def shows_lightning_round_zero_correct(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelist": {
                     "id": row["panelistid"],
                     "name": row["panelist"],
@@ -303,6 +314,9 @@ def shows_lightning_round_answering_same_number_correct(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelists": panelists,
                 "correct_decimal": row["panelistlrndcorrect_decimal"],
             }
@@ -329,6 +343,9 @@ def shows_starting_with_three_way_tie(
                 {
                     "id": show_id,
                     "date": show_date,
+                    "scorekeeper": retrieve_scorekeeper_by_show_id(
+                        show_id=show_id, database_connection=database_connection
+                    ),
                     "score": show_scores[show]["scores"][0],
                     "panelists": retrieve_panelists_by_show_id(
                         show_id=show_id, database_connection=database_connection
@@ -372,6 +389,9 @@ def shows_ending_with_three_way_tie(
             {
                 "id": row["showid"],
                 "date": row["showdate"].isoformat(),
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "score": row["panelistscore_decimal"],
                 "panelists": retrieve_panelists_by_show_id(
                     show_id=row["showid"], database_connection=database_connection
@@ -420,6 +440,9 @@ def shows_starting_ending_three_way_tie(
                 {
                     "id": show_id,
                     "date": score_info["date"],
+                    "scorekeeper": retrieve_scorekeeper_by_show_id(
+                        show_id=show_id, database_connection=database_connection
+                    ),
                     "panelists": retrieve_panelists_by_show_id(
                         show_id=show_id, database_connection=database_connection
                     ),
