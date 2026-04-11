@@ -174,3 +174,34 @@ def retrieve_appearance_summaries(
         }
 
     return scorekeepers_summary
+
+
+def retrieve_scorekeeper_by_show_id(
+    show_id: int,
+    database_connection: MySQLConnection | PooledMySQLConnection,
+) -> list[dict]:
+    """Returns scorekeeper information for the requested show ID."""
+    if not database_connection.is_connected():
+        database_connection.reconnect()
+
+    query = """
+        SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
+        FROM ww_showskmap skm
+        JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
+        JOIN ww_shows s ON s.showid = skm.showid
+        WHERE s.showid = %s
+        LIMIT 1;
+    """
+    cursor = database_connection.cursor(dictionary=True)
+    cursor.execute(query, (show_id,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if not result:
+        return None
+
+    return {
+        "id": result["scorekeeperid"],
+        "name": result["scorekeeper"],
+        "slug": result["scorekeeperslug"],
+    }

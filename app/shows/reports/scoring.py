@@ -11,6 +11,8 @@ from decimal import Decimal
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
+from app.scorekeepers.reports.appearances import retrieve_scorekeeper_by_show_id
+
 
 def retrieve_show_details(
     show_id: int,
@@ -212,7 +214,7 @@ def retrieve_shows_panelist_score_sum_match(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showdate, pm.panelistid, p.panelist, p.panelistslug,
+        SELECT s.showid, s.showdate, pm.panelistid, p.panelist, p.panelistslug,
         pm.panelistscore_decimal, pm.showpnlrank
         FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
@@ -238,6 +240,9 @@ def retrieve_shows_panelist_score_sum_match(
 
         shows[show_date].append(
             {
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelist_id": row["panelistid"],
                 "panelist": row["panelist"],
                 "panelist_slug": row["panelistslug"],
@@ -269,7 +274,7 @@ def retrieve_shows_panelist_perfect_scores(
         database_connection.reconnect()
 
     query = """
-        SELECT s.showdate, p.panelist, p.panelistslug, pm.panelistscore_decimal
+        SELECT s.showid, s.showdate, p.panelist, p.panelistslug, pm.panelistscore_decimal
         FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -289,6 +294,9 @@ def retrieve_shows_panelist_perfect_scores(
         shows.append(
             {
                 "date": row["showdate"],
+                "scorekeeper": retrieve_scorekeeper_by_show_id(
+                    show_id=row["showid"], database_connection=database_connection
+                ),
                 "panelist": row["panelist"],
                 "panelist_slug": row["panelistslug"],
                 "score": row["panelistscore_decimal"],
