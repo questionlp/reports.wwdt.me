@@ -6,6 +6,7 @@
 
 - Added "Scorekeeper" column to the series of Lightning Fill In The Blank reports within the Shows section of the site
 - Added table footers that were missing in several of the Lightning Fill In The Blank reports
+- Removed the unused `app.shows.reports.shows_with_lightning_round_start_zero()` function
 
 ## 4.14.0
 
