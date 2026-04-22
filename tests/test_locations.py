@@ -48,8 +48,9 @@ def test_recordings_by_year(client: FlaskClient) -> None:
 @pytest.mark.parametrize(
     "location_slug",
     [
-        "studebaker-theater-chicago-il",
         "arlene-schnitzer-concert-hall-portland-or",
+        "home-remote-studios",
+        "studebaker-theater-chicago-il",
     ],
 )
 def test_recordings_by_year_post(client: FlaskClient, location_slug: str) -> None:

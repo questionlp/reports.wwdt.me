@@ -130,55 +130,6 @@ def retrieve_panelists_by_show_id(
     return panelists
 
 
-def shows_with_lightning_round_start_zero(
-    database_connection: MySQLConnection | PooledMySQLConnection,
-) -> list[dict]:
-    """Return shows in which panelists start Lightning Fill In The Blank with zero points."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
-    query = """
-        SELECT s.showid, s.showdate, p.panelistid, p.panelist,
-        pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
-        pm.panelistscore_decimal, pm.showpnlrank
-        FROM ww_showpnlmap pm
-        JOIN ww_shows s ON s.showid = pm.showid
-        JOIN ww_panelists p ON p.panelistid = pm.panelistid
-        WHERE s.bestof = 0 AND s.repeatshowid IS NULL
-        AND pm.panelistlrndstart_decimal = 0
-        ORDER BY s.showdate ASC;
-    """
-    cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-
-    if not result:
-        return None
-
-    shows = []
-    for row in result:
-        shows.append(
-            {
-                "id": row["showid"],
-                "date": row["showdate"].isoformat(),
-                "scorekeeper": retrieve_scorekeeper_by_show_id(
-                    show_id=row["showid"], database_connection=database_connection
-                ),
-                "panelist": {
-                    "id": row["panelistid"],
-                    "name": row["panelist"],
-                    "start": row["panelistlrndstart_decimal"],
-                    "correct": row["panelistlrndcorrect_decimal"],
-                    "score": row["panelistscore_decimal"],
-                    "rank": row["showpnlrank"],
-                },
-            }
-        )
-
-    return shows
-
-
 def shows_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
