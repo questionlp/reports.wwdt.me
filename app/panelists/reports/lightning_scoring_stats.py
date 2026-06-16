@@ -15,7 +15,6 @@ from mysql.connector.pooling import PooledMySQLConnection
 
 from . import common
 from .stats_summary import (
-    retrieve_all_panelists_stats,
     retrieve_appearances_by_panelist,
 )
 
@@ -178,8 +177,8 @@ def retrieve_all_panelists_lightning_scoring_stats(
             "slug": panelist["slug"],
             "name": panelist["name"],
             "appearances": {
-                "regular": _appearances and _appearances.get("regular", None),
-                "with_scores": _appearances and _appearances.get("with_scores", None),
+                "regular": _appearances and _appearances.get("regular"),
+                "with_scores": _appearances and _appearances.get("with_scores"),
             },
             "start_stats": _starts_stats,
             "correct_stats": _corrects_stats,

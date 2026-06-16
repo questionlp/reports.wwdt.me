@@ -1,5 +1,32 @@
 # Changes
 
+## 4.16.0 (Work-in-Progress)
+
+### Application Changes
+
+- Changed the handling of the following configuration keys within `settings` to use `None` as the default value rather than an empty string and exclude links if they are `None` or empty
+  - `api_url`
+  - `blog_url`
+  - `reports_url`
+  - `stats_url`
+  - `bluesky_url`
+  - `bluesky_user`
+  - `mastodon_url`
+  - `mastodon_user`
+  - `support_npr_url`
+- Fixed a series of bugs that was repeated throughout many of the Shows reports where checks should have been for location venue, city and state but ended up checking for venue and city twice
+
+### Component Changes
+
+- Upgraded wwdtm from 2.5.5 to 2.6.1
+  - Includes an upgrade of IBM Plex Mono from 1.1.0 to 2.5.0
+
+### Development Changes
+
+- Added pydoclint version 0.8.4 for docstring linting
+- Replaced GitHub repository URLs with Codeberg repository URLs for the Wait Wait Stats Project repositories that have migrated over to Codeberg
+- Upgraded Ruff from 0.14.14 to 0.15.6
+
 ## 4.15.0-post0 (Non-Release)
 
 ### Development Changes
