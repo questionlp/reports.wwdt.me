@@ -49,6 +49,7 @@
             "richard-roeper",
             "roxanne-roberts"
         ],
-        "enable_on_this_day_report": true
+        "enable_on_this_day_report": true,
+        "number_decimal_places": 6
     }
 }

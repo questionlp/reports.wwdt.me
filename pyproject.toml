@@ -10,8 +10,17 @@ requires-python = ">=3.12"
 
 [tool.pytest.ini_options]
 minversion = "8.4"
-filterwarnings = ["ignore::DeprecationWarning:mysql.*:"]
-norecursedirs = [".git", "venv", "dist", ".eggs", "wwdtm.egg-info"]
+filterwarnings = [
+    "ignore::DeprecationWarning:mysql.*:"
+]
+norecursedirs = [
+    ".git",
+    "venv",
+    "dist",
+    ".eggs",
+    "wwdtm.egg-info",
+    "node_modules"
+]
 
 [tool.ruff]
 required-version = ">= 0.15.0"

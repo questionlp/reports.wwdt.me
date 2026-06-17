@@ -8,6 +8,7 @@
 from decimal import Decimal
 from typing import Any
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -23,8 +24,8 @@ def retrieve_average_scores_by_location(
     # due to non-standard number of panelist scores and score totals
     query = """
         SELECT l.locationid, l.locationslug, l.venue, l.city, l.state,
-        AVG(pm.panelistscore_decimal) AS average_score,
-        SUM(pm.panelistscore_decimal) / (COUNT(s.showid) / 3) AS average_total,
+        CAST(AVG(pm.panelistscore_decimal) AS DECIMAL(12, %s)) AS average_score,
+        CAST(SUM(pm.panelistscore_decimal) / (COUNT(s.showid) / 3) AS DECIMAL(12, %s)) AS average_total,
         COUNT(s.showid) / 3 AS show_count
         FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid
@@ -39,7 +40,13 @@ def retrieve_average_scores_by_location(
     """
 
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query)
+    cursor.execute(
+        query,
+        (
+            current_app.config["app_settings"]["number_decimal_places"],
+            current_app.config["app_settings"]["number_decimal_places"],
+        ),
+    )
     result = cursor.fetchall()
     cursor.close()
 
@@ -55,8 +62,8 @@ def retrieve_average_scores_by_location(
                 "venue": row["venue"],
                 "city": row["city"],
                 "state": row["state"],
-                "average_score": round(Decimal(row["average_score"]), 5),
-                "average_total": round(Decimal(row["average_total"]), 5),
+                "average_score": Decimal(row["average_score"]),
+                "average_total": Decimal(row["average_total"]),
                 "show_count": int(row["show_count"]),
             }
         )

@@ -80,6 +80,19 @@ def load_config(
             "enabled": False,
         }
 
+    # Read in setting for number of decimal places when rounding
+    # panelist statistics values
+    try:
+        number_decimal_places = int(settings_config.get("number_decimal_places", 6))
+        if 0 <= number_decimal_places <= 10:
+            settings_config["number_decimal_places"] = number_decimal_places
+        else:
+            settings_config["number_decimal_places"] = 6
+    except ValueError:
+        settings_config["number_decimal_places"] = 6
+    except TypeError:
+        settings_config["number_decimal_places"] = 6
+
     # Default "enable_on_this_day_report" to True
     if "enable_on_this_day_report" not in settings_config:
         settings_config["enable_on_this_day_report"] = True

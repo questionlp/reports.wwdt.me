@@ -7,6 +7,7 @@
 
 from typing import Any
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -153,7 +154,7 @@ def retrieve_not_my_job_stats_by_year(
                 (count_guest_wins + best_of_only_guest_wins)
                 / (count_all_guest_scores + len(best_of_only_guest_ids))
             ),
-            5,
+            current_app.config["app_settings"]["number_decimal_places"],
         )
     else:
         win_ratio = 0
@@ -251,7 +252,10 @@ def retrieve_bluff_stats_by_year(
     count_chosen_incorrect = result[0]
 
     if count_unique_bluffs:
-        correct_ratio = round(100 * (count_chosen_correct / count_unique_bluffs), 5)
+        correct_ratio = round(
+            100 * (count_chosen_correct / count_unique_bluffs),
+            current_app.config["app_settings"]["number_decimal_places"],
+        )
     else:
         correct_ratio = 0
     return {

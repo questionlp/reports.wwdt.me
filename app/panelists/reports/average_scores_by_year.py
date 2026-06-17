@@ -7,6 +7,7 @@
 
 from decimal import Decimal
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -89,7 +90,8 @@ def retrieve_panelist_yearly_average(
     for row in result:
         if row["total"] and row["count"]:
             averages[row["year"]] = round(
-                Decimal(row["total"]) / Decimal(row["count"]), 5
+                Decimal(row["total"]) / Decimal(row["count"]),
+                current_app.config["app_settings"]["number_decimal_places"],
             )
 
     panelist["averages"] = averages

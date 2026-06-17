@@ -10,6 +10,7 @@ from decimal import Decimal
 from typing import Any
 
 import numpy
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -121,11 +122,21 @@ def retrieve_all_panelists_stats(
             all_stats[panelist_slug]["stats"] = {
                 "minimum": Decimal(numpy.amin(scores)),
                 "maximum": Decimal(numpy.amax(scores)),
-                "mean": round(Decimal(numpy.mean(scores)), 5),
+                "mean": round(
+                    Decimal(numpy.mean(scores)),
+                    current_app.config["app_settings"]["number_decimal_places"],
+                ),
                 "median": Decimal(numpy.median(scores)),
                 "mode": statistics.mode(sorted_scores),
                 "mode_multiple": statistics.multimode(sorted_scores),
-                "standard_deviation": round(Decimal(numpy.std(scores)), 5),
+                "standard_deviation": round(
+                    Decimal(numpy.std(scores)),
+                    current_app.config["app_settings"]["number_decimal_places"],
+                ),
+                "variance": round(
+                    Decimal(numpy.var(scores)),
+                    current_app.config["app_settings"]["number_decimal_places"],
+                ),
                 "total": Decimal(numpy.sum(scores)),
             }
         else:

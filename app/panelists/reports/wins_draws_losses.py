@@ -7,6 +7,7 @@
 
 from decimal import Decimal
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -81,11 +82,20 @@ def retrieve_panelist_wins_draws_losses(
     if _total:
         return {
             "wins": _wins,
-            "wins_percent": round(Decimal((_wins / _total) * 100), 5),
+            "wins_percent": round(
+                Decimal((_wins / _total) * 100),
+                current_app.config["app_settings"]["number_decimal_places"],
+            ),
             "draws": _draws,
-            "draws_percent": round(Decimal((_draws / _total) * 100), 5),
+            "draws_percent": round(
+                Decimal((_draws / _total) * 100),
+                current_app.config["app_settings"]["number_decimal_places"],
+            ),
             "losses": _losses,
-            "losses_percent": round(Decimal((_losses / _total) * 100), 5),
+            "losses_percent": round(
+                Decimal((_losses / _total) * 100),
+                current_app.config["app_settings"]["number_decimal_places"],
+            ),
             "total": _total,
         }
 

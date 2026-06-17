@@ -4,10 +4,12 @@
 
 ### Application Changes
 
+- Added `settings.number_decimal_places` configuration key that's used to set the number of decimal places calculated statistics will be rounded to. The default is `6`.
+  - The value is constrained to be between `0` and `10`
 - Changed the handling of the following configuration keys within `settings` to use `None` as the default value rather than an empty string and exclude links if they are `None` or empty
   - `api_url`
   - `blog_url`
-  - `reports_url`
+  - `graphs_url`
   - `stats_url`
   - `bluesky_url`
   - `bluesky_user`
@@ -15,6 +17,7 @@
   - `mastodon_user`
   - `support_npr_url`
 - Fixed a series of bugs that was repeated throughout many of the Shows reports where checks should have been for location venue, city and state but ended up checking for venue and city twice
+- Updated queries that includes the use of SQL `AVG()` functions to have the value cast as a `DECIMAL(12, x)` where `x` is based on the processed value for `settings.number_decimal_places`
 
 ### Component Changes
 
