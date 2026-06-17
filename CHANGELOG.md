@@ -1,6 +1,6 @@
 # Changes
 
-## 4.16.0 (Work-in-Progress)
+## 4.16.0
 
 ### Application Changes
 
