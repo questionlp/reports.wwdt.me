@@ -16,7 +16,7 @@
         "api_url": "",
         "blog_url": "",
         "graphs_url": "",
-        "repo_url": "https://github.com/questionlp/reports.wwdt.me",
+        "repo_url": "https://codeberg.org/qlp/reports.wwdt.me",
         "site_url": "",
         "stats_url": "",
         "ga_property_code": null,
@@ -49,6 +49,7 @@
             "richard-roeper",
             "roxanne-roberts"
         ],
-        "enable_on_this_day_report": true
+        "enable_on_this_day_report": true,
+        "number_decimal_places": 6
     }
 }

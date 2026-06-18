@@ -5,6 +5,7 @@
 # vim: set noai syntax=python ts=4 sw=4:
 """WWDTM Panelist Highest Average Score and Correct Answers Report Functions."""
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -25,7 +26,7 @@ def retrieve_highest_average_scores_by_year(
         query = """
             SELECT p.panelist, p.panelistslug,
             COUNT(pm.showid) AS appearances,
-            AVG(pm.panelistscore_decimal) AS average_score
+            CAST(AVG(pm.panelistscore_decimal) AS DECIMAL(12, %s)) AS average_score
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -42,7 +43,7 @@ def retrieve_highest_average_scores_by_year(
         query = """
             SELECT p.panelist, p.panelistslug,
             COUNT(pm.showid) AS appearances,
-            AVG(pm.panelistscore_decimal) AS average_score
+            CAST(AVG(pm.panelistscore_decimal) AS DECIMAL(12, %s)) AS average_score
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -55,7 +56,13 @@ def retrieve_highest_average_scores_by_year(
             COUNT(pm.showid) DESC, p.panelist ASC;
         """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(
+        query,
+        (
+            current_app.config["app_settings"]["number_decimal_places"],
+            year,
+        ),
+    )
     results = cursor.fetchall()
 
     if not results:
@@ -89,7 +96,7 @@ def retrieve_highest_average_correct_answers_by_year(
         query = """
             SELECT p.panelist, p.panelistslug,
             COUNT(pm.showid) AS appearances,
-            AVG(pm.panelistlrndcorrect_decimal) AS average_correct
+            CAST(AVG(pm.panelistlrndcorrect_decimal) AS DECIMAL(12, %s)) AS average_correct
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -106,7 +113,7 @@ def retrieve_highest_average_correct_answers_by_year(
         query = """
             SELECT p.panelist, p.panelistslug,
             COUNT(pm.showid) AS appearances,
-            AVG(pm.panelistlrndcorrect_decimal) AS average_correct
+            CAST(AVG(pm.panelistlrndcorrect_decimal) AS DECIMAL(12, %s)) AS average_correct
             FROM ww_showpnlmap pm
             JOIN ww_shows s ON s.showid = pm.showid
             JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -119,7 +126,13 @@ def retrieve_highest_average_correct_answers_by_year(
             COUNT(pm.showid) DESC, p.panelist ASC;
         """
     cursor = database_connection.cursor(dictionary=True)
-    cursor.execute(query, (year,))
+    cursor.execute(
+        query,
+        (
+            current_app.config["app_settings"]["number_decimal_places"],
+            year,
+        ),
+    )
     results = cursor.fetchall()
 
     if not results:

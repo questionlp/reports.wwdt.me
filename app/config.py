@@ -22,10 +22,10 @@ def load_config(
     """Load and parse configuration JSON."""
     _config_file = Path(config_file_path)
     with _config_file.open(mode="r", encoding="utf-8") as config_file:
-        app_config = json.load(config_file)
+        app_config: dict[str, dict[str, Any]] = json.load(config_file)
 
-    database_config = app_config.get("database", None)
-    settings_config = app_config.get("settings", None)
+    database_config = app_config.get("database")
+    settings_config = app_config.get("settings")
 
     if "database" in app_config:
         database_config = app_config["database"]
@@ -79,6 +79,19 @@ def load_config(
         settings_config["umami"] = {
             "enabled": False,
         }
+
+    # Read in setting for number of decimal places when rounding
+    # panelist statistics values
+    try:
+        number_decimal_places = int(settings_config.get("number_decimal_places", 6))
+        if 0 <= number_decimal_places <= 10:
+            settings_config["number_decimal_places"] = number_decimal_places
+        else:
+            settings_config["number_decimal_places"] = 6
+    except ValueError:
+        settings_config["number_decimal_places"] = 6
+    except TypeError:
+        settings_config["number_decimal_places"] = 6
 
     # Default "enable_on_this_day_report" to True
     if "enable_on_this_day_report" not in settings_config:

@@ -5,12 +5,13 @@ root = true
 end_of_line = lf
 insert_final_newline = true
 
-[*.{json,md,py,rst}]
-charset = utf-8
-
-[*.{css,html,json,py,rst,tmpl}]
+[*.{css,html,json,py,rst,tmpl,md}]
 indent_size = 4
 indent_style = space
+charset = utf-8
+
+[{package,package-lock}.json]
+indent_size = 2
 
 [*.xml]
 indent_size = 2

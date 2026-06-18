@@ -141,7 +141,7 @@
                         {% else %}
                         <td class="no-data">-</td>
                         {% endif %}
-                        {% if show.location.venue and show.location.city and show.location.city %}
+                        {% if show.location.venue and show.location.city and show.location.state %}
                         <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
                         {% elif show.location.venue and (not show.location.city or not show.location.state) %}
                         <td>{{ show.location.venue }}</td>

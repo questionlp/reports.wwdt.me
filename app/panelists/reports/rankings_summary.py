@@ -7,6 +7,7 @@
 
 from typing import Any
 
+from flask import current_app
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
 
@@ -76,19 +77,24 @@ def retrieve_rankings_by_panelist(
 
     if rankings["count"]:
         rankings["percent_first"] = round(
-            100 * (rankings["first"] / rankings["count"]), 5
+            100 * (rankings["first"] / rankings["count"]),
+            current_app.config["app_settings"]["number_decimal_places"],
         )
         rankings["percent_first_tied"] = round(
-            100 * (rankings["first_tied"] / rankings["count"]), 5
+            100 * (rankings["first_tied"] / rankings["count"]),
+            current_app.config["app_settings"]["number_decimal_places"],
         )
         rankings["percent_second"] = round(
-            100 * (rankings["second"] / rankings["count"]), 5
+            100 * (rankings["second"] / rankings["count"]),
+            current_app.config["app_settings"]["number_decimal_places"],
         )
         rankings["percent_second_tied"] = round(
-            100 * (rankings["second_tied"] / rankings["count"]), 5
+            100 * (rankings["second_tied"] / rankings["count"]),
+            current_app.config["app_settings"]["number_decimal_places"],
         )
         rankings["percent_third"] = round(
-            100 * (rankings["third"] / rankings["count"]), 5
+            100 * (rankings["third"] / rankings["count"]),
+            current_app.config["app_settings"]["number_decimal_places"],
         )
 
     return rankings

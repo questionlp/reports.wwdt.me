@@ -49,9 +49,16 @@
                         <li class="nav-item d-block d-xl-none">
                             <hr>
                         </li>
+                        {% if blog_url %}
                         <li class="nav-item d-block d-xl-none">
                             <a class="nav-link" href="{{ blog_url }}" target="_blank">Blog</a>
                         </li>
+                        {% endif %}
+                        {% if repo_url %}
+                        <li class="nav-item d-block d-md-none">
+                            <a class="nav-link" href="{{ repo_url }}" target="_blank">Source Code</a>
+                        </li>
+                        {% endif %}
                         {% if support_npr_url %}
                         <li class="nav-item d-block d-xl-none">
                             <hr>

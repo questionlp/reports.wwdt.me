@@ -50,7 +50,7 @@
                     {% for show in shows %}
                     <tr>
                         <td><a href="{{ stats_url }}/shows/{{ show.date | replace('-', '/') }}">{{ show.date }}</a></td>
-                        {% if show.location.venue and show.location.city and show.location.city %}
+                        {% if show.location.venue and show.location.city and show.location.state %}
                         <td>{{ show.location.venue }} ({{ show.location.city }}, {{ show.location.state }})</td>
                         {% elif show.location.venue and (not show.location.city or not show.location.state) %}
                         <td>{{ show.location.venue }}</td>
