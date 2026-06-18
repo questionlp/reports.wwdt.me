@@ -17,11 +17,11 @@
   - `mastodon_user`
   - `support_npr_url`
 - Fixed a series of bugs that was repeated throughout many of the Shows reports where checks should have been for location venue, city and state but ended up checking for venue and city twice
-- Updated queries that includes the use of SQL `AVG()` functions to have the value cast as a `DECIMAL(12, x)` where `x` is based on the processed value for `settings.number_decimal_places`
+- Updated queries that includes the use of SQL `AVG()` functions to have the value cast as a `DECIMAL(12, %s)` where `%s` is based on the processed value for `settings.number_decimal_places`
 
 ### Component Changes
 
-- Upgraded wwdtm from 2.5.5 to 2.6.1
+- Upgraded wwdtm-theme from 2.5.5 to 2.6.1
   - Includes an upgrade of IBM Plex Mono from 1.1.0 to 2.5.0
 
 ### Development Changes
