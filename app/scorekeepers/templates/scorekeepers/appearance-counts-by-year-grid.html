@@ -47,7 +47,7 @@
                     {% for scorekeeper in scorekeepers %}
                     <tr>
                         <td class="name scorekeeper">
-                            <a href="{{ stats_url }}/scorekeeper/{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a>
+                            <a href="{{ stats_url }}/scorekeepers/{{ scorekeeper.slug }}">{{ scorekeeper.name }}</a>
                         </td>
                         {% for year in show_years %}
                             {% if year in scorekeeper.regular_appearances and year in scorekeeper.all_appearances %}

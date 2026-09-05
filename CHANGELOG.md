@@ -1,5 +1,11 @@
 # Changes
 
+## 4.16.1
+
+### Application Changes
+
+- Corrected the link scorekeeper link to the Wait Wait Stats Page in the Scorekeeper "Appearance Counts by Year: Grid" report
+
 ## 4.16.0
 
 ### Application Changes
