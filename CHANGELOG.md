@@ -1,5 +1,11 @@
 # Changes
 
+## 4.16.2
+
+### Application Changes
+
+- Added AI Policy collapsible and updated the Disclaimers collapsible located in the page footer template
+
 ## 4.16.1
 
 ### Application Changes
