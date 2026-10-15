@@ -15,9 +15,6 @@ def retrieve_panelists_first_appearance_wins(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str | int | Decimal]:
     """Returns a dictionary containing wins or tied for first for panelists' first appearance."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT p.panelistslug
         FROM ww_showpnlmap pm

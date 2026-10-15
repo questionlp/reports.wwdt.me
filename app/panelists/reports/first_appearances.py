@@ -21,9 +21,6 @@ def retrieve_panelists_first_appearance(
     The dictionary uses panelist slug string as keys with panelist's first
     appearance information as a dictionary as the key value.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT panelistid, panelist, panelistslug
         FROM ww_panelists

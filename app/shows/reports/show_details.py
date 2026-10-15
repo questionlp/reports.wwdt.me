@@ -15,9 +15,6 @@ def retrieve_show_date_by_id(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> str | None:
     """Retrieve a show date for a given show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT showdate FROM ww_shows
         WHERE showid = %s
@@ -38,9 +35,6 @@ def retrieve_show_guests(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str]]:
     """Retrieve the Not My Job guest for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT g.guestid, g.guest, g.guestslug
         FROM ww_showguestmap gm
@@ -72,9 +66,6 @@ def retrieve_show_panelists(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str]]:
     """Retrieve panelists for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug
         FROM ww_showpnlmap pm
@@ -108,9 +99,6 @@ def retrieve_show_panelists_details(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str]]:
     """Retrieve details for panelists for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug,
         pm.panelistlrndstart, pm.panelistlrndstart_decimal,
@@ -160,9 +148,6 @@ def retrieve_all_shows(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, h.host, sk.scorekeeper
@@ -231,9 +216,6 @@ def retrieve_all_best_of_shows(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, h.host, sk.scorekeeper
@@ -303,9 +285,6 @@ def retrieve_all_original_shows(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, l.venue, l.city, l.state,
         h.host, sk.scorekeeper
@@ -369,9 +348,6 @@ def retrieve_all_repeat_shows(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, h.host, sk.scorekeeper
@@ -441,9 +417,6 @@ def retrieve_all_repeat_best_of_shows(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, h.host, sk.scorekeeper

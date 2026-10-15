@@ -19,9 +19,6 @@ def retrieve_perfect_score_counts(
     A "perfect" score is one that greater than or equals to 20 points. Excludes
     Best Of and repeat shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _panelists = retrieve_panelists_id_key(database_connection=database_connection)
 
     # Get panelists who have scored 20 points

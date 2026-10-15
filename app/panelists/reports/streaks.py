@@ -15,9 +15,6 @@ def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of panelists with their panelist ID and name."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug
         FROM ww_panelists p
@@ -50,9 +47,6 @@ def retrieve_panelist_ranks(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of show dates and the panelist rank for the requested panelist ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, pm.showpnlrank
         FROM ww_showpnlmap pm
@@ -88,9 +82,6 @@ def calculate_panelist_losing_streaks(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve panelist stats and calculate their losing streaks."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     losing_streaks = []
     for panelist in panelists:
         longest_losing_streak = 0

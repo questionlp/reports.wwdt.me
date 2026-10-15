@@ -17,9 +17,6 @@ def retrieve_most_outright_wins_by_year(
     Does not include Best Of and/or repeat shows. Panelists are sorted
     by number of outright wins in descending order.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug, COUNT(pm.showpnlrank) AS wins
         FROM ww_showpnlmap pm
@@ -57,9 +54,6 @@ def retrieve_most_outright_wins_plus_ties_by_year(
     Does not include Best Of and/or repeat shows. Panelists are sorted
     by number of outright wins plus ties in descending order.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug, COUNT(pm.showpnlrank) AS wins
         FROM ww_showpnlmap pm
@@ -97,9 +91,6 @@ def retrieve_combined_outright_wins_ties_by_year(
     Does not include Best Of and/or repeat shows. Panelists are sorted
     by number of outright wins in descending order.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _wins_ties = retrieve_most_outright_wins_plus_ties_by_year(
         year=year, database_connection=database_connection
     )

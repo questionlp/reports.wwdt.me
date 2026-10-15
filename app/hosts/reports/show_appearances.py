@@ -29,9 +29,6 @@ def retrieve_appearance_details_by_year(
     Returned information includes show date, show flags, location,
     scorekeeper, panelists, and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, sk.scorekeeper, sk.scorekeeperslug,
@@ -110,9 +107,6 @@ def retrieve_appearance_details(
     Returned information includes show date, show flags, location,
     scorekeeper, panelists, and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years = retrieve_show_years(database_connection=database_connection)
     if not _years:
         return None

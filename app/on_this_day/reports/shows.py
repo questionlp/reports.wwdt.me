@@ -30,9 +30,6 @@ def retrieve_shows_by_month_day(
     if not 1 <= month <= 12 or not 1 <= day <= 31:
         return None
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, l.venue,
         l.city, l.state, h.host, sk.scorekeeper

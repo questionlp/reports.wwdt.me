@@ -20,9 +20,6 @@ def retrieve_unique_best_of_bluff_shows(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of Best Of shows with a unique Bluff the Listener Segment."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showdate, s.repeatshowid, blm.segment, blm.chosenbluffpnlid,
         blm.correctbluffpnlid

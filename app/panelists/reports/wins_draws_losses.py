@@ -32,9 +32,6 @@ def retrieve_panelist_wins_draws_losses(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, int]:
     """Retrieve wins, draws, losses and total counts for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
             SELECT COUNT(pm.showpnlrank)
@@ -107,9 +104,6 @@ def retrieve_all_wins_draws_losses(
     minimum_total_count: int = 0,
 ) -> dict[str, str | int | None]:
     """Retrieves wins, draws, losses and total counts for all panelists."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _panelists = common.retrieve_panelists(database_connection=database_connection)
 
     if not _panelists:

@@ -20,9 +20,6 @@ def retrieve_panelist_scoring_exceptions(
     slug string, Lightning Fill In The Blank scoring information and
     notes for that show.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = (
         "SELECT s.showdate, p.panelist, p.panelistslug, "
         "pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal, "

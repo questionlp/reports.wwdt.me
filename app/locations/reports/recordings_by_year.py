@@ -15,9 +15,6 @@ def retrieve_recording_counts_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, dict[str, str | int | None]]:
     """Retrieve location recording counts for a given year."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count
@@ -133,9 +130,6 @@ def retrieve_all_recording_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, dict[str, str | int | None]]:
     """Retrieve all recording counts for all locations from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years_list = retrieve_all_years(database_connection=database_connection)
 
     if not _years_list:

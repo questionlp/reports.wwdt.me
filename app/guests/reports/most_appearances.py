@@ -19,9 +19,6 @@ def retrieve_guest_most_appearances_all(
     Dictionary keys are ordered by number of appearances in descending
     order, across all shows
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT g.guestid, g.guest, g.guestslug,
@@ -37,7 +34,6 @@ def retrieve_guest_most_appearances_all(
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None
@@ -62,9 +58,6 @@ def retrieve_guest_most_appearances_regular(
     Dictionary entries are ordered by number of appearances in descending
     order, across regular shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT g.guestid, g.guest, g.guestslug,
@@ -79,7 +72,6 @@ def retrieve_guest_most_appearances_regular(
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not result:
         return None

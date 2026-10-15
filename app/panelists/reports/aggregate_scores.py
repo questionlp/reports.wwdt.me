@@ -19,9 +19,6 @@ def retrieve_all_scores(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[int | Decimal]:
     """Retrieve a list of all panelist scores from non-Best Of and non-Repeat shows."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal
         FROM ww_showpnlmap pm
@@ -46,9 +43,6 @@ def retrieve_score_spread(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, int | Decimal]]:
     """Retrieve a list of grouped panelist scores from non-Best Of and non-Repeat shows."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal,
         COUNT(pm.panelistscore_decimal) AS count

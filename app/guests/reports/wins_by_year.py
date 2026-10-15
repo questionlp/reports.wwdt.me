@@ -19,9 +19,6 @@ def retrieve_wins_by_year(
     Results only include guests that have appeared on regular shows and
     unique guests who have only appeared on Best Of shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Add exclusion of 1998-05-02 due to a scoring exception was made
     # but not a win was not granted
     query = """

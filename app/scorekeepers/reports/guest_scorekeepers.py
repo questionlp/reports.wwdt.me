@@ -18,9 +18,6 @@ def retrieve_guest_scorekeeper_counts_by_year(
 
     The returned dictionary uses year as the key.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years = retrieve_show_years(database_connection=database_connection)
     if not _years:
         return None
@@ -38,7 +35,6 @@ def retrieve_guest_scorekeeper_counts_by_year(
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
-    database_connection.close()
 
     if not results:
         return None

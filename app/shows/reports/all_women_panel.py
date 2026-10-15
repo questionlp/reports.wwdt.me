@@ -14,9 +14,6 @@ def retrieve_show_details(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
     """Retrieves host, scorekeeper, panelist, guest and location information."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve host, scorekeeper and guest
     query = """
         SELECT s.showdate, h.host, sk.scorekeeper, g.guest,
@@ -100,9 +97,6 @@ def retrieve_shows_all_women_panel(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves details from all shows that have had an all women panel."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.showid
         FROM ww_showpnlmap pm

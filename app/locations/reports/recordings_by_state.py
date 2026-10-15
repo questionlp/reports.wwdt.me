@@ -13,9 +13,6 @@ def retrieve_recording_counts_by_state(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, dict[str, int]]:
     """Retrieve a count of recordings broken down by state/province."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT state, name, COUNT(name) AS count
         FROM ww_showlocationmap lm

@@ -24,9 +24,6 @@ def retrieve_lightning_start_values_by_panelist(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[Decimal]:
     """Retrieve all Lightning Round starting values for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistlrndstart_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -51,9 +48,6 @@ def retrieve_lightning_correct_values_by_panelist(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[Decimal]:
     """Retrieve all Lightning Round correct values for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistlrndcorrect_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -78,9 +72,6 @@ def retrieve_lightning_total_scores_by_panelist(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[Decimal]:
     """Retrieve all Lightning Round total scores for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid

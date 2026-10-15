@@ -20,9 +20,6 @@ def retrieve_panelists_first_wins(
 
     Overall win includes winning outright or being tied for first.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _all_panelists = retrieve_panelists(database_connection=database_connection)
     panelists = {}
     for panelist in _all_panelists:

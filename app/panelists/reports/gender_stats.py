@@ -28,9 +28,6 @@ def retrieve_scores_by_year_gender(
 
     panelist_gender = gender[0].upper()
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_shows s ON s.showid = pm.showid

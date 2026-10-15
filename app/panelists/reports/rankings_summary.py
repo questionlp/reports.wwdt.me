@@ -18,9 +18,6 @@ def retrieve_rankings_by_panelist(
     panelist_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, Any]:
     """Retrieves ranking statistics for the requested panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
         SELECT COUNT(pm.showpnlrank) FROM ww_showpnlmap pm

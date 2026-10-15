@@ -18,9 +18,6 @@ def retrieve_guest_appearances(
 
     Includes Best Of and Repeats.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
@@ -66,9 +63,6 @@ def retrieve_best_of_only_guests(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves a list of Not My Job guests that have only appeared on Best Of shows."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT g.guestid, g.guest, g.guestslug
@@ -88,7 +82,6 @@ def retrieve_best_of_only_guests(
     cursor.close()
 
     if not result:
-        database_connection.close()
         return None
 
     guests = []

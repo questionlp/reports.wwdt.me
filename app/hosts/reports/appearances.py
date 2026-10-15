@@ -15,9 +15,6 @@ def retrieve_hosts(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str]]:
     """Retrieves a list of all available hosts from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT h.hostid, h.host, h.hostslug
@@ -49,9 +46,6 @@ def retrieve_appearances_by_host(
     host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, int]:
     """Retrieve appearance data for the requested host."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT (
@@ -91,9 +85,6 @@ def retrieve_first_most_recent_appearances(
     host_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str]:
     """Retrieve first and most recent appearances for both regular and all shows for a host."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max

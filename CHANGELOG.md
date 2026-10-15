@@ -1,6 +1,10 @@
 # Changes
 
-## 4.17.0
+## 4.17.0 (Work-in-Progress)
+
+### Application Changes
+
+- Remove unnecessary `database_connection.is_connected()` checks in all reporting modules
 
 ### Component Changes
 

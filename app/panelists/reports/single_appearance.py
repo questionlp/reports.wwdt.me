@@ -15,9 +15,6 @@ def retrieve_single_appearances(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of panelists that have only made a single appearance on the show."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid
         FROM ww_showpnlmap pm

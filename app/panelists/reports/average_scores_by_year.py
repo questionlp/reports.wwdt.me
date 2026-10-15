@@ -16,9 +16,6 @@ def empty_years_average(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, int]:
     """Retrieve a dictionary containing a list of available years as keys and zeroes for values."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve available show years
     cursor = database_connection.cursor(dictionary=True)
     query = """
@@ -41,9 +38,6 @@ def retrieve_panelist_yearly_average(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str | list[float | Decimal]]:
     """Retrieves panelist name, slug string and average scores for each year."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve available panelists
     cursor = database_connection.cursor(dictionary=True)
     query = """
@@ -102,9 +96,6 @@ def retrieve_all_panelists_yearly_average(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves a list of dictionaries for each panelist's yearly average scores."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve available panelists
     cursor = database_connection.cursor(dictionary=True)
     query = """

@@ -17,9 +17,6 @@ def empty_years_bluff(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, int]:
     """Retrieve a dictionary containing a list of available years as keys and zeroes for values."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve available show years
     cursor = database_connection.cursor(dictionary=True)
     query = """
@@ -53,9 +50,6 @@ def retrieve_panelist_bluff_counts(
     Returned is the number of times a panelist's Bluff story was chosen and the
     number of times a panelist had the correct story.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
         SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
@@ -141,9 +135,6 @@ def retrieve_panelist_bluff_counts_by_year(
     Returned is the number of times a panelist's Bluff story was chosen and the
     number of times a panelist had the correct story.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
         SELECT COUNT(blm.showid) FROM ww_showbluffmap blm
@@ -288,9 +279,6 @@ def retrieve_panelist_bluffs_by_year(
     panelist_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[int, int]:
     """Retrieve a panelist's Bluff the Listener statistics per year."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT YEAR(s.showdate) AS year, count(blm.chosenbluffpnlid) AS chosen
         FROM ww_showbluffmap blm
@@ -379,9 +367,6 @@ def retrieve_most_chosen_by_year(
     Includes Bluff the Listener segments from regular shows and Best Of
     shows with unique Bluff the Listener segments.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug,
         COUNT(blm.chosenbluffpnlid) AS count
@@ -427,9 +412,6 @@ def retrieve_most_correct_by_year(
     Includes Bluff the Listener segments from regular shows and Best Of
     shows with unique Bluff the Listener segments.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug,
         COUNT(blm.correctbluffpnlid) AS count
@@ -475,9 +457,6 @@ def retrieve_most_chosen_correct_by_year(
     Includes Bluff the Listener segments from regular shows and Best Of
     shows with unique Bluff the Listener segments.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug,
         COUNT(blm.correctbluffpnlid) AS count

@@ -30,9 +30,6 @@ def retrieve_appearance_details_by_year(
     host, scorekeeper, panelist scoring information, other panelists,
     and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         l.venue, l.city, l.state, h.host, h.hostslug,
@@ -130,9 +127,6 @@ def retrieve_appearance_details(
     host, scorekeeper, panelist scoring information, other panelists,
     and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years = retrieve_show_years(database_connection=database_connection)
     if not _years:
         return None

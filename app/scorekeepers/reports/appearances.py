@@ -13,9 +13,6 @@ def retrieve_scorekeepers(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str]]:
     """Retrieves a list of all available scorekeepers from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
@@ -47,9 +44,6 @@ def retrieve_appearances_by_scorekeeper(
     scorekeeper_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict:
     """Retrieve appearance data for the requested scorekeeper."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT (
@@ -89,9 +83,6 @@ def retrieve_first_most_recent_appearances(
     scorekeeper_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict:
     """Retrieve a scorekeeper's first and most recent appearances for both regular and all shows."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT MIN(s.showdate) AS min, MAX(s.showdate) AS max
@@ -181,9 +172,6 @@ def retrieve_scorekeeper_by_show_id(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Returns scorekeeper information for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT sk.scorekeeperid, sk.scorekeeper, sk.scorekeeperslug
         FROM ww_showskmap skm

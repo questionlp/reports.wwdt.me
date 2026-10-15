@@ -17,9 +17,6 @@ def retrieve_show_descriptions(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Returns a list with all shows and their descriptions."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Get all shows and descriptions
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
@@ -63,9 +60,6 @@ def retrieve_show_notes(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Returns a list with all shows and their notes."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Get all shows and descriptions
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
@@ -109,9 +103,6 @@ def retrieve_show_years(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[int]:
     """Retrieve a list of all show years."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT YEAR(showdate) AS year
         FROM ww_shows
