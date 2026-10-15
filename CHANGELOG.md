@@ -1,5 +1,24 @@
 # Changes
 
+## 4.17.0
+
+### Component Changes
+
+- Upgraded gunicorn from 24.1.1 to 26.2.0
+- Upgraded Markdown from 3.10.1 to 3.11
+- Upgraded MySQL Connector/Python from 9.5.0 to 26.7.0
+- Upgraded NumPy from 2.4.1 to 2.5.0
+- Upgraded pytz from 2025.2 to 2026.5
+- Upgraded wwdtm-theme from 2.6.1 to 2.6.7
+
+### Development Changes
+
+- Upgraded pydoclint from 0.8.4 to 0.11.0
+- Upgraded pytest from 9.0.4 to 9.1.1
+- Upgraded pytest-cov from 7.0.0 to 7.1.0
+- Upgraded Ruff from 0.15.6 to 0.17.0
+  - Minimum version of ruff in `pyproject.toml` has been increased to 0.17.0 to match
+
 ## 4.16.2
 
 ### Application Changes
