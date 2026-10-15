@@ -17,9 +17,6 @@ def retrieve_average_scores_by_location(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve average scores sorted by location."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Excluding 25th Anniversary Show at Chicago Theatre from calculations
     # due to non-standard number of panelist scores and score totals
     query = """

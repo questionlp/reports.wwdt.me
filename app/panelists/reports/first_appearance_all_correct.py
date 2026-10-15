@@ -15,9 +15,6 @@ def retrieve_panelists_first_appearance_all_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str | int | Decimal]:
     """Returns panelists answering all Lightning questions correct in first appearance."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT panelistid, panelist, panelistslug
         FROM ww_panelists

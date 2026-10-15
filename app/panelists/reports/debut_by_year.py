@@ -20,9 +20,6 @@ def retrieve_show_info(
     show_date: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, Any]:
     """Retrieve show host, scorekeeper and Not My Job guest for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.bestof, s.repeatshowid, h.host, sk.scorekeeper
         FROM ww_showhostmap hm
@@ -60,9 +57,6 @@ def retrieve_show_guests(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[str]:
     """Retrieves a list of Not My Job guest(s) for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT g.guest
         FROM ww_showguestmap gm
@@ -86,9 +80,6 @@ def retrieve_panelists_first_shows(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Returns a dictionary containing all panelists and their first shows."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug,
         MIN(s.showdate) AS first, YEAR(MIN(s.showdate)) AS year

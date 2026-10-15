@@ -17,9 +17,6 @@ def retrieve_appearance_counts_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, dict[str, str | int | None]]:
     """Retrieve host appearance counts for a given year."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     all_query = """
         SELECT h.hostid, h.host, h.hostslug, COUNT(h.hostid) AS count
         FROM ww_showhostmap hm
@@ -131,9 +128,6 @@ def retrieve_host_appearance_counts(
 
     Appearance counts exclude both Best Of and repeat shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT YEAR(s.showdate) AS year, COUNT(h.host) AS count
         FROM ww_showhostmap hm
@@ -169,9 +163,6 @@ def retrieve_host_appearance_counts_all(
 
     Appearance counts include both Best Of and repeat shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT YEAR(s.showdate) AS year, COUNT(h.host) AS count
         FROM ww_showhostmap hm
@@ -203,9 +194,6 @@ def retrieve_all_appearance_counts(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve all appearance counts for all hosts from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT h.hostid, h.host, h.hostslug
         FROM ww_showhostmap hm
@@ -245,9 +233,6 @@ def retrieve_all_appearance_counts_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, dict[str, str | int | None]]:
     """Retrieve all appearance counts for all hosts from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years_list = retrieve_all_years(database_connection=database_connection)
 
     if not _years_list:

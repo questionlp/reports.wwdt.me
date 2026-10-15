@@ -22,9 +22,6 @@ def retrieve_not_my_job_stats(
     Job guest has won (including exceptions), and a total number of
     times a Not My Job guest has lost.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Get a count of all Not My Job guest entries with scores and are
     # from shows that are not Best Of or repeats
     query = """
@@ -162,9 +159,6 @@ def retrieve_bluff_stats(
     chooses the correct story, and a count of times where the contestant
     does not choose the correct story.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT COUNT(s.showid)
         FROM ww_showbluffmap blm
@@ -250,9 +244,6 @@ def retrieve_stats_totals(
     chooses the correct story, and a count of times where the contestant
     does not choose the correct story.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _not_my_job_stats = retrieve_not_my_job_stats(
         database_connection=database_connection
     )

@@ -13,9 +13,6 @@ def retrieve_location_home_vs_away(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, int]] | None:
     """Retrieve counts of home versus away shows broken down by year."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT YEAR(showdate) FROM ww_shows
         ORDER BY YEAR(showdate) ASC;

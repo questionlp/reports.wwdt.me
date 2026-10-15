@@ -20,9 +20,6 @@ def retrieve_common_shows(
 
     Returned results excludins Best Of, Repeats and the 20th Anniversary special.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.showid FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -61,9 +58,6 @@ def retrieve_panelists_scores(
     """Retrieves panelists scores for the two requested panelists."""
     if not show_ids:
         return None
-
-    if not database_connection.is_connected():
-        database_connection.reconnect()
 
     show_scores = {}
     for show_id in show_ids:

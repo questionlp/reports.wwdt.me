@@ -19,9 +19,6 @@ def retrieve_appearances_by_year(
     Results only include guests that have appeared on regular shows and
     unique guests who have only appeared on Best Of shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, g.guest,
         g.guestslug, gm.guestscore, gm.exception

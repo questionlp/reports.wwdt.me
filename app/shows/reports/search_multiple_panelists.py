@@ -17,9 +17,6 @@ def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str]:
     """Returns a dictionary containing valid panelists."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT panelistslug, panelist FROM ww_panelists
         WHERE panelistslug <> 'multiple'
@@ -40,9 +37,6 @@ def retrieve_details(
     show_id: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, Any]]:
     """Retrieve show details for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, l.venue,
         l.city, l.state, h.host, sk.scorekeeper
@@ -94,9 +88,6 @@ def retrieve_matching_one(
     include_repeats: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieve show details for shows with a panel containing one of the requested panelists."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.bestof, s.repeatshowid
         FROM ww_showpnlmap pm
@@ -147,9 +138,6 @@ def retrieve_matching_two(
     include_repeats: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieve show details for shows with a panel containing two of the requested panelists."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.bestof, s.repeatshowid
         FROM ww_showpnlmap pm
@@ -207,9 +195,6 @@ def retrieve_matching_three(
     include_repeats: bool = False,
 ) -> list[dict[str, Any]]:
     """Retrieve show details for shows with a panel containing three of the requested panelists."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.bestof, s.repeatshowid
         FROM ww_showpnlmap pm

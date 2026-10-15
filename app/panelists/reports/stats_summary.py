@@ -22,9 +22,6 @@ def retrieve_appearances_by_panelist(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, int]:
     """Retrieve appearance data for the requested panelist by the panelist's slug string."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
         SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
@@ -71,9 +68,6 @@ def retrieve_scores_by_panelist(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[Decimal]:
     """Retrieve all scores for the requested panelist by the panelist's slug string."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid

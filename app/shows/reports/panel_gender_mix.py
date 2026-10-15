@@ -18,9 +18,6 @@ def retrieve_panel_gender_count_by_year(
     year: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> int:
     """Return a count of shows for a year with counts of panel gender counts."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     counts = {}
 
     for gender_count in range(1, 4):

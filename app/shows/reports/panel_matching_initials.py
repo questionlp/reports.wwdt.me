@@ -16,9 +16,6 @@ def retrieve_shows_panelists_matching_initials(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves details from shows where each panelists has matching initials."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     panelists_double_initials = current_app.config["app_settings"].get(
         "panelists_double_initials", None
     )

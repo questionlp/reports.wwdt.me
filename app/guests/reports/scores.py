@@ -18,9 +18,6 @@ def retrieve_all_scoring_exceptions(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieve a list of all Not My Job scoring exceptions."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT s.showdate, g.guestid, g.guest, g.guestslug,
@@ -104,9 +101,6 @@ def retrieve_all_three_pointers(
     This includes instances where a guest has answered all three questions
     correct or received all three points.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         (
@@ -177,9 +171,6 @@ def retrieve_all_missing_scores(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str | int | bool | None]]:
     """Retrieve all Not My Job guests with no scores entered."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showdate, s.bestof, s.repeatshowid, g.guest,
         g.guestslug, gm.guestscore, gm.exception

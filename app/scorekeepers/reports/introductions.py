@@ -15,9 +15,6 @@ def retrieve_scorekeepers_with_introductions(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve a list of scorekeepers that have show introduction entries in the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT DISTINCT sk.scorekeeperid, sk.scorekeeper,
@@ -51,9 +48,6 @@ def retrieve_all_scorekeeper_introductions(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
     """Retrieve all scorekeeper introductions from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     scorekeepers = retrieve_scorekeepers_with_introductions(
         database_connection=database_connection
     )

@@ -25,9 +25,6 @@ def retrieve_best_of_shows_guest_host_scorekeeper(
     Basic information for each show includes location, host,
     scorekeeper, panelists and guest.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, h.host,
         h.hostslug, hm.guest AS host_guest, sk.scorekeeper,
@@ -100,9 +97,6 @@ def retrieve_shows_guest_host_scorekeeper(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve a list of shows with a guest host and guest scorekeeper."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid, h.host,
         h.hostslug, hm.guest AS host_guest, sk.scorekeeper,

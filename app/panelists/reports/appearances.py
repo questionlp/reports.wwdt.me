@@ -35,9 +35,6 @@ def retrieve_first_most_recent_appearances(
             "count_all": 0,
         }
 
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug,
         MIN(s.showdate) AS min, MAX(s.showdate) AS max
@@ -137,9 +134,6 @@ def retrieve_panelists_by_show_id(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str | int]]:
     """Retrieve a list of panelists for a given show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug
         FROM ww_showpnlmap pm

@@ -15,9 +15,6 @@ def retrieve_scoring_exceptions_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int | bool]] | None:
     """Retrieve Not My Job guest scoring exceptions for a given month and day."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     cursor = database_connection.cursor(dictionary=True)
     query = """
         SELECT g.guest, g.guestslug, s.showdate, gm.guestscore, gm.exception

@@ -16,9 +16,6 @@ def retrieve_all_lightning_round_start(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
     """Retrieve a dictionary of all Lightning Fill In The Blank segment starting scores."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, p.panelistid, p.panelist,
         pm.panelistlrndstart_decimal
@@ -65,9 +62,6 @@ def retrieve_scoring_info_by_show_id(
     answers and final score for the requested show ID. Used for
     getting scoring details where the segment starts in a three-way tie.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showdate, pm.panelistlrndstart_decimal,
         pm.panelistlrndcorrect_decimal, pm.panelistscore_decimal
@@ -98,9 +92,6 @@ def retrieve_panelists_by_show_id(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Returns a list of panelists for the requested show ID."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug
         FROM ww_showpnlmap pm
@@ -134,9 +125,6 @@ def shows_lightning_round_start_zero(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Return list of shows in which a panelist starts the Lightning Fill In The Blank with zero points."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, p.panelistid, p.panelist,
         pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
@@ -182,9 +170,6 @@ def shows_lightning_round_zero_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Return list of shows in which a panelist answers zero Lightning Fill In The Blank questions correct."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, p.panelistid, p.panelist,
         pm.panelistlrndstart_decimal, pm.panelistlrndcorrect_decimal,
@@ -231,9 +216,6 @@ def shows_lightning_round_answering_same_number_correct(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Return list of shows in which all panelists answers the same number of Lightning questions correct."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, pm.panelistlrndcorrect_decimal,
         COUNT(pm.panelistlrndcorrect_decimal) AS count
@@ -311,9 +293,6 @@ def shows_ending_with_three_way_tie(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieve all shows in which all three panelists ended the Lightning Fill In The Blank in a three-way tie."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, pm.panelistscore_decimal,
         COUNT(pm.showpnlrank) AS count

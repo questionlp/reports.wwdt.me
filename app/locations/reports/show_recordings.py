@@ -28,9 +28,6 @@ def retrieve_recording_details_by_year(
     Returned information includes show date, show flags, host,
     scorekeeper, panelists, and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, s.bestof, s.repeatshowid,
         h.host, h.hostslug, sk.scorekeeper, sk.scorekeeperslug,
@@ -108,9 +105,6 @@ def retrieve_recording_details(
     Returned information includes show date, show flags, host,
     scorekeeper, panelists, and Not My Job guest(s).
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years = retrieve_show_years(database_connection=database_connection)
     if not _years:
         return None
@@ -130,9 +124,6 @@ def retrieve_locations(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, str | None]]:
     """Retrieve a list of locations along with their details."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT l.venue, l.city, l.state, l.locationslug
         FROM ww_locations l
@@ -179,9 +170,6 @@ def retrieve_location(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str | None]:
     """Retrieve details for a given location slug."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT l.venue, l.city, l.state, l.locationslug
         FROM ww_locations l

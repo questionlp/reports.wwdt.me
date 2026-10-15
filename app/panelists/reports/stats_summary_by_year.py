@@ -24,9 +24,6 @@ def retrieve_appearances_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, int]:
     """Retrieve appearance data for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT (
         SELECT COUNT(pm.showid) FROM ww_showpnlmap pm
@@ -80,9 +77,6 @@ def retrieve_scores_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[int]:
     """Retrieve all scores for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.panelistscore_decimal FROM ww_showpnlmap pm
         JOIN ww_panelists p ON p.panelistid = pm.panelistid
@@ -114,9 +108,6 @@ def retrieve_all_stats_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Retrieve common statistics for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     all_stats = {
         "appearances": retrieve_appearances_by_year(
             panelist_slug=panelist_slug,
@@ -163,9 +154,6 @@ def retrieve_stats_all_years(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ):
     """Retrieves statistics for all years for a given panelist."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _info = retrieve_panelist_info_by_slug(
         panelist_slug=panelist_slug, database_connection=database_connection
     )

@@ -15,9 +15,6 @@ def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Retrieve panelists from the Stats Page database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
         FROM ww_showpnlmap pm
@@ -47,9 +44,6 @@ def retrieve_panelist_appearances(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, str]:
     """Retrieve panelist appearances from the Stats Page database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     panelist_appearances = {}
     for _, panelist_info in panelists.items():
         query = """
@@ -79,9 +73,6 @@ def retrieve_show_scores(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, Any]:
     """Retrieve scores for each show and panelist from the Stats Page Database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     shows = {}
     query = """
         SELECT s.showdate, p.panelistslug, pm.panelistscore_decimal

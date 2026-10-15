@@ -19,9 +19,6 @@ def retrieve_show_details(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict:
     """Retrieves host, scorekeeper, panelist, guest and location information."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Retrieve host and scorekeeper
     cursor = database_connection.cursor(dictionary=True)
     query = """
@@ -123,9 +120,6 @@ def retrieve_shows_all_high_scoring(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves details from shows with a panelist total score greater than or equal to 50."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, SUM(pm.panelistscore_decimal) AS total
         FROM ww_showpnlmap pm
@@ -166,9 +160,6 @@ def retrieve_shows_all_low_scoring(
     Excludes the 20th anniversary show due to unique Lightning
     Fill In The Blank segment.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, SUM(pm.panelistscore_decimal) AS total
         FROM ww_showpnlmap pm
@@ -210,9 +201,6 @@ def retrieve_shows_panelist_score_sum_match(
     Excludes the 20th anniversary show due to unique Lightning
     Fill In The Blank segment.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, pm.panelistid, p.panelist, p.panelistslug,
         pm.panelistscore_decimal, pm.showpnlrank
@@ -270,9 +258,6 @@ def retrieve_shows_panelist_perfect_scores(
 
     Best Of and repeat shows are excluded.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT s.showid, s.showdate, p.panelist, p.panelistslug, pm.panelistscore_decimal
         FROM ww_showpnlmap pm

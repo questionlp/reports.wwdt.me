@@ -25,9 +25,6 @@ def retrieve_not_my_job_stats_by_year(
     Job guest has won (including exceptions), and a total number of
     times a Not My Job guest has lost.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     # Get a count of all Not My Job guest entries with scores and are
     # from shows that are not Best Of or repeats
     query = """
@@ -180,9 +177,6 @@ def retrieve_bluff_stats_by_year(
     chooses the correct story, and a count of times where the contestant
     does not choose the correct story.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT COUNT(s.showid)
         FROM ww_showbluffmap blm
@@ -270,9 +264,6 @@ def retrieve_stats_all_years(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, dict[str, Any]]:
     """Retrieves Not My Job and Bluff the Listener win stats for all years."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _years_list = retrieve_all_years(database_connection=database_connection)
 
     if not _years_list:

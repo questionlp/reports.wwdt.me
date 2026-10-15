@@ -15,9 +15,6 @@ def retrieve_panelists(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of all available panelists from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug
         FROM ww_panelists p
@@ -50,9 +47,6 @@ def retrieve_panelists_by_year(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict[str, Any]]:
     """Retrieves a list of all available panelists for a given year from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT DISTINCT p.panelistid, p.panelist, p.panelistslug
         FROM ww_showpnlmap pm
@@ -87,9 +81,6 @@ def retrieve_panelists_id_key(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[int, dict]:
     """Retrieves a dictionary of all available panelists from the database."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelistid, p.panelist, p.panelistslug
         FROM ww_panelists p
@@ -118,9 +109,6 @@ def retrieve_panelist_info_by_slug(
     panelist_slug: str, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> dict[str, str | int]:
     """Retrieves panelist information for a given panelist slug string."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT p.panelist, p.panelistslug
         FROM ww_panelists p

@@ -15,9 +15,6 @@ def retrieve_recording_counts_by_location(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> dict[str, dict[str, str | int | None]]:
     """Retrieve recording counts for all available locations."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT l.locationid, l.city, l.state, l.venue, l.locationslug,
         COUNT(l.locationid) AS count

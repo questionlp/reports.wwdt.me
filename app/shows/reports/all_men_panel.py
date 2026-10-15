@@ -15,9 +15,6 @@ def retrieve_shows_all_men_panel(
     database_connection: MySQLConnection | PooledMySQLConnection,
 ) -> list[dict]:
     """Retrieves details from all shows that have had an all men panel."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     query = """
         SELECT pm.showid
         FROM ww_showpnlmap pm

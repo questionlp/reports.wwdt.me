@@ -21,9 +21,6 @@ def retrieve_host_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | bool]] | None:
     """Retrieve host debuts for a given month and day."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _list_hosts: list[dict[str, str]] = retrieve_hosts(
         database_connection=database_connection
     )
@@ -66,9 +63,6 @@ def retrieve_panelist_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | int | bool | Decimal]] | None:
     """Retrieve panelist debuts for a given month and day."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _list_panelists: list[dict[str, Any]] = retrieve_panelists(
         database_connection=database_connection
     )
@@ -116,9 +110,6 @@ def retrieve_scorekeeper_debuts_by_month_day(
     month: int, day: int, database_connection: MySQLConnection | PooledMySQLConnection
 ) -> list[dict[str, str | bool]] | None:
     """Retrieve scorekeeper debuts for a given month and day."""
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     _list_scorekeepers: list[dict[str, str]] = retrieve_scorekeepers(
         database_connection=database_connection
     )

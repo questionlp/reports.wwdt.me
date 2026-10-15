@@ -19,9 +19,6 @@ def retrieve_highest_average_scores_by_year(
 
     Does not include Best Of and/or repeat shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     if exclude_single_appearances:
         query = """
             SELECT p.panelist, p.panelistslug,
@@ -89,9 +86,6 @@ def retrieve_highest_average_correct_answers_by_year(
 
     Does not include Best Of and/or repeat shows.
     """
-    if not database_connection.is_connected():
-        database_connection.reconnect()
-
     if exclude_single_appearances:
         query = """
             SELECT p.panelist, p.panelistslug,
