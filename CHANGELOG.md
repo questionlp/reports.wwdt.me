@@ -1,6 +1,6 @@
 # Changes
 
-## 4.17.0 (Work-in-Progress)
+## 4.17.0
 
 ### Application Changes
 
