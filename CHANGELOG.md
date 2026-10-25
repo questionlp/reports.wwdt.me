@@ -1,5 +1,16 @@
 # Changes
 
+## 4.17.1
+
+### Component Changes
+
+- Upgraded wwdtm-theme from 2.6.7 to 2.6.9
+
+### Development Changes
+
+- Increased minimum version of pytest in `pyproject.toml` has been increased to 9.0
+- Increased minimum version of Ruff in `pyproject.toml` has been increased to 0.17.0 (change was missed in the previous release)
+
 ## 4.17.0
 
 ### Application Changes
