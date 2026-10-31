@@ -1,5 +1,11 @@
 # Changes
 
+## 4.17.2
+
+### Application Changes
+
+- Added missing sort to the SQL query for the list of shows for the "On This Day" report
+
 ## 4.17.1
 
 ### Component Changes

@@ -41,6 +41,7 @@ def retrieve_shows_by_month_day(
         JOIN ww_showskmap skm ON skm.showid = s.showid
         JOIN ww_scorekeepers sk ON sk.scorekeeperid = skm.scorekeeperid
         WHERE MONTH(s.showdate) = %s AND DAY(s.showdate) = %s
+        ORDER BY s.showdate ASC;
     """
     cursor = database_connection.cursor(dictionary=True)
     cursor.execute(
