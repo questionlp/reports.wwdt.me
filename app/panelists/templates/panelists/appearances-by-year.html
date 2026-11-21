@@ -55,7 +55,7 @@
             {% if appearances[year] %}
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#flush-collapse-{{ year }}" aria-expanded="false" aria-controls="flush-collapse-{{ year }}">
-                {{ year }}
+                {{ year }} <span class="ps-2 fw-normal">(Appearances: {{ appearances[year] | length }})</a>
             </button>
             {% else %}
             <button disabled class="accordion-button collapsed" type="button" data-bs-toggle="collapse"

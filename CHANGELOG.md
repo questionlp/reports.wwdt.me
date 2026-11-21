@@ -1,5 +1,21 @@
 # Changes
 
+## 4.18.0
+
+### Application Changes
+
+- Added apperance counts to the accordion buttons in the "Appearances by Year" reports for Hosts, Panelists and Scorekeepers
+- Added debut counts to the accordion buttons in the "Debuts by Year" reports for Hosts, Panelists and Scorekeepers
+- Added recording counts to the accordion buttons in the "Recordings by Year" report for Locations
+- Adjusted the padding for the Disclaimer and AI Policy links in the footer
+
+### Component Changes
+
+- Upgraded gunicorn from 26.2.0 to 27.0.1
+- Upgraded IBM Plex Sans from 1.1.0 to 2.0.0
+- Upgraded wwdtm-theme from 2.6.9 to 2.7.1, which also includes:
+  - Upgraded Bootstrap from 5.3.8 to 5.3.9
+
 ## 4.17.2
 
 ### Application Changes
