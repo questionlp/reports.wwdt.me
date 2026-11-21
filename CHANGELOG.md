@@ -1,9 +1,12 @@
 # Changes
 
-## 4.17.3
+## 4.18.0
 
 ### Application Changes
 
+- Added apperance counts to the accordion buttons in the "Appearances by Year" reports for Hosts, Panelists and Scorekeepers
+- Added debut counts to the accordion buttons in the "Debuts by Year" reports for Hosts, Panelists and Scorekeepers
+- Added recording counts to the accordion buttons in the "Recordings by Year" report for Locations
 - Adjusted the padding for the Disclaimer and AI Policy links in the footer
 
 ### Component Changes
